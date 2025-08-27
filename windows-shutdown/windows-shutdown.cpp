@@ -79,7 +79,7 @@ static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   return TRUE;
 }
 
-Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
+static Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
   if (!hRes) return nullptr;
   HGLOBAL hMem = LoadResource(hInst, hRes);
@@ -97,7 +97,7 @@ Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   return bmp;
 }
 
-void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
+static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   Graphics graphics(hdcMem);
   graphics.SetSmoothingMode(SmoothingModeAntiAlias);
   // Draw semi-transparent white background
@@ -121,7 +121,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   }
 }
 
-void UpdateLayered(HWND hWnd, BYTE alpha) {
+static void UpdateLayered(HWND hWnd, BYTE alpha) {
   RECT rc;
   GetClientRect(hWnd, &rc);
   int w = rc.right - rc.left;
