@@ -1,4 +1,4 @@
-#include "ConfigParser.h"
+#include "config-parser.h"
 
 #include <windows.h>
 
@@ -35,16 +35,25 @@ std::wstring GetConfigPath() {
 
 WindowsShutdownConfig ParseConfigFile() {
   WindowsShutdownConfig config;
-  config.mode = MODE_IMMEDIATELY;  // default value
+  config.mode = Mode::NORMAL;  // default value
   std::wstring configPath = GetConfigPath();
   std::ifstream file(configPath);
   if (!file.is_open()) {
     // Create default config.ini
     std::ofstream out(configPath);
-    out << "mode=" << MODE_IMMEDIATELY << std::endl;
+    out << "# If an invalid config file or invalid values are detected, we will use default values."  << std::endl;
+    out << "# `mode` can be \"normal\" and \"immediately\"" << std::endl;
+    out << "# \"normal\"(default): will popup control buttons to choose whether shutdown or restart"
+        << std::endl;
+    out << "# \"immediately\": will shutdown immediately"
+        << std::endl;
+    out << "mode=" << "normal" << std::endl;
     out.close();
     return config;
   }
+
+  const std::string MODE_IMMEDIATELY = "immediately";
+  const std::string MODE_NORMAL = "normal";
 
   std::string line;
   while (std::getline(file, line)) {
@@ -56,11 +65,9 @@ WindowsShutdownConfig ParseConfigFile() {
     std::string value = trim(line.substr(eq + 1));
     if (key == "mode") {
       if (value == MODE_IMMEDIATELY) {
-        config.mode = MODE_IMMEDIATELY;
-      } else if (value == MODE_NORMAL) {
-        config.mode = MODE_NORMAL;
+        config.mode = Mode::IMMEDIATELY;
       } else {
-        config.mode = MODE_IMMEDIATELY;
+        config.mode = Mode::NORMAL;
       }
     }
   }

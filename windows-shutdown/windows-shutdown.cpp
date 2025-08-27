@@ -1,5 +1,6 @@
 ﻿#include "windows-shutdown.h"
 
+// order below must be preserved
 #include <objidl.h>
 #include <gdiplus.h>
 #include <windows.h>
@@ -47,7 +48,7 @@ static void CenterButtons(int w, int h) {
 }
 
 static ATOM MyRegisterClass(HINSTANCE hInstance) {
-  WNDCLASSEXW wcex;
+  WNDCLASSEXW wcex{};
   wcex.cbSize = sizeof(WNDCLASSEX);
   wcex.style = CS_HREDRAW | CS_VREDRAW;
   wcex.lpfnWndProc = WndProc;
