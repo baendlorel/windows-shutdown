@@ -158,6 +158,16 @@ static void UpdateLayered(HWND hWnd, BYTE alpha) {
   ReleaseDC(NULL, hdcScreen);
 }
 
+static void TriggerRestart(HWND hWnd) {
+  MessageBox(hWnd, L"Are you sure to restart?", L"Confirm",
+             MB_OK | MB_ICONQUESTION);
+}
+
+static void TriggerShutdown(HWND hWnd) {
+  MessageBox(hWnd, L"Are you sure to shutdown?", L"Confirm",
+             MB_OK | MB_ICONQUESTION);
+}
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
   switch (message) {
@@ -214,9 +224,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         int dy = my - buttons[i].y;
         if (dx * dx + dy * dy <= buttons[i].r * buttons[i].r) {
           hit = true;
-          const wchar_t* msg = (i == 0) ? L"Are you sure to restart?"
-                                        : L"Are you sure to shutdown?";
-          MessageBox(hWnd, msg, L"Confirm", MB_OK | MB_ICONQUESTION);
+          if (i == 0) {
+            TriggerRestart(hWnd);
+          } else {
+            TriggerShutdown(hWnd);
+          }
           break;
         }
       }
