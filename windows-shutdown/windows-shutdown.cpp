@@ -1,15 +1,14 @@
 ﻿#include "windows-shutdown.h"
 
-#define UNICODE
-#define _UNICODE
-#include <gdiplus.h>
 #include <objidl.h>
+#include <gdiplus.h>
 #include <windows.h>
 
 #include "framework.h"
 #pragma comment(lib, "Gdiplus.lib")
 
 using namespace Gdiplus;
+
 
 #define MAX_LOADSTRING 100
 #define FADEIN_DURATION 150  // ms
