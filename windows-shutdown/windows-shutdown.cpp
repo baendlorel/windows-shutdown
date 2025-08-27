@@ -10,16 +10,16 @@
 using namespace Gdiplus;
 
 
-#define MAX_LOADSTRING 100
-#define FADEIN_DURATION 150  // ms
-#define FADEIN_INTERVAL 10   // ms
-#define FADEIN_TIMER_ID 1001
-#define FADEOUT_TIMER_ID 1002
+constexpr int MAX_LOADSTRING = 100;
+constexpr int FADEIN_DURATION = 150;  // ms
+constexpr int FADEIN_INTERVAL = 10;   // ms
+constexpr int FADEIN_TIMER_ID = 1001;
+constexpr int FADEOUT_TIMER_ID = 1002;
 
 // Function declarations in this module:
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-ATOM MyRegisterClass(HINSTANCE hInstance);
-BOOL InitInstance(HINSTANCE, int);
+static ATOM MyRegisterClass(HINSTANCE hInstance);
+static BOOL InitInstance(HINSTANCE, int);
 
 struct ImageButton {
   int x, y, r;
@@ -37,7 +37,7 @@ BYTE g_alpha = 0;  // Current alpha
 bool g_fadingOut = false;
 int hoveredIndex = -1;  // -1 means no button is hovered
 
-void CenterButtons(int w, int h) {
+static void CenterButtons(int w, int h) {
   int centerX = w / 2;
   int centerY = h / 2;
   int spacing = 100;
@@ -46,7 +46,7 @@ void CenterButtons(int w, int h) {
   buttons[1] = {centerX + spacing, centerY, r, L"Shutdown", IDB_SHUTDOWNPNG};
 }
 
-ATOM MyRegisterClass(HINSTANCE hInstance) {
+static ATOM MyRegisterClass(HINSTANCE hInstance) {
   WNDCLASSEXW wcex;
   wcex.cbSize = sizeof(WNDCLASSEX);
   wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -63,7 +63,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
   return RegisterClassExW(&wcex);
 }
 
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
+static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   hInst = hInstance;
   screenW = GetSystemMetrics(SM_CXSCREEN);
   screenH = GetSystemMetrics(SM_CYSCREEN);
@@ -86,7 +86,7 @@ Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   void* pData = LockResource(hMem);
   DWORD size = SizeofResource(hInst, hRes);
   IStream* pStream = nullptr;
-  CreateStreamOnHGlobal(NULL, TRUE, &pStream);
+  (void)CreateStreamOnHGlobal(NULL, TRUE, &pStream);
   ULONG written;
   pStream->Write(pData, size, &written);
   LARGE_INTEGER li = {0};
@@ -138,6 +138,12 @@ void UpdateLayered(HWND hWnd, BYTE alpha) {
   void* pvBits = nullptr;
   HBITMAP hBitmap =
       CreateDIBSection(hdcScreen, &bmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
+  if (hBitmap == NULL) {
+    DeleteDC(hdcMem);
+    ReleaseDC(NULL, hdcScreen);
+    return;
+  }
+
   HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
   DrawToMemoryDC(hdcMem, w, h, alpha);
   POINT ptWin = {0, 0};
