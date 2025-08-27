@@ -1,4 +1,5 @@
 ﻿#include "windows-shutdown.h"
+#include "config-parser.h"
 
 // order below must be preserved
 #include <objidl.h>
@@ -158,14 +159,26 @@ static void UpdateLayered(HWND hWnd, BYTE alpha) {
   ReleaseDC(NULL, hdcScreen);
 }
 
-static void TriggerRestart(HWND hWnd) {
-  MessageBox(hWnd, L"Are you sure to restart?", L"Confirm",
-             MB_OK | MB_ICONQUESTION);
+static void TriggerRestart() {
+  HANDLE hToken;
+  TOKEN_PRIVILEGES tkp;
+  OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
+  LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
+  tkp.PrivilegeCount = 1;
+  tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+  AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+  ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
 }
 
-static void TriggerShutdown(HWND hWnd) {
-  MessageBox(hWnd, L"Are you sure to shutdown?", L"Confirm",
-             MB_OK | MB_ICONQUESTION);
+static void TriggerShutdown() {
+  HANDLE hToken;
+  TOKEN_PRIVILEGES tkp;
+  OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
+  LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
+  tkp.PrivilegeCount = 1;
+  tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+  AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+  ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
@@ -225,9 +238,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         if (dx * dx + dy * dy <= buttons[i].r * buttons[i].r) {
           hit = true;
           if (i == 0) {
-            TriggerRestart(hWnd);
+            TriggerRestart();
           } else {
-            TriggerShutdown(hWnd);
+            TriggerShutdown();
           }
           break;
         }
@@ -259,6 +272,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   UNREFERENCED_PARAMETER(lpCmdLine);
   GdiplusStartupInput gdiplusStartupInput;
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+  WindowsShutdownConfig config = ParseConfigFile();
+  if (config.mode == Mode::IMMEDIATE) {
+    TriggerShutdown();
+    GdiplusShutdown(gdiplusToken);
+    return 0;
+  }
+
   LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
   LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, szWindowClass, MAX_LOADSTRING);
   MyRegisterClass(hInstance);
