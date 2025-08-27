@@ -114,7 +114,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha)
             graphics.DrawImage(bmp, x, y, size, size);
             // If hovered, overlay a semi-transparent white
             if (i == hoveredIndex) {
-                Gdiplus::SolidBrush highlightBrush(Gdiplus::Color(80, 255, 255, 255));
+                Gdiplus::SolidBrush highlightBrush(Gdiplus::Color(28, 255, 255, 255));
                 graphics.FillEllipse(&highlightBrush, x, y, size, size);
             }
             delete bmp;
