@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 
-enum class Mode { IMMEDIATELY, NORMAL };
+enum class Mode { IMMEDIATE, NORMAL };
 
 struct WindowsShutdownConfig {
-  Mode mode = Mode::IMMEDIATELY;
+  Mode mode = Mode::IMMEDIATE;
 };
 
 WindowsShutdownConfig ParseConfigFile();
