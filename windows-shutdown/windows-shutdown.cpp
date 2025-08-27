@@ -1,11 +1,15 @@
 ﻿#include "windows-shutdown.h"
 
+#define UNICODE
+#define _UNICODE
 #include <gdiplus.h>
 #include <objidl.h>
 #include <windows.h>
 
 #include "framework.h"
 #pragma comment(lib, "Gdiplus.lib")
+
+using namespace Gdiplus;
 
 #define MAX_LOADSTRING 100
 #define FADEIN_DURATION 150  // ms
@@ -75,7 +79,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   return TRUE;
 }
 
-Gdiplus::Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
+Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
   if (!hRes) return nullptr;
   HGLOBAL hMem = LoadResource(hInst, hRes);
@@ -88,20 +92,20 @@ Gdiplus::Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   pStream->Write(pData, size, &written);
   LARGE_INTEGER li = {0};
   pStream->Seek(li, STREAM_SEEK_SET, NULL);
-  Gdiplus::Bitmap* bmp = Gdiplus::Bitmap::FromStream(pStream);
+  Bitmap* bmp = Bitmap::FromStream(pStream);
   pStream->Release();
   return bmp;
 }
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
-  Gdiplus::Graphics graphics(hdcMem);
-  graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+  Graphics graphics(hdcMem);
+  graphics.SetSmoothingMode(SmoothingModeAntiAlias);
   // Draw semi-transparent white background
-  Gdiplus::SolidBrush bgBrush(Gdiplus::Color(77, 255, 255, 255));
+  SolidBrush bgBrush(Color(77, 255, 255, 255));
   graphics.FillRectangle(&bgBrush, 0, 0, w, h);
   // Draw image buttons
   for (int i = 0; i < 2; ++i) {
-    Gdiplus::Bitmap* bmp = LoadPngFromResource(hInst, buttons[i].resId);
+    Bitmap* bmp = LoadPngFromResource(hInst, buttons[i].resId);
     if (bmp) {
       int x = buttons[i].x - buttons[i].r;
       int y = buttons[i].y - buttons[i].r;
@@ -109,7 +113,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
       graphics.DrawImage(bmp, x, y, size, size);
       // If hovered, overlay a semi-transparent white
       if (i == hoveredIndex) {
-        Gdiplus::SolidBrush highlightBrush(Gdiplus::Color(28, 255, 255, 255));
+        SolidBrush highlightBrush(Color(28, 255, 255, 255));
         graphics.FillEllipse(&highlightBrush, x, y, size, size);
       }
       delete bmp;
@@ -235,8 +239,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_ int nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
-  Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-  Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+  GdiplusStartupInput gdiplusStartupInput;
+  GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
   LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
   LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, szWindowClass, MAX_LOADSTRING);
   MyRegisterClass(hInstance);
@@ -248,6 +252,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-  Gdiplus::GdiplusShutdown(gdiplusToken);
+  GdiplusShutdown(gdiplusToken);
   return (int)msg.wParam;
 }

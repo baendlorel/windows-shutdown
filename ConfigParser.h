@@ -8,6 +8,4 @@ struct WindowsShutdownConfig {
   std::string mode = MODE_NORMAL;
 };
 
-std::string trim(const std::string& s);
-std::wstring GetConfigPath();
 WindowsShutdownConfig ParseConfigFile();
