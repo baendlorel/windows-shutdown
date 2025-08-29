@@ -5,6 +5,7 @@
 #include <objidl.h>
 #include <gdiplus.h>
 #include <windows.h>
+#include <string>
 
 #include "framework.h"
 #pragma comment(lib, "Gdiplus.lib")
@@ -17,6 +18,7 @@ constexpr int FADEIN_DURATION = 150;  // ms
 constexpr int FADEIN_INTERVAL = 10;   // ms
 constexpr int FADEIN_TIMER_ID = 1001;
 constexpr int FADEOUT_TIMER_ID = 1002;
+constexpr int COUNTDOWN_TIMER_ID = 1003;  // New timer for countdown
 
 // Function declarations in this module:
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -41,6 +43,11 @@ int hoveredIndex = -1;  // -1 means no button is hovered
 
 // configs
 WindowsShutdownConfig config;
+
+// Countdown state
+bool isCountingDown = false;
+int countdownSeconds = 0;
+bool isRestartCountdown = false;  // true for restart, false for shutdown
 
 static void CenterButtons(int w, int h) {
   int centerX = w / 2;
@@ -107,20 +114,53 @@ static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   // Draw semi-transparent white background
   SolidBrush bgBrush(Color(77, 255, 255, 255));
   graphics.FillRectangle(&bgBrush, 0, 0, w, h);
-  // Draw image buttons
-  for (int i = 0; i < 2; ++i) {
-    Bitmap* bmp = LoadPngFromResource(hInst, buttons[i].resId);
-    if (bmp) {
-      int x = buttons[i].x - buttons[i].r;
-      int y = buttons[i].y - buttons[i].r;
-      int size = buttons[i].r * 2;
-      graphics.DrawImage(bmp, x, y, size, size);
-      // If hovered, overlay a semi-transparent white
-      if (i == hoveredIndex) {
-        SolidBrush highlightBrush(Color(28, 255, 255, 255));
-        graphics.FillEllipse(&highlightBrush, x, y, size, size);
+  
+  if (isCountingDown) {
+    // Draw countdown in center
+    std::wstring countdownText = std::to_wstring(countdownSeconds);
+    std::wstring actionText = isRestartCountdown ? L"Restarting in " : L"Shutting down in ";
+    std::wstring fullText = actionText + countdownText + L" seconds...";
+    
+    // Large font for countdown
+    FontFamily fontFamily(L"Arial");
+    Gdiplus::Font font(&fontFamily, 48, FontStyleBold);
+    SolidBrush textBrush(Color(255, 0, 0, 0));  // Black text
+    
+    // Get text bounds
+    RectF layoutRect(0, 0, (REAL)w, (REAL)h);
+    RectF boundingBox;
+    graphics.MeasureString(fullText.c_str(), -1, &font, layoutRect, &boundingBox);
+    
+    // Center the text
+    REAL x = (w - boundingBox.Width) / 2;
+    REAL y = (h - boundingBox.Height) / 2;
+    
+    graphics.DrawString(fullText.c_str(), -1, &font, PointF(x, y), &textBrush);
+    
+    // Draw cancel instruction
+    Gdiplus::Font smallFont(&fontFamily, 16, FontStyleRegular);
+    std::wstring cancelText = L"Click anywhere or press any key to cancel";
+    RectF cancelBounds;
+    graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &cancelBounds);
+    REAL cancelX = (w - cancelBounds.Width) / 2;
+    REAL cancelY = y + boundingBox.Height + 20;
+    graphics.DrawString(cancelText.c_str(), -1, &smallFont, PointF(cancelX, cancelY), &textBrush);
+  } else {
+    // Draw image buttons (original logic)
+    for (int i = 0; i < 2; ++i) {
+      Bitmap* bmp = LoadPngFromResource(hInst, buttons[i].resId);
+      if (bmp) {
+        int x = buttons[i].x - buttons[i].r;
+        int y = buttons[i].y - buttons[i].r;
+        int size = buttons[i].r * 2;
+        graphics.DrawImage(bmp, x, y, size, size);
+        // If hovered, overlay a semi-transparent white
+        if (i == hoveredIndex) {
+          SolidBrush highlightBrush(Color(28, 255, 255, 255));
+          graphics.FillEllipse(&highlightBrush, x, y, size, size);
+        }
+        delete bmp;
       }
-      delete bmp;
     }
   }
 }
@@ -162,7 +202,7 @@ static void UpdateLayered(HWND hWnd, BYTE alpha) {
   ReleaseDC(NULL, hdcScreen);
 }
 
-static void TriggerRestart() {
+static void ExecuteRestart() {
   HANDLE hToken;
   TOKEN_PRIVILEGES tkp;
   OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
@@ -170,15 +210,12 @@ static void TriggerRestart() {
   tkp.PrivilegeCount = 1;
   tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
-  //ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
 
   wchar_t msg[] = L"Restarting...";
-  InitiateSystemShutdownEx(NULL,msg, config.delay, TRUE,
-                           TRUE, 
-                           SHTDN_REASON_MAJOR_OTHER);
+  InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER);
 }
 
-static void TriggerShutdown() {
+static void ExecuteShutdown() {
   HANDLE hToken;
   TOKEN_PRIVILEGES tkp;
   OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
@@ -186,15 +223,43 @@ static void TriggerShutdown() {
   tkp.PrivilegeCount = 1;
   tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
-  //ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
+
   wchar_t msg[] = L"Shutdown...";
-  InitiateSystemShutdownEx(NULL,           
-                           msg, 
-                           config.delay,              
-                           TRUE,           
-                           FALSE,          
-                           SHTDN_REASON_MAJOR_OTHER  
-  );
+  InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER);
+}
+
+static void StartCountdown(HWND hWnd, bool isRestart) {
+  if (config.delay <= 0) {
+    // No delay, execute immediately
+    if (isRestart) {
+      ExecuteRestart();
+    } else {
+      ExecuteShutdown();
+    }
+    return;
+  }
+
+  isCountingDown = true;
+  countdownSeconds = config.delay;
+  isRestartCountdown = isRestart;
+  SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
+  UpdateLayered(hWnd, g_alpha);  // Redraw to show countdown
+}
+
+static void CancelCountdown(HWND hWnd) {
+  if (isCountingDown) {
+    isCountingDown = false;
+    KillTimer(hWnd, COUNTDOWN_TIMER_ID);
+    UpdateLayered(hWnd, g_alpha);  // Redraw to hide countdown
+  }
+}
+
+static void TriggerRestart(HWND hWnd) {
+  StartCountdown(hWnd, true);
+}
+
+static void TriggerShutdown(HWND hWnd) {
+  StartCountdown(hWnd, false);
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
@@ -222,12 +287,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           KillTimer(hWnd, FADEOUT_TIMER_ID);
           DestroyWindow(hWnd);
         }
+      } else if (wParam == COUNTDOWN_TIMER_ID) {
+        if (isCountingDown) {
+          countdownSeconds--;
+          if (countdownSeconds <= 0) {
+            CancelCountdown(hWnd);
+            if (isRestartCountdown) {
+              ExecuteRestart();
+            } else {
+              ExecuteShutdown();
+            }
+          } else {
+            UpdateLayered(hWnd, g_alpha);  // Redraw to update countdown
+          }
+        }
       }
       break;
     case WM_PAINT: {
       UpdateLayered(hWnd, g_alpha);
     } break;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+      if (isCountingDown) {
+        CancelCountdown(hWnd);
+      }
+      break;
     case WM_MOUSEMOVE: {
+      if (isCountingDown) {
+        break;  // Ignore mouse move during countdown
+      }
       int mx = LOWORD(lParam);
       int my = HIWORD(lParam);
       int newHover = -1;
@@ -245,6 +333,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       }
     } break;
     case WM_LBUTTONDOWN: {
+      if (isCountingDown) {
+        CancelCountdown(hWnd);
+        break;
+      }
+      
       int mx = LOWORD(lParam);
       int my = HIWORD(lParam);
       bool hit = false;
@@ -254,9 +347,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         if (dx * dx + dy * dy <= buttons[i].r * buttons[i].r) {
           hit = true;
           if (i == 0) {
-            TriggerRestart();
+            TriggerRestart(hWnd);
           } else {
-            TriggerShutdown();
+            TriggerShutdown(hWnd);
           }
           break;
         }
@@ -267,6 +360,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       }
     } break;
     case WM_CLOSE:
+      if (isCountingDown) {
+        CancelCountdown(hWnd);
+      }
       if (!g_fadingOut) {
         g_fadingOut = true;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
@@ -292,7 +388,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   ParseConfigFile(config);
 
   if (config.mode == Mode::IMMEDIATE) {
-    TriggerShutdown();
+    ExecuteShutdown();  // Execute immediately without UI
     GdiplusShutdown(gdiplusToken);
     return 0;
   }
