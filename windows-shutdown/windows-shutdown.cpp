@@ -167,7 +167,12 @@ static void TriggerRestart() {
   tkp.PrivilegeCount = 1;
   tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
-  ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
+  //ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
+
+  wchar_t msg[] = L"Restarting...";
+  InitiateSystemShutdownEx(NULL,msg, 5, TRUE,
+                           TRUE, 
+                           SHTDN_REASON_MAJOR_OTHER);
 }
 
 static void TriggerShutdown() {
@@ -178,7 +183,15 @@ static void TriggerShutdown() {
   tkp.PrivilegeCount = 1;
   tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
-  ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
+  //ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
+  wchar_t msg[] = L"Shutdown...";
+  InitiateSystemShutdownEx(NULL,           
+                           msg, 
+                           5,              
+                           TRUE,           
+                           FALSE,          
+                           SHTDN_REASON_MAJOR_OTHER  
+  );
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,

@@ -1,0 +1,6 @@
+{
+  "name": "windows-shutdown",
+  "version": "1.0.0",
+  "description": "Put it on your desktop, double click it and shuts down immediately",
+  "description_zh": "一个可以立刻关机的小工具，用于放在桌面上快速关机"
+}

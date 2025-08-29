@@ -24,6 +24,7 @@
     <ProjectGuid>{fb891990-7c51-4729-ba91-18fe7f8fb9b4}</ProjectGuid>
     <RootNamespace>windowsshutdown</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>windows-shutdown</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -140,8 +141,13 @@
   <ItemGroup>
     <Image Include="assets\restart.png" />
     <Image Include="assets\shutdown.png" />
+    <Image Include="icon.ico" />
     <Image Include="small.ico" />
     <Image Include="windows-shutdown.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\package.json" />
+    <None Include="make-icon.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

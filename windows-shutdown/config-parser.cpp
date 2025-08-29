@@ -55,6 +55,9 @@ WindowsShutdownConfig ParseConfigFile() {
     out << "# \"" << MODE_IMMEDIATE << "\": will shutdown immediately"
         << std::endl;
     out << "mode=" << MODE_NORMAL << std::endl;
+    out << "# Shutdown/Restart in this many seconds, set it to 0 to do it immediately"
+        << std::endl;
+    out << "delay=" << DEFAULT_DELAY << std::endl;
     out.close();
     return config;
   }
@@ -73,6 +76,14 @@ WindowsShutdownConfig ParseConfigFile() {
       } else {
         config.mode = Mode::NORMAL;
       }
+    }
+    if (key == "delay") {
+      config.delay = std::clamp(std::stoi(value), 0, 60);
+      try {
+        config.delay = std::clamp(std::stoi(value), 0, 60);
+      } catch (const std::invalid_argument& e) {
+        config.delay = DEFAULT_DELAY;
+      } 
     }
   }
   return config;
