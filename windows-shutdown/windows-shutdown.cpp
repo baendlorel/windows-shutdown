@@ -111,6 +111,7 @@ static Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
 static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   Graphics graphics(hdcMem);
   graphics.SetSmoothingMode(SmoothingModeAntiAlias);
+  graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
   // Draw semi-transparent white background
   SolidBrush bgBrush(Color(77, 255, 255, 255));
   graphics.FillRectangle(&bgBrush, 0, 0, w, h);
@@ -124,7 +125,8 @@ static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     // Large font for countdown
     FontFamily fontFamily(L"Arial");
     Gdiplus::Font font(&fontFamily, 48, FontStyleBold);
-    SolidBrush textBrush(Color(255, 0, 0, 0));  // Black text
+    SolidBrush outlineBrush(Color(255, 0, 0, 0));     // Black outline
+    SolidBrush textBrush(Color(255, 255, 255, 255));  // White text
     
     // Get text bounds
     RectF layoutRect(0, 0, (REAL)w, (REAL)h);
@@ -135,15 +137,36 @@ static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     REAL x = (w - boundingBox.Width) / 2;
     REAL y = (h - boundingBox.Height) / 2;
     
+    // Draw outline (stroke effect) by drawing text in multiple directions
+    const int outlineWidth = 2;
+    for (int dx = -outlineWidth; dx <= outlineWidth; dx++) {
+      for (int dy = -outlineWidth; dy <= outlineWidth; dy++) {
+        if (dx != 0 || dy != 0) {  // Skip center position
+          graphics.DrawString(fullText.c_str(), -1, &font, PointF(x + dx, y + dy), &outlineBrush);
+        }
+      }
+    }
+    // Draw main text on top
     graphics.DrawString(fullText.c_str(), -1, &font, PointF(x, y), &textBrush);
     
-    // Draw cancel instruction
+    // Draw cancel instruction with outline
     Gdiplus::Font smallFont(&fontFamily, 16, FontStyleRegular);
     std::wstring cancelText = L"Click anywhere or press any key to cancel";
     RectF cancelBounds;
     graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &cancelBounds);
     REAL cancelX = (w - cancelBounds.Width) / 2;
     REAL cancelY = y + boundingBox.Height + 20;
+    
+    // Draw cancel text outline (thinner outline for smaller text)
+    const int smallOutlineWidth = 1;
+    for (int dx = -smallOutlineWidth; dx <= smallOutlineWidth; dx++) {
+      for (int dy = -smallOutlineWidth; dy <= smallOutlineWidth; dy++) {
+        if (dx != 0 || dy != 0) {
+          graphics.DrawString(cancelText.c_str(), -1, &smallFont, PointF(cancelX + dx, cancelY + dy), &outlineBrush);
+        }
+      }
+    }
+    // Draw cancel text
     graphics.DrawString(cancelText.c_str(), -1, &smallFont, PointF(cancelX, cancelY), &textBrush);
   } else {
     // Draw image buttons (original logic)
@@ -212,7 +235,7 @@ static void ExecuteRestart() {
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
 
   wchar_t msg[] = L"Restarting...";
-  InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER);
+  //InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER);
 }
 
 static void ExecuteShutdown() {
@@ -225,7 +248,7 @@ static void ExecuteShutdown() {
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
 
   wchar_t msg[] = L"Shutdown...";
-  InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER);
+  //InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER);
 }
 
 static void StartCountdown(HWND hWnd, bool isRestart) {
