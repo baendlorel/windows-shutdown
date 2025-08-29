@@ -39,6 +39,9 @@ BYTE g_alpha = 0;  // Current alpha
 bool g_fadingOut = false;
 int hoveredIndex = -1;  // -1 means no button is hovered
 
+// configs
+WindowsShutdownConfig config;
+
 static void CenterButtons(int w, int h) {
   int centerX = w / 2;
   int centerY = h / 2;
@@ -170,7 +173,7 @@ static void TriggerRestart() {
   //ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_OTHER);
 
   wchar_t msg[] = L"Restarting...";
-  InitiateSystemShutdownEx(NULL,msg, 5, TRUE,
+  InitiateSystemShutdownEx(NULL,msg, config.delay, TRUE,
                            TRUE, 
                            SHTDN_REASON_MAJOR_OTHER);
 }
@@ -187,7 +190,7 @@ static void TriggerShutdown() {
   wchar_t msg[] = L"Shutdown...";
   InitiateSystemShutdownEx(NULL,           
                            msg, 
-                           5,              
+                           config.delay,              
                            TRUE,           
                            FALSE,          
                            SHTDN_REASON_MAJOR_OTHER  
@@ -286,7 +289,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   GdiplusStartupInput gdiplusStartupInput;
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-  WindowsShutdownConfig config = ParseConfigFile();
+  ParseConfigFile(config);
+
   if (config.mode == Mode::IMMEDIATE) {
     TriggerShutdown();
     GdiplusShutdown(gdiplusToken);

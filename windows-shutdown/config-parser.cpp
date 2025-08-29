@@ -36,9 +36,7 @@ std::wstring GetConfigPath() {
 const std::string MODE_IMMEDIATE = "immediate";
 const std::string MODE_NORMAL = "normal";
 
-WindowsShutdownConfig ParseConfigFile() {
-  WindowsShutdownConfig config;
-  config.mode = Mode::NORMAL;  // default value
+void ParseConfigFile(WindowsShutdownConfig & config) {
   std::wstring configPath = GetConfigPath();
   std::ifstream file(configPath);
   if (!file.is_open()) {
@@ -59,7 +57,7 @@ WindowsShutdownConfig ParseConfigFile() {
         << std::endl;
     out << "delay=" << DEFAULT_DELAY << std::endl;
     out.close();
-    return config;
+    return;
   }
 
   std::string line;
@@ -81,10 +79,9 @@ WindowsShutdownConfig ParseConfigFile() {
       config.delay = std::clamp(std::stoi(value), 0, 60);
       try {
         config.delay = std::clamp(std::stoi(value), 0, 60);
-      } catch (const std::invalid_argument& e) {
+      } catch (const std::invalid_argument& _) {
         config.delay = DEFAULT_DELAY;
       } 
     }
   }
-  return config;
 }
