@@ -1,8 +1,8 @@
 #pragma once
 
 
-ATOM MyRegisterClass(HINSTANCE hInstance);
+ATOM MyRegisterClass();
 
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow);
+BOOL InitInstance(int nCmdShow);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

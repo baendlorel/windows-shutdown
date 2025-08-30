@@ -1,4 +1,4 @@
-﻿#include "windows-shutdown.h"
+﻿#include "Resource.h"
 #include "consts.h"
 #include "framework.h"
 #include "app-state.h"
@@ -13,7 +13,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   UNREFERENCED_PARAMETER(lpCmdLine);
 
   auto& appState = AppState::getInstance();
-
   appState.hInst = hInstance;
   
   GdiplusStartupInput gdiplusStartupInput;
@@ -31,8 +30,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
               MAX_LOADSTRING);
   LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, appState.szWindowClass,
               MAX_LOADSTRING);
-  MyRegisterClass(hInstance);
-  if (!InitInstance(hInstance, nCmdShow)) {
+  MyRegisterClass();
+  if (!InitInstance(nCmdShow)) {
     return FALSE;
   }
   MSG msg;

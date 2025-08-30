@@ -6,7 +6,7 @@
 #include "window.h"
 
 
-ATOM MyRegisterClass(HINSTANCE hInstance) {
+ATOM MyRegisterClass() {
   auto& appState = AppState::getInstance();
   WNDCLASSEXW wcex{};
   wcex.cbSize = sizeof(WNDCLASSEX);
@@ -14,7 +14,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
   wcex.lpfnWndProc = WndProc;
   wcex.cbClsExtra = 0;
   wcex.cbWndExtra = 0;
-  wcex.hInstance = hInstance;
+  wcex.hInstance = appState.hInst;
   wcex.hIcon = NULL;
   wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
   wcex.hbrBackground = NULL;
@@ -24,7 +24,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
   return RegisterClassExW(&wcex);
 }
 
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
+BOOL InitInstance(int nCmdShow) {
   auto& appState = AppState::getInstance();
  appState.screenW = GetSystemMetrics(SM_CXSCREEN);
  appState.screenH = GetSystemMetrics(SM_CYSCREEN);
@@ -32,7 +32,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
       appState.szTitle, WS_POPUP, 0, 0,
      appState.screenW, appState.screenH,
                       nullptr,
-                              nullptr, hInstance, nullptr);
+                              nullptr, appState.hInst, nullptr);
   if (!hWnd) {
     return FALSE;
   }

@@ -1,10 +1,10 @@
 
-#include "framework.h"
 #include "controller.h"
-#include "consts.h"
-#include "render.h"
-#include "app-state.h"
 
+#include "app-state.h"
+#include "consts.h"
+#include "framework.h"
+#include "render.h"
 
 void ExecuteRestart() {
   HANDLE hToken;
@@ -17,8 +17,7 @@ void ExecuteRestart() {
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
 
   wchar_t msg[] = L"Restarting...";
-  // InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE,
-  // SHTDN_REASON_MAJOR_OTHER);
+  InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER);
 }
 
 void ExecuteShutdown() {
@@ -32,8 +31,7 @@ void ExecuteShutdown() {
   AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
 
   wchar_t msg[] = L"Shutdown...";
-  // InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE,
-  // SHTDN_REASON_MAJOR_OTHER);
+  InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER);
 }
 
 void StartCountdown(HWND hWnd, bool isRestart) {
