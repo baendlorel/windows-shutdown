@@ -1,7 +1,9 @@
+#include "framework.h"
 #include "consts.h"
 #include "app-state.h"
 #include "render.h"
 #include "controller.h"
+#include "window.h"
 
 auto appState = AppState::getInstance();    
 

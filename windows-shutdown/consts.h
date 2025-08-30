@@ -1,6 +1,8 @@
 #pragma once
 
-constexpr int MAX_LOADSTRING = 100;
+//#define MAX_LOADSTRING 100
+
+constexpr int MAX_LOADSTRING = 100;   // ms
 constexpr int FADEIN_DURATION = 150;  // ms
 constexpr int FADEIN_INTERVAL = 10;   // ms
 constexpr int FADEIN_TIMER_ID = 1001;

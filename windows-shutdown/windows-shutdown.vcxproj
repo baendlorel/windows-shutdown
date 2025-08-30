@@ -144,7 +144,7 @@
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="ui.cpp" />
     <ClCompile Include="window.cpp" />
-    <ClCompile Include="windows-shutdown.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windows-shutdown.rc" />

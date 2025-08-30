@@ -1,5 +1,4 @@
 #pragma once
-#include "framework.h"
 
 
 static ATOM MyRegisterClass(HINSTANCE hInstance);

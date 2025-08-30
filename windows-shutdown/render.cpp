@@ -1,4 +1,6 @@
+#include "framework.h"
 #include "app-state.h"
+#include "ui.h"
 #include "render.h"
 
 static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
@@ -49,11 +51,12 @@ static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   } else {
     // Draw image buttons (original logic)
     for (int i = 0; i < 2; ++i) {
-      Bitmap* bmp = LoadPngFromResource(hInst, buttons[i].resId);
+      Bitmap* bmp =
+          LoadPngFromResource(appState.hInst, appState.buttons[i].resId);
       if (bmp) {
-        int x = buttons[i].x - buttons[i].r;
-        int y = buttons[i].y - buttons[i].r;
-        int size = buttons[i].r * 2;
+        int x = appState.buttons[i].x - appState.buttons[i].r;
+        int y = appState.buttons[i].y - appState.buttons[i].r;
+        int size = appState.buttons[i].r * 2;
         graphics.DrawImage(bmp, x, y, size, size);
         // If hovered, overlay a semi-transparent white
         if (i == appState.hoveredIndex) {

@@ -13,6 +13,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   UNREFERENCED_PARAMETER(lpCmdLine);
 
   auto appState = AppState::getInstance();
+  appState.hInst = hInstance;
   
   GdiplusStartupInput gdiplusStartupInput;
   ULONG_PTR gdiplusToken;

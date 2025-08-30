@@ -1,6 +1,5 @@
 #pragma once
 
-#include "framework.h"
 
 static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha);
 

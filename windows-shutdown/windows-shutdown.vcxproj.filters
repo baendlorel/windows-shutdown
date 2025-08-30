@@ -62,7 +62,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="windows-shutdown.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="config.cpp">

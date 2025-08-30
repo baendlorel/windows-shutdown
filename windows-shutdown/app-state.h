@@ -1,5 +1,6 @@
 #pragma once
 #include "Resource.h"
+#include "consts.h"
 #include "config.h"
 #include "image-button.h"
 
@@ -11,6 +12,7 @@ class AppState {
   }
 
   AppState() {
+    this->hInst = nullptr;
     this->screenW = 0;
     this->screenH = 0;
     
@@ -27,6 +29,8 @@ class AppState {
     this->buttons[0] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
     this->buttons[1] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
   }
+
+  HINSTANCE hInst;
 
   // size
   int screenW;
