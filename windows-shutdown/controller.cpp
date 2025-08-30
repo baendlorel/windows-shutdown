@@ -5,7 +5,6 @@
 #include "render.h"
 #include "app-state.h"
 
-auto appState = AppState::getInstance();
 
 void ExecuteRestart() {
   HANDLE hToken;
@@ -38,6 +37,7 @@ void ExecuteShutdown() {
 }
 
 void StartCountdown(HWND hWnd, bool isRestart) {
+  auto appState = AppState::getInstance();
   if (appState.config.delay <= 0) {
     // No delay, execute immediately
     if (isRestart) {
@@ -56,6 +56,7 @@ void StartCountdown(HWND hWnd, bool isRestart) {
 }
 
 void CancelCountdown(HWND hWnd) {
+  auto appState = AppState::getInstance();
   if (appState.isCountingDown) {
     appState.isCountingDown = false;
     KillTimer(hWnd, COUNTDOWN_TIMER_ID);

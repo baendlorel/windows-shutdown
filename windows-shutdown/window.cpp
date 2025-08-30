@@ -5,9 +5,9 @@
 #include "controller.h"
 #include "window.h"
 
-auto appState = AppState::getInstance();    
 
 ATOM MyRegisterClass(HINSTANCE hInstance) {
+  auto appState = AppState::getInstance();
   WNDCLASSEXW wcex{};
   wcex.cbSize = sizeof(WNDCLASSEX);
   wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -25,13 +25,16 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 }
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
+  auto appState = AppState::getInstance();
   appState.screenW = GetSystemMetrics(SM_CXSCREEN);
   appState.screenH = GetSystemMetrics(SM_CYSCREEN);
   HWND hWnd = CreateWindowExW(
       WS_EX_LAYERED, appState.szWindowClass, appState.szTitle, WS_POPUP,
                               0, 0, appState.screenW, appState.screenH, nullptr,
                               nullptr, hInstance, nullptr);
-  if (!hWnd) return FALSE;
+  if (!hWnd) {
+    return FALSE;
+  }
   ShowWindow(hWnd, SW_SHOW);
   UpdateWindow(hWnd);
   appState.g_alpha = 0;
@@ -41,6 +44,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
+  auto appState = AppState::getInstance();
   switch (message) {
     case WM_TIMER:
       if (wParam == FADEIN_TIMER_ID) {

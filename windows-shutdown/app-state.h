@@ -3,6 +3,7 @@
 #include "consts.h"
 #include "config.h"
 #include "image-button.h"
+#include "framework.h"
 
 class AppState {
  public:
@@ -49,8 +50,8 @@ class AppState {
 
   // count down
   bool isCountingDown;
-  short countdownSeconds;
   bool isRestartCountdown;
+  short countdownSeconds;
 
   // ui
   WCHAR szTitle[MAX_LOADSTRING];
