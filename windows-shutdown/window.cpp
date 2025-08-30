@@ -25,25 +25,26 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 }
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
-  auto appState = AppState::getInstance();
-  appState.screenW = GetSystemMetrics(SM_CXSCREEN);
-  appState.screenH = GetSystemMetrics(SM_CYSCREEN);
-  HWND hWnd = CreateWindowExW(
-      WS_EX_LAYERED, appState.szWindowClass, appState.szTitle, WS_POPUP,
-                              0, 0, appState.screenW, appState.screenH, nullptr,
+  AppState::getInstance().screenW = GetSystemMetrics(SM_CXSCREEN);
+  AppState::getInstance().screenH = GetSystemMetrics(SM_CYSCREEN);
+  HWND hWnd = CreateWindowExW(WS_EX_LAYERED, AppState::getInstance().szWindowClass,
+      AppState::getInstance().szTitle, WS_POPUP, 0, 0,
+      AppState::getInstance().screenW, AppState::getInstance().screenH,
+                      nullptr,
                               nullptr, hInstance, nullptr);
   if (!hWnd) {
     return FALSE;
   }
   ShowWindow(hWnd, SW_SHOW);
   UpdateWindow(hWnd);
-  appState.g_alpha = 0;
+  AppState::getInstance().g_alpha = 0;
   SetTimer(hWnd, FADEIN_TIMER_ID, FADEIN_INTERVAL, NULL);
   return TRUE;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
+  // [FIXME] 是这里的以外复制导致的问题，待解决
   auto appState = AppState::getInstance();
   switch (message) {
     case WM_TIMER:

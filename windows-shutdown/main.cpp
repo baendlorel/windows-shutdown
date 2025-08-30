@@ -12,22 +12,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
 
-  auto appState = AppState::getInstance();
-  appState.hInst = hInstance;
+  AppState::getInstance().hInst = hInstance;
   
   GdiplusStartupInput gdiplusStartupInput;
   ULONG_PTR gdiplusToken;
 
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-  if (appState.config.mode == Mode::IMMEDIATE) {
+  if (AppState::getInstance().config.mode == Mode::IMMEDIATE) {
     ExecuteShutdown();  // Execute immediately without UI
     GdiplusShutdown(gdiplusToken);
     return 0;
   }
 
-  LoadStringW(hInstance, IDS_APP_TITLE, appState.szTitle, MAX_LOADSTRING);
-  LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, appState.szWindowClass,
+  LoadStringW(hInstance, IDS_APP_TITLE, AppState::getInstance().szTitle,
+              MAX_LOADSTRING);
+  LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN,
+              AppState::getInstance().szWindowClass,
               MAX_LOADSTRING);
   MyRegisterClass(hInstance);
   if (!InitInstance(hInstance, nCmdShow)) {

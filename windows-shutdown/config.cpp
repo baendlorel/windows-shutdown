@@ -65,9 +65,13 @@ void Config::Load() {
   std::string line;
   while (std::getline(file, line)) {
     line = trim(line);
-    if (line.empty() || line[0] == '#') continue;
+    if (line.empty() || line[0] == '#') {
+      continue;
+    }
     auto eq = line.find('=');
-    if (eq == std::string::npos) continue;
+    if (eq == std::string::npos) {
+      continue;
+    }
     std::string key = trim(line.substr(0, eq));
     std::string value = trim(line.substr(eq + 1));
     if (key == "mode") {
@@ -78,10 +82,9 @@ void Config::Load() {
       }
     }
     if (key == "delay") {
-      this->delay = std::clamp(std::stoi(value), 0, 60);
       try {
         this->delay = std::clamp(std::stoi(value), 0, 60);
-      } catch (const std::invalid_argument& _) {
+      } catch (const std::invalid_argument&) {
         this->delay = DEFAULT_DELAY;
       }
     }
