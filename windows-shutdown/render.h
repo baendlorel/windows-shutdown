@@ -1,5 +1,5 @@
 #pragma once
-
+#include "framework.h"
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha);
 
