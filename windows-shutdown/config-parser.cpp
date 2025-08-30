@@ -36,7 +36,8 @@ std::wstring GetConfigPath() {
 const std::string MODE_IMMEDIATE = "immediate";
 const std::string MODE_NORMAL = "normal";
 
-void ParseConfigFile(WindowsShutdownConfig & config) {
+void ParseConfigFile() {
+  static auto appState =AppState::getInstance();
   std::wstring configPath = GetConfigPath();
   std::ifstream file(configPath);
   if (!file.is_open()) {
@@ -70,17 +71,17 @@ void ParseConfigFile(WindowsShutdownConfig & config) {
     std::string value = trim(line.substr(eq + 1));
     if (key == "mode") {
       if (value == MODE_IMMEDIATE) {
-        config.mode = Mode::IMMEDIATE;
+        appState.config.mode = Mode::IMMEDIATE;
       } else {
-        config.mode = Mode::NORMAL;
+        appState.config.mode = Mode::NORMAL;
       }
     }
     if (key == "delay") {
-      config.delay = std::clamp(std::stoi(value), 0, 60);
+      appState.config.delay = std::clamp(std::stoi(value), 0, 60);
       try {
-        config.delay = std::clamp(std::stoi(value), 0, 60);
+        appState.config.delay = std::clamp(std::stoi(value), 0, 60);
       } catch (const std::invalid_argument& _) {
-        config.delay = DEFAULT_DELAY;
+        appState.config.delay = DEFAULT_DELAY;
       } 
     }
   }

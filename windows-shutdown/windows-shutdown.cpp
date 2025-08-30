@@ -24,6 +24,8 @@ constexpr int COUNTDOWN_TIMER_ID = 1003;  // New timer for countdown
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 static ATOM MyRegisterClass(HINSTANCE hInstance);
 static BOOL InitInstance(HINSTANCE, int);
+static void DrawTextWithOutline(Graphics& graphics, const wchar_t* text, const Gdiplus::Font& font, 
+                                const PointF& position, int outlineWidth);
 
 struct ImageButton {
   int x, y, r;
@@ -49,14 +51,6 @@ bool isCountingDown = false;
 int countdownSeconds = 0;
 bool isRestartCountdown = false;  // true for restart, false for shutdown
 
-static void CenterButtons(int w, int h) {
-  int centerX = w / 2;
-  int centerY = h / 2;
-  int spacing = 100;
-  int r = 60;
-  buttons[0] = {centerX - spacing, centerY, r, L"Restart", IDB_RESTARTPNG};
-  buttons[1] = {centerX + spacing, centerY, r, L"Shutdown", IDB_SHUTDOWNPNG};
-}
 
 static ATOM MyRegisterClass(HINSTANCE hInstance) {
   WNDCLASSEXW wcex{};
@@ -108,122 +102,6 @@ static Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   return bmp;
 }
 
-static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
-  Graphics graphics(hdcMem);
-  graphics.SetSmoothingMode(SmoothingModeAntiAlias);
-  graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
-  // Draw semi-transparent white background
-  SolidBrush bgBrush(Color(77, 255, 255, 255));
-  graphics.FillRectangle(&bgBrush, 0, 0, w, h);
-  
-  if (isCountingDown) {
-    // Draw countdown in center
-    std::wstring countdownText = std::to_wstring(countdownSeconds);
-    std::wstring actionText = isRestartCountdown ? L"Restarting in " : L"Shutting down in ";
-    std::wstring fullText = actionText + countdownText + L" seconds...";
-    
-    // Large font for countdown
-    FontFamily fontFamily(L"Arial");
-    Gdiplus::Font font(&fontFamily, 48, FontStyleBold);
-    SolidBrush outlineBrush(Color(255, 0, 0, 0));     // Black outline
-    SolidBrush textBrush(Color(255, 255, 255, 255));  // White text
-    
-    // Get text bounds
-    RectF layoutRect(0, 0, (REAL)w, (REAL)h);
-    RectF boundingBox;
-    graphics.MeasureString(fullText.c_str(), -1, &font, layoutRect, &boundingBox);
-    
-    // Center the text
-    REAL x = (w - boundingBox.Width) / 2;
-    REAL y = (h - boundingBox.Height) / 2;
-    
-    // Draw outline (stroke effect) by drawing text in multiple directions
-    const int outlineWidth = 2;
-    for (int dx = -outlineWidth; dx <= outlineWidth; dx++) {
-      for (int dy = -outlineWidth; dy <= outlineWidth; dy++) {
-        if (dx != 0 || dy != 0) {  // Skip center position
-          graphics.DrawString(fullText.c_str(), -1, &font, PointF(x + dx, y + dy), &outlineBrush);
-        }
-      }
-    }
-    // Draw main text on top
-    graphics.DrawString(fullText.c_str(), -1, &font, PointF(x, y), &textBrush);
-    
-    // Draw cancel instruction with outline
-    Gdiplus::Font smallFont(&fontFamily, 16, FontStyleRegular);
-    std::wstring cancelText = L"Click anywhere or press any key to cancel";
-    RectF cancelBounds;
-    graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &cancelBounds);
-    REAL cancelX = (w - cancelBounds.Width) / 2;
-    REAL cancelY = y + boundingBox.Height + 20;
-    
-    // Draw cancel text outline (thinner outline for smaller text)
-    const int smallOutlineWidth = 1;
-    for (int dx = -smallOutlineWidth; dx <= smallOutlineWidth; dx++) {
-      for (int dy = -smallOutlineWidth; dy <= smallOutlineWidth; dy++) {
-        if (dx != 0 || dy != 0) {
-          graphics.DrawString(cancelText.c_str(), -1, &smallFont, PointF(cancelX + dx, cancelY + dy), &outlineBrush);
-        }
-      }
-    }
-    // Draw cancel text
-    graphics.DrawString(cancelText.c_str(), -1, &smallFont, PointF(cancelX, cancelY), &textBrush);
-  } else {
-    // Draw image buttons (original logic)
-    for (int i = 0; i < 2; ++i) {
-      Bitmap* bmp = LoadPngFromResource(hInst, buttons[i].resId);
-      if (bmp) {
-        int x = buttons[i].x - buttons[i].r;
-        int y = buttons[i].y - buttons[i].r;
-        int size = buttons[i].r * 2;
-        graphics.DrawImage(bmp, x, y, size, size);
-        // If hovered, overlay a semi-transparent white
-        if (i == hoveredIndex) {
-          SolidBrush highlightBrush(Color(28, 255, 255, 255));
-          graphics.FillEllipse(&highlightBrush, x, y, size, size);
-        }
-        delete bmp;
-      }
-    }
-  }
-}
-
-static void UpdateLayered(HWND hWnd, BYTE alpha) {
-  RECT rc;
-  GetClientRect(hWnd, &rc);
-  int w = rc.right - rc.left;
-  int h = rc.bottom - rc.top;
-  CenterButtons(w, h);
-  HDC hdcScreen = GetDC(NULL);
-  HDC hdcMem = CreateCompatibleDC(hdcScreen);
-  BITMAPINFO bmi = {0};
-  bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = w;
-  bmi.bmiHeader.biHeight = -h;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = 32;
-  bmi.bmiHeader.biCompression = BI_RGB;
-  void* pvBits = nullptr;
-  HBITMAP hBitmap =
-      CreateDIBSection(hdcScreen, &bmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
-  if (hBitmap == NULL) {
-    DeleteDC(hdcMem);
-    ReleaseDC(NULL, hdcScreen);
-    return;
-  }
-
-  HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-  DrawToMemoryDC(hdcMem, w, h, alpha);
-  POINT ptWin = {0, 0};
-  SIZE sizeWin = {w, h};
-  BLENDFUNCTION blend = {AC_SRC_OVER, 0, alpha, AC_SRC_ALPHA};
-  UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0,
-                      &blend, ULW_ALPHA);
-  SelectObject(hdcMem, oldBmp);
-  DeleteObject(hBitmap);
-  DeleteDC(hdcMem);
-  ReleaseDC(NULL, hdcScreen);
-}
 
 static void ExecuteRestart() {
   HANDLE hToken;
