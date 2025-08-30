@@ -3,8 +3,9 @@
 #include "ui.h"
 #include "render.h"
 
-static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
-  static auto appState = AppState::getInstance();
+auto appState = AppState::getInstance();
+
+void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   Graphics graphics(hdcMem);
   graphics.SetSmoothingMode(SmoothingModeAntiAlias);
   graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
@@ -70,7 +71,7 @@ static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
 }
 
 // Helper function to draw text with outline effect
-static void DrawTextWithOutline(Graphics& graphics, const wchar_t* text,
+void DrawTextWithOutline(Graphics& graphics, const wchar_t* text,
                                 const Gdiplus::Font& font,
                                 const PointF& position, int outlineWidth) {
   SolidBrush outlineBrush(Color(255, 0, 0, 0));     // Black outline
@@ -91,7 +92,7 @@ static void DrawTextWithOutline(Graphics& graphics, const wchar_t* text,
   graphics.DrawString(text, -1, &font, position, &textBrush);
 }
 
-static void UpdateLayered(HWND hWnd, BYTE alpha) {
+void UpdateLayered(HWND hWnd, BYTE alpha) {
   RECT rc;
   GetClientRect(hWnd, &rc);
   int w = rc.right - rc.left;

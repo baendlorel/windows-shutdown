@@ -11,23 +11,27 @@ class AppState {
     return instance;
   }
 
-  AppState() {
-    this->hInst = nullptr;
-    this->screenW = 0;
-    this->screenH = 0;
-    
-    this->g_alpha = 0;
-    this->g_fadingOut = false;
-    
-    this->hoveredIndex = -1;
+    AppState() {
+      this->hInst = nullptr;
+      this->screenW = 0;
+      this->screenH = 0;
+      
+      this->g_alpha = 0;
+      this->g_fadingOut = false;
+      
+      this->hoveredIndex = -1;
 
-    this->isCountingDown = false;
-    this->countdownSeconds = 0;
-    this->isRestartCountdown = false;
+      this->isCountingDown = false;
+      this->countdownSeconds = 0;
+      this->isRestartCountdown = false;
 
-    this->config.Load();
-    this->buttons[0] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
-    this->buttons[1] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
+      // ³õÊ¼»¯ szTitle ºÍ szWindowClass
+      this->szTitle[0] = L'\0';
+      this->szWindowClass[0] = L'\0';
+
+      this->config.Load();
+      this->buttons[0] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
+      this->buttons[1] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
   }
 
   HINSTANCE hInst;

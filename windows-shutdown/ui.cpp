@@ -1,22 +1,23 @@
-#include "framework.h"
-#include "Resource.h"
-
-#include "app-state.h"
 #include "ui.h"
 
+#include "Resource.h"
+#include "app-state.h"
+#include "framework.h"
+
+auto appState = AppState::getInstance();
+
 void CenterButtons(int w, int h) {
-  static auto appState = AppState::getInstance();
   int centerX = w / 2;
   int centerY = h / 2;
   int spacing = 100;
   int r = 60;
-  appState. buttons[0] = {centerX - spacing, centerY, r, L"Restart",
+  appState.buttons[0] = {centerX - spacing, centerY, r, L"Restart",
                          IDB_RESTARTPNG};
   appState.buttons[1] = {centerX + spacing, centerY, r, L"Shutdown",
-                        IDB_SHUTDOWNPNG};
+                         IDB_SHUTDOWNPNG};
 }
 
-static Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
+Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
   HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
   if (!hRes) {
     return nullptr;

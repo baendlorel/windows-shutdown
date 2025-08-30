@@ -5,7 +5,9 @@
 #include "render.h"
 #include "app-state.h"
 
-static void ExecuteRestart() {
+auto appState = AppState::getInstance();
+
+void ExecuteRestart() {
   HANDLE hToken;
   TOKEN_PRIVILEGES tkp;
   OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -20,7 +22,7 @@ static void ExecuteRestart() {
   // SHTDN_REASON_MAJOR_OTHER);
 }
 
-static void ExecuteShutdown() {
+void ExecuteShutdown() {
   HANDLE hToken;
   TOKEN_PRIVILEGES tkp;
   OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -35,8 +37,7 @@ static void ExecuteShutdown() {
   // SHTDN_REASON_MAJOR_OTHER);
 }
 
-static void StartCountdown(HWND hWnd, bool isRestart) {
-  static auto appState = AppState::getInstance();
+void StartCountdown(HWND hWnd, bool isRestart) {
   if (appState.config.delay <= 0) {
     // No delay, execute immediately
     if (isRestart) {
@@ -54,8 +55,7 @@ static void StartCountdown(HWND hWnd, bool isRestart) {
   UpdateLayered(hWnd, appState.g_alpha);           // Redraw to show countdown
 }
 
-static void CancelCountdown(HWND hWnd) {
-  static auto appState = AppState::getInstance();
+void CancelCountdown(HWND hWnd) {
   if (appState.isCountingDown) {
     appState.isCountingDown = false;
     KillTimer(hWnd, COUNTDOWN_TIMER_ID);
@@ -63,6 +63,6 @@ static void CancelCountdown(HWND hWnd) {
   }
 }
 
-static void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true); }
+void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true); }
 
-static void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false); }
+void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false); }

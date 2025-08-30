@@ -1,13 +1,13 @@
 #pragma once
 
-static void ExecuteRestart();
+void ExecuteRestart();
 
-static void ExecuteShutdown();
+void ExecuteShutdown();
 
-static void StartCountdown(HWND hWnd, bool isRestart);
+void StartCountdown(HWND hWnd, bool isRestart);
 
-static void CancelCountdown(HWND hWnd);
+void CancelCountdown(HWND hWnd);
 
-static void TriggerRestart(HWND hWnd);
+void TriggerRestart(HWND hWnd);
 
-static void TriggerShutdown(HWND hWnd);
+void TriggerShutdown(HWND hWnd);

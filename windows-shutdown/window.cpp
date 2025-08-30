@@ -7,7 +7,7 @@
 
 auto appState = AppState::getInstance();    
 
-static ATOM MyRegisterClass(HINSTANCE hInstance) {
+ATOM MyRegisterClass(HINSTANCE hInstance) {
   WNDCLASSEXW wcex{};
   wcex.cbSize = sizeof(WNDCLASSEX);
   wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -24,7 +24,7 @@ static ATOM MyRegisterClass(HINSTANCE hInstance) {
   return RegisterClassExW(&wcex);
 }
 
-static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   appState.screenW = GetSystemMetrics(SM_CXSCREEN);
   appState.screenH = GetSystemMetrics(SM_CYSCREEN);
   HWND hWnd = CreateWindowExW(
