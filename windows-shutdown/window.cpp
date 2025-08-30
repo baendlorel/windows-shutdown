@@ -7,7 +7,7 @@
 
 
 ATOM MyRegisterClass(HINSTANCE hInstance) {
-  auto appState = AppState::getInstance();
+  auto& appState = AppState::getInstance();
   WNDCLASSEXW wcex{};
   wcex.cbSize = sizeof(WNDCLASSEX);
   wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -25,11 +25,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 }
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
-  AppState::getInstance().screenW = GetSystemMetrics(SM_CXSCREEN);
-  AppState::getInstance().screenH = GetSystemMetrics(SM_CYSCREEN);
-  HWND hWnd = CreateWindowExW(WS_EX_LAYERED, AppState::getInstance().szWindowClass,
-      AppState::getInstance().szTitle, WS_POPUP, 0, 0,
-      AppState::getInstance().screenW, AppState::getInstance().screenH,
+  auto& appState = AppState::getInstance();
+ appState.screenW = GetSystemMetrics(SM_CXSCREEN);
+ appState.screenH = GetSystemMetrics(SM_CYSCREEN);
+ HWND hWnd = CreateWindowExW(WS_EX_LAYERED, appState.szWindowClass,
+      appState.szTitle, WS_POPUP, 0, 0,
+     appState.screenW, appState.screenH,
                       nullptr,
                               nullptr, hInstance, nullptr);
   if (!hWnd) {
@@ -37,15 +38,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   }
   ShowWindow(hWnd, SW_SHOW);
   UpdateWindow(hWnd);
-  AppState::getInstance().g_alpha = 0;
+  appState.g_alpha = 0;
   SetTimer(hWnd, FADEIN_TIMER_ID, FADEIN_INTERVAL, NULL);
   return TRUE;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
-  // [FIXME] 是这里的以外复制导致的问题，待解决
-  auto appState = AppState::getInstance();
+  auto& appState = AppState::getInstance();
   switch (message) {
     case WM_TIMER:
       if (wParam == FADEIN_TIMER_ID) {

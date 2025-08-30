@@ -6,7 +6,7 @@
 
 
 void CenterButtons(int w, int h) {
-  auto appState = AppState::getInstance();
+  auto& appState = AppState::getInstance();
   int centerX = w / 2;
   int centerY = h / 2;
   int spacing = 100;

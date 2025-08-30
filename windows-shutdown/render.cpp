@@ -3,9 +3,8 @@
 #include "ui.h"
 #include "render.h"
 
-auto appState = AppState::getInstance();
-
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
+  auto& appState = AppState::getInstance();
   Graphics graphics(hdcMem);
   graphics.SetSmoothingMode(SmoothingModeAntiAlias);
   graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
