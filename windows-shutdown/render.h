@@ -1,12 +1,11 @@
 #pragma once
 
-// order below must be preserved
-#include <objidl.h>
-#include <gdiplus.h>
-#include <windows.h>
-#include <string>
-
 #include "framework.h"
-#pragma comment(lib, "Gdiplus.lib")
 
-using namespace Gdiplus;
+static void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha);
+
+static void DrawTextWithOutline(Graphics& graphics, const wchar_t* text,
+                                const Gdiplus::Font& font,
+                                const PointF& position, int outlineWidth);
+
+static void UpdateLayered(HWND hWnd, BYTE alpha);

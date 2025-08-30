@@ -1,4 +1,4 @@
-#include "config-parser.h"
+#include "config.h"
 
 #include <windows.h>
 
@@ -36,17 +36,17 @@ std::wstring GetConfigPath() {
 const std::string MODE_IMMEDIATE = "immediate";
 const std::string MODE_NORMAL = "normal";
 
-void ParseConfigFile() {
-  static auto appState =AppState::getInstance();
+void Config::Load() {
   std::wstring configPath = GetConfigPath();
   std::ifstream file(configPath);
   if (!file.is_open()) {
     // Create default config.ini
     std::ofstream out(configPath);
-    out << "# If an invalid config file or invalid values are detected, we will use default values."  << std::endl;
-    out << "# `mode` can be \"" << MODE_IMMEDIATE << "\" and \"" << MODE_NORMAL
-        << "\""
+    out << "# If an invalid config file or invalid values are detected, we "
+           "will use default values."
         << std::endl;
+    out << "# `mode` can be \"" << MODE_IMMEDIATE << "\" and \"" << MODE_NORMAL
+        << "\"" << std::endl;
     out << "# \"" << MODE_NORMAL
         << "\"(default): will popup control buttons to choose whether shutdown "
            "or restart"
@@ -54,7 +54,8 @@ void ParseConfigFile() {
     out << "# \"" << MODE_IMMEDIATE << "\": will shutdown immediately"
         << std::endl;
     out << "mode=" << MODE_NORMAL << std::endl;
-    out << "# Shutdown/Restart in this many seconds, set it to 0 to do it immediately"
+    out << "# Shutdown/Restart in this many seconds, set it to 0 to do it "
+           "immediately"
         << std::endl;
     out << "delay=" << DEFAULT_DELAY << std::endl;
     out.close();
@@ -71,18 +72,18 @@ void ParseConfigFile() {
     std::string value = trim(line.substr(eq + 1));
     if (key == "mode") {
       if (value == MODE_IMMEDIATE) {
-        appState.config.mode = Mode::IMMEDIATE;
+        this->mode = Mode::IMMEDIATE;
       } else {
-        appState.config.mode = Mode::NORMAL;
+        this->mode = Mode::NORMAL;
       }
     }
     if (key == "delay") {
-      appState.config.delay = std::clamp(std::stoi(value), 0, 60);
+      this->delay = std::clamp(std::stoi(value), 0, 60);
       try {
-        appState.config.delay = std::clamp(std::stoi(value), 0, 60);
+        this->delay = std::clamp(std::stoi(value), 0, 60);
       } catch (const std::invalid_argument& _) {
-        appState.config.delay = DEFAULT_DELAY;
-      } 
+        this->delay = DEFAULT_DELAY;
+      }
     }
   }
 }

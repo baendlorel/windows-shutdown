@@ -13,7 +13,13 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\structs">
+    <Filter Include="头文件\ui">
+      <UniqueIdentifier>{502d2fc1-b33b-411f-8b6e-cdd8bd72e112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\core">
+      <UniqueIdentifier>{b21f1e7a-7a95-4f22-a827-1c5e6f06689d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\types">
       <UniqueIdentifier>{2db92704-e442-4fe9-b1b4-fc79b2d43bd3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -30,36 +36,48 @@
     <ClInclude Include="windows-shutdown.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="config-parser.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="image-button.h">
+      <Filter>头文件\types</Filter>
     </ClInclude>
-    <ClInclude Include="app-state.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="config.h">
+      <Filter>头文件\types</Filter>
     </ClInclude>
-    <ClInclude Include="render.h">
+    <ClInclude Include="consts.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ui.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\ui</Filter>
     </ClInclude>
-    <ClInclude Include="image-button.h">
-      <Filter>头文件\structs</Filter>
+    <ClInclude Include="render.h">
+      <Filter>头文件\ui</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>头文件\structs</Filter>
+    <ClInclude Include="app-state.h">
+      <Filter>头文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>头文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="window.h">
+      <Filter>头文件\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windows-shutdown.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="config-parser.cpp">
+    <ClCompile Include="config.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="render.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ui.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

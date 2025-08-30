@@ -23,7 +23,7 @@ class AppState {
     this->countdownSeconds = 0;
     this->isRestartCountdown = false;
 
-    this->config = Config();
+    this->config.Load();
     this->buttons[0] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
     this->buttons[1] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
   }
@@ -43,6 +43,10 @@ class AppState {
   bool isCountingDown;
   short countdownSeconds;
   bool isRestartCountdown;
+
+  // ui
+  WCHAR szTitle[MAX_LOADSTRING];
+  WCHAR szWindowClass[MAX_LOADSTRING];
 
   Config config;
   ImageButton buttons[2];

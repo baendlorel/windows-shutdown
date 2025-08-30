@@ -126,20 +126,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="app-state.h" />
-    <ClInclude Include="config-parser.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="consts.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="image-button.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="controller.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ui.h" />
+    <ClInclude Include="window.h" />
     <ClInclude Include="windows-shutdown.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="config-parser.cpp" />
+    <ClCompile Include="config.cpp" />
     <ClCompile Include="render.cpp" />
+    <ClCompile Include="controller.cpp" />
     <ClCompile Include="ui.cpp" />
+    <ClCompile Include="window.cpp" />
     <ClCompile Include="windows-shutdown.cpp" />
   </ItemGroup>
   <ItemGroup>
