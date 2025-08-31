@@ -150,6 +150,7 @@
     <ResourceCompile Include="windows-shutdown.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\config.png" />
     <Image Include="assets\restart.png" />
     <Image Include="assets\shutdown-icon.png" />
     <Image Include="assets\shutdown.png" />
