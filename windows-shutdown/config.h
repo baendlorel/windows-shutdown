@@ -1,7 +1,7 @@
 #pragma once
 
 enum class Mode { IMMEDIATE, NORMAL };
-constexpr int DEFAULT_DELAY = 5;
+constexpr int DEFAULT_DELAY = 3;
 
 struct Config {
   Mode mode = Mode::NORMAL;

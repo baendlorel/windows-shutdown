@@ -117,13 +117,10 @@ void TriggerLock(HWND hWnd) {
 void TriggerConfig(HWND hWnd) {
   auto& appState = AppState::getInstance();
   
-  // 获取config.ini文件路径
   std::wstring configPath = GetConfigPath();
   
-  // 使用ShellExecute打开config.ini文件进行编辑
   ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
   
-  // 启动窗口淡出并关闭程序
   if (!appState.g_fadingOut) {
     appState.g_fadingOut = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
