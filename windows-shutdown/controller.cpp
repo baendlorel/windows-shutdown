@@ -4,9 +4,13 @@
 #include "consts.h"
 #include "framework.h"
 #include "render.h"
+#include "config.h"
 #include <powrprof.h>
+#include <shellapi.h>
 
 #pragma comment(lib, "PowrProf.lib")
+// 声明GetConfigPath函数（来自config.cpp）
+std::wstring GetConfigPath();
 
 void ExecuteRestart() {
   HANDLE hToken;
@@ -112,9 +116,16 @@ void TriggerLock(HWND hWnd) {
 
 void TriggerConfig(HWND hWnd) {
   auto& appState = AppState::getInstance();
-  // Close the current window with fade out
-
-  // TODO: Show configuration dialog or window
-  // For now, just close the application
-  // You can implement a configuration dialog here later
+  
+  // 获取config.ini文件路径
+  std::wstring configPath = GetConfigPath();
+  
+  // 使用ShellExecute打开config.ini文件进行编辑
+  ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+  
+  // 启动窗口淡出并关闭程序
+  if (!appState.g_fadingOut) {
+    appState.g_fadingOut = true;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+  }
 }

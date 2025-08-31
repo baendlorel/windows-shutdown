@@ -10,18 +10,18 @@ void CenterButtons(int w, int h) {
   auto& appState = AppState::getInstance();
   int centerX = w / 2;
   int centerY = h / 2;
-  int centerGap = BUTTON_GAP + BUTTON_RADIUS;
-  appState.buttons[0] = {centerX - centerGap, centerY,
-                         BUTTON_RADIUS,
-                         L"Config",
-                         IDB_CONFIGPNG};
-  appState.buttons[1] = {centerX, centerY, BUTTON_RADIUS,
-                         L"Restart",
-                         IDB_RESTARTPNG};
-  appState.buttons[2] = {centerX + centerGap, centerY,
-                         BUTTON_RADIUS,
-                         L"Shutdown",
-                         IDB_SHUTDOWNPNG};
+  int spacing = BUTTON_GAP + BUTTON_RADIUS;
+  
+  appState.buttons[0] = {centerX - spacing * 2, centerY, BUTTON_RADIUS,
+                         L"Config", IDB_CONFIGPNG};
+  appState.buttons[1] = {centerX - spacing, centerY, BUTTON_RADIUS,
+                         L"Lock", IDB_LOCKPNG};
+  appState.buttons[2] = {centerX, centerY, BUTTON_RADIUS,
+                         L"Sleep", IDB_SLEEPPNG};
+  appState.buttons[3] = {centerX + spacing, centerY, BUTTON_RADIUS,
+                         L"Restart", IDB_RESTARTPNG};
+  appState.buttons[4] = {centerX + spacing * 2, centerY, BUTTON_RADIUS,
+                         L"Shutdown", IDB_SHUTDOWNPNG};
 }
 
 Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {

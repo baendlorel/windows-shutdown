@@ -33,8 +33,10 @@ class AppState {
 
     this->config.Load();
     this->buttons[0] = {0, 0, 60, L"Config", IDB_CONFIGPNG};
-    this->buttons[1] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
-    this->buttons[2] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
+    this->buttons[1] = {0, 0, 60, L"Lock", IDB_LOCKPNG};
+    this->buttons[2] = {0, 0, 60, L"Sleep", IDB_SLEEPPNG};
+    this->buttons[3] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
+    this->buttons[4] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
    }
 
  public:
@@ -68,5 +70,5 @@ class AppState {
   WCHAR szWindowClass[MAX_LOADSTRING];
 
   Config config;
-  ImageButton buttons[3];
+  ImageButton buttons[5];
 };
