@@ -108,6 +108,15 @@
     <Image Include="assets\config.png">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="bitmap1.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\lock.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\sleep.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="make-icon.py" />

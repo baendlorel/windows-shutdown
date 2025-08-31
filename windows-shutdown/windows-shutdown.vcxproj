@@ -151,9 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\config.png" />
+    <Image Include="assets\lock.png" />
     <Image Include="assets\restart.png" />
     <Image Include="assets\shutdown-icon.png" />
     <Image Include="assets\shutdown.png" />
+    <Image Include="assets\sleep.png" />
+    <Image Include="bitmap1.bmp" />
     <Image Include="icon.ico" />
     <Image Include="small.ico" />
     <Image Include="windows-shutdown.ico" />
