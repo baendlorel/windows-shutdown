@@ -1,11 +1,11 @@
-#include "framework.h"
-#include "consts.h"
-#include "app-state.h"
-#include "render.h"
-#include "controller.h"
 #include "window.h"
-#include "Resource.h"
 
+#include "Resource.h"
+#include "app-state.h"
+#include "consts.h"
+#include "controller.h"
+#include "framework.h"
+#include "render.h"
 
 ATOM MyRegisterClass() {
   auto& appState = AppState::getInstance();
@@ -27,13 +27,12 @@ ATOM MyRegisterClass() {
 
 BOOL InitInstance(int nCmdShow) {
   auto& appState = AppState::getInstance();
- appState.screenW = GetSystemMetrics(SM_CXSCREEN);
- appState.screenH = GetSystemMetrics(SM_CYSCREEN);
- HWND hWnd = CreateWindowExW(WS_EX_LAYERED, appState.szWindowClass,
-      appState.szTitle, WS_POPUP, 0, 0,
-     appState.screenW, appState.screenH,
-                      nullptr,
-                              nullptr, appState.hInst, nullptr);
+  appState.screenW = GetSystemMetrics(SM_CXSCREEN);
+  appState.screenH = GetSystemMetrics(SM_CYSCREEN);
+  HWND hWnd =
+      CreateWindowExW(WS_EX_LAYERED, appState.szWindowClass, appState.szTitle,
+                      WS_POPUP, 0, 0, appState.screenW, appState.screenH,
+                      nullptr, nullptr, appState.hInst, nullptr);
   if (!hWnd) {
     return FALSE;
   }
@@ -133,28 +132,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       int mx = LOWORD(lParam);
       int my = HIWORD(lParam);
       bool hit = false;
-      
+
       for (int i = 0; i < 5; ++i) {
         int dx = mx - appState.buttons[i].x;
         int dy = my - appState.buttons[i].y;
         if (dx * dx + dy * dy <=
             appState.buttons[i].r * appState.buttons[i].r) {
           hit = true;
-          if (i == 0) {
-            TriggerConfig(hWnd);
-          } else if (i == 1) {
-            TriggerLock(hWnd);
-          } else if (i == 2) {
-            TriggerSleep(hWnd);
-          } else if (i == 3) {
-            TriggerRestart(hWnd);
-          } else if (i == 4) {
-            TriggerShutdown(hWnd);
+
+          switch (i) {
+            case 0:
+              TriggerConfig(hWnd);
+              break;
+            case 1:
+              TriggerLock(hWnd);
+              break;
+            case 2:
+              TriggerSleep(hWnd);
+              break;
+            case 3:
+              TriggerRestart(hWnd);
+              break;
+            case 4:
+              TriggerShutdown(hWnd);
+              break;
           }
           break;
         }
       }
-      
+
       if (!hit && !appState.g_fadingOut) {
         appState.g_fadingOut = true;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
