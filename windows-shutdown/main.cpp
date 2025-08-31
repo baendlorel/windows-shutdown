@@ -12,6 +12,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
 
+  // 设置 DPI 感知，防止图标模糊
+  SetProcessDPIAware();
+
   auto& appState = AppState::getInstance();
   appState.hInst = hInstance;
   

@@ -4,6 +4,7 @@
 #include "render.h"
 #include "controller.h"
 #include "window.h"
+#include "Resource.h"
 
 
 ATOM MyRegisterClass() {
@@ -15,12 +16,13 @@ ATOM MyRegisterClass() {
   wcex.cbClsExtra = 0;
   wcex.cbWndExtra = 0;
   wcex.hInstance = appState.hInst;
-  wcex.hIcon = NULL;
+  // 设置大图标和小图标
+  wcex.hIcon = LoadIcon(appState.hInst, MAKEINTRESOURCE(IDI_MAINICON));
   wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
   wcex.hbrBackground = NULL;
   wcex.lpszMenuName = NULL;
   wcex.lpszClassName = appState.szWindowClass;
-  wcex.hIconSm = NULL;
+  wcex.hIconSm = LoadIcon(appState.hInst, MAKEINTRESOURCE(IDI_MAINICON));
   return RegisterClassExW(&wcex);
 }
 
@@ -95,6 +97,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
     case WM_SYSKEYDOWN:
       if (appState.isCountingDown) {
         CancelCountdown(hWnd);
+      } else {
+        if (!appState.g_fadingOut) {
+          appState.g_fadingOut = true;
+          SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+        }
       }
       break;
     case WM_MOUSEMOVE: {
@@ -127,6 +134,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       int mx = LOWORD(lParam);
       int my = HIWORD(lParam);
       bool hit = false;
+      
       for (int i = 0; i < 2; ++i) {
         int dx = mx - appState.buttons[i].x;
         int dy = my - appState.buttons[i].y;
@@ -141,6 +149,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           break;
         }
       }
+      
       if (!hit && !appState.g_fadingOut) {
         appState.g_fadingOut = true;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);

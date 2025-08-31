@@ -1,6 +1,7 @@
 #include "ui.h"
 
 #include "Resource.h"
+#include "consts.h"
 #include "app-state.h"
 #include "framework.h"
 
@@ -9,11 +10,11 @@ void CenterButtons(int w, int h) {
   auto& appState = AppState::getInstance();
   int centerX = w / 2;
   int centerY = h / 2;
-  int spacing = 100;
-  int r = 60;
-  appState.buttons[0] = {centerX - spacing, centerY, r, L"Restart",
+  appState.buttons[0] = {centerX - BUTTON_GAP, centerY, BUTTON_RADIUS,
+                         L"Restart",
                          IDB_RESTARTPNG};
-  appState.buttons[1] = {centerX + spacing, centerY, r, L"Shutdown",
+  appState.buttons[1] = {centerX + BUTTON_GAP, centerY, BUTTON_RADIUS,
+                         L"Shutdown",
                          IDB_SHUTDOWNPNG};
 }
 
