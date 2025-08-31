@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\restart.png" />
+    <Image Include="assets\shutdown-icon.png" />
     <Image Include="assets\shutdown.png" />
     <Image Include="icon.ico" />
     <Image Include="small.ico" />
