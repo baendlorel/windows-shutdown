@@ -4,6 +4,9 @@
 #include "consts.h"
 #include "framework.h"
 #include "render.h"
+#include <powrprof.h>
+
+#pragma comment(lib, "PowrProf.lib")
 
 void ExecuteRestart() {
   HANDLE hToken;
@@ -31,6 +34,28 @@ void ExecuteShutdown() {
 
   wchar_t msg[] = L"Shutdown...";
   InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER);
+}
+
+void ExecuteSleep() {
+  // 获取必要的权限
+  HANDLE hToken;
+  TOKEN_PRIVILEGES tkp;
+  if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+    if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+      tkp.PrivilegeCount = 1;
+      tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+      AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+    }
+    CloseHandle(hToken);
+  }
+  
+  // 执行睡眠操作
+  SetSuspendState(FALSE, FALSE, FALSE);
+}
+
+void ExecuteLock() {
+  // 锁定工作站
+  LockWorkStation();
 }
 
 void StartCountdown(HWND hWnd, bool isRestart) {
@@ -65,13 +90,29 @@ void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true); }
 
 void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false); }
 
-void TriggerConfig(HWND hWnd) {
+void TriggerSleep(HWND hWnd) {
   auto& appState = AppState::getInstance();
-  // Close the current window with fade out
+  // 睡眠功能通常立即执行，不需要倒计时
   if (!appState.g_fadingOut) {
     appState.g_fadingOut = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
   }
+  ExecuteSleep();
+}
+
+void TriggerLock(HWND hWnd) {
+  auto& appState = AppState::getInstance();
+  // 锁屏功能立即执行
+  if (!appState.g_fadingOut) {
+    appState.g_fadingOut = true;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+  }
+  ExecuteLock();
+}
+
+void TriggerConfig(HWND hWnd) {
+  auto& appState = AppState::getInstance();
+  // Close the current window with fade out
 
   // TODO: Show configuration dialog or window
   // For now, just close the application
