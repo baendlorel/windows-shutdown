@@ -50,7 +50,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                         PointF(cancelX, cancelY), 2);
   } else {
     // Draw image buttons (original logic)
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
       Bitmap* bmp =
           LoadPngFromResource(appState.hInst, appState.buttons[i].resId);
       if (bmp) {

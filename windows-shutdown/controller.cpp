@@ -1,4 +1,3 @@
-
 #include "controller.h"
 
 #include "app-state.h"
@@ -65,3 +64,16 @@ void CancelCountdown(HWND hWnd) {
 void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true); }
 
 void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false); }
+
+void TriggerConfig(HWND hWnd) {
+  auto& appState = AppState::getInstance();
+  // Close the current window with fade out
+  if (!appState.g_fadingOut) {
+    appState.g_fadingOut = true;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+  }
+
+  // TODO: Show configuration dialog or window
+  // For now, just close the application
+  // You can implement a configuration dialog here later
+}

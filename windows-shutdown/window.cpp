@@ -110,7 +110,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       int mx = LOWORD(lParam);
       int my = HIWORD(lParam);
       int newHover = -1;
-      for (int i = 0; i < 2; ++i) {
+      for (int i = 0; i < 3; ++i) {
         int dx = mx - appState.buttons[i].x;
         int dy = my - appState.buttons[i].y;
         if (dx * dx + dy * dy <=
@@ -134,13 +134,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       int my = HIWORD(lParam);
       bool hit = false;
       
-      for (int i = 0; i < 2; ++i) {
+      for (int i = 0; i < 3; ++i) {
         int dx = mx - appState.buttons[i].x;
         int dy = my - appState.buttons[i].y;
         if (dx * dx + dy * dy <=
             appState.buttons[i].r * appState.buttons[i].r) {
           hit = true;
           if (i == 0) {
+            TriggerConfig(hWnd);
+          } else if (i == 1) {
             TriggerRestart(hWnd);
           } else {
             TriggerShutdown(hWnd);

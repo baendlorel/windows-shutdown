@@ -10,10 +10,16 @@ void CenterButtons(int w, int h) {
   auto& appState = AppState::getInstance();
   int centerX = w / 2;
   int centerY = h / 2;
-  appState.buttons[0] = {centerX - BUTTON_GAP, centerY, BUTTON_RADIUS,
+  int centerGap = BUTTON_GAP + BUTTON_RADIUS;
+  appState.buttons[0] = {centerX - centerGap, centerY,
+                         BUTTON_RADIUS,
+                         L"Config",
+                         IDB_CONFIGPNG};
+  appState.buttons[1] = {centerX, centerY, BUTTON_RADIUS,
                          L"Restart",
                          IDB_RESTARTPNG};
-  appState.buttons[1] = {centerX + BUTTON_GAP, centerY, BUTTON_RADIUS,
+  appState.buttons[2] = {centerX + centerGap, centerY,
+                         BUTTON_RADIUS,
                          L"Shutdown",
                          IDB_SHUTDOWNPNG};
 }

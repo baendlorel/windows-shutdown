@@ -12,3 +12,5 @@ void CancelCountdown(HWND hWnd);
 void TriggerRestart(HWND hWnd);
 
 void TriggerShutdown(HWND hWnd);
+
+void TriggerConfig(HWND hWnd);
