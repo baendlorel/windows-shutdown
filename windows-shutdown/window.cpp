@@ -6,6 +6,7 @@
 #include "controller.h"
 #include "framework.h"
 #include "render.h"
+#include <thread>
 
 ATOM MyRegisterClass() {
   auto& appState = AppState::getInstance();
@@ -76,7 +77,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           appState.countdownSeconds--;
           if (appState.countdownSeconds <= 0) {
             CancelCountdown(hWnd);
-            if (appState.isRestartCountdown) {
+            if (appState.isSleepCountdown) {
+              // Close the program first, then sleep
+              PostMessage(hWnd, WM_CLOSE, 0, 0);
+              // Use a separate thread to handle sleep after window closes
+              std::thread([]() {
+                Sleep(500); // Give time for window to close
+                ExecuteSleep();
+              }).detach();
+            } else if (appState.isRestartCountdown) {
               ExecuteRestart();
             } else {
               ExecuteShutdown();

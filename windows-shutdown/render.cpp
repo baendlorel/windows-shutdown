@@ -15,8 +15,16 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   if (appState.isCountingDown) {
     // Draw countdown in center
     std::wstring countdownText = std::to_wstring(appState.countdownSeconds);
-    std::wstring actionText =
-        appState.isRestartCountdown ? L"Restarting in " : L"Shutting down in ";
+    std::wstring actionText;
+
+    if (appState.isSleepCountdown) {
+      actionText = L"Sleeping in ";
+    } else if (appState.isRestartCountdown) {
+      actionText = L"Restarting in ";
+    } else {
+      actionText = L"Shutting down in ";
+    }
+
     std::wstring fullText = actionText + countdownText + L" seconds...";
 
     // Large font for countdown

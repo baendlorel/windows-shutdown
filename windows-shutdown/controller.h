@@ -9,7 +9,7 @@ void ExecuteSleep();
 
 void ExecuteLock();
 
-void StartCountdown(HWND hWnd, bool isRestart);
+void StartCountdown(HWND hWnd, bool isRestart, bool isSleep = false);
 
 void CancelCountdown(HWND hWnd);
 

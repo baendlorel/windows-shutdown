@@ -62,11 +62,17 @@ void ExecuteLock() {
   LockWorkStation();
 }
 
-void StartCountdown(HWND hWnd, bool isRestart) {
+void StartCountdown(HWND hWnd, bool isRestart, bool isSleep) {
   auto& appState = AppState::getInstance();
   if (appState.config.delay <= 0) {
     // No delay, execute immediately
-    if (isRestart) {
+    if (isSleep) {
+      // For sleep, close the program first then sleep
+      PostMessage(hWnd, WM_CLOSE, 0, 0);
+      // Use a small delay to ensure the program closes before sleeping
+      Sleep(500);
+      ExecuteSleep();
+    } else if (isRestart) {
       ExecuteRestart();
     } else {
       ExecuteShutdown();
@@ -77,6 +83,7 @@ void StartCountdown(HWND hWnd, bool isRestart) {
   appState.isCountingDown = true;
   appState.countdownSeconds = appState.config.delay;
   appState.isRestartCountdown = isRestart;
+  appState.isSleepCountdown = isSleep;
   SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
   UpdateLayered(hWnd, appState.g_alpha);           // Redraw to show countdown
 }
@@ -85,28 +92,23 @@ void CancelCountdown(HWND hWnd) {
   auto& appState = AppState::getInstance();
   if (appState.isCountingDown) {
     appState.isCountingDown = false;
+    appState.isRestartCountdown = false;
+    appState.isSleepCountdown = false;
     KillTimer(hWnd, COUNTDOWN_TIMER_ID);
     UpdateLayered(hWnd, appState.g_alpha);  // Redraw to hide countdown
   }
 }
 
-void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true); }
+void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true, false); }
 
-void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false); }
+void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false, false); }
 
-void TriggerSleep(HWND hWnd) {
-  auto& appState = AppState::getInstance();
-  // 睡眠功能通常立即执行，不需要倒计时
-  if (!appState.g_fadingOut) {
-    appState.g_fadingOut = true;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-  }
-  ExecuteSleep();
+void TriggerSleep(HWND hWnd) { 
+  StartCountdown(hWnd, false, true); 
 }
 
 void TriggerLock(HWND hWnd) {
   auto& appState = AppState::getInstance();
-  // 锁屏功能立即执行
   if (!appState.g_fadingOut) {
     appState.g_fadingOut = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);

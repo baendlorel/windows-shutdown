@@ -26,6 +26,7 @@ class AppState {
     this->isCountingDown = false;
     this->countdownSeconds = 0;
     this->isRestartCountdown = false;
+    this->isSleepCountdown = false;
 
     // ³õÊ¼»¯ szTitle ºÍ szWindowClass
     this->szTitle[0] = L'\0';
@@ -63,6 +64,7 @@ class AppState {
   // count down
   bool isCountingDown;
   bool isRestartCountdown;
+  bool isSleepCountdown;
   short countdownSeconds;
 
   // ui
