@@ -3,8 +3,9 @@
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha);
 
-void DrawTextWithOutline(Graphics& graphics, const wchar_t* text,
-                                const Gdiplus::Font& font,
-                                const PointF& position, int outlineWidth);
+void DrawBeautifulText(Graphics& graphics, const wchar_t* text,
+                      const Gdiplus::Font& font, const PointF& position,
+                      const Color& textColor = Color(255, 255, 255, 255),
+                      const Color& shadowColor = Color(128, 0, 0, 0));
 
 void UpdateLayered(HWND hWnd, BYTE alpha);

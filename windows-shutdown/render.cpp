@@ -29,7 +29,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
 
     // Large font for countdown
     FontFamily fontFamily(L"Arial");
-    Gdiplus::Font font(&fontFamily, 48, FontStyleBold);
+    Gdiplus::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, FontStyleBold);
 
     // Get text bounds
     RectF layoutRect(0, 0, (REAL)w, (REAL)h);
@@ -41,11 +41,12 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     REAL x = (w - boundingBox.Width) / 2;
     REAL y = (h - boundingBox.Height) / 2;
 
-    // Draw main text with outline
-    DrawTextWithOutline(graphics, fullText.c_str(), font, PointF(x, y), 3);
+    // Draw main text with beautiful rendering
+    DrawBeautifulText(graphics, fullText.c_str(), font, PointF(x, y));
 
-    // Draw cancel instruction with outline
-    Gdiplus::Font smallFont(&fontFamily, 16, FontStyleRegular);
+    // Draw cancel instruction with beautiful rendering
+    Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE,
+                            FontStyleRegular);
     std::wstring cancelText = L"Click anywhere or press any key to cancel";
     RectF cancelBounds;
     graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect,
@@ -53,9 +54,10 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     REAL cancelX = (w - cancelBounds.Width) / 2;
     REAL cancelY = y + boundingBox.Height + 20;
 
-    // Draw cancel text with thinner outline
-    DrawTextWithOutline(graphics, cancelText.c_str(), smallFont,
-                        PointF(cancelX, cancelY), 2);
+    // Draw cancel text with beautiful rendering
+    DrawBeautifulText(graphics, cancelText.c_str(), smallFont,
+                     PointF(cancelX, cancelY), 
+                     Color(255, 220, 220, 220), Color(100, 0, 0, 0));
   } else {
     // Draw image buttons (original logic)
     for (int i = 0; i < 5; ++i) {
@@ -74,28 +76,46 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         delete bmp;
       }
     }
+    
+    // Draw instruction text below buttons
+    FontFamily fontFamily(L"Arial");
+    Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE,
+                                  FontStyleRegular);
+    std::wstring instructionText = L"Press any key or click background to exit";
+    
+    RectF layoutRect(0, 0, (REAL)w, (REAL)h);
+    RectF textBounds;
+    graphics.MeasureString(instructionText.c_str(), -1, &instructionFont, layoutRect, &textBounds);
+    
+    // Position text below the buttons
+    REAL textX = (w - textBounds.Width) / 2;
+    REAL textY = (h / 2) + BUTTON_RADIUS + 40; // Below buttons with some margin
+    
+    // Draw text with beautiful rendering
+    DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, 
+                     PointF(textX, textY), 
+                     Color(255, 200, 200, 200), Color(80, 0, 0, 0));
   }
 }
 
-// Helper function to draw text with outline effect
-void DrawTextWithOutline(Graphics& graphics, const wchar_t* text,
-                                const Gdiplus::Font& font,
-                                const PointF& position, int outlineWidth) {
-  SolidBrush outlineBrush(Color(255, 0, 0, 0));     // Black outline
-  SolidBrush textBrush(Color(255, 255, 255, 255));  // White text
-
-  // Draw outline by rendering text in multiple directions
-  for (int dx = -outlineWidth; dx <= outlineWidth; dx++) {
-    for (int dy = -outlineWidth; dy <= outlineWidth; dy++) {
-      if (dx != 0 || dy != 0) {  // Skip center position
-        graphics.DrawString(text, -1, &font,
-                            PointF(position.X + dx, position.Y + dy),
-                            &outlineBrush);
-      }
-    }
-  }
-
-  // Draw main text on top
+// 新的漂亮文字绘制函数 - 使用阴影效果替代粗糙的轮廓
+void DrawBeautifulText(Graphics& graphics, const wchar_t* text,
+                      const Gdiplus::Font& font, const PointF& position,
+                      const Color& textColor, const Color& shadowColor) {
+  // 设置高质量渲染
+  graphics.SetTextRenderingHint(TextRenderingHintAntiAliasGridFit);
+  graphics.SetSmoothingMode(SmoothingModeAntiAlias);
+  graphics.SetCompositingQuality(CompositingQualityHighQuality);
+  
+  // 创建画刷
+  SolidBrush shadowBrush(shadowColor);
+  SolidBrush textBrush(textColor);
+  
+  // 绘制阴影 (右下偏移)
+  PointF shadowPos(position.X + 2, position.Y + 2);
+  graphics.DrawString(text, -1, &font, shadowPos, &shadowBrush);
+  
+  // 绘制主文字
   graphics.DrawString(text, -1, &font, position, &textBrush);
 }
 
