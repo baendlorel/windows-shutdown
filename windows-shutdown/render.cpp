@@ -1,7 +1,6 @@
 #include "render.h"
 
 #include "app-state.h"
-#include "framework.h"
 #include "ui.h"
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {

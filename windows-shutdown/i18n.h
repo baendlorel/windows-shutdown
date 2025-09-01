@@ -29,7 +29,7 @@ struct I18N {
   I18N(I18N&&) = delete;
   I18N& operator=(I18N&&) = delete;
 
-  std::string PressAnyKeyToExitText() const;
-  std::string PressAnyKeyToCancelText() const;
-  std::string WaitText(WaitType type, int seconds) const;
+  std::wstring PressAnyKeyToExit() const;
+  std::wstring PressAnyKeyToCancel() const;
+  std::wstring Wait(WaitType type, int seconds) const;
 };
