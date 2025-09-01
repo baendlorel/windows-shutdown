@@ -1,7 +1,7 @@
 #pragma once
 
 // state
-enum class Action { Sleep, Shutdown, Restart };
+enum class Action { None, Sleep, Shutdown, Restart };
 
 
 // configs
