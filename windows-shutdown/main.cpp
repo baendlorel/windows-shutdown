@@ -22,7 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-  if (appState.config.mode == Mode::IMMEDIATE) {
+  if (appState.config.isImmediate) {
     ExecuteShutdown();  // Execute immediately without UI
     GdiplusShutdown(gdiplusToken);
     return 0;

@@ -1,14 +1,22 @@
 #pragma once
 
-#define MODE_IMMEDIATE "immediate"
-#define MODE_NORMAL "normal"
+#define CFG_KEY_LANG "lang"
+#define CFG_KEY_MODE "mode"
+#define CFG_KEY_DELAY "delay"
 
-enum class Mode { IMMEDIATE, NORMAL };
-constexpr int DEFAULT_DELAY = 3;
+#define CFG_LANG_ZH "zh"
+#define CFG_LANG_EN "en"
+
+#define CFG_MODE_IMMEDIATE "immediate"
+#define CFG_MODE_NORMAL "normal"
+
+enum Mode { IMMEDIATE, NORMAL };
+constexpr int CFG_DEFAULT_DELAY = 3;
 
 struct Config {
-  Mode mode = Mode::NORMAL;
-  int delay = DEFAULT_DELAY;
+  bool isZh = true;
+  bool isImmediate = false;
+  int delay = CFG_DEFAULT_DELAY;
 
   void Load();
 };
