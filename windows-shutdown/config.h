@@ -1,5 +1,8 @@
 #pragma once
 
+#define MODE_IMMEDIATE "immediate"
+#define MODE_NORMAL "normal"
+
 enum class Mode { IMMEDIATE, NORMAL };
 constexpr int DEFAULT_DELAY = 3;
 
@@ -9,3 +12,4 @@ struct Config {
 
   void Load();
 };
+

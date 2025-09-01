@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include <format>
 
 std::string trim(const std::string& s) {
   auto start = s.begin();
@@ -33,31 +34,27 @@ std::wstring GetConfigPath() {
   return path;
 }
 
-const std::string MODE_IMMEDIATE = "immediate";
-const std::string MODE_NORMAL = "normal";
 
 void Config::Load() {
   std::wstring configPath = GetConfigPath();
   std::ifstream file(configPath);
   if (!file.is_open()) {
     // Create default config.ini
+    std::string content = std::format(
+        "# When loading is failed, we will use default config values.\n"
+        "\n"
+        "# `mode` options:\n"
+        "# - `{}` (default): show menu to choose an action\n"
+        "# - `{}` : shutdown instantly\n"
+        "mode={}\n"
+        "\n"
+        "# Wait time (in seconds) before action\n"
+        "delay={}\n",
+        MODE_NORMAL, MODE_IMMEDIATE, MODE_NORMAL,
+        DEFAULT_DELAY
+    );
     std::ofstream out(configPath);
-    out << "# If an invalid config file or invalid values are detected, we "
-           "will use default values."
-        << std::endl;
-    out << "# `mode` can be \"" << MODE_IMMEDIATE << "\" and \"" << MODE_NORMAL
-        << "\"" << std::endl;
-    out << "# \"" << MODE_NORMAL
-        << "\"(default): will popup control buttons to choose whether shutdown "
-           "or restart"
-        << std::endl;
-    out << "# \"" << MODE_IMMEDIATE << "\": will shutdown immediately"
-        << std::endl;
-    out << "mode=" << MODE_NORMAL << std::endl;
-    out << "# Shutdown/Restart in this many seconds, set it to 0 to do it "
-           "immediately"
-        << std::endl;
-    out << "delay=" << DEFAULT_DELAY << std::endl;
+    out << content;
     out.close();
     return;
   }
