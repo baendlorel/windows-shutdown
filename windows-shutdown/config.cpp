@@ -74,6 +74,9 @@ void Config::Load() {
 
   std::string line;
   while (std::getline(file, line)) {
+    if (line.empty()) {
+      continue;
+    }
     line = trim(line);
     if (line.empty() || line[0] == '#') {
       continue;
@@ -88,7 +91,7 @@ void Config::Load() {
     if (key == CFG_KEY_LANG) {
       this->lang = value == CFG_LANG_EN ? Lang::EN : Lang::ZH;
     } else if (key == CFG_KEY_MODE) {
-      this->isImmediate = value == CFG_MODE_IMMEDIATE;
+      this->mode = value == CFG_MODE_IMMEDIATE ? Mode::IMMEDIATE : Mode::NORMAL;
     } else if (key == CFG_KEY_DELAY) {
       try {
         this->delay = std::clamp(std::stoi(value), 0, 60);

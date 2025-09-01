@@ -3,9 +3,10 @@
 
 struct Config {
   Lang lang = Lang::ZH;
-  bool isImmediate = false;
+  Mode mode = Mode::NORMAL;
   int delay = CFG_DEFAULT_DELAY;
 
   void Load();
+  bool isImmediate() const { return mode == Mode::IMMEDIATE; }
 };
 
