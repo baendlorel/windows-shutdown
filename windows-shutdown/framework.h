@@ -11,8 +11,8 @@
 #include <string>
 
 // order below must be preserved
-#include <gdiplus.h>
 #include <objidl.h>
+#include <gdiplus.h>
 
 #pragma comment(lib, "Gdiplus.lib")
 using namespace Gdiplus;

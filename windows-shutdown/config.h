@@ -1,4 +1,5 @@
 #pragma once
+#include <xstring>
 #include "consts.h"
 
 std::wstring GetConfigPath();

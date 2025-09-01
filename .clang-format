@@ -1,3 +1,21 @@
+# Base style: Google
 BasedOnStyle: Google
-IndentWidth: 4
-ColumnLimit: 100
+
+# Indentation
+IndentWidth: 4          # Number of spaces per indentation level
+
+# Maximum line length
+ColumnLimit: 100        # Wrap lines longer than this limit
+
+# Include handling
+SortIncludes: false     # Disable automatic reordering of #include directives
+IncludeBlocks: Preserve # Keep your original include blocks as-is
+
+# Optional: keep function pointers and lambdas formatting closer to Google style
+AllowShortFunctionsOnASingleLine: false
+
+# Optional: avoid extra space around operators in template arguments
+SpaceBeforeTemplateArguments: false
+
+# Keep pointer alignment consistent
+PointerAlignment: Left
