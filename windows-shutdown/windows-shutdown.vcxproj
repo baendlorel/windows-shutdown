@@ -129,6 +129,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="consts.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="i18n.h" />
     <ClInclude Include="image-button.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="Resource.h" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="i18n.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="ui.cpp" />

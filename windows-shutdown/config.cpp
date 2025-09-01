@@ -86,7 +86,7 @@ void Config::Load() {
     std::string value = trim(line.substr(eq + 1));
 
     if (key == CFG_KEY_LANG) {
-      this->isZh = value == CFG_LANG_EN;
+      this->lang = value == CFG_LANG_EN ? Lang::EN : Lang::ZH;
     } else if (key == CFG_KEY_MODE) {
       this->isImmediate = value == CFG_MODE_IMMEDIATE;
     } else if (key == CFG_KEY_DELAY) {

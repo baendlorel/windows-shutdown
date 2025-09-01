@@ -1,5 +1,20 @@
 #pragma once
 
+// configs 
+#define CFG_KEY_LANG "lang"
+#define CFG_KEY_MODE "mode"
+#define CFG_KEY_DELAY "delay"
+
+#define CFG_LANG_ZH "zh"
+#define CFG_LANG_EN "en"
+
+#define CFG_MODE_IMMEDIATE "immediate"
+#define CFG_MODE_NORMAL "normal"
+
+enum Mode { IMMEDIATE, NORMAL };
+enum Lang { ZH, EN };
+constexpr int CFG_DEFAULT_DELAY = 3;
+
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms
 constexpr int FADEIN_DURATION = 150;  // ms

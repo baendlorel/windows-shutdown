@@ -60,6 +60,9 @@
     <ClInclude Include="window.h">
       <Filter>头文件\core</Filter>
     </ClInclude>
+    <ClInclude Include="i18n.h">
+      <Filter>头文件\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,6 +81,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="window.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="i18n.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
