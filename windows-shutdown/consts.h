@@ -3,7 +3,6 @@
 // state
 enum class Action { None, Sleep, Shutdown, Restart };
 
-
 // configs
 #define CFG_KEY_LANG "lang"
 #define CFG_KEY_MODE "mode"
@@ -19,8 +18,6 @@ enum class Mode { IMMEDIATE, NORMAL };
 enum class Lang { ZH, EN };
 constexpr int CFG_DEFAULT_DELAY = 3;
 
-
-
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms
 constexpr int FADEIN_DURATION = 150;  // ms
@@ -31,7 +28,9 @@ constexpr int COUNTDOWN_TIMER_ID = 1003;  // New timer for countdown
 
 // style
 constexpr int BUTTON_RADIUS = 80;
-constexpr int BUTTON_GAP = 85;
+constexpr int BUTTON_GAP = 5;
+constexpr int BUTTON_CENTER_DISTANCE = 2 * BUTTON_RADIUS + BUTTON_GAP;
+
 constexpr int BUTTON_MARGIN_BOTTOM = 20;
 constexpr int COUNT_DOWN_FONT_SIZE = 48;
 constexpr int INSTRUCTION_FONT_SIZE = 20;

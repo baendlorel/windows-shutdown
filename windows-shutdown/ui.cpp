@@ -5,6 +5,7 @@
 #include "consts.h"
 #include "framework.h"
 
+// todo only once
 void CenterButtons(int w, int h) {
     auto& appState = AppState::getInstance();
     int centerX = w / 2;
@@ -17,6 +18,7 @@ void CenterButtons(int w, int h) {
     }
 }
 
+// todo only once
 Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
     HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
     if (!hRes) {

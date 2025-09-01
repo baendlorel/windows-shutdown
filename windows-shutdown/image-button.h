@@ -12,4 +12,6 @@ struct ImageButton {
     Bitmap* png = nullptr;
 
     void LoadPNGFromResource(HINSTANCE hInst);
+
+    void Center(int w, int h, int index);
 };
