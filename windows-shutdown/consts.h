@@ -1,5 +1,9 @@
 #pragma once
 
+// state
+enum class Action { Sleep, Shutdown, Restart };
+
+
 // configs
 #define CFG_KEY_LANG "lang"
 #define CFG_KEY_MODE "mode"
@@ -11,9 +15,11 @@
 #define CFG_MODE_IMMEDIATE "immediate"
 #define CFG_MODE_NORMAL "normal"
 
-enum Mode { IMMEDIATE, NORMAL };
-enum Lang { ZH, EN };
+enum class Mode { IMMEDIATE, NORMAL };
+enum class Lang { ZH, EN };
 constexpr int CFG_DEFAULT_DELAY = 3;
+
+
 
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms

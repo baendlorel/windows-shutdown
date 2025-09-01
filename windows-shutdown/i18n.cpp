@@ -18,18 +18,18 @@ std::wstring I18N::PressAnyKeyToCancel() const {
     }
 }
 
-std::wstring I18N::Wait(WaitType type, int seconds) const {
+std::wstring I18N::Wait(Action type, int seconds) const {
     std::wstring action_zh, action_en;
     switch (type) {
-        case WaitType::Sleep:
+        case Action::Sleep:
             action_zh = L"Ë¯Ãß";
             action_en = L"sleep";
             break;
-        case WaitType::Shutdown:
+        case Action::Shutdown:
             action_zh = L"¹Ø»ú";
             action_en = L"shutdown";
             break;
-        case WaitType::Restart:
+        case Action::Restart:
             action_zh = L"ÖØÆô";
             action_en = L"restart";
             break;

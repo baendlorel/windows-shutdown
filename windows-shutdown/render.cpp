@@ -1,10 +1,12 @@
 #include "render.h"
 
 #include "app-state.h"
+#include "i18n.h"
 #include "ui.h"
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     auto& appState = AppState::getInstance();
+    auto& i18n = I18N::getInstance();
     Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);

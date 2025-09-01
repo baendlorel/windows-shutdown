@@ -4,7 +4,6 @@
 #include "app-state.h"
 #include "consts.h"
 
-enum class WaitType { Sleep, Shutdown, Restart };
 
 struct I18N {
    public:
@@ -29,5 +28,5 @@ struct I18N {
 
     std::wstring PressAnyKeyToExit() const;
     std::wstring PressAnyKeyToCancel() const;
-    std::wstring Wait(WaitType type, int seconds) const;
+    std::wstring Wait(Action type, int seconds) const;
 };
