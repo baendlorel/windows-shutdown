@@ -1,7 +1,8 @@
-#include "framework.h"
-#include "app-state.h"
-#include "ui.h"
 #include "render.h"
+
+#include "app-state.h"
+#include "framework.h"
+#include "ui.h"
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
   auto& appState = AppState::getInstance();
@@ -45,8 +46,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     DrawBeautifulText(graphics, fullText.c_str(), font, PointF(x, y));
 
     // Draw cancel instruction with beautiful rendering
-    Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE,
-                            FontStyleRegular);
+    Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
     std::wstring cancelText = L"Click anywhere or press any key to cancel";
     RectF cancelBounds;
     graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect,
@@ -56,8 +56,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
 
     // Draw cancel text with beautiful rendering
     DrawBeautifulText(graphics, cancelText.c_str(), smallFont,
-                     PointF(cancelX, cancelY), 
-                     Color(255, 220, 220, 220), Color(100, 0, 0, 0));
+                      PointF(cancelX, cancelY), Color(255, 220, 220, 220),
+                      Color(100, 0, 0, 0));
   } else {
     // Draw image buttons (original logic)
     for (int i = 0; i < 5; ++i) {
@@ -76,46 +76,73 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         delete bmp;
       }
     }
-    
+
     // Draw instruction text below buttons
     FontFamily fontFamily(L"Arial");
     Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE,
-                                  FontStyleRegular);
+                                  FontStyleBold);
     std::wstring instructionText = L"Press any key or click background to exit";
-    
+
     RectF layoutRect(0, 0, (REAL)w, (REAL)h);
     RectF textBounds;
-    graphics.MeasureString(instructionText.c_str(), -1, &instructionFont, layoutRect, &textBounds);
-    
+    graphics.MeasureString(instructionText.c_str(), -1, &instructionFont,
+                           layoutRect, &textBounds);
+
     // Position text below the buttons
     REAL textX = (w - textBounds.Width) / 2;
-    REAL textY = (h / 2) + BUTTON_RADIUS + 40; // Below buttons with some margin
-    
+
+    // Below buttons with some margin
+    REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_BOTTOM);
+
     // Draw text with beautiful rendering
-    DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, 
-                     PointF(textX, textY), 
-                     Color(255, 200, 200, 200), Color(80, 0, 0, 0));
+    DrawBeautifulText(graphics, instructionText.c_str(), instructionFont,
+                      PointF(textX, textY), Color(255, 200, 200, 200),
+                      Color(80, 0, 0, 0));
   }
 }
 
-// 新的漂亮文字绘制函数 - 使用阴影效果替代粗糙的轮廓
+void DrawShadow(Graphics& graphics, const wchar_t* text,
+                const Gdiplus::Font& font, const PointF& position,
+                const Color& color) {
+  //for (int radius = 4; radius >= 1; radius -= 1) {
+  //  int alpha = 220 / (radius + 1);
+  //  SolidBrush brush(Color(alpha, color.GetR(), color.GetG(), color.GetB()));
+
+  //  for (int angle = 0; angle < 360; angle += 45) {
+  //    float dx = cos(angle * 3.14 / 180) * radius;
+  //    float dy = sin(angle * 3.14 / 180) * radius;
+  //    shadowPos.X = position.X + dx;
+  //    shadowPos.Y = position.Y + dy;
+  //    graphics.DrawString(text, -1, &font, shadowPos, &brush);
+  //  }
+  //}
+
+  PointF shadowPos;
+  for (int radius = 4; radius >= 1; radius-=1) {
+    int alpha = 220 / (radius + 1);
+    SolidBrush brush(Color(alpha, color.GetR(), color.GetG(), color.GetB()));
+
+    for (int i = 0; i < 8; i++) {
+      float dx = SHADOW_OFFSET[i][0] * radius;
+      float dy = SHADOW_OFFSET[i][1] * radius;
+      shadowPos.X = position.X + dx;    
+      shadowPos.Y = position.Y + dy;
+      graphics.DrawString(text, -1, &font, shadowPos, &brush);
+    }
+  }
+}
+
 void DrawBeautifulText(Graphics& graphics, const wchar_t* text,
-                      const Gdiplus::Font& font, const PointF& position,
-                      const Color& textColor, const Color& shadowColor) {
-  // 设置高质量渲染
+                       const Gdiplus::Font& font, const PointF& position,
+                       const Color& textColor, const Color& shadowColor) {
   graphics.SetTextRenderingHint(TextRenderingHintAntiAliasGridFit);
   graphics.SetSmoothingMode(SmoothingModeAntiAlias);
   graphics.SetCompositingQuality(CompositingQualityHighQuality);
-  
-  // 创建画刷
-  SolidBrush shadowBrush(shadowColor);
+
   SolidBrush textBrush(textColor);
-  
-  // 绘制阴影 (右下偏移)
-  PointF shadowPos(position.X + 2, position.Y + 2);
-  graphics.DrawString(text, -1, &font, shadowPos, &shadowBrush);
-  
-  // 绘制主文字
+
+  DrawShadow(graphics, text, font, position, shadowColor);
+
   graphics.DrawString(text, -1, &font, position, &textBrush);
 }
 
