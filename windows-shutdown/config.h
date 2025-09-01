@@ -1,16 +1,17 @@
 #pragma once
-#include "consts.h"	
+#include "consts.h"
+
+std::wstring GetConfigPath();
 
 struct Config {
-public:
-  Lang lang;
-  Mode mode;
-  int delay;
+   public:
+    Lang lang;
+    Mode mode;
+    int delay;
 
-  Config();
-  bool isImmediate() const { return mode == Mode::IMMEDIATE; }
+    Config();
+    bool isImmediate() const { return mode == Mode::IMMEDIATE; }
 
-private:
-  void Load();
+   private:
+    void Load();
 };
-

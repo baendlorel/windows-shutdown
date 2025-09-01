@@ -1,6 +1,6 @@
 #pragma once
 
-// configs 
+// configs
 #define CFG_KEY_LANG "lang"
 #define CFG_KEY_MODE "mode"
 #define CFG_KEY_DELAY "delay"
@@ -38,5 +38,5 @@ constexpr float SHADOW_OFFSET[8][2] = {
     {-1.000f, 0.000f},   // 180бу
     {-0.707f, -0.707f},  // 225бу
     {0.000f, -1.000f},   // 270бу
-    {0.707f, -0.707f}   // 315бу
+    {0.707f, -0.707f}    // 315бу
 };

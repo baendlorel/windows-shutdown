@@ -1,7 +1,6 @@
 #pragma once
 #include "framework.h"
 
-
 ATOM MyRegisterClass();
 
 BOOL InitInstance(int nCmdShow);
