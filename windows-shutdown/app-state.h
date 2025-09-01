@@ -32,7 +32,6 @@ class AppState {
     this->szTitle[0] = L'\0';
     this->szWindowClass[0] = L'\0';
 
-    this->config.Load();
     this->buttons[0] = {0, 0, 60, L"Config", IDB_CONFIGPNG};
     this->buttons[1] = {0, 0, 60, L"Lock", IDB_LOCKPNG};
     this->buttons[2] = {0, 0, 60, L"Sleep", IDB_SLEEPPNG};

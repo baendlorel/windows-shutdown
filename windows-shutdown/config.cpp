@@ -40,6 +40,13 @@ bool IsSystemLanguageChinese() {
   return primaryLang == LANG_CHINESE;
 }
 
+Config::Config() {
+  this->lang = IsSystemLanguageChinese() ? Lang::ZH : Lang::EN;
+  this->mode = Mode::NORMAL;
+  this->delay = CFG_DEFAULT_DELAY;
+  this->Load();
+}
+
 void Config::Load() {
   std::wstring configPath = GetConfigPath();
   std::ifstream file(configPath);
