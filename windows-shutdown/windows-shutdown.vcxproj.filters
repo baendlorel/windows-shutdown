@@ -86,6 +86,9 @@
     <ClCompile Include="i18n.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="image-button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windows-shutdown.rc">

@@ -1,7 +1,15 @@
 #pragma once
+#include "framework.h"
+#include "consts.h"
 
 struct ImageButton {
-    int x, y, r;
-    const wchar_t* label;
-    int resId;
+    int x = 0;
+    int y = 0;
+    int r = BUTTON_RADIUS;
+    const wchar_t* label = L"";
+
+    int resId = 0;
+    Bitmap* png = nullptr;
+
+    void LoadPNGFromResource(HINSTANCE hInst);
 };

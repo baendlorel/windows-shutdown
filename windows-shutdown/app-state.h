@@ -68,10 +68,10 @@ class AppState {
         this->szWindowClass[0] = L'\0';
 
         // buttons
-        this->buttons[0] = {0, 0, BUTTON_RADIUS, L"Config", IDB_CONFIGPNG};
-        this->buttons[1] = {0, 0, BUTTON_RADIUS, L"Lock", IDB_LOCKPNG};
-        this->buttons[2] = {0, 0, BUTTON_RADIUS, L"Sleep", IDB_SLEEPPNG};
-        this->buttons[3] = {0, 0, BUTTON_RADIUS, L"Restart", IDB_RESTARTPNG};
-        this->buttons[4] = {0, 0, BUTTON_RADIUS, L"Shutdown", IDB_SHUTDOWNPNG};
+        this->buttons[0].resId = IDB_CONFIGPNG;
+        this->buttons[1].resId = IDB_LOCKPNG;
+        this->buttons[2].resId = IDB_SLEEPPNG;
+        this->buttons[3].resId = IDB_RESTARTPNG;
+        this->buttons[4].resId = IDB_SHUTDOWNPNG;
     }
 };
