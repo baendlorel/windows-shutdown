@@ -47,29 +47,31 @@ class AppState {
     ImageButton buttons[5];
 
    private:
-    AppState() {
-        this->hInst = nullptr;
-        this->screenW = 0;
-        this->screenH = 0;
+    AppState()
+        :  // windows
+          hInst(nullptr),
+          screenW(0),
+          screenH(0),
+          // fade settings
+          g_alpha(0),
+          g_fadingOut(false),
 
-        this->g_alpha = 0;
-        this->g_fadingOut = false;
-
-        this->hoveredIndex = -1;
-
-        this->action = Action::None;
-        this->isCountingDown = false;
-        this->countdownSeconds = 0;
-        this->isRestartCountdown = false;
-        this->isSleepCountdown = false;
-
+          // buttons and actions
+          hoveredIndex(-1),
+          action(Action::None),
+          isCountingDown(false),
+          isRestartCountdown(false),
+          isSleepCountdown(false),
+          countdownSeconds(0) {
+        // window info
         this->szTitle[0] = L'\0';
         this->szWindowClass[0] = L'\0';
 
-        this->buttons[0] = {0, 0, 60, L"Config", IDB_CONFIGPNG};
-        this->buttons[1] = {0, 0, 60, L"Lock", IDB_LOCKPNG};
-        this->buttons[2] = {0, 0, 60, L"Sleep", IDB_SLEEPPNG};
-        this->buttons[3] = {0, 0, 60, L"Restart", IDB_RESTARTPNG};
-        this->buttons[4] = {0, 0, 60, L"Shutdown", IDB_SHUTDOWNPNG};
+        // buttons
+        this->buttons[0] = {0, 0, BUTTON_RADIUS, L"Config", IDB_CONFIGPNG};
+        this->buttons[1] = {0, 0, BUTTON_RADIUS, L"Lock", IDB_LOCKPNG};
+        this->buttons[2] = {0, 0, BUTTON_RADIUS, L"Sleep", IDB_SLEEPPNG};
+        this->buttons[3] = {0, 0, BUTTON_RADIUS, L"Restart", IDB_RESTARTPNG};
+        this->buttons[4] = {0, 0, BUTTON_RADIUS, L"Shutdown", IDB_SHUTDOWNPNG};
     }
 };

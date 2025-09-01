@@ -11,12 +11,10 @@ void CenterButtons(int w, int h) {
     int centerY = h / 2;
     int spacing = BUTTON_GAP + BUTTON_RADIUS;
 
-    appState.buttons[0] = {centerX - spacing * 2, centerY, BUTTON_RADIUS, L"Config", IDB_CONFIGPNG};
-    appState.buttons[1] = {centerX - spacing, centerY, BUTTON_RADIUS, L"Lock", IDB_LOCKPNG};
-    appState.buttons[2] = {centerX, centerY, BUTTON_RADIUS, L"Sleep", IDB_SLEEPPNG};
-    appState.buttons[3] = {centerX + spacing, centerY, BUTTON_RADIUS, L"Restart", IDB_RESTARTPNG};
-    appState.buttons[4] = {centerX + spacing * 2, centerY, BUTTON_RADIUS, L"Shutdown",
-                           IDB_SHUTDOWNPNG};
+    for (short i = 0; i < 5; i++) {
+        appState.buttons[i].x = centerX + spacing * (i - 2);
+        appState.buttons[i].y = centerY;
+    }
 }
 
 Bitmap* LoadPngFromResource(HINSTANCE hInst, int resId) {
