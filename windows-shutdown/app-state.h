@@ -44,7 +44,7 @@ class AppState {
     WCHAR szWindowClass[MAX_LOADSTRING];
 
     Config config;
-    ImageButton buttons[5];
+    ImageButton buttons[BUTTON_COUNT];
 
    private:
     AppState()

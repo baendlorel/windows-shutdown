@@ -26,7 +26,8 @@ constexpr int FADEIN_TIMER_ID = 1001;
 constexpr int FADEOUT_TIMER_ID = 1002;
 constexpr int COUNTDOWN_TIMER_ID = 1003;  // New timer for countdown
 
-// style
+// ui/style
+constexpr int BUTTON_COUNT = 5;
 constexpr int BUTTON_RADIUS = 80;
 constexpr int BUTTON_GAP = 5;
 constexpr int BUTTON_CENTER_DISTANCE = 2 * BUTTON_RADIUS + BUTTON_GAP;

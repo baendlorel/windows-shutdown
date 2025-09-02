@@ -56,7 +56,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                     appState.g_alpha = (appState.g_alpha + step > targetAlpha)
                                            ? targetAlpha
                                            : appState.g_alpha + step;
-                    UpdateLayered(hWnd, appState.g_alpha);
+                    UpdateLayered(hWnd);
                 } else {
                     KillTimer(hWnd, FADEIN_TIMER_ID);
                 }
@@ -65,7 +65,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                 BYTE step = (255 + steps - 1) / steps;
                 if (appState.g_alpha > 0) {
                     appState.g_alpha = (appState.g_alpha < step) ? 0 : appState.g_alpha - step;
-                    UpdateLayered(hWnd, appState.g_alpha);
+                    UpdateLayered(hWnd);
                 } else {
                     KillTimer(hWnd, FADEOUT_TIMER_ID);
                     DestroyWindow(hWnd);
@@ -90,13 +90,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                         }
                     } else {
                         // Redraw to update countdown
-                        UpdateLayered(hWnd, appState.g_alpha);
+                        UpdateLayered(hWnd);
                     }
                 }
             }
             break;
         case WM_PAINT: {
-            UpdateLayered(hWnd, appState.g_alpha);
+            UpdateLayered(hWnd);
         } break;
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
@@ -126,7 +126,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             }
             if (newHover != appState.hoveredIndex) {
                 appState.hoveredIndex = newHover;
-                UpdateLayered(hWnd, appState.g_alpha);
+                UpdateLayered(hWnd);
             }
         } break;
         case WM_LBUTTONDOWN: {

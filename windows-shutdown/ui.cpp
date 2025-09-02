@@ -5,16 +5,10 @@
 #include "consts.h"
 #include "framework.h"
 
-// todo only once
 void CenterButtons(int w, int h) {
     auto& appState = AppState::getInstance();
-    int centerX = w / 2;
-    int centerY = h / 2;
-    int spacing = BUTTON_GAP + BUTTON_RADIUS;
-
     for (short i = 0; i < 5; i++) {
-        appState.buttons[i].x = centerX + spacing * (i - 2);
-        appState.buttons[i].y = centerY;
+        appState.buttons[i].Center(w, h, i);
     }
 }
 

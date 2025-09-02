@@ -7,4 +7,4 @@ void DrawBeautifulText(Graphics& graphics, const wchar_t* text, const Gdiplus::F
                        REAL width, REAL y, const Color& textColor = Color(255, 255, 255, 255),
                        const Color& shadowColor = Color(128, 0, 0, 0));
 
-void UpdateLayered(HWND hWnd, BYTE alpha);
+void UpdateLayered(HWND hWnd);

@@ -79,7 +79,7 @@ void StartCountdown(HWND hWnd, bool isRestart, bool isSleep) {
     appState.isRestartCountdown = isRestart;
     appState.isSleepCountdown = isSleep;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
-    UpdateLayered(hWnd, appState.g_alpha);           // Redraw to show countdown
+    UpdateLayered(hWnd);                             // Redraw to show countdown
 }
 
 void CancelCountdown(HWND hWnd) {
@@ -89,15 +89,21 @@ void CancelCountdown(HWND hWnd) {
         appState.isRestartCountdown = false;
         appState.isSleepCountdown = false;
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
-        UpdateLayered(hWnd, appState.g_alpha);  // Redraw to hide countdown
+        UpdateLayered(hWnd);  // Redraw to hide countdown
     }
 }
 
-void TriggerRestart(HWND hWnd) { StartCountdown(hWnd, true, false); }
+void TriggerRestart(HWND hWnd) {
+    StartCountdown(hWnd, true, false);
+}
 
-void TriggerShutdown(HWND hWnd) { StartCountdown(hWnd, false, false); }
+void TriggerShutdown(HWND hWnd) {
+    StartCountdown(hWnd, false, false);
+}
 
-void TriggerSleep(HWND hWnd) { StartCountdown(hWnd, false, true); }
+void TriggerSleep(HWND hWnd) {
+    StartCountdown(hWnd, false, true);
+}
 
 void TriggerLock(HWND hWnd) {
     auto& appState = AppState::getInstance();

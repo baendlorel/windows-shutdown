@@ -14,8 +14,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     SolidBrush bgBrush(Color(77, 255, 255, 255));
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
+    // Draw countdown in center
     if (appState.isCountingDown) {
-        // Draw countdown in center
         std::wstring countdownText = std::to_wstring(appState.countdownSeconds);
         std::wstring actionText;
 
@@ -56,41 +56,37 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                           Color(255, 220, 220, 220), Color(100, 0, 0, 0));
     } else {
         // Draw image buttons (original logic)
-        for (int i = 0; i < 5; ++i) {
-            Bitmap* bmp = LoadPngFromResource(appState.hInst, appState.buttons[i].resId);
-            if (bmp) {
-                int x = appState.buttons[i].x - appState.buttons[i].r;
-                int y = appState.buttons[i].y - appState.buttons[i].r;
-                int size = appState.buttons[i].r * 2;
-                graphics.DrawImage(bmp, x, y, size, size);
-                // If hovered, overlay a semi-transparent white
-                if (i == appState.hoveredIndex) {
-                    SolidBrush highlightBrush(Color(28, 255, 255, 255));
-                    graphics.FillEllipse(&highlightBrush, x, y, size, size);
-                }
-                delete bmp;
+        for (int i = 0; i < BUTTON_COUNT; ++i) {
+            int x = appState.buttons[i].x - appState.buttons[i].r;
+            int y = appState.buttons[i].y - appState.buttons[i].r;
+            int size = appState.buttons[i].r * 2;
+            graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
+            // If hovered, overlay a semi-transparent white
+            if (i == appState.hoveredIndex) {
+                SolidBrush highlightBrush(Color(28, 255, 255, 255));
+                graphics.FillEllipse(&highlightBrush, x, y, size, size);
             }
         }
-
-        // Draw instruction text below buttons
-        FontFamily fontFamily(L"Arial");
-        Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
-        std::wstring instructionText = L"Press any key or click background to exit";
-
-        RectF layoutRect(0, 0, (REAL)w, (REAL)h);
-        RectF textBounds;
-        StringFormat format;
-        format.SetAlignment(StringAlignmentCenter);
-        graphics.MeasureString(instructionText.c_str(), -1, &instructionFont, layoutRect, &format,
-                               &textBounds);
-
-        // Below buttons with some margin
-        REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_BOTTOM);
-
-        // Draw text with beautiful rendering
-        DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, (REAL)w, textY,
-                          Color(255, 200, 200, 200), Color(80, 0, 0, 0));
     }
+
+    // Draw instruction text below buttons
+    FontFamily fontFamily(L"Arial");
+    Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
+    std::wstring instructionText = L"Press any key or click background to exit";
+
+    RectF layoutRect(0, 0, (REAL)w, (REAL)h);
+    RectF textBounds;
+    StringFormat format;
+    format.SetAlignment(StringAlignmentCenter);
+    graphics.MeasureString(instructionText.c_str(), -1, &instructionFont, layoutRect, &format,
+                           &textBounds);
+
+    // Below buttons with some margin
+    REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_BOTTOM);
+
+    // Draw text with beautiful rendering
+    DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, (REAL)w, textY,
+                      Color(255, 200, 200, 200), Color(80, 0, 0, 0));
 }
 
 void DrawShadow(Graphics& graphics, const wchar_t* text, const Gdiplus::Font& font, REAL width,
@@ -126,18 +122,30 @@ void DrawBeautifulText(Graphics& graphics, const wchar_t* text, const Gdiplus::F
     graphics.DrawString(text, -1, &font, layoutRect, &format, &textBrush);
 }
 
-void UpdateLayered(HWND hWnd, BYTE alpha) {
+struct WH {
+    int w;
+    int h;
+};
+
+WH GetWH(HWND hWnd) {
     RECT rc;
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
     CenterButtons(w, h);
+    return {w, h};
+}
+
+// todo remove alpha param
+void UpdateLayered(HWND hWnd) {
+    static auto alpha = AppState::getInstance().g_alpha;
+    static WH wh = GetWH(hWnd);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
     BITMAPINFO bmi = {0};
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = w;
-    bmi.bmiHeader.biHeight = -h;
+    bmi.bmiHeader.biWidth = wh.w;
+    bmi.bmiHeader.biHeight = -wh.h;
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
@@ -150,9 +158,9 @@ void UpdateLayered(HWND hWnd, BYTE alpha) {
     }
 
     HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-    DrawToMemoryDC(hdcMem, w, h, alpha);
+    DrawToMemoryDC(hdcMem, wh.w, wh.h, alpha);
     POINT ptWin = {0, 0};
-    SIZE sizeWin = {w, h};
+    SIZE sizeWin = {wh.w, wh.h};
     BLENDFUNCTION blend = {AC_SRC_OVER, 0, alpha, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
