@@ -1,6 +1,7 @@
 ﻿#include "Resource.h"
 #include "app-state.h"
 #include "consts.h"
+#include "i18n.h"
 #include "controller.h"
 #include "framework.h"
 #include "window.h"
@@ -24,6 +25,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     for (short i = 0; i < BUTTON_COUNT; i++) {
         appState.buttons[i].LoadPNGFromResource(hInstance);
     }
+
+    I18N::Init(appState);
 
     if (appState.config.isImmediate()) {
         ExecuteShutdown();  // Execute immediately without UI

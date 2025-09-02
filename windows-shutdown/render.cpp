@@ -16,17 +16,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     // Draw countdown in center
     if (appState.isCountingDown) {
         std::wstring countdownText = std::to_wstring(appState.countdownSeconds);
-        std::wstring actionText;
-
-        if (appState.isSleepCountdown) {
-            actionText = L"Sleeping in ";
-        } else if (appState.isRestartCountdown) {
-            actionText = L"Restarting in ";
-        } else {
-            actionText = L"Shutting down in ";
-        }
-
-        std::wstring fullText = actionText + countdownText + L" seconds...";
+        std::wstring fullText = i18n.Wait(appState.action, appState.countdownSeconds);
 
         // Large font for countdown
         FontFamily fontFamily(L"Arial");
@@ -46,7 +36,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
 
         // Draw cancel instruction with beautiful rendering
         Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
-        std::wstring cancelText = L"Click anywhere or press any key to cancel";
+        std::wstring cancelText = i18n.PressAnyKeyToCancel();
         RectF cancelBounds;
         graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &format,
                                &cancelBounds);
@@ -66,14 +56,13 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                 graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH,
                                      y + BUTTON_SHADOW_WIDTH, size - BUTTON_SHADOW_WIDTH * 2,
                                      size - BUTTON_SHADOW_WIDTH * 2);
-                // graphics.FillEllipse(&highlightBrush, x, y, size, size);
             }
         }
 
         // Draw instruction text below buttons
         FontFamily fontFamily(L"Arial");
         Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
-        std::wstring instructionText = L"Press any key or click background to exit";
+        std::wstring instructionText = i18n.PressAnyKeyToExit();
 
         RectF layoutRect(0, 0, (REAL)w, (REAL)h);
         RectF textBounds;
