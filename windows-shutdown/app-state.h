@@ -34,9 +34,6 @@ class AppState {
 
     // actions
     Action action;
-    bool isCountingDown;
-    bool isRestartCountdown;
-    bool isSleepCountdown;
     short countdownSeconds;
 
     // ui
@@ -45,6 +42,16 @@ class AppState {
 
     Config config;
     ImageButton buttons[BUTTON_COUNT];
+
+    bool isCountingDown() const {
+        return action != Action::None;
+    }
+    bool isRestartCountdown() const {
+        return action == Action::Restart;
+    }
+    bool isSleepCountdown() const {
+        return action == Action::Sleep;
+    }
 
    private:
     AppState()
@@ -59,19 +66,16 @@ class AppState {
           // buttons and actions
           hoveredIndex(-1),
           action(Action::None),
-          isCountingDown(false),
-          isRestartCountdown(false),
-          isSleepCountdown(false),
           countdownSeconds(0) {
         // window info
         this->szTitle[0] = L'\0';
         this->szWindowClass[0] = L'\0';
 
         // buttons
-        this->buttons[0].resId = IDB_CONFIGPNG;
-        this->buttons[1].resId = IDB_LOCKPNG;
-        this->buttons[2].resId = IDB_SLEEPPNG;
-        this->buttons[3].resId = IDB_RESTARTPNG;
-        this->buttons[4].resId = IDB_SHUTDOWNPNG;
+        this->buttons[(int)Button::Config].resId = IDB_CONFIGPNG;
+        this->buttons[(int)Button::Lock].resId = IDB_LOCKPNG;
+        this->buttons[(int)Button::Sleep].resId = IDB_SLEEPPNG;
+        this->buttons[(int)Button::Restart].resId = IDB_RESTARTPNG;
+        this->buttons[(int)Button::Shutdown].resId = IDB_SHUTDOWNPNG;
     }
 };

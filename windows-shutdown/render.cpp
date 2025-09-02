@@ -14,7 +14,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
     // Draw countdown in center
-    if (appState.isCountingDown) {
+    if (appState.isCountingDown()) {
         std::wstring countdownText = std::to_wstring(appState.countdownSeconds);
         std::wstring fullText = i18n.Wait(appState.action, appState.countdownSeconds);
 

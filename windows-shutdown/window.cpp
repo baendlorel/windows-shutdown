@@ -44,141 +44,180 @@ BOOL InitInstance(int nCmdShow) {
     return TRUE;
 }
 
+void HandleTimer(HWND hWnd, WPARAM wParam) {
+    static auto& appState = AppState::getInstance();
+
+    auto alpha = appState.g_alpha;
+
+    if (wParam == FADEIN_TIMER_ID) {
+        BYTE targetAlpha = 255;
+        int steps = FADEIN_DURATION / FADEIN_INTERVAL;
+        BYTE step = (targetAlpha + steps - 1) / steps;
+        if (alpha < targetAlpha) {
+            appState.g_alpha = (alpha + step > targetAlpha) ? targetAlpha : alpha + step;
+            UpdateLayered(hWnd);
+            return;
+        }
+
+        KillTimer(hWnd, FADEIN_TIMER_ID);
+        return;
+    }
+
+    if (wParam == FADEOUT_TIMER_ID) {
+        int steps = FADEIN_DURATION / FADEIN_INTERVAL;
+        BYTE step = (255 + steps - 1) / steps;
+        if (alpha > 0) {
+            appState.g_alpha = (alpha < step) ? 0 : alpha - step;
+            UpdateLayered(hWnd);
+            return;
+        }
+
+        KillTimer(hWnd, FADEOUT_TIMER_ID);
+        DestroyWindow(hWnd);
+        return;
+    }
+
+    if (wParam == COUNTDOWN_TIMER_ID && appState.isCountingDown()) {
+        appState.countdownSeconds--;
+        if (appState.countdownSeconds > 0) {
+            // Redraw to update countdown
+            UpdateLayered(hWnd);
+            return;
+        }
+
+        CancelCountdown(hWnd);
+        if (appState.isSleepCountdown()) {
+            // Close the program first, then sleep
+            PostMessage(hWnd, WM_CLOSE, 0, 0);
+            // Use a separate thread to handle sleep after window closes
+            std::thread([]() {
+                Sleep(500);  // Give time for window to close
+                ExecuteSleep();
+            }).detach();
+            return;
+        }
+
+        if (appState.isRestartCountdown()) {
+            ExecuteRestart();
+            return;
+        }
+
+        ExecuteShutdown();
+        return;
+    }
+}
+
+void HandleKeydown(HWND hWnd) {
+    static auto& appState = AppState::getInstance();
+    if (appState.isCountingDown()) {
+        CancelCountdown(hWnd);
+        return;
+    }
+
+    if (appState.g_fadingOut) {
+        return;
+    }
+
+    appState.g_fadingOut = true;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+}
+
+void HandleMoustMove(HWND hWnd, LPARAM lParam) {
+    static auto& appState = AppState::getInstance();
+    if (appState.isCountingDown()) {
+        return;  // Ignore mouse move during countdown
+    }
+    int mx = LOWORD(lParam);
+    int my = HIWORD(lParam);
+    int newHover = -1;
+    for (int i = 0; i < 5; ++i) {
+        if (appState.buttons[i].mouseHit(mx, my)) {
+            newHover = i;
+            break;
+        }
+    }
+
+    if (newHover != appState.hoveredIndex) {
+        appState.hoveredIndex = newHover;
+        UpdateLayered(hWnd);
+    }
+}
+
+void HandleLeftClick(HWND hWnd, LPARAM lParam) {
+    static auto& appState = AppState::getInstance();
+    if (appState.isCountingDown()) {
+        CancelCountdown(hWnd);
+        return;
+    }
+
+    int mx = LOWORD(lParam);
+    int my = HIWORD(lParam);
+    bool hit = false;
+
+    for (int i = 0; i < 5; ++i) {
+        if (!appState.buttons[i].mouseHit(mx, my)) {
+            continue;
+        }
+
+        hit = true;
+        switch ((Button)i) {
+            case Button::Config:
+                TriggerConfig(hWnd);
+                break;
+            case Button::Lock:
+                TriggerLock(hWnd);
+                break;
+            case Button::Sleep:
+                TriggerSleep(hWnd);
+                break;
+            case Button::Restart:
+                TriggerRestart(hWnd);
+                break;
+            case Button::Shutdown:
+                TriggerShutdown(hWnd);
+                break;
+        }
+        break;
+    }
+
+    if (!hit && !appState.g_fadingOut) {
+        appState.g_fadingOut = true;
+        SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    }
+}
+
+void HandleCancel(HWND hWnd) {
+    static auto& appState = AppState::getInstance();
+    if (appState.isCountingDown()) {
+        CancelCountdown(hWnd);
+    }
+    if (!appState.g_fadingOut) {
+        appState.g_fadingOut = true;
+        SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    }
+}
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     auto& appState = AppState::getInstance();
     switch (message) {
         case WM_TIMER:
-            if (wParam == FADEIN_TIMER_ID) {
-                BYTE targetAlpha = 255;
-                int steps = FADEIN_DURATION / FADEIN_INTERVAL;
-                BYTE step = (targetAlpha + steps - 1) / steps;
-                if (appState.g_alpha < targetAlpha) {
-                    appState.g_alpha = (appState.g_alpha + step > targetAlpha)
-                                           ? targetAlpha
-                                           : appState.g_alpha + step;
-                    UpdateLayered(hWnd);
-                } else {
-                    KillTimer(hWnd, FADEIN_TIMER_ID);
-                }
-            } else if (wParam == FADEOUT_TIMER_ID) {
-                int steps = FADEIN_DURATION / FADEIN_INTERVAL;
-                BYTE step = (255 + steps - 1) / steps;
-                if (appState.g_alpha > 0) {
-                    appState.g_alpha = (appState.g_alpha < step) ? 0 : appState.g_alpha - step;
-                    UpdateLayered(hWnd);
-                } else {
-                    KillTimer(hWnd, FADEOUT_TIMER_ID);
-                    DestroyWindow(hWnd);
-                }
-            } else if (wParam == COUNTDOWN_TIMER_ID) {
-                if (appState.isCountingDown) {
-                    appState.countdownSeconds--;
-                    if (appState.countdownSeconds <= 0) {
-                        CancelCountdown(hWnd);
-                        if (appState.isSleepCountdown) {
-                            // Close the program first, then sleep
-                            PostMessage(hWnd, WM_CLOSE, 0, 0);
-                            // Use a separate thread to handle sleep after window closes
-                            std::thread([]() {
-                                Sleep(500);  // Give time for window to close
-                                ExecuteSleep();
-                            }).detach();
-                        } else if (appState.isRestartCountdown) {
-                            ExecuteRestart();
-                        } else {
-                            ExecuteShutdown();
-                        }
-                    } else {
-                        // Redraw to update countdown
-                        UpdateLayered(hWnd);
-                    }
-                }
-            }
+            HandleTimer(hWnd, wParam);
             break;
-        case WM_PAINT: {
+        case WM_PAINT:
             UpdateLayered(hWnd);
-        } break;
+            break;
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
-            if (appState.isCountingDown) {
-                CancelCountdown(hWnd);
-            } else {
-                if (!appState.g_fadingOut) {
-                    appState.g_fadingOut = true;
-                    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-                }
-            }
+            HandleKeydown(hWnd);
             break;
-        case WM_MOUSEMOVE: {
-            if (appState.isCountingDown) {
-                break;  // Ignore mouse move during countdown
-            }
-            int mx = LOWORD(lParam);
-            int my = HIWORD(lParam);
-            int newHover = -1;
-            for (int i = 0; i < 5; ++i) {
-                int dx = mx - appState.buttons[i].x;
-                int dy = my - appState.buttons[i].y;
-                if (dx * dx + dy * dy <= appState.buttons[i].r * appState.buttons[i].r) {
-                    newHover = i;
-                    break;
-                }
-            }
-            if (newHover != appState.hoveredIndex) {
-                appState.hoveredIndex = newHover;
-                UpdateLayered(hWnd);
-            }
-        } break;
-        case WM_LBUTTONDOWN: {
-            if (appState.isCountingDown) {
-                CancelCountdown(hWnd);
-                break;
-            }
-
-            int mx = LOWORD(lParam);
-            int my = HIWORD(lParam);
-            bool hit = false;
-
-            for (int i = 0; i < 5; ++i) {
-                int dx = mx - appState.buttons[i].x;
-                int dy = my - appState.buttons[i].y;
-                if (dx * dx + dy * dy <= appState.buttons[i].r * appState.buttons[i].r) {
-                    hit = true;
-
-                    switch (i) {
-                        case 0:
-                            TriggerConfig(hWnd);
-                            break;
-                        case 1:
-                            TriggerLock(hWnd);
-                            break;
-                        case 2:
-                            TriggerSleep(hWnd);
-                            break;
-                        case 3:
-                            TriggerRestart(hWnd);
-                            break;
-                        case 4:
-                            TriggerShutdown(hWnd);
-                            break;
-                    }
-                    break;
-                }
-            }
-
-            if (!hit && !appState.g_fadingOut) {
-                appState.g_fadingOut = true;
-                SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-            }
-        } break;
+        case WM_MOUSEMOVE:
+            HandleMoustMove(hWnd, lParam);
+            break;
+        case WM_LBUTTONDOWN:
+            HandleLeftClick(hWnd, lParam);
+            break;
         case WM_CLOSE:
-            if (appState.isCountingDown) {
-                CancelCountdown(hWnd);
-            }
-            if (!appState.g_fadingOut) {
-                appState.g_fadingOut = true;
-                SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-            }
+            HandleCancel(hWnd);
             break;
         case WM_DESTROY:
             PostQuitMessage(0);

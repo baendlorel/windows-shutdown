@@ -14,4 +14,10 @@ struct ImageButton {
     void LoadPNGFromResource(HINSTANCE hInst);
 
     void Center(int w, int h, int index);
+
+    bool mouseHit(int mx, int my) const {
+        int dx = mx - x;
+        int dy = my - y;
+        return (dx * dx + dy * dy <= r * r);
+    }
 };
