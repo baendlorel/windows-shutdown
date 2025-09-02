@@ -94,9 +94,10 @@ void DrawShadow(Graphics& graphics, const wchar_t* text, const Gdiplus::Font& fo
     StringFormat format;
     format.SetAlignment(StringAlignmentCenter);
     format.SetLineAlignment(StringAlignmentNear);
+    SolidBrush brush(Color(0, 0, 0, 0));
     for (int radius = 4; radius >= 1; radius -= 1) {
         int alpha = 220 / (radius + 1);
-        SolidBrush brush(Color(alpha, color.GetR(), color.GetG(), color.GetB()));
+        brush.SetColor(Color(alpha, color.GetR(), color.GetG(), color.GetB()));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
