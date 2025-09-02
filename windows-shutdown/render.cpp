@@ -138,7 +138,7 @@ WH GetWH(HWND hWnd) {
 
 // todo remove alpha param
 void UpdateLayered(HWND hWnd) {
-    static auto alpha = AppState::getInstance().g_alpha;
+    static auto& appState = AppState::getInstance();
     static WH wh = GetWH(hWnd);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
@@ -158,10 +158,10 @@ void UpdateLayered(HWND hWnd) {
     }
 
     HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-    DrawToMemoryDC(hdcMem, wh.w, wh.h, alpha);
+    DrawToMemoryDC(hdcMem, wh.w, wh.h, appState.g_alpha);
     POINT ptWin = {0, 0};
     SIZE sizeWin = {wh.w, wh.h};
-    BLENDFUNCTION blend = {AC_SRC_OVER, 0, alpha, AC_SRC_ALPHA};
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.g_alpha, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
     DeleteObject(hBitmap);
