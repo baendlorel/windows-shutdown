@@ -10,8 +10,12 @@ struct Config {
     Mode mode;
     int delay;
 
+    // todo 增加显示instruction的选项
+
     Config();
-    bool isImmediate() const { return mode == Mode::IMMEDIATE; }
+    bool isImmediate() const {
+        return mode == Mode::IMMEDIATE;
+    }
 
    private:
     void Load();

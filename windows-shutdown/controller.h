@@ -1,5 +1,6 @@
 #pragma once
 #include "framework.h"
+#include "consts.h"
 
 void ExecuteRestart();
 
@@ -9,7 +10,7 @@ void ExecuteSleep();
 
 void ExecuteLock();
 
-void StartCountdown(HWND hWnd, bool isRestart, bool isSleep = false);
+void StartCountdown(HWND hWnd, Action action);
 
 void CancelCountdown(HWND hWnd);
 
@@ -22,3 +23,5 @@ void TriggerSleep(HWND hWnd);
 void TriggerLock(HWND hWnd);
 
 void TriggerConfig(HWND hWnd);
+
+void ActionByFileName();

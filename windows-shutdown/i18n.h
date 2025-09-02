@@ -4,10 +4,11 @@
 #include "app-state.h"
 #include "consts.h"
 
-
 struct I18N {
    public:
-    static void Init(const AppState& appState) { I18N::getInstance().lang = appState.config.lang; }
+    static void Init(const AppState& appState) {
+        I18N::getInstance().lang = appState.config.lang;
+    }
 
     static I18N& getInstance() {
         static I18N instance;
@@ -25,6 +26,10 @@ struct I18N {
 
     I18N(I18N&&) = delete;
     I18N& operator=(I18N&&) = delete;
+
+    const wchar_t* FontFamilyName() {
+        return lang == Lang::ZH ? L"Microsoft YaHei" : L"Arial";
+    };
 
     std::wstring PressAnyKeyToExit() const;
     std::wstring PressAnyKeyToCancel() const;

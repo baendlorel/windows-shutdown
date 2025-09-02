@@ -5,7 +5,6 @@
 
 #include "app-state.h"
 #include "config.h"
-#include "consts.h"
 #include "framework.h"
 #include "render.h"
 
@@ -122,4 +121,8 @@ void TriggerConfig(HWND hWnd) {
     if (appState.fadeState != FadeState::None) return;
     appState.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+}
+
+// todo 根据文件名决定是关机还是重启还是睡眠
+void ActionByFileName() {
 }

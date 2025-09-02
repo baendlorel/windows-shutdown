@@ -27,7 +27,6 @@ class AppState {
 
     // effects
     unsigned char g_alpha;
-    bool g_fadingOut;
 
     // buttons
     short hoveredIndex;

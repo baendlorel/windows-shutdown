@@ -9,8 +9,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
-    // Draw semi-transparent white background
-    SolidBrush bgBrush(Color(77, 255, 255, 255));
+    // Draw semi-transparent background
+    SolidBrush bgBrush(Color(52, 0, 0, 0));
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
     // Draw countdown in center
@@ -19,8 +19,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         std::wstring fullText = i18n.Wait(appState.action, appState.countdownSeconds);
 
         // Large font for countdown
-        FontFamily fontFamily(L"Arial");
-        Gdiplus::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, FontStyleBold);
+        FontFamily fontFamily(i18n.FontFamilyName());
+        Gdiplus::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, FontStyleRegular);
 
         // Get text bounds for vertical centering
         RectF layoutRect(0, 0, (REAL)w, (REAL)h);
@@ -35,7 +35,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                           Color(128, 0, 0, 0));
 
         // Draw cancel instruction with beautiful rendering
-        Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
+        Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleRegular);
         std::wstring cancelText = i18n.PressAnyKeyToCancel();
         RectF cancelBounds;
         graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &format,
@@ -46,8 +46,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     } else {
         // Draw image buttons (original logic)
         for (int i = 0; i < BUTTON_COUNT; ++i) {
-            int x = appState.buttons[i].x - appState.buttons[i].r;
-            int y = appState.buttons[i].y - appState.buttons[i].r;
+            int x = appState.buttons[i].x - appState.buttons[i].r + BUTTON_MARGIN_LEFT;
+            int y = appState.buttons[i].y - appState.buttons[i].r + BUTTON_MARGIN_TOP;
             int size = appState.buttons[i].r * 2;
             graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
             // If hovered, overlay a semi-transparent white
@@ -60,8 +60,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         }
 
         // Draw instruction text below buttons
-        FontFamily fontFamily(L"Arial");
-        Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
+        FontFamily fontFamily(i18n.FontFamilyName());
+        Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleRegular);
         std::wstring instructionText = i18n.PressAnyKeyToExit();
 
         RectF layoutRect(0, 0, (REAL)w, (REAL)h);
@@ -72,7 +72,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                                &textBounds);
 
         // Below buttons with some margin
-        REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_BOTTOM);
+        REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
 
         // Draw text with beautiful rendering
         DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, (REAL)w, textY,
@@ -87,7 +87,7 @@ void DrawShadow(Graphics& graphics, const wchar_t* text, const Gdiplus::Font& fo
     format.SetLineAlignment(StringAlignmentNear);
     SolidBrush brush(Color(0, 0, 0, 0));
     for (int radius = 4; radius >= 1; radius -= 1) {
-        int alpha = 220 / (radius + 1);
+        int alpha = 80 / (radius + 1);
         brush.SetColor(Color(alpha, color.GetR(), color.GetG(), color.GetB()));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
