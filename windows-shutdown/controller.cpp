@@ -56,7 +56,7 @@ void ExecuteLock() {
 }
 
 void StartCountdown(HWND hWnd, Action action) {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     if (appState.config.delay <= 0) {
         switch (action) {
             case Action::Sleep:
@@ -86,7 +86,7 @@ void StartCountdown(HWND hWnd, Action action) {
 }
 
 void CancelCountdown(HWND hWnd) {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         appState.action = Action::None;
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
@@ -107,7 +107,7 @@ void TriggerSleep(HWND hWnd) {
 }
 
 void TriggerLock(HWND hWnd) {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     if (appState.fadeState != FadeState::None) return;
     appState.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
@@ -115,7 +115,7 @@ void TriggerLock(HWND hWnd) {
 }
 
 void TriggerConfig(HWND hWnd) {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     std::wstring configPath = GetConfigPath();
     ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
     if (appState.fadeState != FadeState::None) return;

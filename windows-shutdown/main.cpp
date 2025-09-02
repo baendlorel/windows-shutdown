@@ -13,7 +13,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     SetProcessDPIAware();
 
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     appState.hInst = hInstance;
 
     GdiplusStartupInput gdiplusStartupInput;

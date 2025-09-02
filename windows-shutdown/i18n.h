@@ -7,10 +7,10 @@
 struct I18N {
    public:
     static void Init(const AppState& appState) {
-        I18N::getInstance().lang = appState.config.lang;
+        I18N::GetInstance().lang = appState.config.lang;
     }
 
-    static I18N& getInstance() {
+    static I18N& GetInstance() {
         static I18N instance;
         return instance;
     }

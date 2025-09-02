@@ -7,7 +7,7 @@
 
 class AppState {
    public:
-    static AppState& getInstance() {
+    static AppState& GetInstance() {
         static AppState instance;
         return instance;
     }
@@ -73,10 +73,10 @@ class AppState {
         this->szWindowClass[0] = L'\0';
 
         // buttons
-        this->buttons[(int)Button::Config].resId = IDB_CONFIGPNG;
-        this->buttons[(int)Button::Lock].resId = IDB_LOCKPNG;
-        this->buttons[(int)Button::Sleep].resId = IDB_SLEEPPNG;
-        this->buttons[(int)Button::Restart].resId = IDB_RESTARTPNG;
-        this->buttons[(int)Button::Shutdown].resId = IDB_SHUTDOWNPNG;
+        this->buttons[static_cast<int>(Button::Config)].resId = IDB_CONFIGPNG;
+        this->buttons[static_cast<int>(Button::Lock)].resId = IDB_LOCKPNG;
+        this->buttons[static_cast<int>(Button::Sleep)].resId = IDB_SLEEPPNG;
+        this->buttons[static_cast<int>(Button::Restart)].resId = IDB_RESTARTPNG;
+        this->buttons[static_cast<int>(Button::Shutdown)].resId = IDB_SHUTDOWNPNG;
     }
 };

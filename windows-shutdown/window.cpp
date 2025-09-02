@@ -10,7 +10,7 @@
 #include "render.h"
 
 ATOM MyRegisterClass() {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     WNDCLASSEXW wcex{};
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -28,7 +28,7 @@ ATOM MyRegisterClass() {
 }
 
 BOOL InitInstance(int nCmdShow) {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     appState.screenW = GetSystemMetrics(SM_CXSCREEN);
     appState.screenH = GetSystemMetrics(SM_CYSCREEN);
     HWND hWnd = CreateWindowExW(WS_EX_LAYERED, appState.szWindowClass, appState.szTitle, WS_POPUP,
@@ -45,7 +45,7 @@ BOOL InitInstance(int nCmdShow) {
 }
 
 void HandleTimer(HWND hWnd, WPARAM wParam) {
-    static auto& appState = AppState::getInstance();
+    static auto& appState = AppState::GetInstance();
     auto alpha = appState.g_alpha;
 
     if (wParam == FADEIN_TIMER_ID) {
@@ -109,7 +109,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
 }
 
 void HandleKeydown(HWND hWnd) {
-    static auto& appState = AppState::getInstance();
+    static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
         return;
@@ -122,7 +122,7 @@ void HandleKeydown(HWND hWnd) {
 }
 
 void HandleMoustMove(HWND hWnd, LPARAM lParam) {
-    static auto& appState = AppState::getInstance();
+    static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         return;  // Ignore mouse move during countdown
     }
@@ -143,7 +143,7 @@ void HandleMoustMove(HWND hWnd, LPARAM lParam) {
 }
 
 void HandleLeftClick(HWND hWnd, LPARAM lParam) {
-    static auto& appState = AppState::getInstance();
+    static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
         return;
@@ -156,7 +156,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
             continue;
         }
         hit = true;
-        switch ((Button)i) {
+        switch (static_cast<Button>(i)) {
             case Button::Config:
                 TriggerConfig(hWnd);
                 break;
@@ -182,7 +182,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
 }
 
 void HandleCancel(HWND hWnd) {
-    static auto& appState = AppState::getInstance();
+    static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
     }
@@ -193,7 +193,7 @@ void HandleCancel(HWND hWnd) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    auto& appState = AppState::getInstance();
+    auto& appState = AppState::GetInstance();
     switch (message) {
         case WM_TIMER:
             HandleTimer(hWnd, wParam);

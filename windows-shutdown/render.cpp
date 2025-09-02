@@ -4,8 +4,8 @@
 #include "i18n.h"
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
-    auto& appState = AppState::getInstance();
-    auto& i18n = I18N::getInstance();
+    auto& appState = AppState::GetInstance();
+    auto& i18n = I18N::GetInstance();
     Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
@@ -23,7 +23,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         Gdiplus::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, FontStyleRegular);
 
         // Get text bounds for vertical centering
-        RectF layoutRect(0, 0, (REAL)w, (REAL)h);
+        REAL rw = static_cast<REAL>(w);
+        REAL rh = static_cast<REAL>(h);
+        RectF layoutRect(0, 0, rw, rh);
         RectF boundingBox;
         StringFormat format;
         format.SetAlignment(StringAlignmentCenter);
@@ -31,7 +33,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         REAL y = (h - boundingBox.Height) / 2;
 
         // Draw main text with beautiful rendering
-        DrawBeautifulText(graphics, fullText.c_str(), font, (REAL)w, y, Color(255, 255, 255, 255),
+        DrawBeautifulText(graphics, fullText.c_str(), font, rw, y, Color(255, 255, 255, 255),
                           Color(128, 0, 0, 0));
 
         // Draw cancel instruction with beautiful rendering
@@ -41,7 +43,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &format,
                                &cancelBounds);
         REAL cancelY = y + boundingBox.Height + 20;
-        DrawBeautifulText(graphics, cancelText.c_str(), smallFont, (REAL)w, cancelY,
+        DrawBeautifulText(graphics, cancelText.c_str(), smallFont, rw, cancelY,
                           Color(255, 220, 220, 220), Color(100, 0, 0, 0));
     } else {
         // Draw image buttons (original logic)
@@ -64,7 +66,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleRegular);
         std::wstring instructionText = i18n.PressAnyKeyToExit();
 
-        RectF layoutRect(0, 0, (REAL)w, (REAL)h);
+        REAL rw = static_cast<REAL>(w);
+        REAL rh = static_cast<REAL>(h);
+        RectF layoutRect(0, 0, rw, rh);
         RectF textBounds;
         StringFormat format;
         format.SetAlignment(StringAlignmentCenter);
@@ -72,10 +76,10 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                                &textBounds);
 
         // Below buttons with some margin
-        REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
+        REAL textY = static_cast<REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
 
         // Draw text with beautiful rendering
-        DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, (REAL)w, textY,
+        DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, rw, textY,
                           Color(255, 200, 200, 200), Color(80, 0, 0, 0));
     }
 }
@@ -132,7 +136,7 @@ WH GetWH(HWND hWnd, AppState& appState) {
 
 // todo remove alpha param
 void UpdateLayered(HWND hWnd) {
-    static auto& appState = AppState::getInstance();
+    static auto& appState = AppState::GetInstance();
     static WH wh = GetWH(hWnd, appState);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
