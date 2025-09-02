@@ -45,9 +45,6 @@
     <ClInclude Include="consts.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ui.h">
-      <Filter>头文件\ui</Filter>
-    </ClInclude>
     <ClInclude Include="render.h">
       <Filter>头文件\ui</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="render.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">

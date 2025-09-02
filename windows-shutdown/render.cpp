@@ -2,7 +2,6 @@
 
 #include "app-state.h"
 #include "i18n.h"
-#include "ui.h"
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
     auto& appState = AppState::getInstance();
@@ -63,30 +62,33 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
             graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
             // If hovered, overlay a semi-transparent white
             if (i == appState.hoveredIndex) {
-                SolidBrush highlightBrush(Color(28, 255, 255, 255));
-                graphics.FillEllipse(&highlightBrush, x, y, size, size);
+                SolidBrush highlightBrush(Color(32, 255, 255, 255));
+                graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH,
                                      y + BUTTON_SHADOW_WIDTH, size - BUTTON_SHADOW_WIDTH * 2,
+                                     size - BUTTON_SHADOW_WIDTH * 2);
+                // graphics.FillEllipse(&highlightBrush, x, y, size, size);
+            }
         }
+
+        // Draw instruction text below buttons
+        FontFamily fontFamily(L"Arial");
+        Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
+        std::wstring instructionText = L"Press any key or click background to exit";
+
+        RectF layoutRect(0, 0, (REAL)w, (REAL)h);
+        RectF textBounds;
+        StringFormat format;
+        format.SetAlignment(StringAlignmentCenter);
+        graphics.MeasureString(instructionText.c_str(), -1, &instructionFont, layoutRect, &format,
+                               &textBounds);
+
+        // Below buttons with some margin
+        REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_BOTTOM);
+
+        // Draw text with beautiful rendering
+        DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, (REAL)w, textY,
+                          Color(255, 200, 200, 200), Color(80, 0, 0, 0));
     }
-
-    // Draw instruction text below buttons
-    FontFamily fontFamily(L"Arial");
-    Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleBold);
-    std::wstring instructionText = L"Press any key or click background to exit";
-
-    RectF layoutRect(0, 0, (REAL)w, (REAL)h);
-    RectF textBounds;
-    StringFormat format;
-    format.SetAlignment(StringAlignmentCenter);
-    graphics.MeasureString(instructionText.c_str(), -1, &instructionFont, layoutRect, &format,
-                           &textBounds);
-
-    // Below buttons with some margin
-    REAL textY = (REAL)((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_BOTTOM);
-
-    // Draw text with beautiful rendering
-    DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, (REAL)w, textY,
-                      Color(255, 200, 200, 200), Color(80, 0, 0, 0));
 }
 
 void DrawShadow(Graphics& graphics, const wchar_t* text, const Gdiplus::Font& font, REAL width,
@@ -128,19 +130,21 @@ struct WH {
     int h;
 };
 
-WH GetWH(HWND hWnd) {
+WH GetWH(HWND hWnd, AppState& appState) {
     RECT rc;
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
-    CenterButtons(w, h);
+    for (short i = 0; i < 5; i++) {
+        appState.buttons[i].Center(w, h, i);
+    }
     return {w, h};
 }
 
 // todo remove alpha param
 void UpdateLayered(HWND hWnd) {
     static auto& appState = AppState::getInstance();
-    static WH wh = GetWH(hWnd);
+    static WH wh = GetWH(hWnd, appState);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
     BITMAPINFO bmi = {0};

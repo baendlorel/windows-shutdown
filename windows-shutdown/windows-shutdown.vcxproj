@@ -135,7 +135,6 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="ui.h" />
     <ClInclude Include="window.h" />
     <ClInclude Include="windows-shutdown.h" />
   </ItemGroup>
@@ -145,7 +144,6 @@
     <ClCompile Include="image-button.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="controller.cpp" />
-    <ClCompile Include="ui.cpp" />
     <ClCompile Include="window.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
