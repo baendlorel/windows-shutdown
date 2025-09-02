@@ -56,53 +56,55 @@ void ExecuteLock() {
     LockWorkStation();
 }
 
-void StartCountdown(HWND hWnd, bool isRestart, bool isSleep) {
+void StartCountdown(HWND hWnd, Action action) {
     auto& appState = AppState::getInstance();
     if (appState.config.delay <= 0) {
-        // No delay, execute immediately
-        if (isSleep) {
-            // For sleep, close the program first then sleep
-            PostMessage(hWnd, WM_CLOSE, 0, 0);
-            // Use a small delay to ensure the program closes before sleeping
-            Sleep(500);
-            ExecuteSleep();
-        } else if (isRestart) {
-            ExecuteRestart();
-        } else {
-            ExecuteShutdown();
+        switch (action) {
+            case Action::Sleep:
+                // For sleep, close the program first then sleep
+                PostMessage(hWnd, WM_CLOSE, 0, 0);
+                // Use a small delay to ensure the program closes before sleeping
+                Sleep(500);
+                ExecuteSleep();
+                break;
+            case Action::Shutdown:
+                ExecuteShutdown();
+                break;
+            case Action::Restart:
+                ExecuteRestart();
+                break;
+            case Action::None:
+            default:
+                break;
         }
         return;
     }
 
-    appState.isCountingDown = true;
+    appState.action = action;
     appState.countdownSeconds = appState.config.delay;
-    appState.isRestartCountdown = isRestart;
-    appState.isSleepCountdown = isSleep;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
     UpdateLayered(hWnd);                             // Redraw to show countdown
 }
 
 void CancelCountdown(HWND hWnd) {
     auto& appState = AppState::getInstance();
-    if (appState.isCountingDown) {
-        appState.isCountingDown = false;
-        appState.isRestartCountdown = false;
-        appState.isSleepCountdown = false;
+    if (appState.isCountingDown()) {
+        appState.action = Action::None;
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
         UpdateLayered(hWnd);  // Redraw to hide countdown
     }
 }
 
 void TriggerRestart(HWND hWnd) {
-    StartCountdown(hWnd, true, false);
+    StartCountdown(hWnd, Action::Restart);
 }
 
 void TriggerShutdown(HWND hWnd) {
-    StartCountdown(hWnd, false, false);
+    StartCountdown(hWnd, Action::Shutdown);
 }
 
 void TriggerSleep(HWND hWnd) {
-    StartCountdown(hWnd, false, true);
+    StartCountdown(hWnd, Action::Sleep);
 }
 
 void TriggerLock(HWND hWnd) {
