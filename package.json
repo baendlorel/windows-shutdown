@@ -2,6 +2,6 @@
   "name": "windows-shutdown",
   "version": "1.0.0",
   "description": "Put it on your desktop, double click it and shuts down immediately",
-  "description_zh": "Ò»¸ö¿ÉÒÔÁ¢¿Ì¹Ø»úµÄĞ¡¹¤¾ß£¬ÓÃÓÚ·ÅÔÚ×ÀÃæÉÏ¿ìËÙ¹Ø»ú",
-  "purpose": "app",
+  "description_zh": "ä¸€ä¸ªå¯ä»¥ç«‹åˆ»å…³æœºçš„å°å·¥å…·ï¼Œç”¨äºæ”¾åœ¨æ¡Œé¢ä¸Šå¿«é€Ÿå…³æœº",
+  "purpose": "app"
 }
