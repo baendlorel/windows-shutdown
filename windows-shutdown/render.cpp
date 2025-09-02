@@ -65,7 +65,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
             if (i == appState.hoveredIndex) {
                 SolidBrush highlightBrush(Color(28, 255, 255, 255));
                 graphics.FillEllipse(&highlightBrush, x, y, size, size);
-            }
+                                     y + BUTTON_SHADOW_WIDTH, size - BUTTON_SHADOW_WIDTH * 2,
         }
     }
 
