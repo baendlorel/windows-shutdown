@@ -3,6 +3,8 @@
 // state
 enum class Action { None, Sleep, Shutdown, Restart };
 
+enum class FadeState { None, FadingIn, FadingOut };
+
 // configs
 #define CFG_KEY_LANG "lang"
 #define CFG_KEY_MODE "mode"

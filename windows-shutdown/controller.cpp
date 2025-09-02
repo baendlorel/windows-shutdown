@@ -109,22 +109,17 @@ void TriggerSleep(HWND hWnd) {
 
 void TriggerLock(HWND hWnd) {
     auto& appState = AppState::getInstance();
-    if (!appState.g_fadingOut) {
-        appState.g_fadingOut = true;
-        SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-    }
+    if (appState.fadeState != FadeState::None) return;
+    appState.fadeState = FadeState::FadingOut;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
     ExecuteLock();
 }
 
 void TriggerConfig(HWND hWnd) {
     auto& appState = AppState::getInstance();
-
     std::wstring configPath = GetConfigPath();
-
     ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
-
-    if (!appState.g_fadingOut) {
-        appState.g_fadingOut = true;
-        SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-    }
+    if (appState.fadeState != FadeState::None) return;
+    appState.fadeState = FadeState::FadingOut;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
 }

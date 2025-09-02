@@ -43,6 +43,8 @@ class AppState {
     Config config;
     ImageButton buttons[BUTTON_COUNT];
 
+    FadeState fadeState = FadeState::None;
+
     bool isCountingDown() const {
         return action != Action::None;
     }
@@ -61,7 +63,7 @@ class AppState {
           screenH(0),
           // fade settings
           g_alpha(0),
-          g_fadingOut(false),
+          fadeState(FadeState::None),
 
           // buttons and actions
           hoveredIndex(-1),

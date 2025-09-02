@@ -46,10 +46,10 @@ BOOL InitInstance(int nCmdShow) {
 
 void HandleTimer(HWND hWnd, WPARAM wParam) {
     static auto& appState = AppState::getInstance();
-
     auto alpha = appState.g_alpha;
 
     if (wParam == FADEIN_TIMER_ID) {
+        appState.fadeState = FadeState::FadingIn;
         BYTE targetAlpha = 255;
         int steps = FADEIN_DURATION / FADEIN_INTERVAL;
         BYTE step = (targetAlpha + steps - 1) / steps;
@@ -58,12 +58,13 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             UpdateLayered(hWnd);
             return;
         }
-
         KillTimer(hWnd, FADEIN_TIMER_ID);
+        appState.fadeState = FadeState::None;
         return;
     }
 
     if (wParam == FADEOUT_TIMER_ID) {
+        appState.fadeState = FadeState::FadingOut;
         int steps = FADEIN_DURATION / FADEIN_INTERVAL;
         BYTE step = (255 + steps - 1) / steps;
         if (alpha > 0) {
@@ -71,8 +72,8 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             UpdateLayered(hWnd);
             return;
         }
-
         KillTimer(hWnd, FADEOUT_TIMER_ID);
+        appState.fadeState = FadeState::None;
         DestroyWindow(hWnd);
         return;
     }
@@ -113,12 +114,10 @@ void HandleKeydown(HWND hWnd) {
         CancelCountdown(hWnd);
         return;
     }
-
-    if (appState.g_fadingOut) {
+    if (appState.fadeState != FadeState::None) {
         return;
     }
-
-    appState.g_fadingOut = true;
+    appState.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
 }
 
@@ -149,16 +148,13 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         CancelCountdown(hWnd);
         return;
     }
-
     int mx = LOWORD(lParam);
     int my = HIWORD(lParam);
     bool hit = false;
-
     for (int i = 0; i < 5; ++i) {
         if (!appState.buttons[i].mouseHit(mx, my)) {
             continue;
         }
-
         hit = true;
         switch ((Button)i) {
             case Button::Config:
@@ -179,9 +175,8 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         }
         break;
     }
-
-    if (!hit && !appState.g_fadingOut) {
-        appState.g_fadingOut = true;
+    if (!hit && appState.fadeState == FadeState::None) {
+        appState.fadeState = FadeState::FadingOut;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
     }
 }
@@ -191,8 +186,8 @@ void HandleCancel(HWND hWnd) {
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
     }
-    if (!appState.g_fadingOut) {
-        appState.g_fadingOut = true;
+    if (appState.fadeState == FadeState::None) {
+        appState.fadeState = FadeState::FadingOut;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
     }
 }
