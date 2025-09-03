@@ -16,11 +16,13 @@ void ExecuteRestart() {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-        MessageBoxW(nullptr, i18n.ErrorGetProcessTokenRestart().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, I18NWChar(I18NKey::ErrorGetProcessTokenRestart),
+                    I18NWChar(I18NKey::ErrorTitle), MB_ICONERROR);
         return;
     }
     if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
-        MessageBoxW(nullptr, i18n.ErrorLookupPrivilegeRestart().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, I18NWChar(I18NKey::ErrorLookupPrivilegeRestart),
+                    I18NWChar(I18NKey::ErrorTitle), MB_ICONERROR);
         CloseHandle(hToken);
         return;
     }
@@ -31,7 +33,8 @@ void ExecuteRestart() {
 
     wchar_t msg[] = L"Restarting...";
     if (!InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER)) {
-        MessageBoxW(nullptr, i18n.ErrorRestartFailed().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, I18NWChar(I18NKey::ErrorRestartFailed), I18NWChar(I18NKey::ErrorTitle),
+                    MB_ICONERROR);
     }
 }
 
@@ -40,11 +43,13 @@ void ExecuteShutdown() {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-        MessageBoxW(nullptr, i18n.ErrorGetProcessTokenShutdown().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, i18n.ErrorGetProcessTokenShutdown().c_str(), i18n.ErrorTitle().c_str(),
+                    MB_ICONERROR);
         return;
     }
     if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
-        MessageBoxW(nullptr, i18n.ErrorLookupPrivilegeShutdown().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, i18n.ErrorLookupPrivilegeShutdown().c_str(), i18n.ErrorTitle().c_str(),
+                    MB_ICONERROR);
         CloseHandle(hToken);
         return;
     }
@@ -55,7 +60,8 @@ void ExecuteShutdown() {
 
     wchar_t msg[] = L"Shutdown...";
     if (!InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER)) {
-        MessageBoxW(nullptr, i18n.ErrorShutdownFailed().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, i18n.ErrorShutdownFailed().c_str(), i18n.ErrorTitle().c_str(),
+                    MB_ICONERROR);
     }
 }
 
@@ -67,13 +73,15 @@ void ExecuteSleep() {
         if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-            AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0);
+            AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr),
+                                  0);
         }
         CloseHandle(hToken);
     }
 
     if (!SetSuspendState(FALSE, FALSE, FALSE)) {
-        MessageBoxW(nullptr, i18n.ErrorSleepFailed().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, i18n.ErrorSleepFailed().c_str(), i18n.ErrorTitle().c_str(),
+                    MB_ICONERROR);
     }
 }
 

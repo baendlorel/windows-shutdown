@@ -24,7 +24,7 @@ enum class I18NKey {
 
 class I18N {
    public:
-    static I18N& GetInstance(const Lang lang = Lang::Default);
+    static I18N& GetInstance();
 
     static void SetLang(const Lang lang);
 
@@ -34,7 +34,13 @@ class I18N {
 
     Action FileNameToAction(const std::wstring& name) const;
 
+   public:
+    std::wstring ErrorTitle;
+
    private:
     I18N() : dictionary({}) {};
     std::unordered_map<I18NKey, std::wstring> dictionary;
 };
+
+std::wstring GetText(I18NKey key);
+const wchar_t* I18NWChar(I18NKey key);

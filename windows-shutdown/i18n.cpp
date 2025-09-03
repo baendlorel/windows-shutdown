@@ -1,6 +1,6 @@
 #include "i18n.h"
 
-I18N& I18N::GetInstance(const Lang lang) {
+I18N& I18N::GetInstance() {
     static I18N instance;
     return instance;
 }
@@ -107,4 +107,14 @@ Action I18N::FileNameToAction(const std::wstring& name) const {
         return Action::Shutdown;
     }
     return Action::None;
+}
+
+std::wstring GetText(I18NKey key) {
+    static auto& i18n = I18N::GetInstance();
+    return i18n.Get(key);
+}
+
+const wchar_t* I18NWChar(I18NKey key) {
+    static auto& i18n = I18N::GetInstance();
+    return i18n.Get(key).c_str();
 }
