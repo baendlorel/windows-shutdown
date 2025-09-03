@@ -26,6 +26,8 @@ class I18N {
    public:
     static I18N& GetInstance(const Lang lang = Lang::Default);
 
+    static void SetLang(const Lang lang);
+
     std::wstring Get(I18NKey key) const;
 
     std::wstring Wait(Action type, int seconds) const;
@@ -33,6 +35,6 @@ class I18N {
     Action FileNameToAction(const std::wstring& name) const;
 
    private:
-    I18N(const Lang lang);
+    I18N() : dictionary({}) {};
     std::unordered_map<I18NKey, std::wstring> dictionary;
 };

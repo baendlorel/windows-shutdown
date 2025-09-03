@@ -1,8 +1,13 @@
 #include "i18n.h"
 
-I18N::I18N(Lang lang) {
+I18N& I18N::GetInstance(const Lang lang) {
+    static I18N instance;
+    return instance;
+}
+
+void I18N::SetLang(const Lang lang) {
     if (lang == Lang::En) {
-        this->dictionary = {
+        I18N::GetInstance().dictionary = {
             {I18NKey::ErrorCreateWindow,
              L"Failed to create main window! The program cannot start."},
             {I18NKey::ErrorCreateBitmap,
@@ -29,7 +34,7 @@ I18N::I18N(Lang lang) {
             {I18NKey::PressAnyKeyToExit, L"Press any key or click elsewhere to exit"},
             {I18NKey::PressAnyKeyToCancel, L"Press any key or click to cancel"}};
     } else {
-        this->dictionary = {
+        I18N::GetInstance().dictionary = {
             {I18NKey::ErrorCreateWindow, L"创建主窗口失败！程序无法启动。"},
             {I18NKey::ErrorCreateBitmap, L"创建位图失败，无法显示主界面！"},
             {I18NKey::ErrorResourceNotFound, L"找不到图标资源文件！程序可能损坏。"},
@@ -47,11 +52,6 @@ I18N::I18N(Lang lang) {
             {I18NKey::PressAnyKeyToExit, L"按任意键或鼠标点击其他位置退出"},
             {I18NKey::PressAnyKeyToCancel, L"按任意键或鼠标点击取消"}};
     }
-}
-
-I18N& I18N::GetInstance(const Lang lang) {
-    static I18N instance(lang);
-    return instance;
 }
 
 std::wstring I18N::Get(I18NKey key) const {
