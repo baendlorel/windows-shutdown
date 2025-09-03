@@ -135,7 +135,6 @@ WH GetWH(HWND hWnd, AppState& appState) {
     return {w, h};
 }
 
-// todo remove alpha param
 void UpdateLayered(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
     static WH wh = GetWH(hWnd, appState);

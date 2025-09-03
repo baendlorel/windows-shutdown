@@ -10,31 +10,31 @@
 std::string DefaultConfigZh() {
     // Create default config.ini
     std::string lang = std::format(
-        "# '{}' ©ия║оНё╨ '{}', '{}'. д╛хож╣╨мо╣мЁсОятоЮм╛\n"
+        "# '{}' Е▐╞И─┴И║╧О╪  '{}', '{}'. И╩≤Х╝╓Е─╪Е▓▄ГЁ╩Г╩÷Х╞╜Х╗─Г⌡╦Е░▄\n"
         "{}={}",
         CFG_KEY_LANG, CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
 
     std::string mode = std::format(
-        "# '{}' ©ия║оНё╨ ё╗д╛хож╣ё╨ {}ё╘\n"
-        "# - '{}' ё╨отй╬╡к╣╔ё╛©ирт╣Ц╩Вр╙вЖ╣д╡ывВ\n"
-        "# - '{}' ё╨ясЁыж╝╨Сж╠╫с╧ь╩З\n"
+        "# '{}' Е▐╞И─┴И║╧О╪  О╪┬И╩≤Х╝╓Е─╪О╪  {}О╪┴\n"
+        "# - '{}' О╪ Ф≤╬Г╓╨Х▐°Е█∙О╪▄Е▐╞Д╩╔Г┌╧Е┤╩Х╕│Е│ Г └Ф⌠█Д╫°\n"
+        "# - '{}' О╪ Е╩╤Х©÷Д╧▀Е░▌Г⌡╢Ф▌╔Е┘ЁФ°╨\n"
         "{}={}",
         CFG_KEY_ACTION, CFG_ACTION_NONE, CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION,
         CFG_ACTION_NONE);
 
     std::string instruction = std::format(
-        "# '{}' ©ия║оНё╨'{}', '{}'. д╛хож╣ё╨'{}'\n"
+        "# '{}' Е▐╞И─┴И║╧О╪ '{}', '{}'. И╩≤Х╝╓Е─╪О╪ '{}'\n"
         "{}={}",
         CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW,
         CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
-        "# тзж╢пп╡ывВж╝г╟╣х╢ЩуБц╢╤ЮцКё╛д╛хож╣ё╨{}\n"
+        "# Е°╗Ф┴╖Х║▄Ф⌠█Д╫°Д╧▀Е┴█Г╜┴Е╬┘Х©≥Д╧┬Е╓ Г╖▓О╪▄И╩≤Х╝╓Е─╪О╪ {}\n"
         "{}={}",
         CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
 
     return std::format(
-        "# ╪стьеДжцй╖╟эй╠╩Ай╧сцд╛хоеДжц║ё\n"
+        "# Е┼═Х╫╫И┘█Г╫╝Е╓╠Х╢╔Ф≈╤Д╪ Д╫©Г■╗И╩≤Х╝╓И┘█Г╫╝Ц─┌\n"
         "\n"
         "{}\n"
         "\n"
