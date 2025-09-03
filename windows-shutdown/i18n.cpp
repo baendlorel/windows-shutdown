@@ -1,6 +1,4 @@
 #include "i18n.h"
-#include "app-state.h"
-#include "config.h"
 
 I18N& I18N::GetInstance() {
     static I18N instance;
@@ -25,6 +23,14 @@ void I18N::SetLang(Lang lang) {
         ErrTitle = L"错误";
         PressAnyKeyToExit = L"按任意键或鼠标点击其他位置退出";
         PressAnyKeyToCancel = L"按任意键或鼠标点击取消";
+
+        // actions
+        Shutdown = ZH_SHUTDOWN;
+        Sleep = ZH_SLEEP;
+        Restart = ZH_RESTART;
+        Waiting[0] = L"即将";
+        Waiting[1] = L"，剩余";
+        Waiting[2] = L"秒...";
     } else {
         ErrCreateWindow = L"Failed to create main window! The program cannot start.";
         ErrCreateBitmap = L"Failed to create bitmap, cannot display main interface!";
@@ -43,41 +49,51 @@ void I18N::SetLang(Lang lang) {
         ErrTitle = L"Error";
         PressAnyKeyToExit = L"Press any key or click elsewhere to exit";
         PressAnyKeyToCancel = L"Press any key or click to cancel";
+
+        // actions
+        Shutdown = EN_SHUTDOWN;
+        Sleep = EN_SLEEP;
+        Restart = EN_RESTART;
+        Waiting[0] = L"About to";
+        Waiting[1] = L", ";
+        Waiting[2] = L" seconds left...";
     }
 }
 
 std::wstring I18N::Wait(Action type, int seconds) const {
-    std::wstring action_zh, action_en;
+    std::wstring actionWStr;
     switch (type) {
         case Action::Sleep:
-            action_zh = L"睡眠";
-            action_en = L"sleep";
+            actionWStr = this->Sleep;
             break;
         case Action::Shutdown:
-            action_zh = L"关机";
-            action_en = L"shutdown";
+            actionWStr = this->Shutdown;
             break;
         case Action::Restart:
-            action_zh = L"重启";
-            action_en = L"restart";
+            actionWStr = this->Restart;
             break;
     }
-    if (lang == Lang::En) {
-        return L"About to " + action_en + L", " + std::to_wstring(seconds) + L" seconds left...";
-    } else {
-        return L"即将" + action_zh + L"，剩余" + std::to_wstring(seconds) + L"秒...";
-    }
+    return this->Waiting[0] + actionWStr + this->Waiting[1] + std::to_wstring(seconds) +
+           this->Waiting[2];
 }
 
 Action I18N::FileNameToAction(const std::wstring& name) const {
     std::wstring lowerName = name;
-    for (auto& ch : lowerName) ch = towlower(ch);
-    if (lowerName == L"sleep" || lowerName == L"睡眠") {
+    for (auto& ch : lowerName) {
+        ch = towlower(ch);
+    }
+
+    if (lowerName == EN_SLEEP || lowerName == ZH_SLEEP) {
         return Action::Sleep;
-    } else if (lowerName == L"restart" || lowerName == L"重启") {
+    }
+
+    if (lowerName == EN_RESTART || lowerName == ZH_RESTART) {
         return Action::Restart;
-    } else if (lowerName == L"shutdown" || lowerName == L"关机") {
+    }
+
+    if (lowerName == EN_SHUTDOWN || lowerName == ZH_SHUTDOWN) {
         return Action::Shutdown;
     }
+
     return Action::None;
 }
