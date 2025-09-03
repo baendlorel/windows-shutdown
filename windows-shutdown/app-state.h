@@ -54,6 +54,17 @@ class AppState {
         return action == Action::Sleep;
     }
 
+    std::wstring GetExeName() const {
+        wchar_t exePath[MAX_PATH] = {0};
+        GetModuleFileNameW(NULL, exePath, MAX_PATH);
+        std::wstring path(exePath);
+        size_t pos = path.find_last_of(L"\\/");
+        if (pos != std::wstring::npos) {
+            return path.substr(pos + 1);
+        }
+        return L"";
+    }
+
    private:
     AppState()
         :  // windows

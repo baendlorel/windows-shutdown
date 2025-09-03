@@ -37,8 +37,7 @@ BOOL InitInstance(int nCmdShow) {
                                 appState.hInst, nullptr);
     if (!hWnd) {
         auto& i18n = I18N::GetInstance();
-        MessageBoxW(nullptr, i18n.Get(I18NKey::ErrorCreateWindow).c_str(),
-                    i18n.Get(I18NKey::ErrorTitle).c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, i18n.ErrCreateWindow.c_str(), i18n.ErrTitle.c_str(), MB_ICONERROR);
         return FALSE;
     }
     ShowWindow(hWnd, SW_SHOW);

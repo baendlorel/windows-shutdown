@@ -24,4 +24,4 @@ void TriggerLock(HWND hWnd);
 
 void TriggerConfig(HWND hWnd);
 
-void ActionByFileName();
+void ActionByFileName(const std::wstring& name);

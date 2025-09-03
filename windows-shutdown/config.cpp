@@ -20,20 +20,6 @@ std::string trim(const std::string& s) {
     return (start <= end) ? std::string(start, end + 1) : "";
 }
 
-std::wstring GetConfigPath() {
-    wchar_t exePath[MAX_PATH] = {0};
-    GetModuleFileNameW(NULL, exePath, MAX_PATH);
-    std::wstring path(exePath);
-    auto pos = path.find_last_of(L"\\/");
-    if (pos != std::wstring::npos) {
-        path = path.substr(0, pos + 1);
-    } else {
-        path = L"";
-    }
-    path += L"config.ini";
-    return path;
-}
-
 bool IsSystemLanguageChinese() {
     LANGID langId = GetUserDefaultUILanguage();
     WORD primaryLang = PRIMARYLANGID(langId);
@@ -47,8 +33,22 @@ Config::Config() {
     this->Load();
 }
 
+std::wstring Config::GetConfigPath() {
+    wchar_t exePath[MAX_PATH] = {0};
+    GetModuleFileNameW(NULL, exePath, MAX_PATH);
+    std::wstring path(exePath);
+    auto pos = path.find_last_of(L"\\/");
+    if (pos != std::wstring::npos) {
+        path = path.substr(0, pos + 1);
+    } else {
+        path = L"";
+    }
+    path += L"config.ini";
+    return path;
+}
+
 void Config::Load() {
-    std::wstring configPath = GetConfigPath();
+    std::wstring configPath = this->GetConfigPath();
     std::ifstream file(configPath);
     if (!file.is_open()) {
         // Create default config.ini
@@ -87,10 +87,10 @@ void Config::Load() {
 
     std::string line;
 
-    enum ConfigKey {
-        LANG,
-        MODE,
-        DELAY,
+    enum {
+        ConfigLang,
+        ConfigMode,
+        ConfigDelay,
     };
 
     bool isSet[3] = {false, false, false};
@@ -112,27 +112,27 @@ void Config::Load() {
 
         if (key == CFG_KEY_LANG) {
             this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
-            isSet[LANG] = true;
+            isSet[ConfigLang] = true;
         } else if (key == CFG_KEY_MODE) {
             this->mode = value == CFG_MODE_IMMEDIATE ? Mode::Immediate : Mode::Normal;
-            isSet[MODE] = true;
+            isSet[ConfigMode] = true;
         } else if (key == CFG_KEY_DELAY) {
             try {
                 this->delay = std::clamp(std::stoi(value), 0, 60);
             } catch (const std::invalid_argument&) {
                 this->delay = CFG_DEFAULT_DELAY;
             }
-            isSet[DELAY] = true;
+            isSet[ConfigDelay] = true;
         }
     }
 
-    if (!isSet[LANG]) {
+    if (!isSet[ConfigLang]) {
         this->lang = IsSystemLanguageChinese() ? Lang::Zh : Lang::En;
     }
-    if (!isSet[MODE]) {
+    if (!isSet[ConfigMode]) {
         this->mode = Mode::Normal;
     }
-    if (!isSet[DELAY]) {
+    if (!isSet[ConfigDelay]) {
         this->delay = CFG_DEFAULT_DELAY;
     }
 }
