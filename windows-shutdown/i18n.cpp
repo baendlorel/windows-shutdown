@@ -1,65 +1,65 @@
 #include "i18n.h"
 
-I18N::I18N() : lang(Lang::Zh) {
-    this->zh = {{I18NKey::ErrorCreateWindow, L"创建主窗口失败！程序无法启动。"},
-                {I18NKey::ErrorCreateBitmap, L"创建位图失败，无法显示主界面！"},
-                {I18NKey::ErrorResourceNotFound, L"找不到图标资源文件！程序可能损坏。"},
-                {I18NKey::ErrorLoadResource, L"加载图标资源失败！程序可能损坏。"},
-                {I18NKey::ErrorCreateImageStream, L"创建图像流失败！"},
-                {I18NKey::ErrorCreateImageBitmap, L"创建图标位图失败！"},
-                {I18NKey::ErrorGetProcessTokenRestart, L"获取进程权限失败，无法重启系统！"},
-                {I18NKey::ErrorGetProcessTokenShutdown, L"获取进程权限失败，无法关闭系统！"},
-                {I18NKey::ErrorLookupPrivilegeRestart, L"查找关机权限失败，无法重启系统！"},
-                {I18NKey::ErrorLookupPrivilegeShutdown, L"查找关机权限失败，无法关闭系统！"},
-                {I18NKey::ErrorRestartFailed, L"启动系统重启失败！"},
-                {I18NKey::ErrorShutdownFailed, L"启动系统关机失败！"},
-                {I18NKey::ErrorSleepFailed, L"系统睡眠失败！可能不支持睡眠功能。"},
-                {I18NKey::ErrorTitle, L"错误"},
-                {I18NKey::PressAnyKeyToExit, L"按任意键或鼠标点击其他位置退出"},
-                {I18NKey::PressAnyKeyToCancel, L"按任意键或鼠标点击取消"}};
-    this->en = {
-        {I18NKey::ErrorCreateWindow, L"Failed to create main window! The program cannot start."},
-        {I18NKey::ErrorCreateBitmap, L"Failed to create bitmap, cannot display main interface!"},
-        {I18NKey::ErrorResourceNotFound,
-         L"Icon resource file not found! The program may be corrupted."},
-        {I18NKey::ErrorLoadResource,
-         L"Failed to load icon resource! The program may be corrupted."},
-        {I18NKey::ErrorCreateImageStream, L"Failed to create image stream!"},
-        {I18NKey::ErrorCreateImageBitmap, L"Failed to create icon bitmap!"},
-        {I18NKey::ErrorGetProcessTokenRestart,
-         L"Failed to get process privileges, cannot restart system!"},
-        {I18NKey::ErrorGetProcessTokenShutdown,
-         L"Failed to get process privileges, cannot shutdown system!"},
-        {I18NKey::ErrorLookupPrivilegeRestart,
-         L"Failed to lookup shutdown privilege, cannot restart system!"},
-        {I18NKey::ErrorLookupPrivilegeShutdown,
-         L"Failed to lookup shutdown privilege, cannot shutdown system!"},
-        {I18NKey::ErrorRestartFailed, L"Failed to initiate system restart!"},
-        {I18NKey::ErrorShutdownFailed, L"Failed to initiate system shutdown!"},
-        {I18NKey::ErrorSleepFailed, L"System sleep failed! Sleep function may not be supported."},
-        {I18NKey::ErrorTitle, L"Error"},
-        {I18NKey::PressAnyKeyToExit, L"Press any key or click elsewhere to exit"},
-        {I18NKey::PressAnyKeyToCancel, L"Press any key or click to cancel"}};
+I18N::I18N(Lang lang) {
+    if (lang == Lang::En) {
+        this->dictionary = {
+            {I18NKey::ErrorCreateWindow,
+             L"Failed to create main window! The program cannot start."},
+            {I18NKey::ErrorCreateBitmap,
+             L"Failed to create bitmap, cannot display main interface!"},
+            {I18NKey::ErrorResourceNotFound,
+             L"Icon resource file not found! The program may be corrupted."},
+            {I18NKey::ErrorLoadResource,
+             L"Failed to load icon resource! The program may be corrupted."},
+            {I18NKey::ErrorCreateImageStream, L"Failed to create image stream!"},
+            {I18NKey::ErrorCreateImageBitmap, L"Failed to create icon bitmap!"},
+            {I18NKey::ErrorGetProcessTokenRestart,
+             L"Failed to get process privileges, cannot restart system!"},
+            {I18NKey::ErrorGetProcessTokenShutdown,
+             L"Failed to get process privileges, cannot shutdown system!"},
+            {I18NKey::ErrorLookupPrivilegeRestart,
+             L"Failed to lookup shutdown privilege, cannot restart system!"},
+            {I18NKey::ErrorLookupPrivilegeShutdown,
+             L"Failed to lookup shutdown privilege, cannot shutdown system!"},
+            {I18NKey::ErrorRestartFailed, L"Failed to initiate system restart!"},
+            {I18NKey::ErrorShutdownFailed, L"Failed to initiate system shutdown!"},
+            {I18NKey::ErrorSleepFailed,
+             L"System sleep failed! Sleep function may not be supported."},
+            {I18NKey::ErrorTitle, L"Error"},
+            {I18NKey::PressAnyKeyToExit, L"Press any key or click elsewhere to exit"},
+            {I18NKey::PressAnyKeyToCancel, L"Press any key or click to cancel"}};
+    } else {
+        this->dictionary = {
+            {I18NKey::ErrorCreateWindow, L"创建主窗口失败！程序无法启动。"},
+            {I18NKey::ErrorCreateBitmap, L"创建位图失败，无法显示主界面！"},
+            {I18NKey::ErrorResourceNotFound, L"找不到图标资源文件！程序可能损坏。"},
+            {I18NKey::ErrorLoadResource, L"加载图标资源失败！程序可能损坏。"},
+            {I18NKey::ErrorCreateImageStream, L"创建图像流失败！"},
+            {I18NKey::ErrorCreateImageBitmap, L"创建图标位图失败！"},
+            {I18NKey::ErrorGetProcessTokenRestart, L"获取进程权限失败，无法重启系统！"},
+            {I18NKey::ErrorGetProcessTokenShutdown, L"获取进程权限失败，无法关闭系统！"},
+            {I18NKey::ErrorLookupPrivilegeRestart, L"查找关机权限失败，无法重启系统！"},
+            {I18NKey::ErrorLookupPrivilegeShutdown, L"查找关机权限失败，无法关闭系统！"},
+            {I18NKey::ErrorRestartFailed, L"启动系统重启失败！"},
+            {I18NKey::ErrorShutdownFailed, L"启动系统关机失败！"},
+            {I18NKey::ErrorSleepFailed, L"系统睡眠失败！可能不支持睡眠功能。"},
+            {I18NKey::ErrorTitle, L"错误"},
+            {I18NKey::PressAnyKeyToExit, L"按任意键或鼠标点击其他位置退出"},
+            {I18NKey::PressAnyKeyToCancel, L"按任意键或鼠标点击取消"}};
+    }
 }
 
-I18N& I18N::GetInstance() {
-    static I18N instance;
+I18N& I18N::GetInstance(const Lang lang) {
+    static I18N instance(lang);
     return instance;
 }
 
 std::wstring I18N::Get(I18NKey key) const {
-    if (lang == Lang::Zh) {
-        auto it = zh.find(key);
-        if (it != zh.end()) return it->second;
-    } else {
-        auto it = en.find(key);
-        if (it != en.end()) return it->second;
+    auto it = this->dictionary.find(key);
+    if (it != this->dictionary.end()) {
+        return it->second;
     }
     return L"Unknown Error";
-}
-
-void I18N::SetLang(Lang l) {
-    this->lang = l;
 }
 
 std::wstring I18N::Wait(Action type, int seconds) const {
