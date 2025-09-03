@@ -194,17 +194,13 @@ void HandleCancel(HWND hWnd) {
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
     }
 }
-// todo 不要用文件名判定，要config里判定
+
 void TriggerImmediateAction(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
-    if (appState.config.mode != Mode::Immediate) {
+    if (!appState.config.isImmediate()) {
         return;
     }
-    appState.fadeState = FadeState::FadingOut;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
-    auto name = appState.GetExeName();
-    Action action = I18N::GetInstance().FileNameToAction(name);
-    switch (action) {
+    switch (appState.config.action) {
         case Action::Lock:
             TriggerLock(hWnd);
             break;
@@ -217,7 +213,11 @@ void TriggerImmediateAction(HWND hWnd) {
         case Action::Shutdown:
             TriggerShutdown(hWnd);
             break;
+        default:
+            return;
     }
+    appState.fadeState = FadeState::FadingOut;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {

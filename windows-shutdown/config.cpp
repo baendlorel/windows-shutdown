@@ -19,8 +19,8 @@ std::string DefaultConfigZh() {
         "# - '{}' ：显示菜单，可以点击要做的操作\n"
         "# - '{}' ：延迟之后直接关机\n"
         "{}={}",
-        CFG_KEY_MODE, CFG_MODE_NORMAL, CFG_MODE_NORMAL, CFG_MODE_IMMEDIATE, CFG_KEY_MODE,
-        CFG_MODE_NORMAL);
+        CFG_KEY_ACTION, CFG_ACTION_NONE, CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION,
+        CFG_ACTION_NONE);
 
     std::string instruction = std::format(
         "# '{}' 可选项：'{}', '{}'. 默认值：'{}'\n"
@@ -55,11 +55,11 @@ std::string DefaultConfigEn() {
 
     std::string mode = std::format(
         "# '{}' options: (Default: {})\n"
-        "# - '{}' : show menu to choose an action\n"
-        "# - '{}' : after delayed seconds, shutdown instantly\n"
+        "# - {} : show menu to choose an action\n"
+        "# - {} : after delayed seconds, do it instantly\n"
         "{}={}",
-        CFG_KEY_MODE, CFG_MODE_NORMAL, CFG_MODE_NORMAL, CFG_MODE_IMMEDIATE, CFG_KEY_MODE,
-        CFG_MODE_NORMAL);
+        CFG_KEY_ACTION, CFG_ACTION_NONE, CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION,
+        CFG_ACTION_NONE);
 
     std::string instruction = std::format(
         "# '{}' options: '{}', '{}'. Default: '{}'\n"
@@ -106,7 +106,7 @@ bool IsSysLangChinese() {
 
 Config::Config()
     : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
-      mode(Mode::Normal),
+      action(Action::None),
       delay(CFG_DEFAULT_DELAY),
       instruction(Instruction::Show) {
     this->Load();
@@ -139,15 +139,6 @@ void Config::Load() {
 
     std::string line;
 
-    enum {
-        ConfigLang,
-        ConfigMode,
-        ConfigInstruction,
-        ConfigDelay,
-    };
-
-    bool isSet[4] = {false, false, false, false};
-
     while (std::getline(file, line)) {
         if (line.empty()) {
             continue;
@@ -165,34 +156,29 @@ void Config::Load() {
 
         if (key == CFG_KEY_LANG) {
             this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
-            isSet[ConfigLang] = true;
-        } else if (key == CFG_KEY_MODE) {
-            this->mode = value == CFG_MODE_IMMEDIATE ? Mode::Immediate : Mode::Normal;
-            isSet[ConfigMode] = true;
+        } else if (key == CFG_KEY_ACTION) {
+            if (value == CFG_ACTION_NONE) {
+                this->action = Action::None;
+            } else if (value == CFG_ACTION_SLEEP) {
+                this->action = Action::Sleep;
+            } else if (value == CFG_ACTION_SHUTDOWN) {
+                this->action = Action::Shutdown;
+            } else if (value == CFG_ACTION_RESTART) {
+                this->action = Action::Restart;
+            } else if (value == CFG_ACTION_LOCK) {
+                this->action = Action::Lock;
+            } else {
+                this->action = Action::None;
+            }
         } else if (key == CFG_KEY_INSTRUCTION) {
             this->instruction =
                 value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
-            isSet[ConfigInstruction] = true;
         } else if (key == CFG_KEY_DELAY) {
             try {
                 this->delay = std::clamp(std::stoi(value), 0, 60);
             } catch (const std::invalid_argument&) {
                 this->delay = CFG_DEFAULT_DELAY;
             }
-            isSet[ConfigDelay] = true;
         }
-    }
-
-    if (!isSet[ConfigLang]) {
-        this->lang = IsSysLangChinese() ? Lang::Zh : Lang::En;
-    }
-    if (!isSet[ConfigMode]) {
-        this->mode = Mode::Normal;
-    }
-    if (!isSet[ConfigInstruction]) {
-        this->instruction = Instruction::Show;
-    }
-    if (!isSet[ConfigDelay]) {
-        this->delay = CFG_DEFAULT_DELAY;
     }
 }

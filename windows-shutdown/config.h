@@ -5,7 +5,7 @@
 struct Config {
    public:
     Lang lang;
-    Mode mode;
+    Action action;
     Instruction instruction;
     int delay;
 
@@ -13,7 +13,7 @@ struct Config {
     Config();
 
     bool isImmediate() const {
-        return mode != Mode::Normal;
+        return action != Action::None;
     }
 
     std::wstring GetConfigPath();
