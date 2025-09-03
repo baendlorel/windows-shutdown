@@ -225,6 +225,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     if (!immedateTriggered) {
         TriggerImmediateAction(hWnd);
         immedateTriggered = true;
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     switch (message) {

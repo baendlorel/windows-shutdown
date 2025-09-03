@@ -32,7 +32,7 @@
       "stopAtEntry": false,
       "console": "externalTerminal",
       "cwd": "c:/Users/80652/source/repos/windows-shutdown/x64/Debug",
-      "program": "c:/Users/80652/source/repos/windows-shutdown/x64/Debug/windows-shutdown.exe"
+      "program": "c:/Users/80652/source/repos/windows-shutdown/x64/Debug/build/Release/outRelease"
     }
   ]
 }

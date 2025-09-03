@@ -4,9 +4,12 @@
     "titleBar.inactiveBackground": "#152932ff"
   },
   "files.associations": {
+    "*.md": "markdown",
     "*.h": "cpp",
     "*.cpp": "cpp",
-    "*.rc": "plaintext"
+    "*.rc": "plaintext",
+    "format": "cpp",
+    "xstring": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "D:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
   "C_Cpp_Runner.cppCompilerPath": "D:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
@@ -46,5 +49,14 @@
   ],
   "C_Cpp_Runner.enableWarnings": true,
   "C_Cpp_Runner.msvcWarnings": ["/W4", "/permissive-"],
-  "C_Cpp_Runner.warningsAsError": false
+  "C_Cpp_Runner.warningsAsError": false,
+  "C_Cpp_Runner.includeSearch": ["*", "**/*"],
+  "C_Cpp_Runner.excludeSearch": [
+    "**/build",
+    "**/build/**",
+    "**/.*",
+    "**/.*/**",
+    "**/.vscode",
+    "**/.vscode/**"
+  ]
 }

@@ -10,23 +10,21 @@
 std::string DefaultConfigZh() {
     // Create default config.ini
     std::string lang = std::format(
-        "# '{}' 可选项： '{}', '{}'. 默认值和系统语言相同\n"
+        "# 可选项：{}, {}。 默认值和系统语言相同\n"
         "{}={}",
-        CFG_KEY_LANG, CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
+        CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
 
     std::string mode = std::format(
-        "# '{}' 可选项： （默认值： {}）\n"
-        "# - '{}' ：显示菜单，可以点击要做的操作\n"
-        "# - '{}' ：延迟之后直接关机\n"
+        "# 可选项： \n"
+        "# - {} ：（默认）显示菜单，可以点击要做的操作\n"
+        "# - {} ：延迟之后直接关机\n"
         "{}={}",
-        CFG_KEY_ACTION, CFG_ACTION_NONE, CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION,
-        CFG_ACTION_NONE);
+        CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION, CFG_ACTION_NONE);
 
     std::string instruction = std::format(
-        "# '{}' 可选项：'{}', '{}'. 默认值：'{}'\n"
+        "# 可选项：{}, {}（默认）\n"
         "{}={}",
-        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW,
-        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+        CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
         "# 在执行操作之前等待这么多秒，默认值：{}\n"
@@ -49,23 +47,21 @@ std::string DefaultConfigZh() {
 std::string DefaultConfigEn() {
     // Create default config.ini
     std::string lang = std::format(
-        "# '{}' options: '{}', '{}'. Default: same as your system\n"
+        "# Options: {}, {}. Default: same as your system\n"
         "{}={}",
-        CFG_KEY_LANG, CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
+        CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
 
     std::string mode = std::format(
-        "# '{}' options: (Default: {})\n"
-        "# - {} : show menu to choose an action\n"
-        "# - {} : after delayed seconds, do it instantly\n"
+        "# Options: \n"
+        "# - {} : (Default)show menu to choose an action\n"
+        "# - {} : After delayed seconds, do it instantly\n"
         "{}={}",
-        CFG_KEY_ACTION, CFG_ACTION_NONE, CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION,
-        CFG_ACTION_NONE);
+        CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION, CFG_ACTION_NONE);
 
     std::string instruction = std::format(
-        "# '{}' options: '{}', '{}'. Default: '{}'\n"
+        "# Options: {}, {}(Default)\n"
         "{}={}",
-        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW,
-        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+        CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
         "# Wait time (in seconds) before action. Default: {}\n"
