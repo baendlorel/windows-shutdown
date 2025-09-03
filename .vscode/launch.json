@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug windows-shutdown",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\x64\\Debug\\windows-shutdown.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}\\x64\\Debug",
+      "environment": [],
+      "console": "externalTerminal",
+      "preLaunchTask": "Full Build"
+    },
+    {
+      "name": "Debug windows-shutdown (No Build)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\x64\\Debug\\windows-shutdown.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}\\x64\\Debug",
+      "environment": [],
+      "console": "externalTerminal"
+    }
+  ]
+}

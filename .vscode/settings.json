@@ -1,0 +1,11 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#002e42ff",
+    "titleBar.inactiveBackground": "#152932ff"
+  },
+  "files.associations": {
+    "*.h": "cpp",
+    "*.cpp": "cpp",
+    "*.rc": "plaintext"
+  }
+}

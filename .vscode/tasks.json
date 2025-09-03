@@ -1,0 +1,132 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "C/C++: Build Debug",
+      "command": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+      "args": [
+        "/std:c++20",
+        "/EHsc",
+        "/W3",
+        "/MD",
+        "/D_WINDOWS",
+        "/DUNICODE",
+        "/D_UNICODE",
+        "/Zi",
+        "/Fe:",
+        "${workspaceFolder}\\x64\\Debug\\windows-shutdown.exe",
+        "/Fo:",
+        "${workspaceFolder}\\x64\\Debug\\",
+        "/Fd:",
+        "${workspaceFolder}\\x64\\Debug\\",
+        "${workspaceFolder}\\windows-shutdown\\*.cpp",
+        "/link",
+        "${workspaceFolder}\\x64\\Debug\\windows-shutdown.res",
+        "user32.lib",
+        "gdi32.lib",
+        "gdiplus.lib",
+        "kernel32.lib",
+        "shell32.lib",
+        "comctl32.lib",
+        "advapi32.lib",
+        "ole32.lib",
+        "/SUBSYSTEM:WINDOWS",
+        "/DEBUG"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}\\windows-shutdown",
+        "env": {
+          "PATH": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64;D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;${env:PATH}",
+          "INCLUDE": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\ucrt;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\shared;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\um;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\winrt",
+          "LIB": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\lib\\x64;D:\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;D:\\Windows Kits\\10\\lib\\10.0.26100.0\\um\\x64"
+        }
+      },
+      "problemMatcher": ["$msCompile"],
+      "group": "build",
+      "detail": "Build Windows application using MSVC compiler (Debug)"
+    },
+    {
+      "type": "shell",
+      "label": "C/C++: Build Release",
+      "command": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+      "args": [
+        "/std:c++20",
+        "/EHsc",
+        "/W3",
+        "/MD",
+        "/O2",
+        "/D_WINDOWS",
+        "/DUNICODE",
+        "/D_UNICODE",
+        "/DNDEBUG",
+        "/Fe:",
+        "${workspaceFolder}\\x64\\Release\\windows-shutdown.exe",
+        "/Fo:",
+        "${workspaceFolder}\\x64\\Release\\",
+        "${workspaceFolder}\\windows-shutdown\\*.cpp",
+        "/link",
+        "user32.lib",
+        "gdi32.lib",
+        "gdiplus.lib",
+        "kernel32.lib",
+        "shell32.lib",
+        "comctl32.lib",
+        "advapi32.lib",
+        "ole32.lib",
+        "/SUBSYSTEM:WINDOWS"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}\\windows-shutdown",
+        "env": {
+          "PATH": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64;D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;${env:PATH}",
+          "INCLUDE": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\ucrt;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\shared;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\um;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\winrt",
+          "LIB": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\lib\\x64;D:\\Windows Kits\\10\\lib\\10.0.26100.0\\ucrt\\x64;D:\\Windows Kits\\10\\lib\\10.0.26100.0\\um\\x64"
+        }
+      },
+      "problemMatcher": ["$msCompile"],
+      "group": "build",
+      "detail": "Build Windows application using MSVC compiler (Release)"
+    },
+    {
+      "type": "shell",
+      "label": "Create Output Directories",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "if not exist \"${workspaceFolder}\\x64\\Debug\" mkdir \"${workspaceFolder}\\x64\\Debug\" && if not exist \"${workspaceFolder}\\x64\\Release\" mkdir \"${workspaceFolder}\\x64\\Release\""
+      ],
+      "group": "build",
+      "detail": "Create build output directories"
+    },
+    {
+      "type": "shell",
+      "label": "Compile Resource Files",
+      "command": "D:\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\rc.exe",
+      "args": [
+        "/fo",
+        "${workspaceFolder}\\x64\\Debug\\windows-shutdown.res",
+        "${workspaceFolder}\\windows-shutdown\\windows-shutdown.rc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}\\windows-shutdown",
+        "env": {
+          "INCLUDE": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\ucrt;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\shared;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\um;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\winrt"
+        }
+      },
+      "group": "build",
+      "detail": "Compile resource files"
+    },
+    {
+      "type": "shell",
+      "label": "Full Build",
+      "dependsOrder": "sequence",
+      "dependsOn": ["Create Output Directories", "Compile Resource Files", "C/C++: Build Debug"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Full build including resource files"
+    }
+  ]
+}
