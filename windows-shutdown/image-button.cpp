@@ -24,7 +24,8 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     }
     ULONG written;
     pStream->Write(pData, size, &written);
-    LARGE_INTEGER li = {0};
+    // LARGE_INTEGER li = {0};
+    LARGE_INTEGER li;
     pStream->Seek(li, STREAM_SEEK_SET, NULL);
     Bitmap* image = Bitmap::FromStream(pStream);
     pStream->Release();

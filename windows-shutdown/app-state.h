@@ -66,19 +66,20 @@ class AppState {
     }
 
    private:
-    AppState()
-        :  // windows
-          hInst(nullptr),
-          screenW(0),
-          screenH(0),
-          // fade settings
-          g_alpha(0),
-          fadeState(FadeState::None),
+    AppState() {
+        this->hInst = nullptr;
+        this->screenW = 0;
+        this->screenH = 0;
 
-          // buttons and actions
-          hoveredIndex(-1),
-          action(Action::None),
-          countdownSeconds(0) {
+        // fade settings
+        this->g_alpha = 0;
+        this->fadeState = FadeState::None;
+
+        // buttons and actions
+        this->hoveredIndex = -1;
+        this->action = Action::None;
+        this->countdownSeconds = 0;
+
         // window info
         this->szTitle[0] = L'\0';
         this->szWindowClass[0] = L'\0';

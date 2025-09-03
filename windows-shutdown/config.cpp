@@ -103,8 +103,8 @@ bool IsSysLangChinese() {
 Config::Config()
     : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
       action(Action::None),
-      delay(CFG_DEFAULT_DELAY),
-      instruction(Instruction::Show) {
+      instruction(Instruction::Show),
+      delay(CFG_DEFAULT_DELAY) {
     this->Load();
 }
 

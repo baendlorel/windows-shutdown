@@ -3,7 +3,7 @@
 #include "app-state.h"
 #include "i18n.h"
 
-void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
+void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     auto& appState = AppState::GetInstance();
     auto& i18n = I18N::GetInstance();
     Graphics graphics(hdcMem);
@@ -140,7 +140,8 @@ void UpdateLayered(HWND hWnd) {
     static WH wh = GetWH(hWnd, appState);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
-    BITMAPINFO bmi = {0};
+    // BITMAPINFO bmi = {0};
+    BITMAPINFO bmi;
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = wh.w;
     bmi.bmiHeader.biHeight = -wh.h;
@@ -158,7 +159,7 @@ void UpdateLayered(HWND hWnd) {
     }
 
     HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-    DrawToMemoryDC(hdcMem, wh.w, wh.h, appState.g_alpha);
+    DrawToMemoryDC(hdcMem, wh.w, wh.h);
     POINT ptWin = {0, 0};
     SIZE sizeWin = {wh.w, wh.h};
     BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.g_alpha, AC_SRC_ALPHA};

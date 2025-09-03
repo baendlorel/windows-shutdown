@@ -28,7 +28,8 @@ ATOM MyRegisterClass() {
     return RegisterClassExW(&wcex);
 }
 
-BOOL InitInstance(int nCmdShow) {
+// int nCmdShow
+BOOL InitInstance(int) {
     auto& appState = AppState::GetInstance();
     appState.screenW = GetSystemMetrics(SM_CXSCREEN);
     appState.screenH = GetSystemMetrics(SM_CYSCREEN);
