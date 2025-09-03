@@ -76,7 +76,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
                                &textBounds);
 
         // Below buttons with some margin
-        REAL textY = static_cast<REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
+        REAL textY =
+            static_cast<REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
 
         // Draw text with beautiful rendering
         DrawBeautifulText(graphics, instructionText.c_str(), instructionFont, rw, textY,
@@ -150,6 +151,9 @@ void UpdateLayered(HWND hWnd) {
     void* pvBits = nullptr;
     HBITMAP hBitmap = CreateDIBSection(hdcScreen, &bmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
     if (hBitmap == NULL) {
+        static auto& i18n = I18N::GetInstance();
+        MessageBoxW(nullptr, i18n.ErrorCreateBitmap().c_str(), i18n.ErrorTitle().c_str(),
+                    MB_ICONERROR);
         DeleteDC(hdcMem);
         ReleaseDC(NULL, hdcScreen);
         return;

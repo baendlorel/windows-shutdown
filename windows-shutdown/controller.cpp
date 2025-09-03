@@ -7,48 +7,74 @@
 #include "config.h"
 #include "framework.h"
 #include "render.h"
+#include "i18n.h"
 
 #pragma comment(lib, "PowrProf.lib")
 
 void ExecuteRestart() {
+    auto& i18n = I18N::GetInstance();
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
-    OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+        MessageBoxW(nullptr, i18n.ErrorGetProcessTokenRestart().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        return;
+    }
+    if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+        MessageBoxW(nullptr, i18n.ErrorLookupPrivilegeRestart().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        CloseHandle(hToken);
+        return;
+    }
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0);
+    CloseHandle(hToken);
 
     wchar_t msg[] = L"Restarting...";
-    InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER);
+    if (!InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER)) {
+        MessageBoxW(nullptr, i18n.ErrorRestartFailed().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+    }
 }
 
 void ExecuteShutdown() {
+    auto& i18n = I18N::GetInstance();
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
-    OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+        MessageBoxW(nullptr, i18n.ErrorGetProcessTokenShutdown().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        return;
+    }
+    if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+        MessageBoxW(nullptr, i18n.ErrorLookupPrivilegeShutdown().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+        CloseHandle(hToken);
+        return;
+    }
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0);
+    CloseHandle(hToken);
 
     wchar_t msg[] = L"Shutdown...";
-    InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER);
+    if (!InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER)) {
+        MessageBoxW(nullptr, i18n.ErrorShutdownFailed().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+    }
 }
 
 void ExecuteSleep() {
+    auto& i18n = I18N::GetInstance();
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
         if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-            AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+            AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0);
         }
         CloseHandle(hToken);
     }
 
-    SetSuspendState(FALSE, FALSE, FALSE);
+    if (!SetSuspendState(FALSE, FALSE, FALSE)) {
+        MessageBoxW(nullptr, i18n.ErrorSleepFailed().c_str(), i18n.ErrorTitle().c_str(), MB_ICONERROR);
+    }
 }
 
 void ExecuteLock() {
@@ -123,6 +149,22 @@ void TriggerConfig(HWND hWnd) {
     SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
 }
 
-// todo 根据文件名决定是关机还是重启还是睡眠
 void ActionByFileName() {
+    Action action = I18N::GetInstance().FileNameToAction();
+    switch (action) {
+        case Action::Sleep:
+            ExecuteSleep();
+            break;
+        case Action::Shutdown:
+            ExecuteShutdown();
+            break;
+        case Action::Restart:
+            ExecuteRestart();
+            break;
+        case Action::None:
+        default:
+            // default is shutdown, but might be changed later
+            ExecuteShutdown();
+            break;
+    }
 }

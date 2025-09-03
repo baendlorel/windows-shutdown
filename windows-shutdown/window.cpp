@@ -8,6 +8,7 @@
 #include "controller.h"
 #include "framework.h"
 #include "render.h"
+#include "i18n.h"
 
 ATOM MyRegisterClass() {
     auto& appState = AppState::GetInstance();
@@ -35,6 +36,9 @@ BOOL InitInstance(int nCmdShow) {
                                 0, 0, appState.screenW, appState.screenH, nullptr, nullptr,
                                 appState.hInst, nullptr);
     if (!hWnd) {
+        auto& i18n = I18N::GetInstance();
+        MessageBoxW(nullptr, i18n.ErrorCreateWindow().c_str(), i18n.ErrorTitle().c_str(),
+                    MB_ICONERROR);
         return FALSE;
     }
     ShowWindow(hWnd, SW_SHOW);

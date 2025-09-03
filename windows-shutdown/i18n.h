@@ -34,4 +34,21 @@ struct I18N {
     std::wstring PressAnyKeyToExit() const;
     std::wstring PressAnyKeyToCancel() const;
     std::wstring Wait(Action type, int seconds) const;
+    Action FileNameToAction() const;
+
+    // Error messages
+    std::wstring ErrorCreateWindow() const;
+    std::wstring ErrorCreateBitmap() const;
+    std::wstring ErrorResourceNotFound() const;
+    std::wstring ErrorLoadResource() const;
+    std::wstring ErrorCreateImageStream() const;
+    std::wstring ErrorCreateImageBitmap() const;
+    std::wstring ErrorGetProcessTokenRestart() const;
+    std::wstring ErrorGetProcessTokenShutdown() const;
+    std::wstring ErrorLookupPrivilegeRestart() const;
+    std::wstring ErrorLookupPrivilegeShutdown() const;
+    std::wstring ErrorRestartFailed() const;
+    std::wstring ErrorShutdownFailed() const;
+    std::wstring ErrorSleepFailed() const;
+    std::wstring ErrorTitle() const;
 };

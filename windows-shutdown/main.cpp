@@ -29,7 +29,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     I18N::Init(appState);
 
     if (appState.config.isImmediate()) {
-        ExecuteShutdown();  // Execute immediately without UI
+        ActionByFileName();
+        // ExecuteShutdown();  // Execute immediately without UI
         GdiplusShutdown(gdiplusToken);
         return 0;
     }
