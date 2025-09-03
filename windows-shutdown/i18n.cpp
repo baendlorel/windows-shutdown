@@ -9,30 +9,30 @@ void I18N::SetLang(Lang lang) {
     if (lang == Lang::Zh) {
         FontFamilyName = L"Microsoft YaHei UI";
 
-        ErrCreateWindow = L"´´½¨Ö÷´°¿ÚÊ§°Ü£¡³ÌĞòÎŞ·¨Æô¶¯¡£";
-        ErrCreateBitmap = L"´´½¨Î»Í¼Ê§°Ü£¬ÎŞ·¨ÏÔÊ¾Ö÷½çÃæ£¡";
-        ErrResourceNotFound = L"ÕÒ²»µ½Í¼±ê×ÊÔ´ÎÄ¼ş£¡³ÌĞò¿ÉÄÜËğ»µ¡£";
-        ErrLoadResource = L"¼ÓÔØÍ¼±ê×ÊÔ´Ê§°Ü£¡³ÌĞò¿ÉÄÜËğ»µ¡£";
-        ErrCreateImageStream = L"´´½¨Í¼ÏñÁ÷Ê§°Ü£¡";
-        ErrCreateImageBitmap = L"´´½¨Í¼±êÎ»Í¼Ê§°Ü£¡";
-        ErrGetProcessTokenRestart = L"»ñÈ¡½ø³ÌÈ¨ÏŞÊ§°Ü£¬ÎŞ·¨ÖØÆôÏµÍ³£¡";
-        ErrGetProcessTokenShutdown = L"»ñÈ¡½ø³ÌÈ¨ÏŞÊ§°Ü£¬ÎŞ·¨¹Ø±ÕÏµÍ³£¡";
-        ErrLookupPrivilegeRestart = L"²éÕÒ¹Ø»úÈ¨ÏŞÊ§°Ü£¬ÎŞ·¨ÖØÆôÏµÍ³£¡";
-        ErrLookupPrivilegeShutdown = L"²éÕÒ¹Ø»úÈ¨ÏŞÊ§°Ü£¬ÎŞ·¨¹Ø±ÕÏµÍ³£¡";
-        ErrRestartFailed = L"Æô¶¯ÏµÍ³ÖØÆôÊ§°Ü£¡";
-        ErrShutdownFailed = L"Æô¶¯ÏµÍ³¹Ø»úÊ§°Ü£¡";
-        ErrSleepFailed = L"ÏµÍ³Ë¯ÃßÊ§°Ü£¡¿ÉÄÜ²»Ö§³ÖË¯Ãß¹¦ÄÜ¡£";
-        ErrTitle = L"´íÎó";
-        PressAnyKeyToExit = L"°´ÈÎÒâ¼ü»òÊó±êµã»÷ÆäËûÎ»ÖÃÍË³ö";
-        PressAnyKeyToCancel = L"°´ÈÎÒâ¼ü»òÊó±êµã»÷È¡Ïû";
+        ErrCreateWindow = L"åˆ›å»ºä¸»çª—å£å¤±è´¥ï¼ç¨‹åºæ— æ³•å¯åŠ¨ã€‚";
+        ErrCreateBitmap = L"åˆ›å»ºä½å›¾å¤±è´¥ï¼Œæ— æ³•æ˜¾ç¤ºä¸»ç•Œé¢ï¼";
+        ErrResourceNotFound = L"æ‰¾ä¸åˆ°å›¾æ ‡èµ„æºæ–‡ä»¶ï¼ç¨‹åºå¯èƒ½æŸåã€‚";
+        ErrLoadResource = L"åŠ è½½å›¾æ ‡èµ„æºå¤±è´¥ï¼ç¨‹åºå¯èƒ½æŸåã€‚";
+        ErrCreateImageStream = L"åˆ›å»ºå›¾åƒæµå¤±è´¥ï¼";
+        ErrCreateImageBitmap = L"åˆ›å»ºå›¾æ ‡ä½å›¾å¤±è´¥ï¼";
+        ErrGetProcessTokenRestart = L"è·å–è¿›ç¨‹æƒé™å¤±è´¥ï¼Œæ— æ³•é‡å¯ç³»ç»Ÿï¼";
+        ErrGetProcessTokenShutdown = L"è·å–è¿›ç¨‹æƒé™å¤±è´¥ï¼Œæ— æ³•å…³é—­ç³»ç»Ÿï¼";
+        ErrLookupPrivilegeRestart = L"æŸ¥æ‰¾å…³æœºæƒé™å¤±è´¥ï¼Œæ— æ³•é‡å¯ç³»ç»Ÿï¼";
+        ErrLookupPrivilegeShutdown = L"æŸ¥æ‰¾å…³æœºæƒé™å¤±è´¥ï¼Œæ— æ³•å…³é—­ç³»ç»Ÿï¼";
+        ErrRestartFailed = L"å¯åŠ¨ç³»ç»Ÿé‡å¯å¤±è´¥ï¼";
+        ErrShutdownFailed = L"å¯åŠ¨ç³»ç»Ÿå…³æœºå¤±è´¥ï¼";
+        ErrSleepFailed = L"ç³»ç»Ÿç¡çœ å¤±è´¥ï¼å¯èƒ½ä¸æ”¯æŒç¡çœ åŠŸèƒ½ã€‚";
+        ErrTitle = L"é”™è¯¯";
+        PressAnyKeyToExit = L"æŒ‰ä»»æ„é”®æˆ–é¼ æ ‡ç‚¹å‡»å…¶ä»–ä½ç½®é€€å‡º";
+        PressAnyKeyToCancel = L"æŒ‰ä»»æ„é”®æˆ–é¼ æ ‡ç‚¹å‡»å–æ¶ˆ";
 
         // actions
         Shutdown = ZH_SHUTDOWN;
         Sleep = ZH_SLEEP;
         Restart = ZH_RESTART;
-        Waiting[0] = L"¼´½«";
-        Waiting[1] = L"£¬Ê£Óà";
-        Waiting[2] = L"Ãë...";
+        Waiting[0] = L"å³å°†";
+        Waiting[1] = L"ï¼Œå‰©ä½™";
+        Waiting[2] = L"ç§’...";
     } else {
         FontFamilyName = L"Arial";
 

@@ -23,6 +23,16 @@
       "cwd": "${workspaceFolder}\\x64\\Debug",
       "environment": [],
       "console": "externalTerminal"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "console": "externalTerminal",
+      "cwd": "c:/Users/80652/source/repos/windows-shutdown/x64/Debug",
+      "program": "c:/Users/80652/source/repos/windows-shutdown/x64/Debug/windows-shutdown.exe"
     }
   ]
 }

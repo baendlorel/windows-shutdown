@@ -7,10 +7,10 @@
 #define EN_RESTART L"restart"
 #define EN_LOCK L"lock"
 
-#define ZH_SHUTDOWN L"关机"
-#define ZH_SLEEP L"睡眠"
-#define ZH_RESTART L"重启"
-#define ZH_LOCK L"锁定"
+#define ZH_SHUTDOWN L"鍏虫満"
+#define ZH_SLEEP L"鐫＄湢"
+#define ZH_RESTART L"閲嶅惎"
+#define ZH_LOCK L"閿佸畾"
 
 class I18N {
    public:
