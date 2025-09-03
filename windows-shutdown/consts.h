@@ -9,6 +9,7 @@ enum class FadeState { None, FadingIn, FadingOut };
 #define CFG_KEY_LANG "lang"
 #define CFG_KEY_MODE "mode"
 #define CFG_KEY_DELAY "delay"
+#define CFG_KEY_INSTRUCTION "instruction"
 
 #define CFG_LANG_ZH "zh"
 #define CFG_LANG_EN "en"
@@ -16,8 +17,12 @@ enum class FadeState { None, FadingIn, FadingOut };
 #define CFG_MODE_IMMEDIATE "immediate"
 #define CFG_MODE_NORMAL "normal"
 
+#define CFG_INSTRUCTION_SHOW "show"
+#define CFG_INSTRUCTION_HIDDEN "hidden"
+
 enum class Mode { Immediate, Normal };
 enum class Lang { Zh, En };  // used in config and i18n
+enum class Instruction { Show, Hidden };
 constexpr int CFG_DEFAULT_DELAY = 3;
 
 // effects

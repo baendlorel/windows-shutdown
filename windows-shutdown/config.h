@@ -6,13 +6,16 @@ struct Config {
    public:
     Lang lang;
     Mode mode;
+    Instruction instruction;
     int delay;
-    // todo 增加显示instruction的选项
+
    public:
     Config();
+
     bool isImmediate() const {
-        return mode == Mode::Immediate;
+        return mode != Mode::Normal;
     }
+
     std::wstring GetConfigPath();
 
    private:

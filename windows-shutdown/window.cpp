@@ -194,7 +194,7 @@ void HandleCancel(HWND hWnd) {
         SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
     }
 }
-
+// todo 不要用文件名判定，要config里判定
 void TriggerImmediateAction(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
     if (appState.config.mode != Mode::Immediate) {

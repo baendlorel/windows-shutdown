@@ -7,6 +7,84 @@
 #include <fstream>
 #include <sstream>
 
+std::string DefaultConfigZh() {
+    // Create default config.ini
+    std::string lang = std::format(
+        "# '{}' 可选项： '{}', '{}'. 默认值和系统语言相同\n"
+        "{}={}",
+        CFG_KEY_LANG, CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
+
+    std::string mode = std::format(
+        "# '{}' 可选项： （默认值： {}）\n"
+        "# - '{}' ：显示菜单，可以点击要做的操作\n"
+        "# - '{}' ：延迟之后直接关机\n"
+        "{}={}",
+        CFG_KEY_MODE, CFG_MODE_NORMAL, CFG_MODE_NORMAL, CFG_MODE_IMMEDIATE, CFG_KEY_MODE,
+        CFG_MODE_NORMAL);
+
+    std::string instruction = std::format(
+        "# '{}' 可选项：'{}', '{}'. 默认值：'{}'\n"
+        "{}={}",
+        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW,
+        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+
+    std::string delay = std::format(
+        "# 在执行操作之前等待这么多秒，默认值：{}\n"
+        "{}={}",
+        CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
+
+    return std::format(
+        "# 加载配置失败时会使用默认配置。\n"
+        "\n"
+        "{}\n"
+        "\n"
+        "{}\n"
+        "\n"
+        "{}\n"
+        "\n"
+        "{}\n",
+        lang, mode, instruction, delay);
+}
+
+std::string DefaultConfigEn() {
+    // Create default config.ini
+    std::string lang = std::format(
+        "# '{}' options: '{}', '{}'. Default: same as your system\n"
+        "{}={}",
+        CFG_KEY_LANG, CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
+
+    std::string mode = std::format(
+        "# '{}' options: (Default: {})\n"
+        "# - '{}' : show menu to choose an action\n"
+        "# - '{}' : after delayed seconds, shutdown instantly\n"
+        "{}={}",
+        CFG_KEY_MODE, CFG_MODE_NORMAL, CFG_MODE_NORMAL, CFG_MODE_IMMEDIATE, CFG_KEY_MODE,
+        CFG_MODE_NORMAL);
+
+    std::string instruction = std::format(
+        "# '{}' options: '{}', '{}'. Default: '{}'\n"
+        "{}={}",
+        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW,
+        CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+
+    std::string delay = std::format(
+        "# Wait time (in seconds) before action. Default: {}\n"
+        "{}={}",
+        CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
+
+    return std::format(
+        "# When loading is failed, we will use default config values.\n"
+        "\n"
+        "{}\n"
+        "\n"
+        "{}\n"
+        "\n"
+        "{}\n"
+        "\n"
+        "{}\n",
+        lang, mode, instruction, delay);
+}
+
 std::string trim(const std::string& s) {
     auto start = s.begin();
     while (start != s.end() && isspace(*start)) {
@@ -20,16 +98,17 @@ std::string trim(const std::string& s) {
     return (start <= end) ? std::string(start, end + 1) : "";
 }
 
-bool IsSystemLanguageChinese() {
+bool IsSysLangChinese() {
     LANGID langId = GetUserDefaultUILanguage();
     WORD primaryLang = PRIMARYLANGID(langId);
     return primaryLang == LANG_CHINESE;
 }
 
-Config::Config() {
-    this->lang = IsSystemLanguageChinese() ? Lang::Zh : Lang::En;
-    this->mode = Mode::Normal;
-    this->delay = CFG_DEFAULT_DELAY;
+Config::Config()
+    : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
+      mode(Mode::Normal),
+      delay(CFG_DEFAULT_DELAY),
+      instruction(Instruction::Show) {
     this->Load();
 }
 
@@ -51,34 +130,7 @@ void Config::Load() {
     std::wstring configPath = this->GetConfigPath();
     std::ifstream file(configPath);
     if (!file.is_open()) {
-        // Create default config.ini
-        std::string lang = std::format(
-            "# '{}' options: 'zh', 'en'. Default: same as your system\n"
-            "{}={}",
-            CFG_KEY_LANG, CFG_KEY_LANG, CFG_LANG_ZH);
-
-        std::string mode = std::format(
-            "# '{}' options: (Default: {})\n"
-            "# - '{}' : show menu to choose an action\n"
-            "# - '{}' : shutdown instantly\n"
-            "{}={}",
-            CFG_KEY_MODE, CFG_MODE_NORMAL, CFG_MODE_NORMAL, CFG_MODE_IMMEDIATE, CFG_KEY_MODE,
-            CFG_MODE_NORMAL);
-
-        std::string delay = std::format(
-            "# Wait time (in seconds) before action. Default: {}\n"
-            "{}={}",
-            CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
-
-        std::string content = std::format(
-            "# When loading is failed, we will use default config values.\n"
-            "\n"
-            "{}\n"
-            "\n"
-            "{}\n"
-            "\n"
-            "{}\n",
-            lang, mode, delay);
+        std::string content = IsSysLangChinese() ? DefaultConfigZh() : DefaultConfigEn();
         std::ofstream out(configPath);
         out << content;
         out.close();
@@ -90,10 +142,11 @@ void Config::Load() {
     enum {
         ConfigLang,
         ConfigMode,
+        ConfigInstruction,
         ConfigDelay,
     };
 
-    bool isSet[3] = {false, false, false};
+    bool isSet[4] = {false, false, false, false};
 
     while (std::getline(file, line)) {
         if (line.empty()) {
@@ -116,6 +169,10 @@ void Config::Load() {
         } else if (key == CFG_KEY_MODE) {
             this->mode = value == CFG_MODE_IMMEDIATE ? Mode::Immediate : Mode::Normal;
             isSet[ConfigMode] = true;
+        } else if (key == CFG_KEY_INSTRUCTION) {
+            this->instruction =
+                value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
+            isSet[ConfigInstruction] = true;
         } else if (key == CFG_KEY_DELAY) {
             try {
                 this->delay = std::clamp(std::stoi(value), 0, 60);
@@ -127,10 +184,13 @@ void Config::Load() {
     }
 
     if (!isSet[ConfigLang]) {
-        this->lang = IsSystemLanguageChinese() ? Lang::Zh : Lang::En;
+        this->lang = IsSysLangChinese() ? Lang::Zh : Lang::En;
     }
     if (!isSet[ConfigMode]) {
         this->mode = Mode::Normal;
+    }
+    if (!isSet[ConfigInstruction]) {
+        this->instruction = Instruction::Show;
     }
     if (!isSet[ConfigDelay]) {
         this->delay = CFG_DEFAULT_DELAY;
