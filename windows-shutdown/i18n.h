@@ -1,46 +1,39 @@
 #pragma once
 #include <string>
-#include <unordered_map>
 #include "consts.h"
-
-enum class I18NKey {
-    ErrorCreateWindow,
-    ErrorCreateBitmap,
-    ErrorResourceNotFound,
-    ErrorLoadResource,
-    ErrorCreateImageStream,
-    ErrorCreateImageBitmap,
-    ErrorGetProcessTokenRestart,
-    ErrorGetProcessTokenShutdown,
-    ErrorLookupPrivilegeRestart,
-    ErrorLookupPrivilegeShutdown,
-    ErrorRestartFailed,
-    ErrorShutdownFailed,
-    ErrorSleepFailed,
-    ErrorTitle,
-    PressAnyKeyToExit,
-    PressAnyKeyToCancel
-};
 
 class I18N {
    public:
+    I18N(const I18N&) = delete;
+    I18N& operator=(const I18N&) = delete;
+
+    I18N(I18N&&) = delete;
+    I18N& operator=(I18N&&) = delete;
+
     static I18N& GetInstance();
+    void SetLang(Lang lang);
 
-    static void SetLang(const Lang lang);
-
-    std::wstring Get(I18NKey key) const;
+    // text members
+    std::wstring ErrCreateWindow;
+    std::wstring ErrCreateBitmap;
+    std::wstring ErrResourceNotFound;
+    std::wstring ErrLoadResource;
+    std::wstring ErrCreateImageStream;
+    std::wstring ErrCreateImageBitmap;
+    std::wstring ErrGetProcessTokenRestart;
+    std::wstring ErrGetProcessTokenShutdown;
+    std::wstring ErrLookupPrivilegeRestart;
+    std::wstring ErrLookupPrivilegeShutdown;
+    std::wstring ErrRestartFailed;
+    std::wstring ErrShutdownFailed;
+    std::wstring ErrSleepFailed;
+    std::wstring ErrTitle;
+    std::wstring PressAnyKeyToExit;
+    std::wstring PressAnyKeyToCancel;
 
     std::wstring Wait(Action type, int seconds) const;
-
     Action FileNameToAction(const std::wstring& name) const;
 
-   public:
-    std::wstring ErrorTitle;
-
    private:
-    I18N() : dictionary({}) {};
-    std::unordered_map<I18NKey, std::wstring> dictionary;
+    I18N() = default;
 };
-
-std::wstring GetText(I18NKey key);
-const wchar_t* I18NWChar(I18NKey key);
