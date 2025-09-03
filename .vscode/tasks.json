@@ -3,7 +3,7 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "C/C++: Build Debug",
+      "label": "C/C++: Build Debug (MSVC)",
       "command": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
       "args": [
         "/std:c++20",
@@ -49,7 +49,49 @@
     },
     {
       "type": "shell",
-      "label": "C/C++: Build Release",
+      "label": "C/C++: Build Debug (GCC)",
+      "command": "g++.exe",
+      "args": [
+        "-std=c++20",
+        "-finput-charset=UTF-8",
+        "-fexec-charset=UTF-8",
+        "-Wall",
+        "-Wextra",
+        "-g",
+        "-O0",
+        "-D_WINDOWS",
+        "-DUNICODE",
+        "-D_UNICODE",
+        "-mwindows",
+        "${workspaceFolder}/windows-shutdown/*.cpp",
+        "${workspaceFolder}/x64/Debug/windows-shutdown.res",
+        "-o",
+        "${workspaceFolder}/x64/Debug/windows-shutdown.exe",
+        "-luser32",
+        "-lgdi32",
+        "-lgdiplus",
+        "-lkernel32",
+        "-lshell32",
+        "-lcomctl32",
+        "-ladvapi32",
+        "-lole32"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/windows-shutdown",
+        "env": {
+          "PATH": "C:\\msys64\\ucrt64\\bin;${env:PATH}"
+        }
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build Windows application using GCC compiler (Debug)"
+    },
+    {
+      "type": "shell",
+      "label": "C/C++: Build Release (MSVC)",
       "command": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
       "args": [
         "/std:c++20",
@@ -89,6 +131,47 @@
       "problemMatcher": ["$msCompile"],
       "group": "build",
       "detail": "Build Windows application using MSVC compiler (Release)"
+    },
+    {
+      "type": "shell",
+      "label": "C/C++: Build Release (GCC)",
+      "command": "g++.exe",
+      "args": [
+        "-std=c++20",
+        "-finput-charset=UTF-8",
+        "-fexec-charset=UTF-8",
+        "-Wall",
+        "-Wextra",
+        "-O2",
+        "-DNDEBUG",
+        "-D_WINDOWS",
+        "-DUNICODE",
+        "-D_UNICODE",
+        "-mwindows",
+        "${workspaceFolder}/windows-shutdown/*.cpp",
+        "-o",
+        "${workspaceFolder}/x64/Release/windows-shutdown.exe",
+        "-luser32",
+        "-lgdi32",
+        "-lgdiplus",
+        "-lkernel32",
+        "-lshell32",
+        "-lcomctl32",
+        "-ladvapi32",
+        "-lole32"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/windows-shutdown",
+        "env": {
+          "PATH": "C:\\msys64\\ucrt64\\bin;${env:PATH}"
+        }
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build Windows application using GCC compiler (Release)"
     },
     {
       "type": "shell",
