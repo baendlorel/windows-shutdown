@@ -14,7 +14,7 @@ struct Config {
 
     Config();
     bool isImmediate() const {
-        return mode == Mode::IMMEDIATE;
+        return mode == Mode::Immediate;
     }
 
    private:

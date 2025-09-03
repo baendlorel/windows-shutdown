@@ -1,21 +1,65 @@
 #include "i18n.h"
 
-I18N::I18N() = default;
-
-std::wstring I18N::PressAnyKeyToExit() const {
-    if (lang == Lang::EN) {
-        return L"Press any key or click elsewhere to exit";
-    } else {
-        return L"按任意键或鼠标点击其他位置退出";
-    }
+I18N::I18N() : lang(Lang::Zh) {
+    this->zh = {{I18NKey::ErrorCreateWindow, L"创建主窗口失败！程序无法启动。"},
+                {I18NKey::ErrorCreateBitmap, L"创建位图失败，无法显示主界面！"},
+                {I18NKey::ErrorResourceNotFound, L"找不到图标资源文件！程序可能损坏。"},
+                {I18NKey::ErrorLoadResource, L"加载图标资源失败！程序可能损坏。"},
+                {I18NKey::ErrorCreateImageStream, L"创建图像流失败！"},
+                {I18NKey::ErrorCreateImageBitmap, L"创建图标位图失败！"},
+                {I18NKey::ErrorGetProcessTokenRestart, L"获取进程权限失败，无法重启系统！"},
+                {I18NKey::ErrorGetProcessTokenShutdown, L"获取进程权限失败，无法关闭系统！"},
+                {I18NKey::ErrorLookupPrivilegeRestart, L"查找关机权限失败，无法重启系统！"},
+                {I18NKey::ErrorLookupPrivilegeShutdown, L"查找关机权限失败，无法关闭系统！"},
+                {I18NKey::ErrorRestartFailed, L"启动系统重启失败！"},
+                {I18NKey::ErrorShutdownFailed, L"启动系统关机失败！"},
+                {I18NKey::ErrorSleepFailed, L"系统睡眠失败！可能不支持睡眠功能。"},
+                {I18NKey::ErrorTitle, L"错误"},
+                {I18NKey::PressAnyKeyToExit, L"按任意键或鼠标点击其他位置退出"},
+                {I18NKey::PressAnyKeyToCancel, L"按任意键或鼠标点击取消"}};
+    this->en = {
+        {I18NKey::ErrorCreateWindow, L"Failed to create main window! The program cannot start."},
+        {I18NKey::ErrorCreateBitmap, L"Failed to create bitmap, cannot display main interface!"},
+        {I18NKey::ErrorResourceNotFound,
+         L"Icon resource file not found! The program may be corrupted."},
+        {I18NKey::ErrorLoadResource,
+         L"Failed to load icon resource! The program may be corrupted."},
+        {I18NKey::ErrorCreateImageStream, L"Failed to create image stream!"},
+        {I18NKey::ErrorCreateImageBitmap, L"Failed to create icon bitmap!"},
+        {I18NKey::ErrorGetProcessTokenRestart,
+         L"Failed to get process privileges, cannot restart system!"},
+        {I18NKey::ErrorGetProcessTokenShutdown,
+         L"Failed to get process privileges, cannot shutdown system!"},
+        {I18NKey::ErrorLookupPrivilegeRestart,
+         L"Failed to lookup shutdown privilege, cannot restart system!"},
+        {I18NKey::ErrorLookupPrivilegeShutdown,
+         L"Failed to lookup shutdown privilege, cannot shutdown system!"},
+        {I18NKey::ErrorRestartFailed, L"Failed to initiate system restart!"},
+        {I18NKey::ErrorShutdownFailed, L"Failed to initiate system shutdown!"},
+        {I18NKey::ErrorSleepFailed, L"System sleep failed! Sleep function may not be supported."},
+        {I18NKey::ErrorTitle, L"Error"},
+        {I18NKey::PressAnyKeyToExit, L"Press any key or click elsewhere to exit"},
+        {I18NKey::PressAnyKeyToCancel, L"Press any key or click to cancel"}};
 }
 
-std::wstring I18N::PressAnyKeyToCancel() const {
-    if (lang == Lang::EN) {
-        return L"Press any key or click to cancel";
+I18N& I18N::GetInstance() {
+    static I18N instance;
+    return instance;
+}
+
+std::wstring I18N::Get(I18NKey key) const {
+    if (lang == Lang::Zh) {
+        auto it = zh.find(key);
+        if (it != zh.end()) return it->second;
     } else {
-        return L"按任意键或鼠标点击取消";
+        auto it = en.find(key);
+        if (it != en.end()) return it->second;
     }
+    return L"Unknown Error";
+}
+
+void I18N::SetLang(Lang l) {
+    this->lang = l;
 }
 
 std::wstring I18N::Wait(Action type, int seconds) const {
@@ -34,24 +78,26 @@ std::wstring I18N::Wait(Action type, int seconds) const {
             action_en = L"restart";
             break;
     }
-    if (lang == Lang::EN) {
+    if (lang == Lang::En) {
         return L"About to " + action_en + L", " + std::to_wstring(seconds) + L" seconds left...";
     } else {
         return L"即将" + action_zh + L"，剩余" + std::to_wstring(seconds) + L"秒...";
     }
 }
 
-Action I18N::FileNameToAction() const {
-    auto& appState = AppState::GetInstance();
-    std::wstring exePath = GetConfigPath();
-    size_t pos1 = exePath.find_last_of(L"\\/");
-    std::wstring name = (pos1 != std::wstring::npos) ? exePath.substr(pos1 + 1) : exePath;
-    size_t pos2 = name.find_last_of(L".");
-    if (pos2 != std::wstring::npos) {
-        name = name.substr(0, pos2);
-    }
-    // To lower case
-    for (auto& ch : name) ch = towlower(ch);
+Action I18N::FileNameToAction(const std::wstring& name) const {
+    // auto& appState = AppState::GetInstance();
+    // std::wstring exePath = GetConfigPath();
+    // size_t pos1 = exePath.find_last_of(L"\\/");
+    // std::wstring name = (pos1 != std::wstring::npos) ? exePath.substr(pos1 + 1) : exePath;
+    // size_t pos2 = name.find_last_of(L".");
+    // if (pos2 != std::wstring::npos) {
+    //     name = name.substr(0, pos2);
+    // }
+    //  To lower case
+    // for (auto& ch : name) {
+    //    ch = towlower(ch);
+    //}
 
     if (name == L"sleep" || name == L"睡眠") {
         return Action::Sleep;
@@ -61,117 +107,4 @@ Action I18N::FileNameToAction() const {
         return Action::Shutdown;
     }
     return Action::None;
-}
-
-// Error messages
-std::wstring I18N::ErrorCreateWindow() const {
-    if (lang == Lang::EN) {
-        return L"Failed to create main window! The program cannot start.";
-    } else {
-        return L"创建主窗口失败！程序无法启动。";
-    }
-}
-
-std::wstring I18N::ErrorCreateBitmap() const {
-    if (lang == Lang::EN) {
-        return L"Failed to create bitmap, cannot display main interface!";
-    } else {
-        return L"创建位图失败，无法显示主界面！";
-    }
-}
-
-std::wstring I18N::ErrorResourceNotFound() const {
-    if (lang == Lang::EN) {
-        return L"Icon resource file not found! The program may be corrupted.";
-    } else {
-        return L"找不到图标资源文件！程序可能损坏。";
-    }
-}
-
-std::wstring I18N::ErrorLoadResource() const {
-    if (lang == Lang::EN) {
-        return L"Failed to load icon resource! The program may be corrupted.";
-    } else {
-        return L"加载图标资源失败！程序可能损坏。";
-    }
-}
-
-std::wstring I18N::ErrorCreateImageStream() const {
-    if (lang == Lang::EN) {
-        return L"Failed to create image stream!";
-    } else {
-        return L"创建图像流失败！";
-    }
-}
-
-std::wstring I18N::ErrorCreateImageBitmap() const {
-    if (lang == Lang::EN) {
-        return L"Failed to create icon bitmap!";
-    } else {
-        return L"创建图标位图失败！";
-    }
-}
-
-std::wstring I18N::ErrorGetProcessTokenRestart() const {
-    if (lang == Lang::EN) {
-        return L"Failed to get process privileges, cannot restart system!";
-    } else {
-        return L"获取进程权限失败，无法重启系统！";
-    }
-}
-
-std::wstring I18N::ErrorGetProcessTokenShutdown() const {
-    if (lang == Lang::EN) {
-        return L"Failed to get process privileges, cannot shutdown system!";
-    } else {
-        return L"获取进程权限失败，无法关闭系统！";
-    }
-}
-
-std::wstring I18N::ErrorLookupPrivilegeRestart() const {
-    if (lang == Lang::EN) {
-        return L"Failed to lookup shutdown privilege, cannot restart system!";
-    } else {
-        return L"查找关机权限失败，无法重启系统！";
-    }
-}
-
-std::wstring I18N::ErrorLookupPrivilegeShutdown() const {
-    if (lang == Lang::EN) {
-        return L"Failed to lookup shutdown privilege, cannot shutdown system!";
-    } else {
-        return L"查找关机权限失败，无法关闭系统！";
-    }
-}
-
-std::wstring I18N::ErrorRestartFailed() const {
-    if (lang == Lang::EN) {
-        return L"Failed to initiate system restart!";
-    } else {
-        return L"启动系统重启失败！";
-    }
-}
-
-std::wstring I18N::ErrorShutdownFailed() const {
-    if (lang == Lang::EN) {
-        return L"Failed to initiate system shutdown!";
-    } else {
-        return L"启动系统关机失败！";
-    }
-}
-
-std::wstring I18N::ErrorSleepFailed() const {
-    if (lang == Lang::EN) {
-        return L"System sleep failed! Sleep function may not be supported.";
-    } else {
-        return L"系统睡眠失败！可能不支持睡眠功能。";
-    }
-}
-
-std::wstring I18N::ErrorTitle() const {
-    if (lang == Lang::EN) {
-        return L"Error";
-    } else {
-        return L"错误";
-    }
 }

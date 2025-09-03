@@ -26,7 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         appState.buttons[i].LoadPNGFromResource(hInstance);
     }
 
-    I18N::Init(appState);
+    I18N::GetInstance().SetLang(appState.config.lang);
 
     if (appState.config.isImmediate()) {
         ActionByFileName();

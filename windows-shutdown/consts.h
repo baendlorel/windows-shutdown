@@ -16,8 +16,8 @@ enum class FadeState { None, FadingIn, FadingOut };
 #define CFG_MODE_IMMEDIATE "immediate"
 #define CFG_MODE_NORMAL "normal"
 
-enum class Mode { IMMEDIATE, NORMAL };
-enum class Lang { ZH, EN };
+enum class Mode { Immediate, Normal };
+enum class Lang { Zh, En };  // used in config and i18n
 constexpr int CFG_DEFAULT_DELAY = 3;
 
 // effects

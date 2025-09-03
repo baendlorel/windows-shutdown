@@ -41,8 +41,8 @@ bool IsSystemLanguageChinese() {
 }
 
 Config::Config() {
-    this->lang = IsSystemLanguageChinese() ? Lang::ZH : Lang::EN;
-    this->mode = Mode::NORMAL;
+    this->lang = IsSystemLanguageChinese() ? Lang::Zh : Lang::En;
+    this->mode = Mode::Normal;
     this->delay = CFG_DEFAULT_DELAY;
     this->Load();
 }
@@ -111,10 +111,10 @@ void Config::Load() {
         std::string value = trim(line.substr(eq + 1));
 
         if (key == CFG_KEY_LANG) {
-            this->lang = value == CFG_LANG_EN ? Lang::EN : Lang::ZH;
+            this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
             isSet[LANG] = true;
         } else if (key == CFG_KEY_MODE) {
-            this->mode = value == CFG_MODE_IMMEDIATE ? Mode::IMMEDIATE : Mode::NORMAL;
+            this->mode = value == CFG_MODE_IMMEDIATE ? Mode::Immediate : Mode::Normal;
             isSet[MODE] = true;
         } else if (key == CFG_KEY_DELAY) {
             try {
@@ -127,10 +127,10 @@ void Config::Load() {
     }
 
     if (!isSet[LANG]) {
-        this->lang = IsSystemLanguageChinese() ? Lang::ZH : Lang::EN;
+        this->lang = IsSystemLanguageChinese() ? Lang::Zh : Lang::En;
     }
     if (!isSet[MODE]) {
-        this->mode = Mode::NORMAL;
+        this->mode = Mode::Normal;
     }
     if (!isSet[DELAY]) {
         this->delay = CFG_DEFAULT_DELAY;
