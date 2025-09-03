@@ -18,7 +18,7 @@
         "-D_UNICODE",
         "-mwindows",
         "${workspaceFolder}/windows-shutdown/*.cpp",
-        "${workspaceFolder}/x64/Debug/windows-shutdown.res",
+        "${workspaceFolder}/x64/Debug/windows-shutdown.o",
         "-o",
         "${workspaceFolder}/x64/Debug/windows-shutdown.exe",
         "-luser32",
@@ -28,13 +28,11 @@
         "-lshell32",
         "-lcomctl32",
         "-ladvapi32",
-        "-lole32"
+        "-lole32",
+        "-lpowrprof"
       ],
       "options": {
-        "cwd": "${workspaceFolder}/windows-shutdown",
-        "env": {
-          "PATH": "C:\\msys64\\ucrt64\\bin;${env:PATH}"
-        }
+        "cwd": "${workspaceFolder}/windows-shutdown"
       },
       "problemMatcher": ["$gcc"],
       "group": {
@@ -70,13 +68,11 @@
         "-lcomctl32",
         "-ladvapi32",
         "-lole32",
-        "./x64/Release/windows-shutdown.exe"
+        "-lpowrprof"
+        // "./x64/Release/windows-shutdown.exe"
       ],
       "options": {
-        "cwd": "${workspaceFolder}/windows-shutdown",
-        "env": {
-          "PATH": "C:\\msys64\\ucrt64\\bin;${env:PATH}"
-        }
+        "cwd": "${workspaceFolder}/windows-shutdown"
       },
       "problemMatcher": ["$gcc"],
       "group": {
@@ -100,10 +96,11 @@
       "label": "Compile Resource Files",
       "command": "windres.exe",
       "args": [
+        "--target=pe-x86-64",
         "-i",
         "${workspaceFolder}/windows-shutdown/windows-shutdown.rc",
         "-o",
-        "${workspaceFolder}/x64/Debug/windows-shutdown.res"
+        "${workspaceFolder}/x64/Debug/windows-shutdown.o"
       ],
       "options": {
         "cwd": "${workspaceFolder}/windows-shutdown"
