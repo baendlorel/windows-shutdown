@@ -27,7 +27,7 @@ enum class FadeState { None, FadingIn, FadingOut };
 
 enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hidden };
-constexpr int CFG_DEFAULT_DELAY = 3;
+constexpr int CFG_DEFAULT_DELAY = 4;
 
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms

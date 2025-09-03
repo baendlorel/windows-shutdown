@@ -10,24 +10,24 @@
 std::string DefaultConfigZh() {
     // Create default config.ini
     std::string lang = std::format(
-        "# 可选项：{}, {}。 默认值和系统语言相同\n"
+        "# 可填：{}, {}。 默认值和系统语言相同\n"
         "{}={}",
         CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
 
     std::string mode = std::format(
-        "# 可选项： \n"
-        "# - {} ：（默认）显示菜单，可以点击要做的操作\n"
-        "# - {} ：延迟之后直接关机\n"
+        "# 可填： \n"
+        "# - {}（默认）：显示菜单，可以点击要做的操作\n"
+        "# - {}：延迟之后直接执行操作\n"
         "{}={}",
         CFG_ACTION_NONE, CFG_ACTION_SOME, CFG_KEY_ACTION, CFG_ACTION_NONE);
 
     std::string instruction = std::format(
-        "# 可选项：{}, {}（默认）\n"
+        "# 可填：{}, {}（默认）\n"
         "{}={}",
         CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
-        "# 在执行操作之前等待这么多秒，默认值：{}\n"
+        "# 在执行操作之前等待这么多秒，默认{}秒\n"
         "{}={}",
         CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
 
@@ -64,7 +64,7 @@ std::string DefaultConfigEn() {
         CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
-        "# Wait time (in seconds) before action. Default: {}\n"
+        "# Wait time (in seconds, default is {}s) before action.\n"
         "{}={}",
         CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
 
@@ -124,18 +124,31 @@ std::wstring Config::GetConfigPath() {
 
 void Config::Load() {
     std::wstring configPath = this->GetConfigPath();
-    std::ifstream file(configPath);
+
+    // Read config file as UTF-8
+    std::ifstream file(configPath, std::ios::binary);
     if (!file.is_open()) {
+        // If config file does not exist, create it with UTF-8 encoding
         std::string content = IsSysLangChinese() ? DefaultConfigZh() : DefaultConfigEn();
-        std::ofstream out(configPath);
+        std::ofstream out(configPath, std::ios::binary);
+        // Write UTF-8 BOM for compatibility
+        const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
+        out.write((const char*)bom, sizeof(bom));
         out << content;
         out.close();
         return;
     }
 
-    std::string line;
+    file.seekg(0, std::ios::end);
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+    std::string buffer(size, '\0');
+    if (size > 0) file.read(&buffer[0], size);
+    std::istringstream utf8stream(buffer);
 
-    while (std::getline(file, line)) {
+    // Parse config file line by line (UTF-8)
+    std::string line;
+    while (std::getline(utf8stream, line)) {
         if (line.empty()) {
             continue;
         }
