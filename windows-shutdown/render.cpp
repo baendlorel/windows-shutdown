@@ -19,7 +19,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         std::wstring fullText = i18n.Wait(appState.action, appState.countdownSeconds);
 
         // Large font for countdown
-        FontFamily fontFamily(i18n.FontFamilyName());
+        FontFamily fontFamily(i18n.FontFamilyName.c_str());
         Gdiplus::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, FontStyleRegular);
 
         // Get text bounds for vertical centering
@@ -38,7 +38,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
 
         // Draw cancel instruction with beautiful rendering
         Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleRegular);
-        std::wstring cancelText = i18n.PressAnyKeyToCancel();
+        std::wstring cancelText = i18n.PressAnyKeyToCancel;
         RectF cancelBounds;
         graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &format,
                                &cancelBounds);
@@ -62,9 +62,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h, BYTE alpha) {
         }
 
         // Draw instruction text below buttons
-        FontFamily fontFamily(i18n.FontFamilyName());
+        FontFamily fontFamily(i18n.FontFamilyName.c_str());
         Gdiplus::Font instructionFont(&fontFamily, INSTRUCTION_FONT_SIZE, FontStyleRegular);
-        std::wstring instructionText = i18n.PressAnyKeyToExit();
+        std::wstring instructionText = i18n.PressAnyKeyToExit;
 
         REAL rw = static_cast<REAL>(w);
         REAL rh = static_cast<REAL>(h);
@@ -152,8 +152,7 @@ void UpdateLayered(HWND hWnd) {
     HBITMAP hBitmap = CreateDIBSection(hdcScreen, &bmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
     if (hBitmap == NULL) {
         static auto& i18n = I18N::GetInstance();
-        MessageBoxW(nullptr, i18n.ErrorCreateBitmap().c_str(), i18n.ErrorTitle().c_str(),
-                    MB_ICONERROR);
+        MessageBoxW(nullptr, i18n.ErrCreateBitmap.c_str(), i18n.ErrTitle.c_str(), MB_ICONERROR);
         DeleteDC(hdcMem);
         ReleaseDC(NULL, hdcScreen);
         return;

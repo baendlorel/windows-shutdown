@@ -7,6 +7,8 @@ I18N& I18N::GetInstance() {
 
 void I18N::SetLang(Lang lang) {
     if (lang == Lang::Zh) {
+        FontFamilyName = L"Microsoft YaHei UI";
+
         ErrCreateWindow = L"创建主窗口失败！程序无法启动。";
         ErrCreateBitmap = L"创建位图失败，无法显示主界面！";
         ErrResourceNotFound = L"找不到图标资源文件！程序可能损坏。";
@@ -32,6 +34,8 @@ void I18N::SetLang(Lang lang) {
         Waiting[1] = L"，剩余";
         Waiting[2] = L"秒...";
     } else {
+        FontFamilyName = L"Arial";
+
         ErrCreateWindow = L"Failed to create main window! The program cannot start.";
         ErrCreateBitmap = L"Failed to create bitmap, cannot display main interface!";
         ErrResourceNotFound = L"Icon resource file not found! The program may be corrupted.";
@@ -93,6 +97,10 @@ Action I18N::FileNameToAction(const std::wstring& name) const {
 
     if (lowerName == EN_SHUTDOWN || lowerName == ZH_SHUTDOWN) {
         return Action::Shutdown;
+    }
+
+    if (lowerName == EN_LOCK || lowerName == ZH_LOCK) {
+        return Action::Lock;
     }
 
     return Action::None;

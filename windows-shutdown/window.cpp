@@ -195,8 +195,38 @@ void HandleCancel(HWND hWnd) {
     }
 }
 
+void TriggerImmediateAction(HWND hWnd) {
+    static auto& appState = AppState::GetInstance();
+    if (appState.config.mode != Mode::Immediate) {
+        return;
+    }
+    appState.fadeState = FadeState::FadingOut;
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    auto name = appState.GetExeName();
+    Action action = I18N::GetInstance().FileNameToAction(name);
+    switch (action) {
+        case Action::Lock:
+            TriggerLock(hWnd);
+            break;
+        case Action::Sleep:
+            TriggerSleep(hWnd);
+            break;
+        case Action::Restart:
+            TriggerRestart(hWnd);
+            break;
+        case Action::Shutdown:
+            TriggerShutdown(hWnd);
+            break;
+    }
+}
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    auto& appState = AppState::GetInstance();
+    static bool immedateTriggered = false;
+    if (!immedateTriggered) {
+        TriggerImmediateAction(hWnd);
+        immedateTriggered = true;
+    }
+
     switch (message) {
         case WM_TIMER:
             HandleTimer(hWnd, wParam);
