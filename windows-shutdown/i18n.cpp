@@ -30,6 +30,7 @@ void I18N::SetLang(Lang lang) {
         Shutdown = ZH_SHUTDOWN;
         Sleep = ZH_SLEEP;
         Restart = ZH_RESTART;
+        Lock = ZH_LOCK;
         Waiting[0] = L"即将";
         Waiting[1] = L"，剩余";
         Waiting[2] = L"秒...";
@@ -58,6 +59,7 @@ void I18N::SetLang(Lang lang) {
         Shutdown = EN_SHUTDOWN;
         Sleep = EN_SLEEP;
         Restart = EN_RESTART;
+        Lock = EN_LOCK;
         Waiting[0] = L"About to";
         Waiting[1] = L", ";
         Waiting[2] = L" seconds left...";
@@ -75,6 +77,13 @@ std::wstring I18N::Wait(Action type, int seconds) const {
             break;
         case Action::Restart:
             actionWStr = this->Restart;
+            break;
+        case Action::Lock:
+            actionWStr = this->Lock;
+            break;
+        case Action::None:
+        default:
+            actionWStr = L"Unknown Action";
             break;
     }
     return this->Waiting[0] + actionWStr + this->Waiting[1] + std::to_wstring(seconds) +

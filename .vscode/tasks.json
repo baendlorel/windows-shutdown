@@ -98,20 +98,18 @@
     {
       "type": "shell",
       "label": "Compile Resource Files",
-      "command": "D:\\Windows Kits\\10\\bin\\10.0.26100.0\\x64\\rc.exe",
+      "command": "windres.exe",
       "args": [
-        "/fo",
-        "${workspaceFolder}\\x64\\Debug\\windows-shutdown.res",
-        "${workspaceFolder}\\windows-shutdown\\windows-shutdown.rc"
+        "-i",
+        "${workspaceFolder}/windows-shutdown/windows-shutdown.rc",
+        "-o",
+        "${workspaceFolder}/x64/Debug/windows-shutdown.res"
       ],
       "options": {
-        "cwd": "${workspaceFolder}\\windows-shutdown",
-        "env": {
-          "INCLUDE": "D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\ucrt;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\shared;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\um;D:\\Windows Kits\\10\\Include\\10.0.26100.0\\winrt"
-        }
+        "cwd": "${workspaceFolder}/windows-shutdown"
       },
       "group": "build",
-      "detail": "Compile resource files"
+      "detail": "Compile resource files (MinGW compatible)"
     },
     {
       "type": "shell",

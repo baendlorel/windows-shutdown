@@ -9,7 +9,7 @@
 #include "render.h"
 #include "i18n.h"
 
-#pragma comment(lib, "PowrProf.lib")
+// msvc use: #pragma comment(lib, "PowrProf.lib")
 
 void ExecuteRestart() {
     auto& i18n = I18N::GetInstance();

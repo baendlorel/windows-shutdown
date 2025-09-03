@@ -48,6 +48,7 @@ class I18N {
     std::wstring Shutdown;
     std::wstring Restart;
     std::wstring Sleep;
+    std::wstring Lock;
     std::wstring Waiting[3] = {L"", L"", L""};
 
     std::wstring Wait(Action type, int seconds) const;

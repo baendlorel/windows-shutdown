@@ -14,5 +14,5 @@
 #include <objidl.h>
 #include <gdiplus.h>
 
-#pragma comment(lib, "Gdiplus.lib")
+// msvc use: #pragma comment(lib, "Gdiplus.lib")
 using namespace Gdiplus;

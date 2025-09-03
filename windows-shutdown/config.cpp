@@ -122,15 +122,27 @@ std::wstring Config::GetConfigPath() {
     return path;
 }
 
+// Use this in case of returning to MSVC
+std::string WStringToUtf8(const std::wstring& wstr) {
+    if (wstr.empty()) return {};
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), nullptr, 0,
+                                          nullptr, nullptr);
+    std::string strTo(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), &strTo[0], size_needed, nullptr,
+                        nullptr);
+    return strTo;
+}
+
 void Config::Load() {
-    std::wstring configPath = this->GetConfigPath();
+    std::wstring configPathW = this->GetConfigPath();
+    std::string configPath = WStringToUtf8(configPathW);
 
     // Read config file as UTF-8
-    std::ifstream file(configPath, std::ios::binary);
+    std::ifstream file(configPath);
     if (!file.is_open()) {
         // If config file does not exist, create it with UTF-8 encoding
         std::string content = IsSysLangChinese() ? DefaultConfigZh() : DefaultConfigEn();
-        std::ofstream out(configPath, std::ios::binary);
+        std::ofstream out(configPath);
         // Write UTF-8 BOM for compatibility
         const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
         out.write((const char*)bom, sizeof(bom));
