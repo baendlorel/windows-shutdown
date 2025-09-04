@@ -1,5 +1,10 @@
 #pragma once
 
+// util
+// 2-step macro to expand macro value
+#define WIDEN2(x) L##x
+#define WIDEN(x)  WIDEN2(x)
+
 // state
 enum class Action { None, Sleep, Shutdown, Restart, Lock };
 
@@ -42,6 +47,10 @@ enum class ConfigWarning {
     InvalidBackgroundColorFormat,
     InvalidBackgroundColorValue
 };
+
+#define CFG_WARNING_X         40
+#define CFG_WARNING_Y         40
+#define CFG_WARNING_FONT_SIZE 16
 
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms

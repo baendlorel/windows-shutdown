@@ -48,52 +48,50 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     if (!warnings.empty()) {
         Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
         Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleRegular);
-        Gdiplus::REAL warnX = 10;
-        Gdiplus::REAL warnY = 10;
-        std::wstring warnText = i18n.GetConfigWarnings(warnings);
+        Gdiplus::REAL warnX = CFG_WARNING_X;
+        Gdiplus::REAL warnY = CFG_WARNING_Y;
+        LPCWSTR warnText = i18n.GetConfigWarnings(warnings).c_str();
         Gdiplus::RectF warnRect(warnX, warnY, static_cast<Gdiplus::REAL>(w) - 20, 1000);
         Gdiplus::StringFormat warnFormat;
         warnFormat.SetAlignment(Gdiplus::StringAlignmentNear);
         warnFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
         Gdiplus::SolidBrush warnBrush(TEXT_WARN_COLOR);
-        graphics.DrawString(warnText.c_str(), -1, &warnFont, warnRect, &warnFormat, &warnBrush);
-    } else {
-        // Draw image buttons (original logic)
-        for (int i = 0; i < BUTTON_COUNT; ++i) {
-            int x = appState.buttons[i].x - appState.buttons[i].r + BUTTON_MARGIN_LEFT;
-            int y = appState.buttons[i].y - appState.buttons[i].r + BUTTON_MARGIN_TOP;
-            int size = appState.buttons[i].r * 2;
-            graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
-            // If hovered, overlay a semi-transparent white
-            if (i == appState.hoveredIndex) {
-                Gdiplus::SolidBrush highlightBrush(BUTTON_HIGHLIGHT_COLOR);
-                graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH,
-                                     y + BUTTON_SHADOW_WIDTH, size - BUTTON_SHADOW_WIDTH * 2,
-                                     size - BUTTON_SHADOW_WIDTH * 2);
-            }
-        }
-
-        // Draw instruction text below buttons
-        Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-        Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE,
-                           Gdiplus::FontStyle::FontStyleRegular);
-        LPCWSTR instr = i18n.PressAnyKeyToExit.c_str();
-
-        Gdiplus::REAL rw = static_cast<Gdiplus::REAL>(w);
-        Gdiplus::REAL rh = static_cast<Gdiplus::REAL>(h);
-        Gdiplus::RectF layoutRect(0, 0, rw, rh);
-        Gdiplus::RectF textBounds;
-        Gdiplus::StringFormat format;
-        format.SetAlignment(Gdiplus::StringAlignmentCenter);
-        graphics.MeasureString(instr, -1, &font, layoutRect, &format, &textBounds);
-
-        // Below buttons with some margin
-        Gdiplus::REAL textY = static_cast<Gdiplus::REAL>((h / 2) + BUTTON_RADIUS +
-                                                         BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
-
-        // Draw text with beautiful rendering
-        DrawUIText(graphics, instr, font, rw, textY, TEXT_COLOR, TEXT_SHADOW_COLOR);
+        // graphics.DrawString(warnText.c_str(), -1, &warnFont, warnRect, &warnFormat, &warnBrush);
+        DrawUIText(graphics, warnText, warnFont, warnX, warnY, TEXT_WARN_COLOR, TEXT_SHADOW_COLOR);
     }
+    // Draw image buttons (original logic)
+    for (int i = 0; i < BUTTON_COUNT; ++i) {
+        int x = appState.buttons[i].x - appState.buttons[i].r + BUTTON_MARGIN_LEFT;
+        int y = appState.buttons[i].y - appState.buttons[i].r + BUTTON_MARGIN_TOP;
+        int size = appState.buttons[i].r * 2;
+        graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
+        // If hovered, overlay a semi-transparent white
+        if (i == appState.hoveredIndex) {
+            Gdiplus::SolidBrush highlightBrush(BUTTON_HIGHLIGHT_COLOR);
+            graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
+                                 size - BUTTON_SHADOW_WIDTH * 2, size - BUTTON_SHADOW_WIDTH * 2);
+        }
+    }
+
+    // Draw instruction text below buttons
+    Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+    Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyle::FontStyleRegular);
+    LPCWSTR instr = i18n.PressAnyKeyToExit.c_str();
+
+    Gdiplus::REAL rw = static_cast<Gdiplus::REAL>(w);
+    Gdiplus::REAL rh = static_cast<Gdiplus::REAL>(h);
+    Gdiplus::RectF layoutRect(0, 0, rw, rh);
+    Gdiplus::RectF textBounds;
+    Gdiplus::StringFormat format;
+    format.SetAlignment(Gdiplus::StringAlignmentCenter);
+    graphics.MeasureString(instr, -1, &font, layoutRect, &format, &textBounds);
+
+    // Below buttons with some margin
+    Gdiplus::REAL textY = static_cast<Gdiplus::REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP +
+                                                     BUTTON_MARGIN_BOTTOM);
+
+    // Draw text with beautiful rendering
+    DrawUIText(graphics, instr, font, rw, textY, TEXT_COLOR, TEXT_SHADOW_COLOR);
 }
 
 void DrawShadow(Gdiplus::Graphics& graphics, LPCWSTR text, const Gdiplus::Font& font,
