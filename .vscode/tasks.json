@@ -58,6 +58,7 @@
         "-D_UNICODE",
         "-mwindows",
         "${workspaceFolder}/windows-shutdown/*.cpp",
+        "${workspaceFolder}/x64/Debug/windows-shutdown.o",
         "-o",
         "${workspaceFolder}/x64/Release/windows-shutdown.exe",
         "-luser32",
@@ -110,12 +111,26 @@
     },
     {
       "type": "shell",
-      "label": "C/C++: Full Build",
+      "label": "C/C++: Full Debug Build",
       "dependsOrder": "sequence",
       "dependsOn": [
         "C/C++: Create Output Directories",
         "C/C++: Compile Resource Files",
         "C/C++: Build Debug (GCC)"
+      ],
+      "group": {
+        "kind": "build"
+      },
+      "detail": "Full build including resource files"
+    },
+    {
+      "type": "shell",
+      "label": "C/C++: Full Build",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "C/C++: Create Output Directories",
+        "C/C++: Compile Resource Files",
+        "C/C++: Build Release (GCC)"
       ],
       "group": {
         "kind": "build"

@@ -1,4 +1,5 @@
 #include "render.h"
+#include <unordered_map>
 
 #include "app-state.h"
 #include "i18n.h"
@@ -11,6 +12,9 @@ DrawTextParams DrawTextParams::GetShadowVersion() {
             .color = this->shadowColor,
             .shadowColor = this->shadowColor};
 }
+
+// fixme instruction跑到最顶上去了
+// fixme 点击按钮后按钮还在
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
@@ -29,7 +33,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     // Draw countdown in center
     if (appState.isCountingDown()) {
         std::wstring countdownText = std::to_wstring(appState.countdownSeconds);
-        LPCWSTR fullText = i18n.Wait(appState.action, appState.countdownSeconds).c_str();
+        std::wstring fullText = i18n.Wait(appState.action, appState.countdownSeconds);
 
         // Large font for countdown
         Gdi::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleRegular);
@@ -41,7 +45,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         Gdi::RectF boundingBox;
         Gdi::StringFormat format;
         format.SetAlignment(Gdi::StringAlignmentCenter);
-        graphics.MeasureString(fullText, -1, &font, layoutRect, &format, &boundingBox);
+        graphics.MeasureString(fullText.c_str(), -1, &font, layoutRect, &format, &boundingBox);
         Gdi::REAL y = (h - boundingBox.Height) / 2;
 
         // Draw main text with beautiful rendering
@@ -57,9 +61,10 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Draw cancel instruction with beautiful rendering
         Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-        LPCWSTR cancelText = i18n.PressAnyKeyToCancel.c_str();
+        std::wstring cancelText = i18n.PressAnyKeyToCancel;
         Gdi::RectF cancelBounds;
-        graphics.MeasureString(cancelText, -1, &smallFont, layoutRect, &format, &cancelBounds);
+        graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &format,
+                               &cancelBounds);
         Gdi::REAL cancelY = y + boundingBox.Height + 20;
         Gdi::RectF cancelTextRect(0, cancelY, rw, cancelBounds.Height);
 
@@ -69,20 +74,20 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                       .horizontalAlign = Gdi::StringAlignmentCenter,
                                       .color = &colors.TextColor,
                                       .shadowColor = &colors.TextShadowColor};
-        DrawUIText(graphics, smallParams);
+        DrawCachedUIText(graphics, smallParams);
     }
 
     auto& warnings = appState.config.warnings;
     if (!warnings.empty()) {
         Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
         Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w - 20, 1000);
-        DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings).c_str(),
+        DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings),
                                      .font = &warnFont,
                                      .rect = &warnRect,
-                                     .horizontalAlign = Gdi::StringAlignmentCenter,
+                                     .horizontalAlign = Gdi::StringAlignmentNear,
                                      .color = &colors.TextWarnColor,
                                      .shadowColor = &colors.TextShadowColor};
-        DrawUIText(graphics, warnParams);
+        DrawCachedUIText(graphics, warnParams);
     }
 
     // Draw image buttons (original logic)
@@ -124,7 +129,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                   .horizontalAlign = Gdi::StringAlignmentCenter,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
-    DrawUIText(graphics, instrParams);
+    DrawCachedUIText(graphics, instrParams);
 }
 
 void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
@@ -141,7 +146,7 @@ void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
             float dy = SHADOW_OFFSET[i][1] * radius;
             Gdi::RectF rect(params.rect->X + dx, params.rect->Y + dy, params.rect->Width,
                             params.rect->Height);
-            graphics.DrawString(params.text, -1, params.font, rect, &format, &brush);
+            graphics.DrawString(params.text.c_str(), -1, params.font, rect, &format, &brush);
         }
     }
 }
@@ -158,11 +163,82 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::StringFormat format;
     format.SetAlignment(params.horizontalAlign);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
-    graphics.DrawString(params.text, -1, params.font, *params.rect, &format, &brush);
+    graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
 }
 
-Gdi::Bitmap* CacheUIText() {
-    return nullptr;
+Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
+    static std::unordered_map<std::wstring, Gdi::Bitmap*> cache;
+    auto it = cache.find(params.text);
+    if (it != cache.end()) {
+        return it->second;
+    }
+
+    // Measure text size to determine bitmap dimensions
+    Gdi::StringFormat format;
+    format.SetAlignment(params.horizontalAlign);
+    format.SetLineAlignment(Gdi::StringAlignmentNear);
+
+    Gdi::RectF measureRect(0, 0, params.rect->Width, params.rect->Height);
+    Gdi::RectF boundingBox;
+    graphics.MeasureString(params.text.c_str(), -1, params.font, measureRect, &format,
+                           &boundingBox);
+
+    // Add extra margin for shadow (max radius is 4, need extra space in each direction)
+    const int shadowMargin = 8;
+    int bitmapWidth = static_cast<int>(boundingBox.Width) + shadowMargin * 2;
+    int bitmapHeight = static_cast<int>(boundingBox.Height) + shadowMargin * 2;
+
+    // Create new bitmap
+    Gdi::Bitmap* bitmap = new Gdi::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
+    Gdi::Graphics bitmapGraphics(bitmap);
+
+    // Set high quality rendering
+    bitmapGraphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAliasGridFit);
+    bitmapGraphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
+    bitmapGraphics.SetCompositingQuality(Gdi::CompositingQualityHighQuality);
+
+    // Clear bitmap background to transparent
+    bitmapGraphics.Clear(Gdi::Color(0, 0, 0, 0));
+
+    // // Create draw params, adjust rect position to bitmap coordinates
+    // DrawTextParams bitmapParams = params;
+    // Gdi::RectF bitmapRect(shadowMargin, shadowMargin, boundingBox.Width, boundingBox.Height);
+    // bitmapParams.rect = &bitmapRect;
+
+    // // Draw shadow
+    // DrawTextParams shadowParams = bitmapParams.GetShadowVersion();
+    // DrawUITextShadow(bitmapGraphics, shadowParams);
+
+    // // Draw main text
+    // Gdi::SolidBrush brush(*bitmapParams.color);
+    // bitmapGraphics.DrawString(bitmapParams.text, -1, bitmapParams.font, bitmapRect, &format,
+    // &brush);
+    DrawUIText(bitmapGraphics, params);
+
+    // Store in cache
+    cache[params.text] = bitmap;
+
+    return bitmap;
+}
+
+void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
+    Gdi::Bitmap* cachedBitmap = UITextToBitmap(graphics, params);
+    if (!cachedBitmap) {
+        return;
+    }
+    // Calculate draw position (consider shadow margin)
+    const int shadowMargin = 8;
+    Gdi::REAL drawX = params.rect->X - shadowMargin;
+    Gdi::REAL drawY = params.rect->Y - shadowMargin;
+
+    // Adjust X position according to alignment
+    if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
+        drawX = params.rect->X + (params.rect->Width - cachedBitmap->GetWidth()) / 2;
+    } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
+        drawX = params.rect->X + params.rect->Width - cachedBitmap->GetWidth() + shadowMargin;
+    }
+
+    graphics.DrawImage(cachedBitmap, drawX, drawY);
 }
 
 struct WH {
