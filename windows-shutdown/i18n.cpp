@@ -1,4 +1,5 @@
 #include "i18n.h"
+#include <format>
 
 I18N& I18N::GetInstance() {
     static I18N instance;
@@ -27,12 +28,18 @@ void I18N::SetLang(Lang lang) {
         PressAnyKeyToCancel = L"按任意键或鼠标点击取消";
 
         // config warnings
-        InvalidLanguage = L"[language]不是预设值，应该是zh,en中的一个";
-        InvalidAction = L"[action]不是预设值，应该是none,sleep,shutdown,restart,lock中的一个";
-        InvalidInstruction = L"[instruction]不是预设值，应该是show,hidden中的一个";
-        InvalidDelay = L"[delay]不是有效数字";
-        InvalidBackgroundColorFormat = L"[backgroundColor]不是有效的#RRGGBBAA或#RRGGBB格式";
-        InvalidBackgroundColorValue = L"[backgroundColor]不是有效的颜色值";
+        InvalidLanguage = std::format(L"[{}]不是预设值，应该是{},{}中的一个", CFG_KEY_LANG,
+                                      CFG_LANG_ZH, CFG_LANG_EN);
+        InvalidAction =
+            std::format(L"[{}]不是预设值，应该是{}中的一个", CFG_KEY_ACTION, CFG_ACTION_SOME);
+        InvalidInstruction =
+            std::format(L"[{}]不是预设值，应该是{}, {}中的一个", CFG_KEY_INSTRUCTION,
+                        CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN);
+        InvalidDelay = std::format(L"[{}]不是有效数字", CFG_KEY_DELAY);
+        InvalidBackgroundColorFormat =
+            std::format(L"[{}]不是有效的#RRGGBBAA或#RRGGBB格式", CFG_KEY_BACKGROUND_COLOR);
+        InvalidBackgroundColorValue =
+            std::format(L"[{}]不是有效的颜色值", CFG_KEY_BACKGROUND_COLOR);
 
         // actions
         Shutdown = ZH_SHUTDOWN;
@@ -63,13 +70,18 @@ void I18N::SetLang(Lang lang) {
         PressAnyKeyToExit = L"Press any key or click elsewhere to exit";
 
         // config warnings
-        InvalidLanguage = L"[language] is not valid, should be zh or en";
-        InvalidAction = L"[action] is not valid, should be one of none,sleep,shutdown,restart,lock";
-        InvalidInstruction = L"[instruction] is not valid, should be show or hidden";
-        InvalidDelay = L"[delay] is not a valid number";
+        InvalidLanguage = std::format(L"[{}] is not valid, should be {} or {}", CFG_KEY_LANG,
+                                      CFG_LANG_ZH, CFG_LANG_EN);
+        InvalidAction =
+            std::format(L"[{}] is not valid, should be one of {}", CFG_KEY_ACTION, CFG_ACTION_SOME);
+        InvalidInstruction =
+            std::format(L"[{}] is not valid, should be {} or {}", CFG_KEY_INSTRUCTION,
+                        CFG_INSTRUCTION_SHOW, CFG_INSTRUCTION_HIDDEN);
+        InvalidDelay = std::format(L"[{}] is not a valid number", CFG_KEY_DELAY);
         InvalidBackgroundColorFormat =
-            L"[backgroundColor] is not valid #RRGGBBAA or #RRGGBB format";
-        InvalidBackgroundColorValue = L"[backgroundColor] is not a valid color value";
+            std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format", CFG_KEY_BACKGROUND_COLOR);
+        InvalidBackgroundColorValue =
+            std::format(L"[{}] is not a valid color value", CFG_KEY_BACKGROUND_COLOR);
 
         // actions
         Shutdown = EN_SHUTDOWN;

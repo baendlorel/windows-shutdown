@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 // order below must be preserved
-#include <gdiplus.h>
 #include "consts.h"
 
 struct Config {
@@ -11,7 +10,7 @@ struct Config {
     Action action;
     Instruction instruction;
     int delay;
-    Gdiplus::Color bgColor;
+    short bgColor[4];  // ARGB , same as Gdiplus::Color
     std::vector<ConfigWarning> warnings;
 
    public:
@@ -24,6 +23,6 @@ struct Config {
     std::wstring GetConfigPath();
 
    private:
-    void Load();
     ConfigWarning LoadKeyValue(std::string& key, std::string& value);
+    void Load();
 };

@@ -31,6 +31,11 @@ std::string DefaultConfigZh() {
         "{}={}",
         CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
 
+    std::string bgColor = std::format(
+        "# 背景色，格式为#RRGGBBAA或#RRGGBB，默认黑色半透明\n"
+        "{}=#52000000",
+        CFG_KEY_BACKGROUND_COLOR);
+
     return std::format(
         "# 加载配置失败时会使用默认配置。\n"
         "\n"
@@ -40,8 +45,10 @@ std::string DefaultConfigZh() {
         "\n"
         "{}\n"
         "\n"
+        "{}\n"
+        "\n"
         "{}\n",
-        lang, mode, instruction, delay);
+        lang, mode, instruction, delay, bgColor);
 }
 
 std::string DefaultConfigEn() {
@@ -68,6 +75,11 @@ std::string DefaultConfigEn() {
         "{}={}",
         CFG_DEFAULT_DELAY, CFG_KEY_DELAY, CFG_DEFAULT_DELAY);
 
+    std::string bgColor = std::format(
+        "# Background color, format: #RRGGBBAA or #RRGGBB, default is black semi-transparent\n"
+        "{}=#52000000",
+        CFG_KEY_BACKGROUND_COLOR);
+
     return std::format(
         "# When loading is failed, we will use default config values.\n"
         "\n"
@@ -77,8 +89,10 @@ std::string DefaultConfigEn() {
         "\n"
         "{}\n"
         "\n"
+        "{}\n"
+        "\n"
         "{}\n",
-        lang, mode, instruction, delay);
+        lang, mode, instruction, delay, bgColor);
 }
 
 std::string trim(const std::string& s) {
@@ -105,7 +119,9 @@ Config::Config()
       action(Action::None),
       instruction(Instruction::Show),
       delay(CFG_DEFAULT_DELAY),
-      bgColor(BACKGROUND_COLOR) {
+      bgColor({
+          0,
+      }) {
     this->Load();
 }
 
@@ -188,7 +204,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         try {
             this->delay = std::clamp(std::stoi(value), 0, 60);
             return ConfigWarning::None;
-        } catch (const std::invalid_argument&) {
+        } catch (...) {
             this->delay = CFG_DEFAULT_DELAY;
             return ConfigWarning::InvalidDelay;
         }
@@ -201,7 +217,10 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
-                this->bgColor = Gdiplus::Color(a, r, g, b);
+                this->bgColor[0] = a;
+                this->bgColor[1] = r;
+                this->bgColor[2] = g;
+                this->bgColor[3] = b;
                 return ConfigWarning::None;
             } catch (...) {
                 return ConfigWarning::InvalidBackgroundColorValue;
@@ -213,7 +232,10 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
-                this->bgColor = Gdiplus::Color(255, r, g, b);
+                this->bgColor[0] = 0x32;  // default alpha
+                this->bgColor[1] = r;
+                this->bgColor[2] = g;
+                this->bgColor[3] = b;
                 return ConfigWarning::None;
             } catch (...) {
                 return ConfigWarning::InvalidBackgroundColorValue;
@@ -222,6 +244,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
 
         return ConfigWarning::InvalidBackgroundColorFormat;
     }
+    return ConfigWarning::None;
 }
 
 void Config::Load() {
@@ -265,6 +288,9 @@ void Config::Load() {
         }
         std::string key = trim(line.substr(0, eq));
         std::string value = trim(line.substr(eq + 1));
-        this->LoadKeyValue(key, value);
+        auto warning = this->LoadKeyValue(key, value);
+        if (warning != ConfigWarning::None) {
+            this->warnings.push_back(warning);
+        }
     }
 }
