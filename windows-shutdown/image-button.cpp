@@ -27,7 +27,7 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     // LARGE_INTEGER li = {0};
     LARGE_INTEGER li;
     pStream->Seek(li, STREAM_SEEK_SET, NULL);
-    Bitmap* image = Bitmap::FromStream(pStream);
+    Gdiplus::Bitmap* image = Gdiplus::Bitmap::FromStream(pStream);
     pStream->Release();
     if (!image) {
         MessageBoxW(nullptr, i18n.ErrCreateImageBitmap.c_str(), i18n.ErrTitle.c_str(),

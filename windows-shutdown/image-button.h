@@ -9,7 +9,7 @@ struct ImageButton {
     const wchar_t* label = L"";
 
     int resId = 0;
-    Bitmap* png = nullptr;
+    Gdiplus::Bitmap* png = nullptr;
 
     void LoadPNGFromResource(HINSTANCE hInst);
 
