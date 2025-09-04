@@ -73,4 +73,3 @@ constexpr float SHADOW_OFFSET[8][2] = {
 #define TEXT_COLOR             Gdiplus::Color(255, 255, 255, 255)
 #define TEXT_SHADOW_COLOR      Gdiplus::Color(128, 0, 0, 0)
 #define BUTTON_HIGHLIGHT_COLOR Gdiplus::Color(52, 0, 0, 0)
-#

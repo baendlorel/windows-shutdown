@@ -15,4 +15,3 @@
 #include <gdiplus.h>
 
 // msvc use: #pragma comment(lib, "Gdiplus.lib")
-using namespace Gdiplus;
