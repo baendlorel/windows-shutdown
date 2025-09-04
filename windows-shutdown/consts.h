@@ -95,9 +95,17 @@ constexpr float SHADOW_OFFSET[8][2] = {
 };
 
 // ui/colors
-#define DEFAULT_ALPHA 52
-Gdiplus::Color BACKGROUND_COLOR(DEFAULT_ALPHA, 0, 0, 0);
-Gdiplus::Color TEXT_COLOR(255, 255, 255, 255);
-Gdiplus::Color TEXT_WARN_COLOR(255, 255, 193, 7);
-Gdiplus::Color TEXT_SHADOW_COLOR(128, 0, 0, 0);
-Gdiplus::Color BUTTON_HIGHLIGHT_COLOR(DEFAULT_ALPHA, 0, 0, 0);
+constexpr int DEFAULT_ALPHA = 52;
+
+struct ColorSet {
+    static ColorSet& GetInstance() {
+        static ColorSet instance;
+        return instance;
+    }
+
+    Gdiplus::Color BackgroundColor = Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0);
+    Gdiplus::Color TextColor = Gdiplus::Color(255, 255, 255, 255);
+    Gdiplus::Color TextWarnColor = Gdiplus::Color(255, 255, 193, 7);
+    Gdiplus::Color TextShadowColor = Gdiplus::Color(128, 0, 0, 0);
+    Gdiplus::Color ButtonHighlightColor = Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0);
+};

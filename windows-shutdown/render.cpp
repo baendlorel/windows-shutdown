@@ -15,8 +15,10 @@ DrawTextParams DrawTextParams::GetShadowVersion() {
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
+    static auto& colors = ColorSet::GetInstance();
+
     static Gdi::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-    static Gdi::SolidBrush bgBrush(BACKGROUND_COLOR);
+    static Gdi::SolidBrush bgBrush(colors.BackgroundColor);
 
     Gdi::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
@@ -48,8 +50,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                  .font = &font,
                                  .rect = &mainTextRect,
                                  .horizontalAlign = Gdi::StringAlignmentCenter,
-                                 .color = &TEXT_COLOR,
-                                 .shadowColor = &TEXT_SHADOW_COLOR};
+                                 .color = &colors.TextColor,
+                                 .shadowColor = &colors.TextShadowColor};
 
         DrawUIText(graphics, params);
 
@@ -65,22 +67,21 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                       .font = &smallFont,
                                       .rect = &cancelTextRect,
                                       .horizontalAlign = Gdi::StringAlignmentCenter,
-                                      .color = &TEXT_COLOR,
-                                      .shadowColor = &TEXT_SHADOW_COLOR};
+                                      .color = &colors.TextColor,
+                                      .shadowColor = &colors.TextShadowColor};
         DrawUIText(graphics, smallParams);
     }
 
     auto& warnings = appState.config.warnings;
     if (!warnings.empty()) {
-        LPCWSTR warnText = i18n.GetConfigWarnings(warnings).c_str();
         Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
         Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w - 20, 1000);
         DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings).c_str(),
                                      .font = &warnFont,
                                      .rect = &warnRect,
                                      .horizontalAlign = Gdi::StringAlignmentCenter,
-                                     .color = &TEXT_COLOR,
-                                     .shadowColor = &TEXT_SHADOW_COLOR};
+                                     .color = &colors.TextWarnColor,
+                                     .shadowColor = &colors.TextShadowColor};
         DrawUIText(graphics, warnParams);
     }
 
@@ -92,7 +93,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
         // If hovered, overlay a semi-transparent white
         if (i == appState.hoveredIndex) {
-            Gdi::SolidBrush highlightBrush(BUTTON_HIGHLIGHT_COLOR);
+            Gdi::SolidBrush highlightBrush(colors.ButtonHighlightColor);
             graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
                                  size - BUTTON_SHADOW_WIDTH * 2, size - BUTTON_SHADOW_WIDTH * 2);
         }
@@ -121,8 +122,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                   .font = &font,
                                   .rect = &layoutRect,
                                   .horizontalAlign = Gdi::StringAlignmentCenter,
-                                  .color = &TEXT_COLOR,
-                                  .shadowColor = &TEXT_SHADOW_COLOR};
+                                  .color = &colors.TextColor,
+                                  .shadowColor = &colors.TextShadowColor};
     DrawUIText(graphics, instrParams);
 }
 
@@ -160,7 +161,8 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     graphics.DrawString(params.text, -1, params.font, *params.rect, &format, &brush);
 }
 
-Gdi::Bitmap CacheUIText() {
+Gdi::Bitmap* CacheUIText() {
+    return nullptr;
 }
 
 struct WH {
