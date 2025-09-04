@@ -32,36 +32,23 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         // Get text bounds for vertical centering
         Gdi::REAL rw = static_cast<Gdi::REAL>(w);
         Gdi::REAL rh = static_cast<Gdi::REAL>(h);
-        Gdi::RectF layoutRect(0, 0, rw, rh);
-        Gdi::RectF boundingBox;
-        Gdi::StringFormat format;
-        format.SetAlignment(Gdi::StringAlignmentCenter);
-        graphics.MeasureString(fullText.c_str(), -1, &font, layoutRect, &format, &boundingBox);
-        Gdi::REAL y = (h - boundingBox.Height) / 2;
-
-        // Draw main text with beautiful rendering
-        Gdi::RectF mainTextRect(0, y, rw, boundingBox.Height);
+        Gdi::RectF rect(0, rh * 0.382f, rw, rh);
         DrawTextParams params = {.text = fullText,
                                  .font = &font,
-                                 .rect = &mainTextRect,
+                                 .rect = &rect,
                                  .horizontalAlign = Gdi::StringAlignmentCenter,
                                  .color = &colors.TextColor,
                                  .shadowColor = &colors.TextShadowColor};
 
         DrawUIText(graphics, params);
 
-        // Draw cancel instruction with beautiful rendering
         Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-        std::wstring cancelText = i18n.PressAnyKeyToCancel;
-        Gdi::RectF cancelBounds;
-        graphics.MeasureString(cancelText.c_str(), -1, &smallFont, layoutRect, &format,
-                               &cancelBounds);
-        Gdi::REAL cancelY = y + boundingBox.Height + 20;
-        Gdi::RectF cancelTextRect(0, cancelY, rw, cancelBounds.Height);
+        Gdi::RectF smallRect(0, rh / 2 + 40, rw, 1000);
 
-        DrawTextParams smallParams = {.text = cancelText,
+        // Draw cancel instruction with beautiful rendering
+        DrawTextParams smallParams = {.text = i18n.PressAnyKeyToCancel,
                                       .font = &smallFont,
-                                      .rect = &cancelTextRect,
+                                      .rect = &smallRect,
                                       .horizontalAlign = Gdi::StringAlignmentCenter,
                                       .color = &colors.TextColor,
                                       .shadowColor = &colors.TextShadowColor};
@@ -85,15 +72,16 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // Draw image buttons (original logic)
     for (int i = 0; i < BUTTON_COUNT; ++i) {
-        int x = appState.buttons[i].x - appState.buttons[i].r + BUTTON_MARGIN_LEFT;
-        int y = appState.buttons[i].y - appState.buttons[i].r + BUTTON_MARGIN_TOP;
-        int size = appState.buttons[i].r * 2;
-        graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
+        int x = appState.buttons[i].x - BUTTON_RADIUS + BUTTON_MARGIN_LEFT;
+        int y = appState.buttons[i].y - BUTTON_RADIUS + BUTTON_MARGIN_TOP;
+
+        graphics.DrawImage(appState.buttons[i].png, x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
         // If hovered, overlay a semi-transparent white
         if (i == appState.hoveredIndex) {
             Gdi::SolidBrush highlightBrush(colors.ButtonHighlightColor);
             graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
-                                 size - BUTTON_SHADOW_WIDTH * 2, size - BUTTON_SHADOW_WIDTH * 2);
+                                 BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2,
+                                 BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2);
         }
     }
 

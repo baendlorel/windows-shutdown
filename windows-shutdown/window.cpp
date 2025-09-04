@@ -244,6 +244,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             HandleMoustMove(hWnd, lParam);
             break;
         case WM_LBUTTONDOWN:
+        case WM_RBUTTONDOWN:
             HandleLeftClick(hWnd, lParam);
             break;
         case WM_CLOSE:
