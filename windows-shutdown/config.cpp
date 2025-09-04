@@ -119,7 +119,7 @@ Config::Config()
       action(Action::None),
       instruction(Instruction::Show),
       delay(CFG_DEFAULT_DELAY),
-      bgColor(BACKGROUND_COLOR) {
+      bgColor(ColorSet::GetInstance().BackgroundColor) {
     this->Load();
 }
 
