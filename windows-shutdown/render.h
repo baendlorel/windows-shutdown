@@ -1,10 +1,15 @@
 #pragma once
 #include "framework.h"
+namespace Gdi = Gdiplus;
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h);
 
-void DrawUIText(Gdiplus::Graphics& graphics, LPCWSTR text, const Gdiplus::Font& font,
-                Gdiplus::REAL width, Gdiplus::REAL y, const Gdiplus::Color& textColor,
-                const Gdiplus::Color& shadowColor);
+void DrawUIText(Gdi::Graphics& graphics, LPCWSTR text, const Gdi::Font& font,
+                const Gdi::RectF& rect, Gdi::StringAlignment horizontalAlign,
+                const Gdi::Color& textColor, const Gdi::Color& shadowColor);
+
+void DrawUITextShadow(Gdi::Graphics& graphics, LPCWSTR text, const Gdi::Font& font,
+                      const Gdi::RectF& rect, Gdi::StringAlignment horizontalAlign,
+                      const Gdi::Color& color);
 
 void UpdateLayered(HWND hWnd);

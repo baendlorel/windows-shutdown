@@ -6,10 +6,12 @@
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
-    static Gdiplus::SolidBrush bgBrush(BACKGROUND_COLOR);
-    Gdiplus::Graphics graphics(hdcMem);
-    graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-    graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
+    static Gdi::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+    static Gdi::SolidBrush bgBrush(BACKGROUND_COLOR);
+
+    Gdi::Graphics graphics(hdcMem);
+    graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
+    graphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAlias);
     // Draw semi-transparent background
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
@@ -19,46 +21,43 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         LPCWSTR fullText = i18n.Wait(appState.action, appState.countdownSeconds).c_str();
 
         // Large font for countdown
-        Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-        Gdiplus::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdiplus::FontStyleRegular);
+        Gdi::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleRegular);
 
         // Get text bounds for vertical centering
-        Gdiplus::REAL rw = static_cast<Gdiplus::REAL>(w);
-        Gdiplus::REAL rh = static_cast<Gdiplus::REAL>(h);
-        Gdiplus::RectF layoutRect(0, 0, rw, rh);
-        Gdiplus::RectF boundingBox;
-        Gdiplus::StringFormat format;
-        format.SetAlignment(Gdiplus::StringAlignmentCenter);
+        Gdi::REAL rw = static_cast<Gdi::REAL>(w);
+        Gdi::REAL rh = static_cast<Gdi::REAL>(h);
+        Gdi::RectF layoutRect(0, 0, rw, rh);
+        Gdi::RectF boundingBox;
+        Gdi::StringFormat format;
+        format.SetAlignment(Gdi::StringAlignmentCenter);
         graphics.MeasureString(fullText, -1, &font, layoutRect, &format, &boundingBox);
-        Gdiplus::REAL y = (h - boundingBox.Height) / 2;
+        Gdi::REAL y = (h - boundingBox.Height) / 2;
 
         // Draw main text with beautiful rendering
-        DrawUIText(graphics, fullText, font, rw, y, TEXT_COLOR, TEXT_SHADOW_COLOR);
+        Gdi::RectF mainTextRect(0, y, rw, boundingBox.Height);
+        DrawUIText(graphics, fullText, font, mainTextRect, Gdi::StringAlignmentCenter, TEXT_COLOR,
+                   TEXT_SHADOW_COLOR);
 
         // Draw cancel instruction with beautiful rendering
-        Gdiplus::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleRegular);
+        Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
         LPCWSTR cancelText = i18n.PressAnyKeyToCancel.c_str();
-        Gdiplus::RectF cancelBounds;
+        Gdi::RectF cancelBounds;
         graphics.MeasureString(cancelText, -1, &smallFont, layoutRect, &format, &cancelBounds);
-        Gdiplus::REAL cancelY = y + boundingBox.Height + 20;
-        DrawUIText(graphics, cancelText, smallFont, rw, cancelY, TEXT_COLOR, TEXT_SHADOW_COLOR);
+        Gdi::REAL cancelY = y + boundingBox.Height + 20;
+        Gdi::RectF cancelTextRect(0, cancelY, rw, cancelBounds.Height);
+        DrawUIText(graphics, cancelText, smallFont, cancelTextRect, Gdi::StringAlignmentCenter,
+                   TEXT_COLOR, TEXT_SHADOW_COLOR);
     }
 
     auto& warnings = appState.config.warnings;
     if (!warnings.empty()) {
-        Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-        Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleRegular);
-        Gdiplus::REAL warnX = CFG_WARNING_X;
-        Gdiplus::REAL warnY = CFG_WARNING_Y;
         LPCWSTR warnText = i18n.GetConfigWarnings(warnings).c_str();
-        Gdiplus::RectF warnRect(warnX, warnY, static_cast<Gdiplus::REAL>(w) - 20, 1000);
-        Gdiplus::StringFormat warnFormat;
-        warnFormat.SetAlignment(Gdiplus::StringAlignmentNear);
-        warnFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
-        Gdiplus::SolidBrush warnBrush(TEXT_WARN_COLOR);
-        // graphics.DrawString(warnText.c_str(), -1, &warnFont, warnRect, &warnFormat, &warnBrush);
-        DrawUIText(graphics, warnText, warnFont, warnX, warnY, TEXT_WARN_COLOR, TEXT_SHADOW_COLOR);
+        Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
+        Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w - 20, 1000);
+        DrawUIText(graphics, warnText, warnFont, warnRect, Gdi::StringAlignmentNear,
+                   TEXT_WARN_COLOR, TEXT_SHADOW_COLOR);
     }
+
     // Draw image buttons (original logic)
     for (int i = 0; i < BUTTON_COUNT; ++i) {
         int x = appState.buttons[i].x - appState.buttons[i].r + BUTTON_MARGIN_LEFT;
@@ -67,66 +66,67 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         graphics.DrawImage(appState.buttons[i].png, x, y, size, size);
         // If hovered, overlay a semi-transparent white
         if (i == appState.hoveredIndex) {
-            Gdiplus::SolidBrush highlightBrush(BUTTON_HIGHLIGHT_COLOR);
+            Gdi::SolidBrush highlightBrush(BUTTON_HIGHLIGHT_COLOR);
             graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
                                  size - BUTTON_SHADOW_WIDTH * 2, size - BUTTON_SHADOW_WIDTH * 2);
         }
     }
 
     // Draw instruction text below buttons
-    Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-    Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyle::FontStyleRegular);
+    Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
     LPCWSTR instr = i18n.PressAnyKeyToExit.c_str();
 
-    Gdiplus::REAL rw = static_cast<Gdiplus::REAL>(w);
-    Gdiplus::REAL rh = static_cast<Gdiplus::REAL>(h);
-    Gdiplus::RectF layoutRect(0, 0, rw, rh);
-    Gdiplus::RectF textBounds;
-    Gdiplus::StringFormat format;
-    format.SetAlignment(Gdiplus::StringAlignmentCenter);
+    Gdi::REAL rw = static_cast<Gdi::REAL>(w);
+    Gdi::REAL rh = static_cast<Gdi::REAL>(h);
+    Gdi::RectF layoutRect(0, 0, rw, rh);
+    Gdi::RectF textBounds;
+    Gdi::StringFormat format;
+    format.SetAlignment(Gdi::StringAlignmentCenter);
     graphics.MeasureString(instr, -1, &font, layoutRect, &format, &textBounds);
 
     // Below buttons with some margin
-    Gdiplus::REAL textY = static_cast<Gdiplus::REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP +
-                                                     BUTTON_MARGIN_BOTTOM);
+    Gdi::REAL textY =
+        static_cast<Gdi::REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
 
     // Draw text with beautiful rendering
-    DrawUIText(graphics, instr, font, rw, textY, TEXT_COLOR, TEXT_SHADOW_COLOR);
+    Gdi::RectF instrRect(0, textY, rw, textBounds.Height);
+    DrawUIText(graphics, instr, font, instrRect, Gdi::StringAlignmentCenter, TEXT_COLOR,
+               TEXT_SHADOW_COLOR);
 }
 
-void DrawShadow(Gdiplus::Graphics& graphics, LPCWSTR text, const Gdiplus::Font& font,
-                Gdiplus::REAL width, Gdiplus::REAL y, const Gdiplus::Color& color) {
-    Gdiplus::StringFormat format;
-    format.SetAlignment(Gdiplus::StringAlignmentCenter);
-    format.SetLineAlignment(Gdiplus::StringAlignmentNear);
-    Gdiplus::SolidBrush brush(Gdiplus::Color(0, 0, 0, 0));
+void DrawUITextShadow(Gdi::Graphics& graphics, LPCWSTR text, const Gdi::Font& font,
+                      const Gdi::RectF& rect, Gdi::StringAlignment horizontalAlign,
+                      const Gdi::Color& color) {
+    Gdi::StringFormat format;
+    format.SetAlignment(horizontalAlign);
+    format.SetLineAlignment(Gdi::StringAlignmentNear);
+    Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
     for (int radius = 4; radius >= 1; radius -= 1) {
         int alpha = 80 / (radius + 1);
-        brush.SetColor(Gdiplus::Color(alpha, color.GetR(), color.GetG(), color.GetB()));
+        brush.SetColor(Gdi::Color(alpha, color.GetR(), color.GetG(), color.GetB()));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
-            Gdiplus::RectF layoutRect(0 + dx, y + dy, width, 1000);
+            Gdi::RectF layoutRect(rect.X + dx, rect.Y + dy, rect.Width, rect.Height);
             graphics.DrawString(text, -1, &font, layoutRect, &format, &brush);
         }
     }
 }
 
-void DrawUIText(Gdiplus::Graphics& graphics, LPCWSTR text, const Gdiplus::Font& font,
-                Gdiplus::REAL width, Gdiplus::REAL y, const Gdiplus::Color& textColor,
-                const Gdiplus::Color& shadowColor) {
-    graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAliasGridFit);
-    graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-    graphics.SetCompositingQuality(Gdiplus::CompositingQualityHighQuality);
+void DrawUIText(Gdi::Graphics& graphics, LPCWSTR text, const Gdi::Font& font,
+                const Gdi::RectF& rect, Gdi::StringAlignment horizontalAlign,
+                const Gdi::Color& textColor, const Gdi::Color& shadowColor) {
+    graphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAliasGridFit);
+    graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
+    graphics.SetCompositingQuality(Gdi::CompositingQualityHighQuality);
 
-    DrawShadow(graphics, text, font, width, y, shadowColor);
+    DrawUITextShadow(graphics, text, font, rect, horizontalAlign, shadowColor);
 
-    Gdiplus::SolidBrush textBrush(textColor);
-    Gdiplus::StringFormat format;
-    format.SetAlignment(Gdiplus::StringAlignmentCenter);
-    format.SetLineAlignment(Gdiplus::StringAlignmentNear);
-    Gdiplus::RectF layoutRect(0, y, width, 1000);
-    graphics.DrawString(text, -1, &font, layoutRect, &format, &textBrush);
+    Gdi::SolidBrush textBrush(textColor);
+    Gdi::StringFormat format;
+    format.SetAlignment(horizontalAlign);
+    format.SetLineAlignment(Gdi::StringAlignmentNear);
+    graphics.DrawString(text, -1, &font, rect, &format, &textBrush);
 }
 
 struct WH {

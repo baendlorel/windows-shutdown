@@ -82,7 +82,7 @@
     },
     {
       "type": "shell",
-      "label": "Create Output Directories",
+      "label": "C/C++: Create Output Directories",
       "command": "cmd",
       "args": [
         "/c",
@@ -93,7 +93,7 @@
     },
     {
       "type": "shell",
-      "label": "Compile Resource Files",
+      "label": "C/C++: Compile Resource Files",
       "command": "windres.exe",
       "args": [
         "--target=pe-x86-64",
@@ -110,11 +110,11 @@
     },
     {
       "type": "shell",
-      "label": "Full Build",
+      "label": "C/C++: Full Build",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Create Output Directories",
-        "Compile Resource Files",
+        "C/C++: Create Output Directories",
+        "C/C++: Compile Resource Files",
         "C/C++: Build Debug (GCC)"
       ],
       "group": {
