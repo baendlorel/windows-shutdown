@@ -26,6 +26,8 @@ enum class FadeState { None, FadingIn, FadingOut };
 #define CFG_INSTRUCTION_SHOW   "show"
 #define CFG_INSTRUCTION_HIDDEN "hidden"
 
+#define CFG_BACKGROUND_COLOR_DEFAULT "#34000000"  // ARGB same as macro BACKGROUND_COLOR below
+
 enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hidden };
 constexpr int CFG_DEFAULT_DELAY = 4;
@@ -81,8 +83,9 @@ constexpr float SHADOW_OFFSET[8][2] = {
 };
 
 // ui/colors
-#define BACKGROUND_COLOR       Gdiplus::Color(52, 0, 0, 0)
+#define DEFAULT_ALPHA          52
+#define BACKGROUND_COLOR       Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0)
 #define TEXT_COLOR             Gdiplus::Color(255, 255, 255, 255)
 #define TEXT_WARN_COLOR        Gdiplus::Color(255, 255, 193, 7)
 #define TEXT_SHADOW_COLOR      Gdiplus::Color(128, 0, 0, 0)
-#define BUTTON_HIGHLIGHT_COLOR Gdiplus::Color(52, 0, 0, 0)
+#define BUTTON_HIGHLIGHT_COLOR Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0)

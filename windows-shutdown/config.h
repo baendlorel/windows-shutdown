@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 // order below must be preserved
+#include <objidl.h>
+#include <gdiplus.h>
 #include "consts.h"
 
 struct Config {
@@ -10,7 +12,7 @@ struct Config {
     Action action;
     Instruction instruction;
     int delay;
-    short bgColor[4];  // ARGB , same as Gdiplus::Color
+    Gdiplus::Color bgColor;  // ARGB , same as Gdiplus::Color
     std::vector<ConfigWarning> warnings;
 
    public:

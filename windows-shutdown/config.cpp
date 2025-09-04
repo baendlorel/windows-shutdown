@@ -33,8 +33,8 @@ std::string DefaultConfigZh() {
 
     std::string bgColor = std::format(
         "# 背景色，格式为#RRGGBBAA或#RRGGBB，默认黑色半透明\n"
-        "{}=#52000000",
-        CFG_KEY_BACKGROUND_COLOR);
+        "{}={}",
+        CFG_KEY_BACKGROUND_COLOR, CFG_BACKGROUND_COLOR_DEFAULT);
 
     return std::format(
         "# 加载配置失败时会使用默认配置。\n"
@@ -77,8 +77,8 @@ std::string DefaultConfigEn() {
 
     std::string bgColor = std::format(
         "# Background color, format: #RRGGBBAA or #RRGGBB, default is black semi-transparent\n"
-        "{}=#52000000",
-        CFG_KEY_BACKGROUND_COLOR);
+        "{}={}",
+        CFG_KEY_BACKGROUND_COLOR, CFG_BACKGROUND_COLOR_DEFAULT);
 
     return std::format(
         "# When loading is failed, we will use default config values.\n"
@@ -119,9 +119,7 @@ Config::Config()
       action(Action::None),
       instruction(Instruction::Show),
       delay(CFG_DEFAULT_DELAY),
-      bgColor({
-          0,
-      }) {
+      bgColor(BACKGROUND_COLOR) {
     this->Load();
 }
 
@@ -217,10 +215,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
-                this->bgColor[0] = a;
-                this->bgColor[1] = r;
-                this->bgColor[2] = g;
-                this->bgColor[3] = b;
+                this->bgColor = Gdiplus::Color(a, r, g, b);
                 return ConfigWarning::None;
             } catch (...) {
                 return ConfigWarning::InvalidBackgroundColorValue;
@@ -232,10 +227,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
-                this->bgColor[0] = 0x32;  // default alpha
-                this->bgColor[1] = r;
-                this->bgColor[2] = g;
-                this->bgColor[3] = b;
+                this->bgColor = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
                 return ConfigWarning::None;
             } catch (...) {
                 return ConfigWarning::InvalidBackgroundColorValue;
