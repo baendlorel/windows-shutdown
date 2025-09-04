@@ -104,7 +104,8 @@ Config::Config()
     : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
       action(Action::None),
       instruction(Instruction::Show),
-      delay(CFG_DEFAULT_DELAY) {
+      delay(CFG_DEFAULT_DELAY),
+      bgColor(BACKGROUND_COLOR) {
     this->Load();
 }
 
@@ -131,6 +132,79 @@ std::string WStringToUtf8(const std::wstring& wstr) {
     WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), &strTo[0], size_needed, nullptr,
                         nullptr);
     return strTo;
+}
+
+void Config::LoadKeyValue(std::string& key, std::string& value) {
+    if (key == CFG_KEY_LANG) {
+        this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
+        return;
+    }
+
+    if (key == CFG_KEY_ACTION) {
+        if (value == CFG_ACTION_NONE) {
+            this->action = Action::None;
+            return;
+        }
+
+        if (value == CFG_ACTION_SLEEP) {
+            this->action = Action::Sleep;
+            return;
+        }
+
+        if (value == CFG_ACTION_SHUTDOWN) {
+            this->action = Action::Shutdown;
+            return;
+        }
+
+        if (value == CFG_ACTION_RESTART) {
+            this->action = Action::Restart;
+            return;
+        }
+
+        if (value == CFG_ACTION_LOCK) {
+            this->action = Action::Lock;
+            return;
+        }
+
+        this->action = Action::None;
+        return;
+    }
+
+    if (key == CFG_KEY_INSTRUCTION) {
+        this->instruction = value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
+        return;
+    }
+
+    if (key == CFG_KEY_DELAY) {
+        try {
+            this->delay = std::clamp(std::stoi(value), 0, 60);
+        } catch (const std::invalid_argument&) {
+            this->delay = CFG_DEFAULT_DELAY;
+        }
+        return;
+    }
+
+    if (key == CFG_KEY_BACKGROUND_COLOR) {
+        if (value.size() == 9 && value[0] == '#') {
+            try {
+                BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
+                BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
+                BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
+                BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
+                this->bgColor = Gdiplus::Color(a, r, g, b);
+            } catch (...) {
+            }
+        } else if (value.size() == 7 && value[0] == '#') {
+            try {
+                BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
+                BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
+                BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
+                this->bgColor = Gdiplus::Color(255, r, g, b);
+            } catch (...) {
+            }
+        }
+        return;
+    }
 }
 
 void Config::Load() {
@@ -174,32 +248,6 @@ void Config::Load() {
         }
         std::string key = trim(line.substr(0, eq));
         std::string value = trim(line.substr(eq + 1));
-
-        if (key == CFG_KEY_LANG) {
-            this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
-        } else if (key == CFG_KEY_ACTION) {
-            if (value == CFG_ACTION_NONE) {
-                this->action = Action::None;
-            } else if (value == CFG_ACTION_SLEEP) {
-                this->action = Action::Sleep;
-            } else if (value == CFG_ACTION_SHUTDOWN) {
-                this->action = Action::Shutdown;
-            } else if (value == CFG_ACTION_RESTART) {
-                this->action = Action::Restart;
-            } else if (value == CFG_ACTION_LOCK) {
-                this->action = Action::Lock;
-            } else {
-                this->action = Action::None;
-            }
-        } else if (key == CFG_KEY_INSTRUCTION) {
-            this->instruction =
-                value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
-        } else if (key == CFG_KEY_DELAY) {
-            try {
-                this->delay = std::clamp(std::stoi(value), 0, 60);
-            } catch (const std::invalid_argument&) {
-                this->delay = CFG_DEFAULT_DELAY;
-            }
-        }
+        this->LoadKeyValue(key, value);
     }
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+// order below must be preserved
+#include <gdiplus.h>
 #include "consts.h"
 
 struct Config {
@@ -8,6 +10,7 @@ struct Config {
     Action action;
     Instruction instruction;
     int delay;
+    Gdiplus::Color bgColor;
 
    public:
     Config();
@@ -20,4 +23,5 @@ struct Config {
 
    private:
     void Load();
+    void LoadKeyValue(std::string& key, std::string& value);
 };

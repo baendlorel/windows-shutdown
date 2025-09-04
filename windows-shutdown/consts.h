@@ -6,10 +6,11 @@ enum class Action { None, Sleep, Shutdown, Restart, Lock };
 enum class FadeState { None, FadingIn, FadingOut };
 
 // configs
-#define CFG_KEY_LANG        "language"
-#define CFG_KEY_ACTION      "action"
-#define CFG_KEY_DELAY       "delay"
-#define CFG_KEY_INSTRUCTION "instruction"
+#define CFG_KEY_LANG             "language"
+#define CFG_KEY_ACTION           "action"
+#define CFG_KEY_DELAY            "delay"
+#define CFG_KEY_INSTRUCTION      "instruction"
+#define CFG_KEY_BACKGROUND_COLOR "backgroundColor"
 
 #define CFG_LANG_ZH "zh"
 #define CFG_LANG_EN "en"
@@ -71,5 +72,6 @@ constexpr float SHADOW_OFFSET[8][2] = {
 // ui/colors
 #define BACKGROUND_COLOR       Gdiplus::Color(52, 0, 0, 0)
 #define TEXT_COLOR             Gdiplus::Color(255, 255, 255, 255)
+#define TEXT_WARN_COLOR        Gdiplus::Color(255, 255, 193, 7)
 #define TEXT_SHADOW_COLOR      Gdiplus::Color(128, 0, 0, 0)
 #define BUTTON_HIGHLIGHT_COLOR Gdiplus::Color(52, 0, 0, 0)
