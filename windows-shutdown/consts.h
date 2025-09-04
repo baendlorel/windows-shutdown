@@ -82,6 +82,10 @@ constexpr int BUTTON_CENTER_DISTANCE = 2 * BUTTON_RADIUS + BUTTON_GAP;
 constexpr int BUTTON_MARGIN_LEFT = 0;
 constexpr int BUTTON_MARGIN_TOP = -60;
 constexpr int BUTTON_MARGIN_BOTTOM = 45;
+
+// font styles
+constexpr int TEXT_SHADOW_RADIUS = 4;
+constexpr int TEXT_SHADOW_RADIUS_STEP = 1;
 constexpr int COUNT_DOWN_FONT_SIZE = 48;
 constexpr int INSTRUCTION_FONT_SIZE = 20;
 constexpr int FONT_OUTLINE_WIDTH = 3;

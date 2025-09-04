@@ -5,7 +5,6 @@
 #include "i18n.h"
 
 // fixme instruction跑到最顶上去了
-// fixme 点击按钮后按钮还在
 // fixme 文字缓存的bitmap缺了半行
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
@@ -131,7 +130,7 @@ void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
     format.SetAlignment(params.horizontalAlign);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
     Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
-    for (int radius = 4; radius >= 1; radius -= 1) {
+    for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
         int alpha = 80 / (radius + 1);
         brush.SetColor(Gdi::Color(alpha, params.shadowColor->GetR(), params.shadowColor->GetG(),
                                   params.shadowColor->GetB()));
@@ -160,6 +159,7 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
 }
 
 Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
+    // only wstring can be correctly hashed, while LPCWSTR cannot
     static std::unordered_map<std::wstring, Gdi::Bitmap*> cache;
     auto it = cache.find(params.text);
     if (it != cache.end()) {
@@ -177,9 +177,8 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
                            &boundingBox);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    const int shadowMargin = 8;
-    int bitmapWidth = static_cast<int>(boundingBox.Width) + shadowMargin * 2;
-    int bitmapHeight = static_cast<int>(boundingBox.Height) + shadowMargin * 2;
+    int bitmapWidth = static_cast<int>(boundingBox.Width) + TEXT_SHADOW_RADIUS * 2;
+    int bitmapHeight = static_cast<int>(boundingBox.Height) + TEXT_SHADOW_RADIUS * 2;
 
     // Create new bitmap
     Gdi::Bitmap* bitmap = new Gdi::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
@@ -193,19 +192,6 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
     // Clear bitmap background to transparent
     bitmapGraphics.Clear(Gdi::Color(0, 0, 0, 0));
 
-    // // Create draw params, adjust rect position to bitmap coordinates
-    // DrawTextParams bitmapParams = params;
-    // Gdi::RectF bitmapRect(shadowMargin, shadowMargin, boundingBox.Width, boundingBox.Height);
-    // bitmapParams.rect = &bitmapRect;
-
-    // // Draw shadow
-    // DrawTextParams shadowParams = bitmapParams.GetShadowVersion();
-    // DrawUITextShadow(bitmapGraphics, shadowParams);
-
-    // // Draw main text
-    // Gdi::SolidBrush brush(*bitmapParams.color);
-    // bitmapGraphics.DrawString(bitmapParams.text, -1, bitmapParams.font, bitmapRect, &format,
-    // &brush);
     DrawUIText(bitmapGraphics, params);
 
     // Store in cache
@@ -220,15 +206,14 @@ void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
         return;
     }
     // Calculate draw position (consider shadow margin)
-    const int shadowMargin = 8;
-    Gdi::REAL drawX = params.rect->X - shadowMargin;
-    Gdi::REAL drawY = params.rect->Y - shadowMargin;
+    Gdi::REAL drawX = params.rect->X - TEXT_SHADOW_RADIUS;
+    Gdi::REAL drawY = params.rect->Y - TEXT_SHADOW_RADIUS;
 
     // Adjust X position according to alignment
     if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
         drawX = params.rect->X + (params.rect->Width - cachedBitmap->GetWidth()) / 2;
     } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-        drawX = params.rect->X + params.rect->Width - cachedBitmap->GetWidth() + shadowMargin;
+        drawX = params.rect->X + params.rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
     }
 
     graphics.DrawImage(cachedBitmap, drawX, drawY);
