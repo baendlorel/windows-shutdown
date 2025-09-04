@@ -112,7 +112,11 @@
       "type": "shell",
       "label": "Full Build",
       "dependsOrder": "sequence",
-      "dependsOn": ["Create Output Directories", "Compile Resource Files", "C/C++: Build Debug"],
+      "dependsOn": [
+        "Create Output Directories",
+        "Compile Resource Files",
+        "C/C++: Build Debug (GCC)"
+      ],
       "group": {
         "kind": "build"
       },

@@ -2,13 +2,13 @@
 BasedOnStyle: Google
 
 # Indentation
-IndentWidth: 4          # Number of spaces per indentation level
+IndentWidth: 4 # Number of spaces per indentation level
 
 # Maximum line length
-ColumnLimit: 100        # Wrap lines longer than this limit
+ColumnLimit: 100 # Wrap lines longer than this limit
 
 # Include handling
-SortIncludes: false     # Disable automatic reordering of #include directives
+SortIncludes: false # Disable automatic reordering of #include directives
 IncludeBlocks: Preserve # Keep your original include blocks as-is
 
 # Optional: keep function pointers and lambdas formatting closer to Google style
@@ -16,3 +16,6 @@ AllowShortFunctionsOnASingleLine: false
 
 # Keep pointer alignment consistent
 PointerAlignment: Left
+
+AlignConsecutiveMacros: true
+AlignAfterOpenBracket: Align
