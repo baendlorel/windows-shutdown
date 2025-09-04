@@ -134,7 +134,7 @@ std::string WStringToUtf8(const std::wstring& wstr) {
     return strTo;
 }
 
-void Config::LoadKeyValue(std::string& key, std::string& value) {
+std::string Config::LoadKeyValue(std::string& key, std::string& value) {
     if (key == CFG_KEY_LANG) {
         this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
         return;

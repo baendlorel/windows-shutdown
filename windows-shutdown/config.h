@@ -23,5 +23,5 @@ struct Config {
 
    private:
     void Load();
-    void LoadKeyValue(std::string& key, std::string& value);
+    std::string LoadKeyValue(std::string& key, std::string& value);
 };
