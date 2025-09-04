@@ -46,9 +46,9 @@ void I18N::SetLang(Lang lang) {
         Sleep = ZH_SLEEP;
         Restart = ZH_RESTART;
         Lock = ZH_LOCK;
-        Waiting[0] = L"即将";
-        Waiting[1] = L"，剩余";
-        Waiting[2] = L"秒...";
+        Waiting[0] = L"距离";  // e.g. "距离关机还有"
+        Waiting[1] = L"还有";
+        Waiting[2] = L"秒...";  // kept for compatibility if needed elsewhere
     } else {
         FontFamilyName = L"Arial";
 
@@ -88,8 +88,9 @@ void I18N::SetLang(Lang lang) {
         Sleep = EN_SLEEP;
         Restart = EN_RESTART;
         Lock = EN_LOCK;
-        Waiting[0] = L"About to";
-        Waiting[1] = L", ";
+        // English: first line like "Time until shutdown"
+        Waiting[0] = L"Time until ";
+        Waiting[1] = L"";
         Waiting[2] = L" seconds left...";
     }
 }
@@ -143,8 +144,8 @@ std::wstring I18N::Wait(Action type, int seconds) const {
             actionWStr = L"Unknown Action";
             break;
     }
-    return this->Waiting[0] + actionWStr + this->Waiting[1] + std::to_wstring(seconds) +
-           this->Waiting[2];
+    // Return only the first-line text; seconds are drawn separately as a large centered number.
+    return this->Waiting[0] + actionWStr + this->Waiting[1];
 }
 
 Action I18N::FileNameToAction(const std::wstring& name) const {

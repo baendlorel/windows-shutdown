@@ -44,7 +44,7 @@ BOOL InitInstance(int) {
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
     appState.g_alpha = 0;
-    SetTimer(hWnd, FADEIN_TIMER_ID, FADEIN_INTERVAL, NULL);
+    SetTimer(hWnd, FADEIN_TIMER_ID, FRAME_TIME, NULL);
     return TRUE;
 }
 
@@ -55,7 +55,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     if (wParam == FADEIN_TIMER_ID) {
         appState.fadeState = FadeState::FadingIn;
         BYTE targetAlpha = 255;
-        int steps = FADEIN_DURATION / FADEIN_INTERVAL;
+        int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (targetAlpha + steps - 1) / steps;
         if (alpha < targetAlpha) {
             appState.g_alpha = (alpha + step > targetAlpha) ? targetAlpha : alpha + step;
@@ -69,7 +69,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
 
     if (wParam == FADEOUT_TIMER_ID) {
         appState.fadeState = FadeState::FadingOut;
-        int steps = FADEIN_DURATION / FADEIN_INTERVAL;
+        int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (255 + steps - 1) / steps;
         if (alpha > 0) {
             appState.g_alpha = (alpha < step) ? 0 : alpha - step;
@@ -122,7 +122,7 @@ void HandleKeydown(HWND hWnd) {
         return;
     }
     appState.fadeState = FadeState::FadingOut;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
 void HandleMoustMove(HWND hWnd, LPARAM lParam) {
@@ -181,7 +181,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
     }
     if (!hit && appState.fadeState == FadeState::None) {
         appState.fadeState = FadeState::FadingOut;
-        SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+        SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
 
@@ -192,7 +192,7 @@ void HandleCancel(HWND hWnd) {
     }
     if (appState.fadeState == FadeState::None) {
         appState.fadeState = FadeState::FadingOut;
-        SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+        SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
 
@@ -218,7 +218,7 @@ void TriggerImmediateAction(HWND hWnd) {
             return;
     }
     appState.fadeState = FadeState::FadingOut;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {

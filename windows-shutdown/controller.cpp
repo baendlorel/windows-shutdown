@@ -141,7 +141,7 @@ void TriggerLock(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     if (appState.fadeState != FadeState::None) return;
     appState.fadeState = FadeState::FadingOut;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     ExecuteLock();
 }
 
@@ -153,7 +153,7 @@ void TriggerConfig(HWND hWnd) {
         return;
     }
     appState.fadeState = FadeState::FadingOut;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FADEIN_INTERVAL, NULL);
+    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
 void ActionByFileName(const std::wstring& name) {

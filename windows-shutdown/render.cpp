@@ -5,7 +5,6 @@
 #include "i18n.h"
 
 // fixme instruction全部消失了
-// fixme 文字缓存的bitmap缺了半行——这是因为size算对了但是位置有偏移导致的
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
@@ -23,29 +22,43 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // Draw countdown in center
     if (appState.isCountingDown()) {
-        std::wstring countdownText = std::to_wstring(appState.countdownSeconds);
-        std::wstring fullText = i18n.Wait(appState.action, appState.countdownSeconds);
+        // First line: original style (left/right language preserved by i18n.Wait)
+        std::wstring firstLine = i18n.Wait(appState.action, appState.countdownSeconds);
+        // Second line: large centered numeric seconds
+        std::wstring secondLine = std::to_wstring(appState.countdownSeconds);
 
-        // Large font for countdown
-        Gdi::Font font(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleRegular);
+        // Fonts
+        Gdi::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleRegular);
+        Gdi::Font secondFont(&fontFamily, COUNT_DOWN_NUMBER_FONT_SIZE, Gdi::FontStyleRegular);
 
-        // Get text bounds for vertical centering
         Gdi::REAL rw = static_cast<Gdi::REAL>(w);
         Gdi::REAL rh = static_cast<Gdi::REAL>(h);
-        Gdi::RectF rect(0, rh * 0.382f, rw, rh);
-        DrawTextParams params = {.text = fullText,
-                                 .font = &font,
-                                 .rect = &rect,
-                                 .horizontalAlign = Gdi::StringAlignmentCenter,
-                                 .color = &colors.TextColor,
-                                 .shadowColor = &colors.TextShadowColor};
 
-        DrawUIText(graphics, params);
+        // Position first line a bit above center
+        Gdi::REAL y = rh * 0.36f;
+        Gdi::RectF firstRect(0, y, rw, rh);
+        DrawTextParams firstParams = {.text = firstLine,
+                                      .font = &firstFont,
+                                      .rect = &firstRect,
+                                      .horizontalAlign = Gdi::StringAlignmentCenter,
+                                      .color = &colors.TextColor,
+                                      .shadowColor = &colors.TextShadowColor};
+        DrawCachedUIText(graphics, firstParams);
 
+        // Position second (number) centered below the first line
+        Gdi::RectF secondRect(0, y + 60, rw, rh);
+        DrawTextParams secondParams = {.text = secondLine,
+                                       .font = &secondFont,
+                                       .rect = &secondRect,
+                                       .horizontalAlign = Gdi::StringAlignmentCenter,
+                                       .color = &colors.TextColor,
+                                       .shadowColor = &colors.TextShadowColor};
+        // & seconds cannot use cache since it changes every second
+        DrawUIText(graphics, secondParams);
+
+        // Draw cancel instruction below the number
         Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-        Gdi::RectF smallRect(0, rh / 2 + 40, rw, 1000);
-
-        // Draw cancel instruction with beautiful rendering
+        Gdi::RectF smallRect(0, y + 160, rw, rh);
         DrawTextParams smallParams = {.text = i18n.PressAnyKeyToCancel,
                                       .font = &smallFont,
                                       .rect = &smallRect,
