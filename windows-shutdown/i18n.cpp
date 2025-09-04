@@ -26,6 +26,14 @@ void I18N::SetLang(Lang lang) {
         PressAnyKeyToExit = L"按任意键或鼠标点击其他位置退出";
         PressAnyKeyToCancel = L"按任意键或鼠标点击取消";
 
+        // config warnings
+        InvalidLanguage = L"[language]不是预设值，应该是zh,en中的一个";
+        InvalidAction = L"[action]不是预设值，应该是none,sleep,shutdown,restart,lock中的一个";
+        InvalidInstruction = L"[instruction]不是预设值，应该是show,hidden中的一个";
+        InvalidDelay = L"[delay]不是有效数字";
+        InvalidBackgroundColorFormat = L"[backgroundColor]不是有效的#RRGGBBAA或#RRGGBB格式";
+        InvalidBackgroundColorValue = L"[backgroundColor]不是有效的颜色值";
+
         // actions
         Shutdown = ZH_SHUTDOWN;
         Sleep = ZH_SLEEP;
@@ -53,7 +61,15 @@ void I18N::SetLang(Lang lang) {
         ErrSleepFailed = L"System sleep failed! Sleep function may not be supported.";
         ErrTitle = L"Error";
         PressAnyKeyToExit = L"Press any key or click elsewhere to exit";
-        PressAnyKeyToCancel = L"Press any key or click to cancel";
+
+        // config warnings
+        InvalidLanguage = L"[language] is not valid, should be zh or en";
+        InvalidAction = L"[action] is not valid, should be one of none,sleep,shutdown,restart,lock";
+        InvalidInstruction = L"[instruction] is not valid, should be show or hidden";
+        InvalidDelay = L"[delay] is not a valid number";
+        InvalidBackgroundColorFormat =
+            L"[backgroundColor] is not valid #RRGGBBAA or #RRGGBB format";
+        InvalidBackgroundColorValue = L"[backgroundColor] is not a valid color value";
 
         // actions
         Shutdown = EN_SHUTDOWN;
@@ -64,6 +80,35 @@ void I18N::SetLang(Lang lang) {
         Waiting[1] = L", ";
         Waiting[2] = L" seconds left...";
     }
+}
+
+std::wstring I18N::GetConfigWarnings(const std::vector<ConfigWarning>& warnings) const {
+    std::wstring result;
+    for (const auto& warn : warnings) {
+        switch (warn) {
+            case ConfigWarning::InvalidLanguage:
+                result += InvalidLanguage + L"\n";
+                break;
+            case ConfigWarning::InvalidAction:
+                result += InvalidAction + L"\n";
+                break;
+            case ConfigWarning::InvalidInstruction:
+                result += InvalidInstruction + L"\n";
+                break;
+            case ConfigWarning::InvalidDelay:
+                result += InvalidDelay + L"\n";
+                break;
+            case ConfigWarning::InvalidBackgroundColorFormat:
+                result += InvalidBackgroundColorFormat + L"\n";
+                break;
+            case ConfigWarning::InvalidBackgroundColorValue:
+                result += InvalidBackgroundColorValue + L"\n";
+                break;
+            default:
+                break;
+        }
+    }
+    return result;
 }
 
 std::wstring I18N::Wait(Action type, int seconds) const {

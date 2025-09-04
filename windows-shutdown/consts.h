@@ -30,6 +30,17 @@ enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hidden };
 constexpr int CFG_DEFAULT_DELAY = 4;
 
+// config warnings
+enum class ConfigWarning {
+    None,
+    InvalidLanguage,
+    InvalidAction,
+    InvalidInstruction,
+    InvalidDelay,
+    InvalidBackgroundColorFormat,
+    InvalidBackgroundColorValue
+};
+
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms
 constexpr int FADEIN_DURATION = 120;  // ms

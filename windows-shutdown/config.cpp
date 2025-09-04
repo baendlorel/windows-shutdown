@@ -134,54 +134,64 @@ std::string WStringToUtf8(const std::wstring& wstr) {
     return strTo;
 }
 
-std::string Config::LoadKeyValue(std::string& key, std::string& value) {
+ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     if (key == CFG_KEY_LANG) {
-        this->lang = value == CFG_LANG_EN ? Lang::En : Lang::Zh;
-        return;
+        if (value == CFG_LANG_EN) {
+            this->lang = Lang::En;
+            return ConfigWarning::None;
+        }
+
+        if (value == CFG_LANG_ZH) {
+            this->lang = Lang::Zh;
+            return ConfigWarning::None;
+        }
+
+        return ConfigWarning::InvalidLanguage;
     }
 
     if (key == CFG_KEY_ACTION) {
         if (value == CFG_ACTION_NONE) {
             this->action = Action::None;
-            return;
+            return ConfigWarning::None;
         }
-
         if (value == CFG_ACTION_SLEEP) {
             this->action = Action::Sleep;
-            return;
+            return ConfigWarning::None;
         }
-
         if (value == CFG_ACTION_SHUTDOWN) {
             this->action = Action::Shutdown;
-            return;
+            return ConfigWarning::None;
         }
-
         if (value == CFG_ACTION_RESTART) {
             this->action = Action::Restart;
-            return;
+            return ConfigWarning::None;
         }
-
         if (value == CFG_ACTION_LOCK) {
             this->action = Action::Lock;
-            return;
+            return ConfigWarning::None;
         }
-
         this->action = Action::None;
-        return;
+        return ConfigWarning::InvalidAction;
     }
 
     if (key == CFG_KEY_INSTRUCTION) {
-        this->instruction = value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
-        return;
+        if (value == CFG_INSTRUCTION_SHOW || value == CFG_INSTRUCTION_HIDDEN) {
+            this->instruction =
+                value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
+            return static_cast<ConfigWarning>(-1);
+        } else {
+            return ConfigWarning::InvalidInstruction;
+        }
     }
 
     if (key == CFG_KEY_DELAY) {
         try {
             this->delay = std::clamp(std::stoi(value), 0, 60);
+            return ConfigWarning::None;
         } catch (const std::invalid_argument&) {
             this->delay = CFG_DEFAULT_DELAY;
+            return ConfigWarning::InvalidDelay;
         }
-        return;
     }
 
     if (key == CFG_KEY_BACKGROUND_COLOR) {
@@ -192,18 +202,25 @@ std::string Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
                 this->bgColor = Gdiplus::Color(a, r, g, b);
+                return ConfigWarning::None;
             } catch (...) {
+                return ConfigWarning::InvalidBackgroundColorValue;
             }
-        } else if (value.size() == 7 && value[0] == '#') {
+        }
+
+        if (value.size() == 7 && value[0] == '#') {
             try {
                 BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 this->bgColor = Gdiplus::Color(255, r, g, b);
+                return ConfigWarning::None;
             } catch (...) {
+                return ConfigWarning::InvalidBackgroundColorValue;
             }
         }
-        return;
+
+        return ConfigWarning::InvalidBackgroundColorFormat;
     }
 }
 

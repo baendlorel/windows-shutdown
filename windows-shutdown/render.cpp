@@ -42,6 +42,21 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         graphics.MeasureString(cancelText, -1, &smallFont, layoutRect, &format, &cancelBounds);
         Gdiplus::REAL cancelY = y + boundingBox.Height + 20;
         DrawUIText(graphics, cancelText, smallFont, rw, cancelY, TEXT_COLOR, TEXT_SHADOW_COLOR);
+    }
+
+    auto& warnings = appState.config.warnings;
+    if (!warnings.empty()) {
+        Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+        Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleRegular);
+        Gdiplus::REAL warnX = 10;
+        Gdiplus::REAL warnY = 10;
+        std::wstring warnText = i18n.GetConfigWarnings(warnings);
+        Gdiplus::RectF warnRect(warnX, warnY, static_cast<Gdiplus::REAL>(w) - 20, 1000);
+        Gdiplus::StringFormat warnFormat;
+        warnFormat.SetAlignment(Gdiplus::StringAlignmentNear);
+        warnFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
+        Gdiplus::SolidBrush warnBrush(TEXT_WARN_COLOR);
+        graphics.DrawString(warnText.c_str(), -1, &warnFont, warnRect, &warnFormat, &warnBrush);
     } else {
         // Draw image buttons (original logic)
         for (int i = 0; i < BUTTON_COUNT; ++i) {

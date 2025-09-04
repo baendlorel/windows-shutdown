@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "consts.h"
 
 #define EN_SHUTDOWN L"shutdown"
@@ -43,6 +44,16 @@ class I18N {
     std::wstring ErrTitle;
     std::wstring PressAnyKeyToExit;
     std::wstring PressAnyKeyToCancel;
+
+    // config warning messages
+    std::wstring InvalidLanguage;
+    std::wstring InvalidAction;
+    std::wstring InvalidInstruction;
+    std::wstring InvalidDelay;
+    std::wstring InvalidBackgroundColorFormat;
+    std::wstring InvalidBackgroundColorValue;
+
+    std::wstring GetConfigWarnings(const std::vector<ConfigWarning>& warnings) const;
 
     // actions
     std::wstring Shutdown;
