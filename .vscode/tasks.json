@@ -2,140 +2,42 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "CMake: Configure",
       "type": "shell",
-      "label": "C/C++: Build Debug (GCC)",
-      "command": "g++.exe",
-      "args": [
-        "-std=c++20",
-        "-finput-charset=UTF-8",
-        "-fexec-charset=UTF-8",
-        "-Wall",
-        "-Wextra",
-        "-g",
-        "-O0",
-        "-D_WINDOWS",
-        "-DUNICODE",
-        "-D_UNICODE",
-        "-mwindows",
-        "${workspaceFolder}/windows-shutdown/*.cpp",
-        "${workspaceFolder}/x64/Debug/windows-shutdown.o",
-        "-o",
-        "${workspaceFolder}/x64/Debug/windows-shutdown.exe",
-        "-luser32",
-        "-lgdi32",
-        "-lgdiplus",
-        "-lkernel32",
-        "-lshell32",
-        "-lcomctl32",
-        "-ladvapi32",
-        "-lole32",
-        "-lpowrprof"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/windows-shutdown"
-      },
-      "problemMatcher": ["$gcc"],
+      "command": "cmake",
+      "args": ["-S", "${workspaceFolder}", "-B", "${workspaceFolder}/build", "-G", "Ninja"],
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: Build",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build", "--config", "Debug"],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "detail": "Build Windows application using GCC compiler (Debug)"
+      "problemMatcher": []
     },
     {
+      "label": "CMake: Clean",
       "type": "shell",
-      "label": "C/C++: Build Release (GCC)",
-      "command": "g++.exe",
-      "args": [
-        "-std=c++20",
-        "-finput-charset=UTF-8",
-        "-fexec-charset=UTF-8",
-        "-Wall",
-        "-Wextra",
-        "-O2",
-        "-DNDEBUG",
-        "-D_WINDOWS",
-        "-DUNICODE",
-        "-D_UNICODE",
-        "-mwindows",
-        "${workspaceFolder}/windows-shutdown/*.cpp",
-        "${workspaceFolder}/x64/Debug/windows-shutdown.o",
-        "-o",
-        "${workspaceFolder}/x64/Release/windows-shutdown.exe",
-        "-luser32",
-        "-lgdi32",
-        "-lgdiplus",
-        "-lkernel32",
-        "-lshell32",
-        "-lcomctl32",
-        "-ladvapi32",
-        "-lole32",
-        "-lpowrprof"
-        // "./x64/Release/windows-shutdown.exe"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/windows-shutdown"
-      },
-      "problemMatcher": ["$gcc"],
-      "group": {
-        "kind": "build"
-      },
-      "detail": "Build Windows application using GCC compiler (Release)"
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build", "--target", "clean"],
+      "problemMatcher": []
     },
     {
-      "type": "shell",
-      "label": "C/C++: Create Output Directories",
-      "command": "cmd",
-      "args": [
-        "/c",
-        "if not exist \"${workspaceFolder}\\x64\\Debug\" mkdir \"${workspaceFolder}\\x64\\Debug\" && if not exist \"${workspaceFolder}\\x64\\Release\" mkdir \"${workspaceFolder}\\x64\\Release\""
-      ],
-      "group": "build",
-      "detail": "Create build output directories"
-    },
-    {
-      "type": "shell",
-      "label": "C/C++: Compile Resource Files",
-      "command": "windres.exe",
-      "args": [
-        "--target=pe-x86-64",
-        "-i",
-        "${workspaceFolder}/windows-shutdown/windows-shutdown.rc",
-        "-o",
-        "${workspaceFolder}/x64/Debug/windows-shutdown.o"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/windows-shutdown"
-      },
-      "group": "build",
-      "detail": "Compile resource files (MinGW compatible)"
-    },
-    {
-      "type": "shell",
-      "label": "C/C++: Full Debug Build",
+      "label": "CMake: Configure -> Build -> Run",
       "dependsOrder": "sequence",
-      "dependsOn": [
-        "C/C++: Create Output Directories",
-        "C/C++: Compile Resource Files",
-        "C/C++: Build Debug (GCC)"
-      ],
-      "group": {
-        "kind": "build"
-      },
-      "detail": "Full build including resource files"
-    },
-    {
+      "dependsOn": ["CMake: Configure", "CMake: Build"],
       "type": "shell",
-      "label": "C/C++: Full Build",
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "C/C++: Create Output Directories",
-        "C/C++: Compile Resource Files",
-        "C/C++: Build Release (GCC)"
-      ],
-      "group": {
-        "kind": "build"
+      "command": "${workspaceFolder}/build/windows-shutdown.exe",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
       },
-      "detail": "Full build including resource files"
+      "problemMatcher": []
     }
   ]
 }

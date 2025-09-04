@@ -67,8 +67,10 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                       .color = &colors.TextColor,
                                       .shadowColor = &colors.TextShadowColor};
         DrawCachedUIText(graphics, smallParams);
+        return;
     }
 
+    // Not counting down
     auto& warnings = appState.config.warnings;
     if (!warnings.empty()) {
         Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);

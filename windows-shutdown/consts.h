@@ -14,6 +14,8 @@ enum class Action { None, Sleep, Shutdown, Restart, Lock };
 enum class FadeState { None, FadingIn, FadingOut };
 
 // configs
+#define CFG_FILE_NAME L"config.txt"
+
 #define CFG_KEY_LANG             "language"
 #define CFG_KEY_ACTION           "action"
 #define CFG_KEY_DELAY            "delay"

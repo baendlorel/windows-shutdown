@@ -8,7 +8,7 @@
 #include <sstream>
 
 std::string DefaultConfigZh() {
-    // Create default config.ini
+    // Create default
     std::string lang = std::format(
         "# 可填：{}, {}。 默认值和系统语言相同\n"
         "{}={}",
@@ -52,7 +52,6 @@ std::string DefaultConfigZh() {
 }
 
 std::string DefaultConfigEn() {
-    // Create default config.ini
     std::string lang = std::format(
         "# Options: {}, {}. Default: same as your system\n"
         "{}={}",
@@ -133,7 +132,7 @@ std::wstring Config::GetConfigPath() {
     } else {
         path = L"";
     }
-    path += L"config.ini";
+    path += CFG_FILE_NAME;
     return path;
 }
 
