@@ -4,17 +4,9 @@
 #include "app-state.h"
 #include "i18n.h"
 
-DrawTextParams DrawTextParams::GetShadowVersion() {
-    return {.text = this->text,
-            .font = this->font,
-            .rect = this->rect,
-            .horizontalAlign = this->horizontalAlign,
-            .color = this->shadowColor,
-            .shadowColor = this->shadowColor};
-}
-
 // fixme instruction跑到最顶上去了
 // fixme 点击按钮后按钮还在
+// fixme 文字缓存的bitmap缺了半行
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
@@ -139,8 +131,8 @@ void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
     for (int radius = 4; radius >= 1; radius -= 1) {
         int alpha = 80 / (radius + 1);
-        brush.SetColor(
-            Gdi::Color(alpha, params.color->GetR(), params.color->GetG(), params.color->GetB()));
+        brush.SetColor(Gdi::Color(alpha, params.shadowColor->GetR(), params.shadowColor->GetG(),
+                                  params.shadowColor->GetB()));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
@@ -156,8 +148,7 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
     graphics.SetCompositingQuality(Gdi::CompositingQualityHighQuality);
 
-    DrawTextParams shadowParams = params.GetShadowVersion();
-    DrawUITextShadow(graphics, shadowParams);
+    DrawUITextShadow(graphics, params);
 
     Gdi::SolidBrush brush(*params.color);
     Gdi::StringFormat format;

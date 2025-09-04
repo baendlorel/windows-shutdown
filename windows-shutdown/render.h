@@ -9,8 +9,6 @@ struct DrawTextParams {
     Gdi::StringAlignment horizontalAlign;
     Gdi::Color* color;
     Gdi::Color* shadowColor;
-
-    DrawTextParams GetShadowVersion();
 };
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h);
