@@ -72,8 +72,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // Draw image buttons (original logic)
     for (int i = 0; i < BUTTON_COUNT; ++i) {
-        int x = appState.buttons[i].x - BUTTON_RADIUS + BUTTON_MARGIN_LEFT;
-        int y = appState.buttons[i].y - BUTTON_RADIUS + BUTTON_MARGIN_TOP;
+        int x = appState.buttons[i].x - BUTTON_RADIUS;
+        int y = appState.buttons[i].y - BUTTON_RADIUS;
 
         graphics.DrawImage(appState.buttons[i].png, x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
         // If hovered, overlay a semi-transparent white
@@ -165,8 +165,8 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
                            &boundingBox);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    int bitmapWidth = static_cast<int>(boundingBox.Width) + TEXT_SHADOW_RADIUS * 2;
-    int bitmapHeight = static_cast<int>(boundingBox.Height) + TEXT_SHADOW_RADIUS * 2;
+    int bitmapWidth = static_cast<int>(boundingBox.Width) + TEXT_SHADOW_RADIUS * 2 + 200;
+    int bitmapHeight = static_cast<int>(boundingBox.Height) + TEXT_SHADOW_RADIUS * 2 + 200;
 
     // Create new bitmap
     Gdi::Bitmap* bitmap = new Gdi::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
@@ -218,7 +218,7 @@ WH GetWH(HWND hWnd, AppState& appState) {
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
     for (short i = 0; i < 5; i++) {
-        appState.buttons[i].Center(w, h, i);
+        appState.buttons[i].Center(BUTTON_MARGIN_LEFT, BUTTON_MARGIN_TOP, w, h, i);
     }
     return {w, h};
 }

@@ -37,9 +37,17 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     this->png = image;
 }
 
-void ImageButton::Center(int w, int h, int index) {
+void ImageButton::Center(int marginLeft, int marginTop, int w, int h, int index) {
     int centerX = w / 2;
     int centerY = h / 2;
-    this->x = centerX + BUTTON_CENTER_DISTANCE * (index - 2);
-    this->y = centerY;
+    this->x = centerX + BUTTON_CENTER_DISTANCE * (index - 2) + marginLeft;
+    this->y = centerY + marginTop;
+}
+
+bool ImageButton::MouseHit(int mx, int my) const {
+    // Account for the same margins used when rendering the button so that
+    // hit testing uses the visual center rather than the stored center.
+    int dx = mx - this->x;
+    int dy = my - this->y;
+    return (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
 }
