@@ -4,8 +4,8 @@
 #include "app-state.h"
 #include "i18n.h"
 
-// fixme instruction跑到最顶上去了
-// fixme 文字缓存的bitmap缺了半行
+// fixme instruction全部消失了
+// fixme 文字缓存的bitmap缺了半行——这是因为size算对了但是位置有偏移导致的
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
@@ -165,8 +165,8 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
                            &boundingBox);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    int bitmapWidth = static_cast<int>(boundingBox.Width) + TEXT_SHADOW_RADIUS * 2 + 200;
-    int bitmapHeight = static_cast<int>(boundingBox.Height) + TEXT_SHADOW_RADIUS * 2 + 200;
+    int bitmapWidth = static_cast<int>(boundingBox.Width) + TEXT_SHADOW_RADIUS * 2;
+    int bitmapHeight = static_cast<int>(boundingBox.Height) + TEXT_SHADOW_RADIUS * 2;
 
     // Create new bitmap
     Gdi::Bitmap* bitmap = new Gdi::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
@@ -189,19 +189,23 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
 }
 
 void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
+    Gdi::RectF* originRect = params.rect;
+    params.rect = params.rect->Clone();
+    params.rect->X = 0;
+    params.rect->Y = 0;
     Gdi::Bitmap* cachedBitmap = UITextToBitmap(graphics, params);
     if (!cachedBitmap) {
         return;
     }
     // Calculate draw position (consider shadow margin)
-    Gdi::REAL drawX = params.rect->X - TEXT_SHADOW_RADIUS;
-    Gdi::REAL drawY = params.rect->Y - TEXT_SHADOW_RADIUS;
+    Gdi::REAL drawX = originRect->X - TEXT_SHADOW_RADIUS;
+    Gdi::REAL drawY = originRect->Y - TEXT_SHADOW_RADIUS;
 
     // Adjust X position according to alignment
     if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
-        drawX = params.rect->X + (params.rect->Width - cachedBitmap->GetWidth()) / 2;
+        drawX = originRect->X + (originRect->Width - cachedBitmap->GetWidth()) / 2;
     } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-        drawX = params.rect->X + params.rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
+        drawX = originRect->X + originRect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
     }
 
     graphics.DrawImage(cachedBitmap, drawX, drawY);
