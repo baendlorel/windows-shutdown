@@ -61,6 +61,21 @@ target_link_libraries(windows-shutdown PRIVATE
 
 # Output directories
 set_target_properties(windows-shutdown PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}/x64/Debug
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/x64/Release
+        # Keep legacy props for multi-config generators (Visual Studio)
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}/x64/Debug
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/x64/Release
 )
+
+# For single-config generators (Ninja/Make), set a common runtime output directory
+# inside the build directory (common practice: keep build artifacts under the build tree).
+if(NOT CMAKE_CONFIGURATION_TYPES)
+    # Use build/bin for runtime artifacts for clarity
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+else()
+    # For multi-config generators use generator expressions to put binaries under build/bin/<config>
+    set_target_properties(windows-shutdown PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release
+    )
+endif()
