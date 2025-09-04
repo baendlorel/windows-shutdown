@@ -1,4 +1,7 @@
 #pragma once
+// order below must be preserved
+#include <objidl.h>
+#include <gdiplus.h>
 
 // util
 // 2-step macro to expand macro value
@@ -92,9 +95,9 @@ constexpr float SHADOW_OFFSET[8][2] = {
 };
 
 // ui/colors
-#define DEFAULT_ALPHA          52
-#define BACKGROUND_COLOR       Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0)
-#define TEXT_COLOR             Gdiplus::Color(255, 255, 255, 255)
-#define TEXT_WARN_COLOR        Gdiplus::Color(255, 255, 193, 7)
-#define TEXT_SHADOW_COLOR      Gdiplus::Color(128, 0, 0, 0)
-#define BUTTON_HIGHLIGHT_COLOR Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0)
+#define DEFAULT_ALPHA 52
+Gdiplus::Color BACKGROUND_COLOR(DEFAULT_ALPHA, 0, 0, 0);
+Gdiplus::Color TEXT_COLOR(255, 255, 255, 255);
+Gdiplus::Color TEXT_WARN_COLOR(255, 255, 193, 7);
+Gdiplus::Color TEXT_SHADOW_COLOR(128, 0, 0, 0);
+Gdiplus::Color BUTTON_HIGHLIGHT_COLOR(DEFAULT_ALPHA, 0, 0, 0);

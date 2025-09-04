@@ -3,6 +3,15 @@
 #include "app-state.h"
 #include "i18n.h"
 
+DrawTextParams DrawTextParams::GetShadowVersion() {
+    return {.text = this->text,
+            .font = this->font,
+            .rect = this->rect,
+            .horizontalAlign = this->horizontalAlign,
+            .color = this->shadowColor,
+            .shadowColor = this->shadowColor};
+}
+
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
@@ -35,8 +44,14 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Draw main text with beautiful rendering
         Gdi::RectF mainTextRect(0, y, rw, boundingBox.Height);
-        DrawUIText(graphics, fullText, font, mainTextRect, Gdi::StringAlignmentCenter, TEXT_COLOR,
-                   TEXT_SHADOW_COLOR);
+        DrawTextParams params = {.text = fullText,
+                                 .font = &font,
+                                 .rect = &mainTextRect,
+                                 .horizontalAlign = Gdi::StringAlignmentCenter,
+                                 .color = &TEXT_COLOR,
+                                 .shadowColor = &TEXT_SHADOW_COLOR};
+
+        DrawUIText(graphics, params);
 
         // Draw cancel instruction with beautiful rendering
         Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
@@ -45,8 +60,14 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         graphics.MeasureString(cancelText, -1, &smallFont, layoutRect, &format, &cancelBounds);
         Gdi::REAL cancelY = y + boundingBox.Height + 20;
         Gdi::RectF cancelTextRect(0, cancelY, rw, cancelBounds.Height);
-        DrawUIText(graphics, cancelText, smallFont, cancelTextRect, Gdi::StringAlignmentCenter,
-                   TEXT_COLOR, TEXT_SHADOW_COLOR);
+
+        DrawTextParams smallParams = {.text = cancelText,
+                                      .font = &smallFont,
+                                      .rect = &cancelTextRect,
+                                      .horizontalAlign = Gdi::StringAlignmentCenter,
+                                      .color = &TEXT_COLOR,
+                                      .shadowColor = &TEXT_SHADOW_COLOR};
+        DrawUIText(graphics, smallParams);
     }
 
     auto& warnings = appState.config.warnings;
@@ -54,8 +75,13 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         LPCWSTR warnText = i18n.GetConfigWarnings(warnings).c_str();
         Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
         Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w - 20, 1000);
-        DrawUIText(graphics, warnText, warnFont, warnRect, Gdi::StringAlignmentNear,
-                   TEXT_WARN_COLOR, TEXT_SHADOW_COLOR);
+        DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings).c_str(),
+                                     .font = &warnFont,
+                                     .rect = &warnRect,
+                                     .horizontalAlign = Gdi::StringAlignmentCenter,
+                                     .color = &TEXT_COLOR,
+                                     .shadowColor = &TEXT_SHADOW_COLOR};
+        DrawUIText(graphics, warnParams);
     }
 
     // Draw image buttons (original logic)
@@ -90,43 +116,51 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // Draw text with beautiful rendering
     Gdi::RectF instrRect(0, textY, rw, textBounds.Height);
-    DrawUIText(graphics, instr, font, instrRect, Gdi::StringAlignmentCenter, TEXT_COLOR,
-               TEXT_SHADOW_COLOR);
+
+    DrawTextParams instrParams = {.text = instr,
+                                  .font = &font,
+                                  .rect = &layoutRect,
+                                  .horizontalAlign = Gdi::StringAlignmentCenter,
+                                  .color = &TEXT_COLOR,
+                                  .shadowColor = &TEXT_SHADOW_COLOR};
+    DrawUIText(graphics, instrParams);
 }
 
-void DrawUITextShadow(Gdi::Graphics& graphics, LPCWSTR text, const Gdi::Font& font,
-                      const Gdi::RectF& rect, Gdi::StringAlignment horizontalAlign,
-                      const Gdi::Color& color) {
+void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::StringFormat format;
-    format.SetAlignment(horizontalAlign);
+    format.SetAlignment(params.horizontalAlign);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
     Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
     for (int radius = 4; radius >= 1; radius -= 1) {
         int alpha = 80 / (radius + 1);
-        brush.SetColor(Gdi::Color(alpha, color.GetR(), color.GetG(), color.GetB()));
+        brush.SetColor(
+            Gdi::Color(alpha, params.color->GetR(), params.color->GetG(), params.color->GetB()));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
-            Gdi::RectF layoutRect(rect.X + dx, rect.Y + dy, rect.Width, rect.Height);
-            graphics.DrawString(text, -1, &font, layoutRect, &format, &brush);
+            Gdi::RectF rect(params.rect->X + dx, params.rect->Y + dy, params.rect->Width,
+                            params.rect->Height);
+            graphics.DrawString(params.text, -1, params.font, rect, &format, &brush);
         }
     }
 }
 
-void DrawUIText(Gdi::Graphics& graphics, LPCWSTR text, const Gdi::Font& font,
-                const Gdi::RectF& rect, Gdi::StringAlignment horizontalAlign,
-                const Gdi::Color& textColor, const Gdi::Color& shadowColor) {
+void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     graphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAliasGridFit);
     graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
     graphics.SetCompositingQuality(Gdi::CompositingQualityHighQuality);
 
-    DrawUITextShadow(graphics, text, font, rect, horizontalAlign, shadowColor);
+    DrawTextParams shadowParams = params.GetShadowVersion();
+    DrawUITextShadow(graphics, shadowParams);
 
-    Gdi::SolidBrush textBrush(textColor);
+    Gdi::SolidBrush brush(*params.color);
     Gdi::StringFormat format;
-    format.SetAlignment(horizontalAlign);
+    format.SetAlignment(params.horizontalAlign);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
-    graphics.DrawString(text, -1, &font, rect, &format, &textBrush);
+    graphics.DrawString(params.text, -1, params.font, *params.rect, &format, &brush);
+}
+
+Gdi::Bitmap CacheUIText() {
 }
 
 struct WH {
