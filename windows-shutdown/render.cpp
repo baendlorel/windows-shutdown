@@ -73,7 +73,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     auto& warnings = appState.config.warnings;
     if (!warnings.empty()) {
         Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-        Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w - 20, 1000);
+        Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
         DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings),
                                      .font = &warnFont,
                                      .rect = &warnRect,
@@ -163,8 +163,9 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
     format.SetAlignment(params.horizontalAlign);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
 
+    Gdi::RectF measuredRect(0, 0, params.rect->Width, params.rect->Height);
     Gdi::RectF box;
-    graphics.MeasureString(params.text.c_str(), -1, params.font, *params.rect, &format, &box);
+    graphics.MeasureString(params.text.c_str(), -1, params.font, measuredRect, &format, &box);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
     int bitmapWidth = static_cast<int>(box.Width) + TEXT_SHADOW_RADIUS * 2;
@@ -182,6 +183,7 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
     // Clear bitmap background to transparent
     bitmapGraphics.Clear(Gdi::Color(0, 0, 0, 0));
 
+    params.rect = &measuredRect;
     DrawUIText(bitmapGraphics, params);
 
     // Store in cache
@@ -191,23 +193,20 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
 }
 
 void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
-    Gdi::RectF* originRect = params.rect;
-    params.rect = params.rect->Clone();
-    params.rect->X = 0;
-    params.rect->Y = 0;
+    Gdi::RectF* rect = params.rect;
     Gdi::Bitmap* cachedBitmap = UITextToBitmap(graphics, params);
     if (!cachedBitmap) {
         return;
     }
     // Calculate draw position (consider shadow margin)
-    Gdi::REAL drawX = originRect->X - TEXT_SHADOW_RADIUS;
-    Gdi::REAL drawY = originRect->Y - TEXT_SHADOW_RADIUS;
+    Gdi::REAL drawX = rect->X - TEXT_SHADOW_RADIUS;
+    Gdi::REAL drawY = rect->Y - TEXT_SHADOW_RADIUS;
 
     // Adjust X position according to alignment
     if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
-        drawX = originRect->X + (originRect->Width - cachedBitmap->GetWidth()) / 2;
+        drawX = rect->X + (rect->Width - cachedBitmap->GetWidth()) / 2;
     } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-        drawX = originRect->X + originRect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
+        drawX = rect->X + rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
     }
 
     graphics.DrawImage(cachedBitmap, drawX, drawY);
