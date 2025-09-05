@@ -140,7 +140,9 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
 
     Gdi::SolidBrush brush(*params.color);
     Gdi::StringFormat format;
-    format.SetAlignment(params.horizontalAlign);
+    // & Better to be handled in DrawCachedUIText
+    // format.SetAlignment(params.horizontalAlign);
+    format.SetAlignment(Gdi::StringAlignmentNear);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
     graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
 }
@@ -199,9 +201,9 @@ void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
 
     // Adjust X position according to alignment
     if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
-        drawX = rect->X + (rect->Width - cachedBitmap->GetWidth()) / 2;
+        drawX = rect->X + rect->Width / 2;
     } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-        drawX = rect->X + rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
+        drawX = rect->X + rect->Width + TEXT_SHADOW_RADIUS;
     }
 
     graphics.DrawImage(cachedBitmap, drawX, drawY);
