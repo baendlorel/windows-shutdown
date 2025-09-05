@@ -4,7 +4,6 @@
 
 #include "Resource.h"
 #include "app-state.h"
-#include "consts.h"
 #include "controller.h"
 #include "framework.h"
 #include "render.h"

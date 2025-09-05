@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "consts.h"
+#include "consts/configure.h"
+#include "consts/state.h"
+#include "consts/util.h"
 
 #define EN_SHUTDOWN L"shutdown"
 #define EN_SLEEP    L"sleep"

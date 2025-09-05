@@ -1,6 +1,6 @@
 ﻿#include "Resource.h"
 #include "app-state.h"
-#include "consts.h"
+#include "consts/effects.h"
 #include "i18n.h"
 #include "controller.h"
 #include "framework.h"

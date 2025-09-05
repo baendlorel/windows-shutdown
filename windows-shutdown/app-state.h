@@ -1,8 +1,7 @@
 #pragma once
 #include "Resource.h"
-#include "config.h"
-#include "consts.h"
 #include "framework.h"
+#include "config.h"
 #include "image-button.h"
 
 class AppState {
@@ -19,30 +18,29 @@ class AppState {
     AppState(AppState&&) = delete;
     AppState& operator=(AppState&&) = delete;
 
-    HINSTANCE hInst;
+    HINSTANCE hInst = nullptr;
 
     // size
-    int screenW;
-    int screenH;
+    int screenW = 0;
+    int screenH = 0;
 
     // effects
-    unsigned char g_alpha;
+    FadeState fadeState = FadeState::None;
+    unsigned char g_alpha = 0;
 
     // buttons
-    short hoveredIndex;
+    short hoveredIndex = -1;
 
     // actions
-    Action action;
-    short countdownSeconds;
+    Action action = Action::None;
+    short countdownSeconds = 0;
 
     // ui
-    WCHAR szTitle[MAX_LOADSTRING];
-    WCHAR szWindowClass[MAX_LOADSTRING];
+    WCHAR szTitle[MAX_LOADSTRING] = L"";
+    WCHAR szWindowClass[MAX_LOADSTRING] = L"";
 
     Config config;
     ImageButton buttons[BUTTON_COUNT];
-
-    FadeState fadeState = FadeState::None;
 
     bool isCountingDown() const {
         return action != Action::None;
@@ -54,36 +52,8 @@ class AppState {
         return action == Action::Sleep;
     }
 
-    std::wstring GetExeName() const {
-        wchar_t exePath[MAX_PATH] = {0};
-        GetModuleFileNameW(NULL, exePath, MAX_PATH);
-        std::wstring path(exePath);
-        size_t pos = path.find_last_of(L"\\/");
-        if (pos != std::wstring::npos) {
-            return path.substr(pos + 1);
-        }
-        return L"";
-    }
-
    private:
     AppState() {
-        this->hInst = nullptr;
-        this->screenW = 0;
-        this->screenH = 0;
-
-        // fade settings
-        this->g_alpha = 0;
-        this->fadeState = FadeState::None;
-
-        // buttons and actions
-        this->hoveredIndex = -1;
-        this->action = Action::None;
-        this->countdownSeconds = 0;
-
-        // window info
-        this->szTitle[0] = L'\0';
-        this->szWindowClass[0] = L'\0';
-
         // buttons
         this->buttons[static_cast<int>(Button::Config)].resId = IDB_CONFIGPNG;
         this->buttons[static_cast<int>(Button::Lock)].resId = IDB_LOCKPNG;

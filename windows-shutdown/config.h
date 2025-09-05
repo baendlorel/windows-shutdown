@@ -4,7 +4,11 @@
 // order below must be preserved
 #include <objidl.h>
 #include <gdiplus.h>
-#include "consts.h"
+
+// consts
+#include "consts/configure.h"
+#include "consts/state.h"
+#include "consts/color-set.h"
 
 struct Config {
    public:

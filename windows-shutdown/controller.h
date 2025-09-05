@@ -1,6 +1,7 @@
 #pragma once
 #include "framework.h"
-#include "consts.h"
+#include "consts/state.h"
+#include "consts/effects.h"
 
 void ExecuteRestart();
 

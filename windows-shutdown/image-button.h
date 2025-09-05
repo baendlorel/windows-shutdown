@@ -1,6 +1,8 @@
 #pragma once
 #include "framework.h"
-#include "consts.h"
+
+// consts
+#include "consts/button-style.h"
 
 struct ImageButton {
     int x = 0;
