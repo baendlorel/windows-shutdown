@@ -4,7 +4,7 @@
 #include "app-state.h"
 #include "i18n.h"
 
-// fixme instruction全部消失了
+// fixme instruction全部消失了——是alignCenter的问题！
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
@@ -29,14 +29,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Fonts
         Gdi::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleRegular);
-        Gdi::Font secondFont(&fontFamily, COUNT_DOWN_NUMBER_FONT_SIZE, Gdi::FontStyleRegular);
-
-        Gdi::REAL rw = static_cast<Gdi::REAL>(w);
-        Gdi::REAL rh = static_cast<Gdi::REAL>(h);
-
         // Position first line a bit above center
-        Gdi::REAL y = rh * 0.36f;
-        Gdi::RectF firstRect(0, y, rw, rh);
+        Gdi::REAL y = h * 0.36f;
+        Gdi::RectF firstRect(0, y, w, h);
         DrawTextParams firstParams = {.text = firstLine,
                                       .font = &firstFont,
                                       .rect = &firstRect,
@@ -46,7 +41,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         DrawCachedUIText(graphics, firstParams);
 
         // Position second (number) centered below the first line
-        Gdi::RectF secondRect(0, y + 60, rw, rh);
+        Gdi::Font secondFont(&fontFamily, COUNT_DOWN_NUMBER_FONT_SIZE, Gdi::FontStyleBold);
+        Gdi::RectF secondRect(0, y + 60, w, h);
         DrawTextParams secondParams = {.text = secondLine,
                                        .font = &secondFont,
                                        .rect = &secondRect,
@@ -58,7 +54,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Draw cancel instruction below the number
         Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-        Gdi::RectF smallRect(0, y + 160, rw, rh);
+        Gdi::RectF smallRect(0, y + 160, w, h);
         DrawTextParams smallParams = {.text = i18n.PressAnyKeyToCancel,
                                       .font = &smallFont,
                                       .rect = &smallRect,
@@ -101,14 +97,13 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // Draw instruction text below buttons
     Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-    LPCWSTR instr = i18n.PressAnyKeyToExit.c_str();
     // Below buttons with some margin
-    int textY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
+    int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
 
     // Draw text with beautiful rendering
-    Gdi::RectF instrRect(0, static_cast<Gdi::REAL>(textY), w, h);
+    Gdi::RectF instrRect(0, instrY, w, h);
 
-    DrawTextParams instrParams = {.text = instr,
+    DrawTextParams instrParams = {.text = i18n.PressAnyKeyToExit,
                                   .font = &font,
                                   .rect = &instrRect,
                                   .horizontalAlign = Gdi::StringAlignmentCenter,
