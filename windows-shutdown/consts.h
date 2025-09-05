@@ -36,7 +36,7 @@ enum class FadeState { None, FadingIn, FadingOut };
 #define CFG_INSTRUCTION_SHOW   "show"
 #define CFG_INSTRUCTION_HIDDEN "hidden"
 
-#define CFG_BACKGROUND_COLOR_DEFAULT "#34000000"  // ARGB same as macro BACKGROUND_COLOR below
+#define CFG_BACKGROUND_COLOR_DEFAULT "#00000034"  // ARGB same as macro BACKGROUND_COLOR below
 
 enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hidden };
@@ -53,14 +53,14 @@ enum class ConfigWarning {
     InvalidBackgroundColorValue
 };
 
-#define CFG_WARNING_X         40
-#define CFG_WARNING_Y         40
-#define CFG_WARNING_FONT_SIZE 16
+constexpr int CFG_WARNING_X = 40;
+constexpr int CFG_WARNING_Y = 40;
+constexpr int CFG_WARNING_FONT_SIZE = 16;
 
 // effects
 constexpr int MAX_LOADSTRING = 100;   // ms
-constexpr int FADEIN_DURATION = 180;  // ms
-constexpr int FRAME_TIME = 33;  // & It is no need to be 10, since 30 fps(33ms/frame) is enough
+constexpr int FADEIN_DURATION = 200;  // ms
+constexpr int FRAME_TIME = 20;  // & It is no need to be 10, since 30 fps(33ms/frame) is enough
 constexpr int FADEIN_TIMER_ID = 1001;
 constexpr int FADEOUT_TIMER_ID = 1002;
 constexpr int COUNTDOWN_TIMER_ID = 1003;  // New timer for countdown
@@ -88,8 +88,8 @@ constexpr int BUTTON_MARGIN_BOTTOM = 45;
 constexpr int BUTTON_CENTER_DISTANCE = 2 * BUTTON_RADIUS + BUTTON_GAP;
 
 // font styles
-constexpr int TEXT_SHADOW_RADIUS = 4;
-constexpr int TEXT_SHADOW_RADIUS_STEP = 1;
+constexpr int TEXT_SHADOW_RADIUS = 8;
+constexpr int TEXT_SHADOW_RADIUS_STEP = 2;
 constexpr int COUNT_DOWN_FONT_SIZE = 48;
 // font size for the large seconds number on the second line
 constexpr int COUNT_DOWN_NUMBER_FONT_SIZE = 64;

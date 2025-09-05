@@ -12,7 +12,7 @@ struct Config {
     Action action;
     Instruction instruction;
     int delay;
-    Gdiplus::Color bgColor;  // ARGB , same as Gdiplus::Color
+    Gdiplus::Color backgroundColor;  // ARGB , same as Gdiplus::Color
     std::vector<ConfigWarning> warnings;
 
    public:

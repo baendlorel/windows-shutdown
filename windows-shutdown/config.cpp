@@ -118,7 +118,7 @@ Config::Config()
       action(Action::None),
       instruction(Instruction::Show),
       delay(CFG_DEFAULT_DELAY),
-      bgColor(ColorSet::GetInstance().BackgroundColor) {
+      backgroundColor(ColorSet::GetInstance().BackgroundColor) {
     this->Load();
 }
 
@@ -214,7 +214,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
-                this->bgColor = Gdiplus::Color(a, r, g, b);
+                this->backgroundColor = Gdiplus::Color(a, r, g, b);
                 return ConfigWarning::None;
             } catch (...) {
                 return ConfigWarning::InvalidBackgroundColorValue;
@@ -226,7 +226,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
-                this->bgColor = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
+                this->backgroundColor = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
                 return ConfigWarning::None;
             } catch (...) {
                 return ConfigWarning::InvalidBackgroundColorValue;

@@ -12,7 +12,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& colors = ColorSet::GetInstance();
 
     static Gdi::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-    static Gdi::SolidBrush bgBrush(colors.BackgroundColor);
+    static Gdi::SolidBrush bgBrush(appState.config.backgroundColor);
 
     Gdi::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
@@ -68,7 +68,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     // Not counting down
     auto& warnings = appState.config.warnings;
     if (!warnings.empty()) {
-        Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
+        Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
         Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
         DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings),
                                      .font = &warnFont,
@@ -96,7 +96,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     }
 
     // Draw instruction text below buttons
-    Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
+    Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
     // Below buttons with some margin
     int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
 
@@ -114,7 +114,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
 void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::StringFormat format;
-    format.SetAlignment(params.horizontalAlign);
+    // & Better to be handled in DrawCachedUIText, here we always use near
+    format.SetAlignment(Gdi::StringAlignmentNear);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
     Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
@@ -140,7 +141,7 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
 
     Gdi::SolidBrush brush(*params.color);
     Gdi::StringFormat format;
-    // & Better to be handled in DrawCachedUIText
+    // & Better to be handled in DrawCachedUIText, here we always use near
     // format.SetAlignment(params.horizontalAlign);
     format.SetAlignment(Gdi::StringAlignmentNear);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
@@ -196,14 +197,16 @@ void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
         return;
     }
     // Calculate draw position (consider shadow margin)
-    Gdi::REAL drawX = rect->X - TEXT_SHADOW_RADIUS;
-    Gdi::REAL drawY = rect->Y - TEXT_SHADOW_RADIUS;
+    Gdi::REAL drawX = rect->X;
+    Gdi::REAL drawY = rect->Y;
 
     // Adjust X position according to alignment
     if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
-        drawX = rect->X + rect->Width / 2;
+        drawX += (rect->Width - cachedBitmap->GetWidth()) / 2 + TEXT_SHADOW_RADIUS;
     } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-        drawX = rect->X + rect->Width + TEXT_SHADOW_RADIUS;
+        drawX += rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
+    } else if (params.horizontalAlign == Gdi::StringAlignmentNear) {
+        drawX += -TEXT_SHADOW_RADIUS;
     }
 
     graphics.DrawImage(cachedBitmap, drawX, drawY);
