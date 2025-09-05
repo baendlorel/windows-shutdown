@@ -102,25 +102,15 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     // Draw instruction text below buttons
     Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
     LPCWSTR instr = i18n.PressAnyKeyToExit.c_str();
-
-    Gdi::REAL rw = static_cast<Gdi::REAL>(w);
-    Gdi::REAL rh = static_cast<Gdi::REAL>(h);
-    Gdi::RectF layoutRect(0, 0, rw, rh);
-    Gdi::RectF textBounds;
-    Gdi::StringFormat format;
-    format.SetAlignment(Gdi::StringAlignmentCenter);
-    graphics.MeasureString(instr, -1, &font, layoutRect, &format, &textBounds);
-
     // Below buttons with some margin
-    Gdi::REAL textY =
-        static_cast<Gdi::REAL>((h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
+    int textY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
 
     // Draw text with beautiful rendering
-    Gdi::RectF instrRect(0, textY, rw, textBounds.Height);
+    Gdi::RectF instrRect(0, static_cast<Gdi::REAL>(textY), w, h);
 
     DrawTextParams instrParams = {.text = instr,
                                   .font = &font,
-                                  .rect = &layoutRect,
+                                  .rect = &instrRect,
                                   .horizontalAlign = Gdi::StringAlignmentCenter,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
@@ -173,14 +163,12 @@ Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
     format.SetAlignment(params.horizontalAlign);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
 
-    Gdi::RectF measureRect(0, 0, params.rect->Width, params.rect->Height);
-    Gdi::RectF boundingBox;
-    graphics.MeasureString(params.text.c_str(), -1, params.font, measureRect, &format,
-                           &boundingBox);
+    Gdi::RectF box;
+    graphics.MeasureString(params.text.c_str(), -1, params.font, *params.rect, &format, &box);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    int bitmapWidth = static_cast<int>(boundingBox.Width) + TEXT_SHADOW_RADIUS * 2;
-    int bitmapHeight = static_cast<int>(boundingBox.Height) + TEXT_SHADOW_RADIUS * 2;
+    int bitmapWidth = static_cast<int>(box.Width) + TEXT_SHADOW_RADIUS * 2;
+    int bitmapHeight = static_cast<int>(box.Height) + TEXT_SHADOW_RADIUS * 2;
 
     // Create new bitmap
     Gdi::Bitmap* bitmap = new Gdi::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
