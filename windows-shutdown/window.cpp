@@ -44,6 +44,9 @@ BOOL InitInstance(int) {
     UpdateWindow(hWnd);
     appState.g_alpha = 0;
     SetTimer(hWnd, FADEIN_TIMER_ID, FRAME_TIME, NULL);
+    // If the config requests immediate action, trigger it after the window
+    // has been created and shown to avoid running actions during CreateWindow.
+    TriggerImmediateAction(hWnd);
     return TRUE;
 }
 
@@ -221,13 +224,6 @@ void TriggerImmediateAction(HWND hWnd) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    static bool immedateTriggered = false;
-    if (!immedateTriggered) {
-        TriggerImmediateAction(hWnd);
-        immedateTriggered = true;
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-
     switch (message) {
         case WM_TIMER:
             HandleTimer(hWnd, wParam);
