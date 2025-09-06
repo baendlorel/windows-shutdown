@@ -1,9 +1,9 @@
 #include "render.h"
 #include <format>
-#include <unordered_map>
 
 #include "app-state.h"
 #include "i18n.h"
+#include "ui.h"
 
 std::wstring FormatTime(int seconds) {
     int h = seconds / 3600;
@@ -11,8 +11,9 @@ std::wstring FormatTime(int seconds) {
     int s = seconds % 60;
     return std::format(L"{:02}:{:02}:{:02}", h, m, s);
 }
+
 // #region Drawing Pages
-void DrawWarning(Gdi::Graphics& graphics, int w, int h) {
+void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& warnings = AppState::GetInstance().config.warnings;
     if (warnings.empty()) {
         return;
@@ -20,39 +21,39 @@ void DrawWarning(Gdi::Graphics& graphics, int w, int h) {
 
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
-    static Gdi::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+    static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
 
-    Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
-    Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
+    Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+    Gdiplus::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
     DrawTextParams warnParams = {.text = i18n.GetConfigWarningText(warnings),
                                  .font = &warnFont,
                                  .rect = &warnRect,
-                                 .horizontalAlign = Gdi::StringAlignmentNear,
+                                 .horizontalAlign = Gdiplus::StringAlignmentNear,
                                  .color = &colors.TextWarnColor,
                                  //  .color = &colors.TextDangerColor,
                                  .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, warnParams);
 }
 
-void DrawInstruction(Gdi::Graphics& graphics, Gdi::RectF* rect, const std::wstring& text) {
+void DrawInstruction(Gdiplus::Graphics& graphics, Gdiplus::RectF* rect, const std::wstring& text) {
     static bool showInstruction = AppState::GetInstance().config.instruction == Instruction::Show;
     if (!showInstruction) {
         return;
     }
 
     static auto& colors = ColorSet::GetInstance();
-    static Gdi::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());
-    static Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
+    static Gdiplus::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());
+    static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
     DrawTextParams instrParams = {.text = text,
                                   .font = &font,
                                   .rect = rect,
-                                  .horizontalAlign = Gdi::StringAlignmentCenter,
+                                  .horizontalAlign = Gdiplus::StringAlignmentCenter,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, instrParams);
 }
 
-void DrawCountdown(Gdi::Graphics& graphics, int w, int h) {
+void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& appState = AppState::GetInstance();
     if (!appState.isCountingDown()) {
         return;
@@ -61,22 +62,21 @@ void DrawCountdown(Gdi::Graphics& graphics, int w, int h) {
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
 
-    static Gdi::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-    static Gdi::SolidBrush bgBrush(appState.config.backgroundColor);
-    static auto* mono = Gdi::FontFamily::GenericMonospace();
+    static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+    static auto* mono = Gdiplus::FontFamily::GenericMonospace();
 
     // First line: original style (left/right language preserved by i18n.Wait)
     std::wstring firstLine = i18n.Wait(appState.action, appState.countdownSeconds);
 
     // Fonts
-    Gdi::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleBold);
+    Gdiplus::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdiplus::FontStyleBold);
     // Position first line a bit above center
-    Gdi::REAL y = h * 0.36f;
-    Gdi::RectF firstRect(0, y, w, h);
+    Gdiplus::REAL y = h * 0.36f;
+    Gdiplus::RectF firstRect(0, y, w, h);
     DrawTextParams firstParams = {.text = firstLine,
                                   .font = &firstFont,
                                   .rect = &firstRect,
-                                  .horizontalAlign = Gdi::StringAlignmentCenter,
+                                  .horizontalAlign = Gdiplus::StringAlignmentCenter,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, firstParams);
@@ -84,24 +84,24 @@ void DrawCountdown(Gdi::Graphics& graphics, int w, int h) {
     // Second line: large centered numeric seconds
     std::wstring secondLine = FormatTime(appState.countdownSeconds) + i18n.Waiting[2];
     // Position second (number) centered below the first line
-    Gdi::Font secondFont(mono, COUNT_DOWN_NUMBER_FONT_SIZE, Gdi::FontStyleBold);
-    Gdi::RectF secondRect(0, y + 140, w, h);
+    Gdiplus::Font secondFont(mono, COUNT_DOWN_NUMBER_FONT_SIZE, Gdiplus::FontStyleBold);
+    Gdiplus::RectF secondRect(0, y + 140, w, h);
     DrawTextParams secondParams = {.text = secondLine,
                                    .font = &secondFont,
                                    .rect = &secondRect,
                                    .manualAlign = false,
-                                   .horizontalAlign = Gdi::StringAlignmentCenter,
+                                   .horizontalAlign = Gdiplus::StringAlignmentCenter,
                                    .color = &colors.TextWarnColor,
                                    .shadowColor = &colors.TextShadowColor};
     // & seconds cannot use cache since it changes every second
     DrawUIText(graphics, secondParams);
 
     // Draw cancel instruction below the number
-    Gdi::RectF smallRect(0, y + 300, w, h);
+    Gdiplus::RectF smallRect(0, y + 300, w, h);
     DrawInstruction(graphics, &smallRect, i18n.PressAnyKeyToCancel);
 }
 
-void DrawButtons(Gdi::Graphics& graphics, int w, int h) {
+void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
@@ -114,7 +114,7 @@ void DrawButtons(Gdi::Graphics& graphics, int w, int h) {
         graphics.DrawImage(appState.buttons[i].png, x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
         // If hovered, overlay a semi-transparent white
         if (i == appState.hoveredIndex) {
-            Gdi::SolidBrush highlightBrush(colors.ButtonHighlightColor);
+            Gdiplus::SolidBrush highlightBrush(colors.ButtonHighlightColor);
             graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
                                  BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2,
                                  BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2);
@@ -123,17 +123,17 @@ void DrawButtons(Gdi::Graphics& graphics, int w, int h) {
 
     // Draw exit instruction below buttons
     int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
-    Gdi::RectF instrRect(0, instrY, w, h);
+    Gdiplus::RectF instrRect(0, instrY, w, h);
     DrawInstruction(graphics, &instrRect, i18n.PressAnyKeyToExit);
 }
 // #endregion
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
-    static Gdi::SolidBrush bgBrush(AppState::GetInstance().config.backgroundColor);
+    static Gdiplus::SolidBrush bgBrush(AppState::GetInstance().config.backgroundColor);
 
-    Gdi::Graphics graphics(hdcMem);
-    graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
-    graphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAlias);
+    Gdiplus::Graphics graphics(hdcMem);
+    graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+    graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
     // * These functions will decide internally whether to draw based on current state
@@ -144,114 +144,6 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     DrawButtons(graphics, w, h);
 }
-
-// #region Basic methods
-void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
-    Gdi::StringFormat format;
-    auto align = params.manualAlign ? Gdi::StringAlignmentNear : params.horizontalAlign;
-    // & Better to be handled in DrawCachedUIText, here we always use near
-    format.SetAlignment(align);
-    format.SetLineAlignment(Gdi::StringAlignmentNear);
-    Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
-    for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
-        int alpha = 80 / (radius + 1);
-        brush.SetColor(Gdi::Color(alpha, params.shadowColor->GetR(), params.shadowColor->GetG(),
-                                  params.shadowColor->GetB()));
-        for (int i = 0; i < 8; i++) {
-            float dx = SHADOW_OFFSET[i][0] * radius;
-            float dy = SHADOW_OFFSET[i][1] * radius;
-            Gdi::RectF rect(params.rect->X + dx, params.rect->Y + dy, params.rect->Width,
-                            params.rect->Height);
-            graphics.DrawString(params.text.c_str(), -1, params.font, rect, &format, &brush);
-        }
-    }
-}
-
-void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
-    graphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAliasGridFit);
-    graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
-    graphics.SetCompositingQuality(Gdi::CompositingQualityHighQuality);
-
-    DrawUITextShadow(graphics, params);
-
-    Gdi::SolidBrush brush(*params.color);
-    Gdi::StringFormat format;
-    // & Better to be handled in DrawCachedUIText, here we always use near
-    // format.SetAlignment(params.horizontalAlign);
-    auto align = params.manualAlign ? Gdi::StringAlignmentNear : params.horizontalAlign;
-    format.SetAlignment(align);
-    format.SetLineAlignment(Gdi::StringAlignmentNear);
-    graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
-}
-
-Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
-    // Cache for rendered UI text bitmaps
-    static std::unordered_map<std::wstring, Gdi::Bitmap*> cache;
-
-    // only wstring can be correctly hashed, while LPCWSTR cannot
-    auto it = cache.find(params.text);
-    if (it != cache.end()) {
-        return it->second;
-    }
-
-    // Measure text size to determine bitmap dimensions
-    Gdi::StringFormat format;
-    format.SetAlignment(params.horizontalAlign);
-    format.SetLineAlignment(Gdi::StringAlignmentNear);
-
-    Gdi::RectF measuredRect(0, 0, params.rect->Width, params.rect->Height);
-    Gdi::RectF box;
-    graphics.MeasureString(params.text.c_str(), -1, params.font, measuredRect, &format, &box);
-
-    // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    int bitmapWidth = static_cast<int>(box.Width) + TEXT_SHADOW_RADIUS * 2;
-    int bitmapHeight = static_cast<int>(box.Height) + TEXT_SHADOW_RADIUS * 2;
-
-    // Create new bitmap
-    Gdi::Bitmap* bitmap = new Gdi::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
-    Gdi::Graphics bitmapGraphics(bitmap);
-
-    // Set high quality rendering
-    bitmapGraphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAliasGridFit);
-    bitmapGraphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
-    bitmapGraphics.SetCompositingQuality(Gdi::CompositingQualityHighQuality);
-
-    // Clear bitmap background to transparent
-    bitmapGraphics.Clear(Gdi::Color(0, 0, 0, 0));
-
-    params.rect = &measuredRect;
-    DrawUIText(bitmapGraphics, params);
-
-    // Store in cache
-    cache[params.text] = bitmap;
-
-    return bitmap;
-}
-
-void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
-    Gdi::RectF* rect = params.rect;
-    Gdi::Bitmap* cachedBitmap = UITextToBitmap(graphics, params);
-    if (!cachedBitmap) {
-        return;
-    }
-    // Calculate draw position (consider shadow margin)
-    Gdi::REAL drawX = rect->X;
-    Gdi::REAL drawY = rect->Y;
-
-    // Adjust X position according to alignment
-    if (params.manualAlign) {
-        if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
-            drawX += (rect->Width - cachedBitmap->GetWidth()) / 2 + TEXT_SHADOW_RADIUS;
-        } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-            drawX += rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
-        } else if (params.horizontalAlign == Gdi::StringAlignmentNear) {
-            drawX += -TEXT_SHADOW_RADIUS;
-        }
-    }
-
-    graphics.DrawImage(cachedBitmap, drawX, drawY);
-}
-// #endregion
 
 struct WH {
     int w;
@@ -274,7 +166,7 @@ void UpdateLayered(HWND hWnd) {
     static WH wh = GetWH(hWnd, appState);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
-    // BITMAPINFO bmi = {0};
+
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = wh.w;
