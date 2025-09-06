@@ -10,13 +10,14 @@ IDB_LOCKPNG             PNG                     "assets\\lock.png"
 IDB_SLEEPPNG            PNG                     "assets\\sleep.png"
 IDB_DONATEENPNG         PNG                     "assets\\donate-en.png"
 IDB_DONATEZHPNG         PNG                     "assets\\donate-zh.jpg"
+IDB_DONATEPNG           PNG                     "assets\\donate.png"
 
 /////////////////////////////////////////////////////////////////////////////
 // Icon
-IDI_MAINICON            ICON                    "icons\\shutdown-icon.ico"
-IDI_RESTARTICON         ICON                    "icons\\restart-icon.ico"
-IDI_LOCKICON            ICON                    "icons\\lock-icon.ico"
-IDI_SLEEPICON           ICON                    "icons\\sleep-icon.ico"
+IDI_MAINICON            ICON                    "icons\\icon-shutdown.ico"
+IDI_RESTARTICON         ICON                    "icons\\icon-restart.ico"
+IDI_LOCKICON            ICON                    "icons\\icon-lock.ico"
+IDI_SLEEPICON           ICON                    "icons\\icon-sleep.ico"
 /////////////////////////////////////////////////////////////////////////////
 // String Table
 STRINGTABLE

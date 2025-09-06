@@ -1,8 +1,8 @@
 from PIL import Image
 from pathlib import Path
 
-# English comments required: script finds all PNG files that end with
-# "-icon.png" under the assets directory and writes same-named .ico files
+# English comments required: script finds all PNG files that start with
+# "icon-" under the assets directory and writes same-named .ico files
 # containing multiple standard icon sizes.
 
 SIZES = [(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)]
@@ -28,7 +28,7 @@ def main() -> None:
 		print(f"Assets directory not found: {assets}")
 		return
 
-	pattern = '*-icon.png'
+	pattern = 'icon-*.png'
 	files = list(assets.glob(pattern))
 	if not files:
 		print(f"No files matching {pattern} in {assets}")
