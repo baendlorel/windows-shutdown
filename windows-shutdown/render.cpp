@@ -75,8 +75,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
                                      .font = &warnFont,
                                      .rect = &warnRect,
                                      .horizontalAlign = Gdi::StringAlignmentNear,
-                                     //  .color = &colors.TextWarnColor,
-                                     .color = &colors.TextDangerColor,
+                                     .color = &colors.TextWarnColor,
+                                     //  .color = &colors.TextDangerColor,
                                      .shadowColor = &colors.TextShadowColor};
         DrawCachedUIText(graphics, warnParams);
     }

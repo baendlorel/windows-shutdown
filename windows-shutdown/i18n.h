@@ -48,6 +48,7 @@ class I18N {
     std::wstring PressAnyKeyToCancel;
 
     // config warning messages
+    std::wstring InvalidConfig;
     std::wstring InvalidLanguage;
     std::wstring InvalidAction;
     std::wstring InvalidInstruction;

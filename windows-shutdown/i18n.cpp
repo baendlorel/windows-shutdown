@@ -28,12 +28,13 @@ void I18N::SetLang(Lang lang) {
         PressAnyKeyToCancel = L"按任意键或鼠标点击取消";
 
         // config warnings
-        InvalidLanguage = std::format(L"配置项[{}]的值无效，应该是{},{}中的一个",
-                                      WIDEN(CFG_KEY_LANG), WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN));
-        InvalidAction = std::format(L"配置项[{}]的值无效，应该是{}中的一个", WIDEN(CFG_KEY_ACTION),
+        InvalidConfig = L"config.txt 配置文件里有无效配置：";
+        InvalidLanguage = std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个", WIDEN(CFG_KEY_LANG),
+                                      WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN));
+        InvalidAction = std::format(L"[{}]的值无效，应该是\"{}\"中的一个", WIDEN(CFG_KEY_ACTION),
                                     WIDEN(CFG_ACTION_SOME));
         InvalidInstruction =
-            std::format(L"配置项[{}]的值无效，应该是{}, {}中的一个", WIDEN(CFG_KEY_INSTRUCTION),
+            std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个", WIDEN(CFG_KEY_INSTRUCTION),
                         WIDEN(CFG_INSTRUCTION_SHOW), WIDEN(CFG_INSTRUCTION_HIDDEN));
         InvalidDelay = std::format(L"[{}]不是有效数字", WIDEN(CFG_KEY_DELAY));
         InvalidBackgroundColorFormat =
@@ -70,6 +71,7 @@ void I18N::SetLang(Lang lang) {
         PressAnyKeyToExit = L"Press any key or click elsewhere to exit";
 
         // config warnings
+        InvalidConfig = L"Configuration file has some invalid values:";
         InvalidLanguage = std::format(L"[{}] is not valid, should be {} or {}", WIDEN(CFG_KEY_LANG),
                                       WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN));
         InvalidAction = std::format(L"[{}] is not valid, should be one of {}",
@@ -96,7 +98,7 @@ void I18N::SetLang(Lang lang) {
 }
 
 std::wstring I18N::GetConfigWarnings(const std::vector<ConfigWarning>& warnings) const {
-    std::wstring result;
+    std::wstring result = this->InvalidConfig + L"\n";
     for (const auto& warn : warnings) {
         switch (warn) {
             case ConfigWarning::InvalidLanguage:
