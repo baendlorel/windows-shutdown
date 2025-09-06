@@ -61,11 +61,10 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
 
     if (wParam == FADEIN_TIMER_ID) {
         appState.fadeState = FadeState::FadingIn;
-        BYTE targetAlpha = 255;
         int steps = FADEIN_DURATION / FRAME_TIME;
-        BYTE step = (targetAlpha + steps - 1) / steps;
-        if (alpha < targetAlpha) {
-            appState.g_alpha = (alpha + step > targetAlpha) ? targetAlpha : alpha + step;
+        BYTE step = (TARGET_ALPHA + steps - 1) / steps;
+        if (alpha < TARGET_ALPHA) {
+            appState.g_alpha = (alpha + step > TARGET_ALPHA) ? TARGET_ALPHA : alpha + step;
             UpdateLayered(hWnd);
             return;
         }
@@ -77,7 +76,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     if (wParam == FADEOUT_TIMER_ID) {
         appState.fadeState = FadeState::FadingOut;
         int steps = FADEIN_DURATION / FRAME_TIME;
-        BYTE step = (255 + steps - 1) / steps;
+        BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha > 0) {
             appState.g_alpha = (alpha < step) ? 0 : alpha - step;
             UpdateLayered(hWnd);
@@ -211,22 +210,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         case WM_PAINT:
             UpdateLayered(hWnd);
             break;
-        case WM_KEYDOWN:
-        case WM_SYSKEYDOWN:
-            HandleKeydown(hWnd);
-            break;
-        case WM_MOUSEMOVE:
-            HandleMoustMove(hWnd, lParam);
-            break;
-        case WM_LBUTTONDOWN:
-        case WM_RBUTTONDOWN:
-            HandleLeftClick(hWnd, lParam);
-            break;
         case WM_CLOSE:
             HandleCancel(hWnd);
             break;
         case WM_DESTROY:
             PostQuitMessage(0);
+            break;
+        case WM_MOUSEMOVE:
+            HandleMoustMove(hWnd, lParam);
+            break;
+        case WM_KEYDOWN:
+        case WM_SYSKEYDOWN:
+            if (AppState::GetInstance().fadeState == FadeState::None) {
+                HandleKeydown(hWnd);
+            }
+            break;
+        case WM_LBUTTONDOWN:
+        case WM_RBUTTONDOWN:
+            if (AppState::GetInstance().fadeState == FadeState::None) {
+                HandleLeftClick(hWnd, lParam);
+            }
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
