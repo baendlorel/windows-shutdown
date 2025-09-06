@@ -14,7 +14,7 @@ std::string DefaultConfigZh() {
         "{}={}",
         CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
 
-    std::string mode = std::format(
+    std::string action = std::format(
         "# 可填： \n"
         "# - {}（默认）：显示菜单，可以点击要做的操作\n"
         "# - {}：延迟之后直接执行操作\n"
@@ -48,7 +48,7 @@ std::string DefaultConfigZh() {
         "{}\n"
         "\n"
         "{}\n",
-        lang, mode, instruction, delay, bgColor);
+        lang, action, delay, instruction, delay, bgColor);
 }
 
 std::string DefaultConfigEn() {
@@ -57,7 +57,7 @@ std::string DefaultConfigEn() {
         "{}={}",
         CFG_LANG_ZH, CFG_LANG_EN, CFG_KEY_LANG, CFG_LANG_ZH);
 
-    std::string mode = std::format(
+    std::string action = std::format(
         "# Options: \n"
         "# - {} : (Default)show menu to choose an action\n"
         "# - {} : After delayed seconds, do it instantly\n"
@@ -91,7 +91,7 @@ std::string DefaultConfigEn() {
         "{}\n"
         "\n"
         "{}\n",
-        lang, mode, instruction, delay, bgColor);
+        lang, action, delay, instruction, delay, bgColor);
 }
 
 std::string trim(const std::string& s) {

@@ -27,7 +27,7 @@
 
 enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hide };
-constexpr int CFG_DEFAULT_DELAY = 4;
+constexpr int CFG_DEFAULT_DELAY = 3;
 
 // config warnings
 enum class ConfigWarning {
