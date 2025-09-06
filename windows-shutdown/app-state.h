@@ -1,6 +1,7 @@
 #pragma once
-#include "Resource.h"
+#include "resource.h"
 #include "framework.h"
+#include "consts/effects.h"
 #include "config.h"
 #include "image-button.h"
 

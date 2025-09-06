@@ -1,10 +1,10 @@
-﻿#include "Resource.h"
+﻿#include "framework.h"
+#include "resource.h"
 #include "app-state.h"
-#include "consts/effects.h"
 #include "i18n.h"
 #include "controller.h"
-#include "framework.h"
 #include "window.h"
+#include "consts/effects.h"
 
 // msvc use: int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 //  _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)

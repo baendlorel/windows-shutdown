@@ -2,7 +2,7 @@
 
 #include <thread>
 
-#include "Resource.h"
+#include "resource.h"
 #include "app-state.h"
 #include "controller.h"
 #include "framework.h"

@@ -1,5 +1,7 @@
 #pragma once
 #include "framework.h"
+#include "consts/font-style.h"
+
 namespace Gdi = Gdiplus;
 
 struct DrawTextParams {
