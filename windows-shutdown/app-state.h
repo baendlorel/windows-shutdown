@@ -45,13 +45,16 @@ class AppState {
     std::vector<ImageButton> buttons;
 
     bool isCountingDown() const {
-        return action != Action::None;
-    }
-    bool isRestartCountdown() const {
-        return action == Action::Restart;
-    }
-    bool isSleepCountdown() const {
-        return action == Action::Sleep;
+        switch (action) {
+            case Action::Restart:
+                return true;
+            case Action::Sleep:
+                return true;
+            case Action::Shutdown:
+                return true;
+            default:
+                return false;
+        }
     }
 
    private:

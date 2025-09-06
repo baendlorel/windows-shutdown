@@ -97,24 +97,25 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
         }
 
         CancelCountdown(hWnd);
-        if (appState.isSleepCountdown()) {
-            // Close the program first, then sleep
-            PostMessage(hWnd, WM_CLOSE, 0, 0);
-            // Use a separate thread to handle sleep after window closes
-            std::thread([]() {
-                Sleep(500);  // Give time for window to close
-                ExecuteSleep();
-            }).detach();
-            return;
+        switch (appState.action) {
+            case Action::Sleep:
+                // Close the program first, then sleep
+                PostMessage(hWnd, WM_CLOSE, 0, 0);
+                // Use a separate thread to handle sleep after window closes
+                std::thread([]() {
+                    Sleep(500);  // Give time for window to close
+                    ExecuteSleep();
+                }).detach();
+                return;
+            case Action::Restart:
+                ExecuteRestart();
+                return;
+            case Action::Shutdown:
+                ExecuteShutdown();
+                return;
+            default:
+                break;
         }
-
-        if (appState.isRestartCountdown()) {
-            ExecuteRestart();
-            return;
-        }
-
-        ExecuteShutdown();
-        return;
     }
 }
 
