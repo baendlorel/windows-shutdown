@@ -1,12 +1,12 @@
 #include "image-button.h"
 #include "i18n.h"
 
-ImageButton::ImageButton(int resId, Button kind) {
+ImageButton::ImageButton(int resId, Action action) {
     this->x = 0;
     this->y = 0;
     this->png = nullptr;
     this->resId = resId;
-    this->kind = kind;
+    this->action = action;
 }
 
 void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
@@ -45,11 +45,10 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     this->png = image;
 }
 
-void ImageButton::Center(int marginLeft, int marginTop, int w, int h, int index) {
+void ImageButton::Center(int marginLeft, int marginTop, int w, int h) {
     int centerX = w / 2;
     int centerY = h / 2;
-    int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (index - 0.5f * (BUTTON_COUNT - 1)));
-    this->x = centerX + delta + marginLeft;
+    this->x = centerX + marginLeft;
     this->y = centerY + marginTop;
 }
 

@@ -166,20 +166,24 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
             continue;
         }
         hit = true;
-        switch (static_cast<Button>(i)) {
-            case Button::Config:
+        // todo 编写donate功能
+        switch (appState.buttons[i].action) {
+            case Action::Donate:
                 TriggerConfig(hWnd);
                 break;
-            case Button::Lock:
+            case Action::Config:
+                TriggerConfig(hWnd);
+                break;
+            case Action::Lock:
                 TriggerLock(hWnd);
                 break;
-            case Button::Sleep:
+            case Action::Sleep:
                 TriggerSleep(hWnd);
                 break;
-            case Button::Restart:
+            case Action::Restart:
                 TriggerRestart(hWnd);
                 break;
-            case Button::Shutdown:
+            case Action::Shutdown:
                 TriggerShutdown(hWnd);
                 break;
         }

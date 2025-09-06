@@ -56,11 +56,11 @@ class AppState {
 
    private:
     AppState() {
-        this->buttons.push_back(ImageButton(IDB_DONATEPNG, Button::Donate));
-        this->buttons.push_back(ImageButton(IDB_CONFIGPNG, Button::Config));
-        this->buttons.push_back(ImageButton(IDB_LOCKPNG, Button::Lock));
-        this->buttons.push_back(ImageButton(IDB_SLEEPPNG, Button::Sleep));
-        this->buttons.push_back(ImageButton(IDB_RESTARTPNG, Button::Restart));
-        this->buttons.push_back(ImageButton(IDB_SHUTDOWNPNG, Button::Shutdown));
+        this->buttons.push_back(ImageButton(IDB_DONATEPNG, Action::Donate));
+        this->buttons.push_back(ImageButton(IDB_CONFIGPNG, Action::Config));
+        this->buttons.push_back(ImageButton(IDB_LOCKPNG, Action::Lock));
+        this->buttons.push_back(ImageButton(IDB_SLEEPPNG, Action::Sleep));
+        this->buttons.push_back(ImageButton(IDB_RESTARTPNG, Action::Restart));
+        this->buttons.push_back(ImageButton(IDB_SHUTDOWNPNG, Action::Shutdown));
     }
 };

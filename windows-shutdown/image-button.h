@@ -7,7 +7,7 @@
 
 struct ImageButton {
    public:
-    Button kind;
+    Action action;
 
     int x;
     int y;
@@ -16,11 +16,11 @@ struct ImageButton {
     Gdiplus::Bitmap* png;
 
    public:
-    ImageButton(int resId, Button kind);
+    ImageButton(int resId, Action action);
 
     void LoadPNGFromResource(HINSTANCE hInst);
 
-    void Center(int marginLeft, int marginTop, int w, int h, int index);
+    void Center(int marginLeft, int marginTop, int w, int h);
 
     bool MouseHit(int mx, int my) const;
 };

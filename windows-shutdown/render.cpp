@@ -150,8 +150,12 @@ WH GetWH(HWND hWnd, AppState& appState) {
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
-    for (short i = 0; i < appState.buttons.size(); i++) {
-        appState.buttons[i].Center(BUTTON_MARGIN_LEFT, BUTTON_MARGIN_TOP, w, h, i);
+    int buttonCount = static_cast<int>(appState.buttons.size());
+    float centerIndex = (buttonCount - 1) * 0.5f;
+
+    for (short i = 0; i < buttonCount; i++) {
+        int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (i - centerIndex));
+        appState.buttons[i].Center(BUTTON_MARGIN_LEFT, BUTTON_MARGIN_TOP, w, h);
     }
     return {w, h};
 }
