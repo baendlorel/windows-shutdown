@@ -235,7 +235,7 @@ WH GetWH(HWND hWnd, AppState& appState) {
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
-    for (short i = 0; i < 5; i++) {
+    for (short i = 0; i < BUTTON_COUNT; i++) {
         appState.buttons[i].Center(BUTTON_MARGIN_LEFT, BUTTON_MARGIN_TOP, w, h, i);
     }
     return {w, h};

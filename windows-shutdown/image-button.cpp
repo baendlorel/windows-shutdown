@@ -40,7 +40,8 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
 void ImageButton::Center(int marginLeft, int marginTop, int w, int h, int index) {
     int centerX = w / 2;
     int centerY = h / 2;
-    this->x = centerX + BUTTON_CENTER_DISTANCE * (index - 2) + marginLeft;
+    int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (index - 0.5f * (BUTTON_COUNT - 1)));
+    this->x = centerX + delta + marginLeft;
     this->y = centerY + marginTop;
 }
 

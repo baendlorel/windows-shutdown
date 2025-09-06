@@ -56,6 +56,7 @@ class AppState {
    private:
     AppState() {
         // buttons
+        this->buttons[static_cast<int>(Button::Donate)].resId = IDB_DONATEPNG;
         this->buttons[static_cast<int>(Button::Config)].resId = IDB_CONFIGPNG;
         this->buttons[static_cast<int>(Button::Lock)].resId = IDB_LOCKPNG;
         this->buttons[static_cast<int>(Button::Sleep)].resId = IDB_SLEEPPNG;
