@@ -74,6 +74,7 @@ void I18N::SetLang(Lang lang) {
         ErrSleepFailed = L"System sleep failed! Sleep function may not be supported.";
         ErrTitle = L"Error";
         PressAnyKeyToExit = L"Press any key or click elsewhere to exit";
+        PressAnyKeyToCancel = L"Press any key or click to cancel";
 
         // config warnings
         InvalidConfig = L"Configuration file has some invalid values:";
