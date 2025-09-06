@@ -42,7 +42,7 @@ BOOL InitInstance(int) {
     }
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
-    appState.g_alpha = 0;
+    appState.windowPage.alpha = 0;
     // If config requests immediate action, initialize the immediate action
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
@@ -57,33 +57,33 @@ BOOL InitInstance(int) {
 
 void HandleTimer(HWND hWnd, WPARAM wParam) {
     static auto& appState = AppState::GetInstance();
-    auto alpha = appState.g_alpha;
+    auto alpha = appState.windowPage.alpha;
 
     if (wParam == FADEIN_TIMER_ID) {
-        appState.fadeState = FadeState::FadingIn;
+        appState.windowPage.fadeState = FadeState::FadingIn;
         int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha < TARGET_ALPHA) {
-            appState.g_alpha = (alpha + step > TARGET_ALPHA) ? TARGET_ALPHA : alpha + step;
+            appState.windowPage.alpha = (alpha + step > TARGET_ALPHA) ? TARGET_ALPHA : alpha + step;
             UpdateLayered(hWnd);
             return;
         }
         KillTimer(hWnd, FADEIN_TIMER_ID);
-        appState.fadeState = FadeState::None;
+        appState.windowPage.fadeState = FadeState::None;
         return;
     }
 
     if (wParam == FADEOUT_TIMER_ID) {
-        appState.fadeState = FadeState::FadingOut;
+        appState.windowPage.fadeState = FadeState::FadingOut;
         int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha > 0) {
-            appState.g_alpha = (alpha < step) ? 0 : alpha - step;
+            appState.windowPage.alpha = (alpha < step) ? 0 : alpha - step;
             UpdateLayered(hWnd);
             return;
         }
         KillTimer(hWnd, FADEOUT_TIMER_ID);
-        appState.fadeState = FadeState::None;
+        appState.windowPage.fadeState = FadeState::None;
         DestroyWindow(hWnd);
         return;
     }
@@ -125,10 +125,10 @@ void HandleKeydown(HWND hWnd) {
         CancelCountdown(hWnd);
         return;
     }
-    if (appState.fadeState != FadeState::None) {
+    if (appState.windowPage.fadeState != FadeState::None) {
         return;
     }
-    appState.fadeState = FadeState::FadingOut;
+    appState.windowPage.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
@@ -190,8 +190,8 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         }
         break;
     }
-    if (!hit && appState.fadeState == FadeState::None) {
-        appState.fadeState = FadeState::FadingOut;
+    if (!hit && appState.windowPage.fadeState == FadeState::None) {
+        appState.windowPage.fadeState = FadeState::FadingOut;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
@@ -201,8 +201,8 @@ void HandleCancel(HWND hWnd) {
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
     }
-    if (appState.fadeState == FadeState::None) {
-        appState.fadeState = FadeState::FadingOut;
+    if (appState.windowPage.fadeState == FadeState::None) {
+        appState.windowPage.fadeState = FadeState::FadingOut;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
@@ -226,13 +226,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
-            if (AppState::GetInstance().fadeState == FadeState::None) {
+            if (AppState::GetInstance().windowPage.fadeState == FadeState::None) {
                 HandleKeydown(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
-            if (AppState::GetInstance().fadeState == FadeState::None) {
+            if (AppState::GetInstance().windowPage.fadeState == FadeState::None) {
                 HandleLeftClick(hWnd, lParam);
             }
             break;

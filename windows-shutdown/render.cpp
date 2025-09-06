@@ -148,6 +148,9 @@ struct WH {
     int h;
 };
 
+// & Here we do not use appState.screenW/H.
+// Although they are equivalent, we still need to write program that has
+// more compilcated logic. Consider future features like responsive layout.
 WH GetWH(HWND hWnd, AppState& appState) {
     RECT rc;
     GetClientRect(hWnd, &rc);
@@ -190,7 +193,7 @@ void UpdateLayered(HWND hWnd) {
     DrawToMemoryDC(hdcMem, wh.w, wh.h);
     POINT ptWin = {0, 0};
     SIZE sizeWin = {wh.w, wh.h};
-    BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.g_alpha, AC_SRC_ALPHA};
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.windowPage.alpha, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
     DeleteObject(hBitmap);

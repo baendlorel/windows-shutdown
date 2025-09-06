@@ -7,7 +7,7 @@
 
 // consts
 #include "consts/configure.h"
-#include "consts/state.h"
+#include "consts/core.h"
 #include "consts/color-set.h"
 
 struct Config {

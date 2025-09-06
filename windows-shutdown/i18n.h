@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "consts/configure.h"
-#include "consts/state.h"
+#include "consts/core.h"
 #include "consts/util.h"
 
 #define EN_SHUTDOWN L"shutdown"

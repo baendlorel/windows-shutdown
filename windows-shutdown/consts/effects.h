@@ -1,5 +1,7 @@
 #pragma once
 
+enum class FadeState { None, FadingIn, FadingOut };
+
 // effects
 constexpr BYTE TARGET_ALPHA = 255;
 constexpr int MAX_LOADSTRING = 100;   // ms

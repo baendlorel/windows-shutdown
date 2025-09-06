@@ -1,6 +1,6 @@
 #pragma once
 #include "framework.h"
-#include "consts/state.h"
+#include "consts/core.h"
 #include "consts/effects.h"
 
 ATOM MyRegisterClass();

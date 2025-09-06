@@ -3,8 +3,16 @@
 #include "resource.h"
 #include "framework.h"
 #include "consts/effects.h"
+#include "consts/core.h"
 #include "config.h"
 #include "image-button.h"
+
+struct WindowPage {
+    Page current = Page::Main;
+    Page next = Page::None;
+    unsigned char alpha = 0;  // 0-255
+    FadeState fadeState = FadeState::None;
+};
 
 class AppState {
    public:
@@ -22,13 +30,13 @@ class AppState {
 
     HINSTANCE hInst = nullptr;
 
+    WindowPage windowPage;
+
     // size
     int screenW = 0;
     int screenH = 0;
 
     // effects
-    FadeState fadeState = FadeState::None;
-    unsigned char g_alpha = 0;
 
     // buttons
     short hoveredIndex = -1;
