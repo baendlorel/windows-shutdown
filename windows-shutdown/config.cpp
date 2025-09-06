@@ -24,7 +24,7 @@ std::string DefaultConfigZh() {
     std::string instruction = std::format(
         "# 可填：{}, {}（默认）\n"
         "{}={}",
-        CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+        CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
         "# 在执行操作之前等待这么多秒，默认{}秒\n"
@@ -67,7 +67,7 @@ std::string DefaultConfigEn() {
     std::string instruction = std::format(
         "# Options: {}, {}(Default)\n"
         "{}={}",
-        CFG_INSTRUCTION_HIDDEN, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+        CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string delay = std::format(
         "# Wait time (in seconds, default is {}s) before action.\n"
@@ -188,7 +188,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_INSTRUCTION) {
-        if (value == CFG_INSTRUCTION_SHOW || value == CFG_INSTRUCTION_HIDDEN) {
+        if (value == CFG_INSTRUCTION_SHOW || value == CFG_INSTRUCTION_HIDE) {
             this->instruction =
                 value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hide;
             return static_cast<ConfigWarning>(-1);

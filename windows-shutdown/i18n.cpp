@@ -35,10 +35,9 @@ void I18N::SetLang(Lang lang) {
         InvalidAction =
             std::format(L"[{}]的值无效，应该是\"{}\"中的一个。现使用默认值{}",
                         WIDEN(CFG_KEY_ACTION), WIDEN(CFG_ACTION_SOME), WIDEN(CFG_ACTION_NONE));
-        InvalidInstruction =
-            std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}",
-                        WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
-                        WIDEN(CFG_INSTRUCTION_HIDDEN), WIDEN(CFG_INSTRUCTION_SHOW));
+        InvalidInstruction = std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}",
+                                         WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
+                                         WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
         InvalidDelay = std::format(L"[{}]必须是大于或等于0的整数。现使用默认值{}",
                                    WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
@@ -87,7 +86,7 @@ void I18N::SetLang(Lang lang) {
         InvalidInstruction =
             std::format(L"[{}] is not valid, should be {} or {}. Using default value {}",
                         WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
-                        WIDEN(CFG_INSTRUCTION_HIDDEN), WIDEN(CFG_INSTRUCTION_SHOW));
+                        WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
         InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}",
                                    WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
