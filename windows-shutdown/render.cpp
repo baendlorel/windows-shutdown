@@ -46,6 +46,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         DrawTextParams secondParams = {.text = secondLine,
                                        .font = &secondFont,
                                        .rect = &secondRect,
+                                       .manualAlign = false,
                                        .horizontalAlign = Gdi::StringAlignmentCenter,
                                        .color = &colors.TextColor,
                                        .shadowColor = &colors.TextShadowColor};
@@ -114,8 +115,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
 void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::StringFormat format;
+    auto align = params.manualAlign ? Gdi::StringAlignmentNear : params.horizontalAlign;
     // & Better to be handled in DrawCachedUIText, here we always use near
-    format.SetAlignment(Gdi::StringAlignmentNear);
+    format.SetAlignment(align);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
     Gdi::SolidBrush brush(Gdi::Color(0, 0, 0, 0));
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
@@ -143,7 +145,8 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::StringFormat format;
     // & Better to be handled in DrawCachedUIText, here we always use near
     // format.SetAlignment(params.horizontalAlign);
-    format.SetAlignment(Gdi::StringAlignmentNear);
+    auto align = params.manualAlign ? Gdi::StringAlignmentNear : params.horizontalAlign;
+    format.SetAlignment(align);
     format.SetLineAlignment(Gdi::StringAlignmentNear);
     graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
 }
@@ -201,12 +204,14 @@ void DrawCachedUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     Gdi::REAL drawY = rect->Y;
 
     // Adjust X position according to alignment
-    if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
-        drawX += (rect->Width - cachedBitmap->GetWidth()) / 2 + TEXT_SHADOW_RADIUS;
-    } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
-        drawX += rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
-    } else if (params.horizontalAlign == Gdi::StringAlignmentNear) {
-        drawX += -TEXT_SHADOW_RADIUS;
+    if (params.manualAlign) {
+        if (params.horizontalAlign == Gdi::StringAlignmentCenter) {
+            drawX += (rect->Width - cachedBitmap->GetWidth()) / 2 + TEXT_SHADOW_RADIUS;
+        } else if (params.horizontalAlign == Gdi::StringAlignmentFar) {
+            drawX += rect->Width - cachedBitmap->GetWidth() + TEXT_SHADOW_RADIUS;
+        } else if (params.horizontalAlign == Gdi::StringAlignmentNear) {
+            drawX += -TEXT_SHADOW_RADIUS;
+        }
     }
 
     graphics.DrawImage(cachedBitmap, drawX, drawY);

@@ -15,7 +15,7 @@ struct ColorSet {
     Gdiplus::Color BackgroundColor = Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0);
     Gdiplus::Color TextColor = Gdiplus::Color(255, 255, 255, 255);
     Gdiplus::Color TextWarnColor = Gdiplus::Color(255, 255, 193, 7);
-    Gdiplus::Color TextDangerColor = Gdiplus::Color(255, 250, 93, 111);
+    Gdiplus::Color TextDangerColor = Gdiplus::Color(255, 255, 151, 163);
     Gdiplus::Color TextShadowColor = Gdiplus::Color(128, 0, 0, 0);
     Gdiplus::Color ButtonHighlightColor = Gdiplus::Color(DEFAULT_ALPHA, 255, 255, 255);
 };

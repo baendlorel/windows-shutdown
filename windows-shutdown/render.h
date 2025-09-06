@@ -8,6 +8,7 @@ struct DrawTextParams {
     std::wstring text;
     Gdi::Font* font;
     Gdi::RectF* rect;
+    bool manualAlign = true;
     Gdi::StringAlignment horizontalAlign;
     Gdi::Color* color;
     Gdi::Color* shadowColor;
