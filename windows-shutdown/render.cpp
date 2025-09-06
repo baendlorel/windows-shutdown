@@ -27,6 +27,21 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     // Draw semi-transparent background
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
+    // Not counting down
+    auto& warnings = appState.config.warnings;
+    if (!warnings.empty()) {
+        Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
+        Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
+        DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings),
+                                     .font = &warnFont,
+                                     .rect = &warnRect,
+                                     .horizontalAlign = Gdi::StringAlignmentNear,
+                                     .color = &colors.TextWarnColor,
+                                     //  .color = &colors.TextDangerColor,
+                                     .shadowColor = &colors.TextShadowColor};
+        DrawCachedUIText(graphics, warnParams);
+    }
+
     // Draw countdown in center
     if (appState.isCountingDown()) {
         // First line: original style (left/right language preserved by i18n.Wait)
@@ -64,21 +79,6 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         Gdi::RectF smallRect(0, y + 300, w, h);
         DrawInstruction(graphics, &smallRect, i18n.PressAnyKeyToCancel);
         return;
-    }
-
-    // Not counting down
-    auto& warnings = appState.config.warnings;
-    if (!warnings.empty()) {
-        Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
-        Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
-        DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings),
-                                     .font = &warnFont,
-                                     .rect = &warnRect,
-                                     .horizontalAlign = Gdi::StringAlignmentNear,
-                                     .color = &colors.TextWarnColor,
-                                     //  .color = &colors.TextDangerColor,
-                                     .shadowColor = &colors.TextShadowColor};
-        DrawCachedUIText(graphics, warnParams);
     }
 
     // Draw image buttons (original logic)
