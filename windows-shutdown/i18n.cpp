@@ -31,7 +31,7 @@ void I18N::SetLang(Lang lang) {
 
         // config warnings
         InvalidConfig = L"config.txt 配置文件里有无效配置：";
-        UnknownConfigKey = std::format(L"[{}]是未知的配置项，已忽略。", WIDEN(CFG_KEY_LANG));
+        UnknownConfigKey = std::format(L"未知的配置项，已忽略。");
         NotConfigEntry = L"配置文件中有无法解析的行，已忽略。";
         InvalidLanguage = std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个。现使用默认值{}。",
                                       WIDEN(CFG_KEY_LANG), WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN),
@@ -119,37 +119,41 @@ void I18N::SetLang(Lang lang) {
 
 std::wstring I18N::GetConfigWarningText(const std::vector<ConfigWarnInfo>& entries) const {
     std::wstring result = this->InvalidConfig + L"\n";
-    for (const auto& entry : entries) {
+    for (int i = 0; i < entries.size(); i++) {
+        auto& entry = entries[i];
+        std::wstring text;
+
         switch (entry.warning) {
             case ConfigWarning::InvalidLanguage:
-                result += this->InvalidLanguage;
+                text = this->InvalidLanguage;
                 break;
             case ConfigWarning::InvalidAction:
-                result += this->InvalidAction;
+                text = this->InvalidAction;
                 break;
             case ConfigWarning::InvalidInstruction:
-                result += this->InvalidInstruction;
+                text = this->InvalidInstruction;
                 break;
             case ConfigWarning::UnknownConfigKey:
-                result += this->UnknownConfigKey;
+                text = this->UnknownConfigKey;
                 break;
             case ConfigWarning::NotConfigEntry:
-                result += this->NotConfigEntry;
+                text = this->NotConfigEntry;
                 break;
             case ConfigWarning::InvalidDelay:
-                result += this->InvalidDelay;
+                text = this->InvalidDelay;
                 break;
             case ConfigWarning::InvalidBackgroundColorFormat:
-                result += this->InvalidBackgroundColorFormat;
+                text = this->InvalidBackgroundColorFormat;
                 break;
             case ConfigWarning::InvalidBackgroundColorValue:
-                result += this->InvalidBackgroundColorValue;
+                text = this->InvalidBackgroundColorValue;
                 break;
             default:
                 break;
         }
-        result += std::format(L" ({} {})\n", this->LineNumber, entry.lineNo);
+        result += std::format(L"    {}. {} ({} {})\n", i + 1, text, this->LineNumber, entry.lineNo);
     }
+
     return result;
 }
 
