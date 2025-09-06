@@ -3,8 +3,6 @@
 #include "consts/state.h"
 #include "consts/effects.h"
 
-void TriggerImmediateAction(HWND hWnd);
-
 ATOM MyRegisterClass();
 
 BOOL InitInstance(int nCmdShow);

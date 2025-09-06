@@ -43,10 +43,15 @@ BOOL InitInstance(int) {
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
     appState.g_alpha = 0;
+    // If config requests immediate action, initialize the immediate action
+    // state before starting the fade-in so the first drawn frame shows the
+    // countdown UI instead of the main menu.
+    if (appState.config.isImmediate()) {
+        // Start countdown immediately so the first painted frame shows the
+        // countdown UI rather than the main menu, avoiding flicker.
+        StartCountdown(hWnd, appState.config.action);
+    }
     SetTimer(hWnd, FADEIN_TIMER_ID, FRAME_TIME, NULL);
-    // If the config requests immediate action, trigger it after the window
-    // has been created and shown to avoid running actions during CreateWindow.
-    TriggerImmediateAction(hWnd);
     return TRUE;
 }
 
@@ -196,31 +201,6 @@ void HandleCancel(HWND hWnd) {
         appState.fadeState = FadeState::FadingOut;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
-}
-
-void TriggerImmediateAction(HWND hWnd) {
-    static auto& appState = AppState::GetInstance();
-    if (!appState.config.isImmediate()) {
-        return;
-    }
-    switch (appState.config.action) {
-        case Action::Lock:
-            TriggerLock(hWnd);
-            break;
-        case Action::Sleep:
-            TriggerSleep(hWnd);
-            break;
-        case Action::Restart:
-            TriggerRestart(hWnd);
-            break;
-        case Action::Shutdown:
-            TriggerShutdown(hWnd);
-            break;
-        default:
-            return;
-    }
-    appState.fadeState = FadeState::FadingOut;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
