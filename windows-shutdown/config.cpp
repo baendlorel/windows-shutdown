@@ -289,19 +289,21 @@ void Config::Load() {
         }
         auto eq = line.find('=');
         if (eq == std::string::npos) {
-            this->warnings.push_back({.warning = ConfigWarning::NotConfigEntry, .lineNo = lineNo});
+            // this->warnings.push_back({.warning = ConfigWarning::NotConfigEntry, .lineNo =
+            // lineNo});
             continue;
         }
 
         std::string key = trim(line.substr(0, eq));
-        // Extract value, ignore any inline comment starting with '#' and trim whitespace
-        std::string rawValue = line.substr(eq + 1);
-        auto commentPos = rawValue.find('#');
-        if (commentPos != std::string::npos) {
-            rawValue = rawValue.substr(0, commentPos);
-        }
+        // // Extract value, ignore any inline comment starting with '#' and trim whitespace
+        // std::string rawValue = line.substr(eq + 1);
+        // auto commentPos = rawValue.find('#');
+        // if (commentPos != std::string::npos) {
+        //     rawValue = rawValue.substr(0, commentPos);
+        // }
+        // std::string value = trim(rawValue);
+        std::string value = trim(line.substr(eq + 1));
 
-        std::string value = trim(rawValue);
         auto warning = this->LoadKeyValue(key, value);
         if (warning != ConfigWarning::None) {
             this->warnings.push_back({.warning = warning, .lineNo = lineNo});
