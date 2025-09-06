@@ -199,7 +199,12 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
 
     if (key == CFG_KEY_DELAY) {
         try {
-            this->delay = std::clamp(std::stoi(value), 0, 60);
+            int num = std::stoi(value);
+            if (num < 0) {
+                this->delay = CFG_DEFAULT_DELAY;
+                return ConfigWarning::InvalidDelay;
+            }
+            this->delay = num;
             return ConfigWarning::None;
         } catch (...) {
             this->delay = CFG_DEFAULT_DELAY;

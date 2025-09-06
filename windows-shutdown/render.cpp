@@ -28,7 +28,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         std::wstring secondLine = std::to_wstring(appState.countdownSeconds);
 
         // Fonts
-        Gdi::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleRegular);
+        Gdi::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleBold);
         // Position first line a bit above center
         Gdi::REAL y = h * 0.36f;
         Gdi::RectF firstRect(0, y, w, h);
@@ -42,7 +42,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Position second (number) centered below the first line
         Gdi::Font secondFont(&fontFamily, COUNT_DOWN_NUMBER_FONT_SIZE, Gdi::FontStyleBold);
-        Gdi::RectF secondRect(0, y + 60, w, h);
+        Gdi::RectF secondRect(0, y + 100, w, h);
         DrawTextParams secondParams = {.text = secondLine,
                                        .font = &secondFont,
                                        .rect = &secondRect,
@@ -54,8 +54,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         DrawUIText(graphics, secondParams);
 
         // Draw cancel instruction below the number
-        Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleRegular);
-        Gdi::RectF smallRect(0, y + 160, w, h);
+        Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
+        Gdi::RectF smallRect(0, y + 260, w, h);
         DrawTextParams smallParams = {.text = i18n.PressAnyKeyToCancel,
                                       .font = &smallFont,
                                       .rect = &smallRect,

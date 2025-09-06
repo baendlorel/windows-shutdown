@@ -29,18 +29,24 @@ void I18N::SetLang(Lang lang) {
 
         // config warnings
         InvalidConfig = L"config.txt 配置文件里有无效配置：";
-        InvalidLanguage = std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个", WIDEN(CFG_KEY_LANG),
-                                      WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN));
-        InvalidAction = std::format(L"[{}]的值无效，应该是\"{}\"中的一个", WIDEN(CFG_KEY_ACTION),
-                                    WIDEN(CFG_ACTION_SOME));
+        InvalidLanguage = std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个。现使用默认值{}",
+                                      WIDEN(CFG_KEY_LANG), WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN),
+                                      WIDEN(CFG_LANG_EN));
+        InvalidAction =
+            std::format(L"[{}]的值无效，应该是\"{}\"中的一个。现使用默认值{}",
+                        WIDEN(CFG_KEY_ACTION), WIDEN(CFG_ACTION_SOME), WIDEN(CFG_ACTION_NONE));
         InvalidInstruction =
-            std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个", WIDEN(CFG_KEY_INSTRUCTION),
-                        WIDEN(CFG_INSTRUCTION_SHOW), WIDEN(CFG_INSTRUCTION_HIDDEN));
-        InvalidDelay = std::format(L"[{}]不是有效数字", WIDEN(CFG_KEY_DELAY));
+            std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}",
+                        WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
+                        WIDEN(CFG_INSTRUCTION_HIDDEN), WIDEN(CFG_INSTRUCTION_SHOW));
+        InvalidDelay = std::format(L"[{}]必须是大于或等于0的整数。现使用默认值{}",
+                                   WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
-            std::format(L"[{}]不是有效的#RRGGBBAA或#RRGGBB格式", WIDEN(CFG_KEY_BACKGROUND_COLOR));
+            std::format(L"[{}]不是有效的#RRGGBBAA或#RRGGBB格式。现使用默认值{}",
+                        WIDEN(CFG_KEY_BACKGROUND_COLOR), WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
         InvalidBackgroundColorValue =
-            std::format(L"[{}]不是有效的颜色值", WIDEN(CFG_KEY_BACKGROUND_COLOR));
+            std::format(L"[{}]不是有效的颜色值。现使用默认值{}", WIDEN(CFG_KEY_BACKGROUND_COLOR),
+                        WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
 
         // actions
         Shutdown = ZH_SHUTDOWN;
@@ -72,18 +78,24 @@ void I18N::SetLang(Lang lang) {
 
         // config warnings
         InvalidConfig = L"Configuration file has some invalid values:";
-        InvalidLanguage = std::format(L"[{}] is not valid, should be {} or {}", WIDEN(CFG_KEY_LANG),
-                                      WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN));
-        InvalidAction = std::format(L"[{}] is not valid, should be one of {}",
-                                    WIDEN(CFG_KEY_ACTION), WIDEN(CFG_ACTION_SOME));
+        InvalidLanguage = std::format(
+            L"[{}] is not valid, should be {} or {}. Using default value {}", WIDEN(CFG_KEY_LANG),
+            WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN), WIDEN(CFG_LANG_EN));
+        InvalidAction =
+            std::format(L"[{}] is not valid, should be one of {}. Using default value {}",
+                        WIDEN(CFG_KEY_ACTION), WIDEN(CFG_ACTION_SOME), WIDEN(CFG_ACTION_NONE));
         InvalidInstruction =
-            std::format(L"[{}] is not valid, should be {} or {}", WIDEN(CFG_KEY_INSTRUCTION),
-                        WIDEN(CFG_INSTRUCTION_SHOW), WIDEN(CFG_INSTRUCTION_HIDDEN));
-        InvalidDelay = std::format(L"[{}] is not a valid number", WIDEN(CFG_KEY_DELAY));
-        InvalidBackgroundColorFormat = std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format",
-                                                   WIDEN(CFG_KEY_BACKGROUND_COLOR));
+            std::format(L"[{}] is not valid, should be {} or {}. Using default value {}",
+                        WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
+                        WIDEN(CFG_INSTRUCTION_HIDDEN), WIDEN(CFG_INSTRUCTION_SHOW));
+        InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}",
+                                   WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
+        InvalidBackgroundColorFormat =
+            std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format. Using default value {}",
+                        WIDEN(CFG_KEY_BACKGROUND_COLOR), WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
         InvalidBackgroundColorValue =
-            std::format(L"[{}] is not a valid color value", WIDEN(CFG_KEY_BACKGROUND_COLOR));
+            std::format(L"[{}] is not a valid color value. Using default value {}",
+                        WIDEN(CFG_KEY_BACKGROUND_COLOR), WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
 
         // actions
         Shutdown = EN_SHUTDOWN;
