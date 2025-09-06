@@ -139,7 +139,9 @@ void TriggerSleep(HWND hWnd) {
 
 void TriggerLock(HWND hWnd) {
     auto& appState = AppState::GetInstance();
-    if (appState.fadeState != FadeState::None) return;
+    if (appState.fadeState != FadeState::None) {
+        return;
+    }
     appState.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     ExecuteLock();
@@ -154,4 +156,8 @@ void TriggerConfig(HWND hWnd) {
     }
     appState.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
+}
+
+void TriggerDonate(HWND hWnd) {
+    auto& appState = AppState::GetInstance();
 }

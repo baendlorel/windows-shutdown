@@ -119,6 +119,9 @@ void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
     DrawInstruction(graphics, &instrRect, i18n.PressAnyKeyToExit);
 }
 
+void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
+}
+
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static Gdiplus::SolidBrush bgBrush(AppState::GetInstance().config.backgroundColor);

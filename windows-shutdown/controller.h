@@ -15,12 +15,14 @@ void StartCountdown(HWND hWnd, Action action);
 
 void CancelCountdown(HWND hWnd);
 
-void TriggerRestart(HWND hWnd);
+void TriggerDonate(HWND hWnd);
 
-void TriggerShutdown(HWND hWnd);
-
-void TriggerSleep(HWND hWnd);
+void TriggerConfig(HWND hWnd);
 
 void TriggerLock(HWND hWnd);
 
-void TriggerConfig(HWND hWnd);
+void TriggerSleep(HWND hWnd);
+
+void TriggerRestart(HWND hWnd);
+
+void TriggerShutdown(HWND hWnd);
