@@ -3,13 +3,20 @@
 
 // consts
 #include "consts/button-style.h"
+#include "consts/state.h"
 
 struct ImageButton {
-    int x = 0;
-    int y = 0;
+   public:
+    Button kind;
 
-    int resId = 0;
-    Gdiplus::Bitmap* png = nullptr;
+    int x;
+    int y;
+
+    int resId;
+    Gdiplus::Bitmap* png;
+
+   public:
+    ImageButton(int resId, Button kind);
 
     void LoadPNGFromResource(HINSTANCE hInst);
 

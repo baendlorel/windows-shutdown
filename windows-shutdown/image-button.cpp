@@ -1,6 +1,14 @@
 #include "image-button.h"
 #include "i18n.h"
 
+ImageButton::ImageButton(int resId, Button kind) {
+    this->x = 0;
+    this->y = 0;
+    this->png = nullptr;
+    this->resId = resId;
+    this->kind = kind;
+}
+
 void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     auto& i18n = I18N::GetInstance();
     HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");

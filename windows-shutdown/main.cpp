@@ -55,7 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
     // must put this after GdiplusStartup, or images will not be loaded correctly
-    for (short i = 0; i < BUTTON_COUNT; i++) {
+    for (short i = 0; i < appState.buttons.size(); i++) {
         appState.buttons[i].LoadPNGFromResource(hInstance);
     }
 

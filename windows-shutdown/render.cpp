@@ -99,7 +99,7 @@ void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& colors = ColorSet::GetInstance();
 
     // Draw image buttons (original logic)
-    for (int i = 0; i < BUTTON_COUNT; ++i) {
+    for (int i = 0; i < appState.buttons.size(); ++i) {
         int x = appState.buttons[i].x - BUTTON_RADIUS;
         int y = appState.buttons[i].y - BUTTON_RADIUS;
 
@@ -150,7 +150,7 @@ WH GetWH(HWND hWnd, AppState& appState) {
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
-    for (short i = 0; i < BUTTON_COUNT; i++) {
+    for (short i = 0; i < appState.buttons.size(); i++) {
         appState.buttons[i].Center(BUTTON_MARGIN_LEFT, BUTTON_MARGIN_TOP, w, h, i);
     }
     return {w, h};

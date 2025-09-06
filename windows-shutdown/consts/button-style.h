@@ -9,7 +9,6 @@ enum class Button {
     Restart,
     Shutdown,
 };
-constexpr int BUTTON_COUNT = 6;
 constexpr int BUTTON_RADIUS = 80;
 constexpr int BUTTON_DIAMETER = BUTTON_RADIUS * 2;
 constexpr int BUTTON_SHADOW_WIDTH = 22;  // This value is based on testing, not actual measurement

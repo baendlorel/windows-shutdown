@@ -139,7 +139,7 @@ void HandleMoustMove(HWND hWnd, LPARAM lParam) {
     int mx = LOWORD(lParam);
     int my = HIWORD(lParam);
     int newHover = -1;
-    for (int i = 0; i < BUTTON_COUNT; ++i) {
+    for (int i = 0; i < appState.buttons.size(); ++i) {
         if (appState.buttons[i].MouseHit(mx, my)) {
             newHover = i;
             break;
@@ -161,7 +161,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
     int mx = LOWORD(lParam);
     int my = HIWORD(lParam);
     bool hit = false;
-    for (int i = 0; i < BUTTON_COUNT; ++i) {
+    for (int i = 0; i < appState.buttons.size(); ++i) {
         if (!appState.buttons[i].MouseHit(mx, my)) {
             continue;
         }

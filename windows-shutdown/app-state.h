@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "resource.h"
 #include "framework.h"
 #include "consts/effects.h"
@@ -41,7 +42,7 @@ class AppState {
     WCHAR szWindowClass[MAX_LOADSTRING] = L"";
 
     Config config;
-    ImageButton buttons[BUTTON_COUNT];
+    std::vector<ImageButton> buttons;
 
     bool isCountingDown() const {
         return action != Action::None;
@@ -55,12 +56,11 @@ class AppState {
 
    private:
     AppState() {
-        // buttons
-        this->buttons[static_cast<int>(Button::Donate)].resId = IDB_DONATEPNG;
-        this->buttons[static_cast<int>(Button::Config)].resId = IDB_CONFIGPNG;
-        this->buttons[static_cast<int>(Button::Lock)].resId = IDB_LOCKPNG;
-        this->buttons[static_cast<int>(Button::Sleep)].resId = IDB_SLEEPPNG;
-        this->buttons[static_cast<int>(Button::Restart)].resId = IDB_RESTARTPNG;
-        this->buttons[static_cast<int>(Button::Shutdown)].resId = IDB_SHUTDOWNPNG;
+        this->buttons.push_back(ImageButton(IDB_DONATEPNG, Button::Donate));
+        this->buttons.push_back(ImageButton(IDB_CONFIGPNG, Button::Config));
+        this->buttons.push_back(ImageButton(IDB_LOCKPNG, Button::Lock));
+        this->buttons.push_back(ImageButton(IDB_SLEEPPNG, Button::Sleep));
+        this->buttons.push_back(ImageButton(IDB_RESTARTPNG, Button::Restart));
+        this->buttons.push_back(ImageButton(IDB_SHUTDOWNPNG, Button::Shutdown));
     }
 };
