@@ -55,7 +55,7 @@ void I18N::SetLang(Lang lang) {
         Lock = ZH_LOCK;
         Waiting[0] = L"距离";  // e.g. "距离关机还有"
         Waiting[1] = L"还有";
-        Waiting[2] = L"秒...";  // kept for compatibility if needed elsewhere
+        Waiting[2] = L"";  // left empty
     } else {
         FontFamilyName = L"Arial";
 
@@ -105,7 +105,7 @@ void I18N::SetLang(Lang lang) {
         // English: first line like "Time until shutdown"
         Waiting[0] = L"Time until ";
         Waiting[1] = L"";
-        Waiting[2] = L" seconds left...";
+        Waiting[2] = L"";  // left empty
     }
 }
 

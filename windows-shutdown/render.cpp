@@ -25,7 +25,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         // First line: original style (left/right language preserved by i18n.Wait)
         std::wstring firstLine = i18n.Wait(appState.action, appState.countdownSeconds);
         // Second line: large centered numeric seconds
-        std::wstring secondLine = std::to_wstring(appState.countdownSeconds);
+        std::wstring secondLine = std::to_wstring(appState.countdownSeconds) + i18n.Waiting[2];
 
         // Fonts
         Gdi::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdi::FontStyleBold);
@@ -42,7 +42,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Position second (number) centered below the first line
         Gdi::Font secondFont(&fontFamily, COUNT_DOWN_NUMBER_FONT_SIZE, Gdi::FontStyleBold);
-        Gdi::RectF secondRect(0, y + 100, w, h);
+        Gdi::RectF secondRect(0, y + 130, w, h);
         DrawTextParams secondParams = {.text = secondLine,
                                        .font = &secondFont,
                                        .rect = &secondRect,
@@ -55,7 +55,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
         // Draw cancel instruction below the number
         Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
-        Gdi::RectF smallRect(0, y + 260, w, h);
+        Gdi::RectF smallRect(0, y + 360, w, h);
         DrawTextParams smallParams = {.text = i18n.PressAnyKeyToCancel,
                                       .font = &smallFont,
                                       .rect = &smallRect,
