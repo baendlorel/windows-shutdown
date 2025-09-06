@@ -17,7 +17,6 @@ struct WindowPage {
     // Opacity of current page, 0-255
     unsigned char alpha = 0;
 
-    // todo 设计完整的淡入淡出状态机
     // Only consider one page fading to another, no need to distinguish fading out or in
     bool fading = false;
 };

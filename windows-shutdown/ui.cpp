@@ -1,6 +1,7 @@
 #include "ui.h"
 #include "consts/font-style.h"
 
+// todo 画阴影要把颜色混合模式改为覆盖
 void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     Gdiplus::StringFormat format;
     auto align = params.manualAlign ? Gdiplus::StringAlignmentNear : params.horizontalAlign;
