@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "consts/font-style.h"
 
 void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     Gdiplus::StringFormat format;

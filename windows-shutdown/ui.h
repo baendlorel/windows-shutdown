@@ -1,7 +1,6 @@
 #pragma once
 #include <unordered_map>
 #include "framework.h"
-#include "consts/font-style.h"
 
 struct DrawTextParams {
     std::wstring text;

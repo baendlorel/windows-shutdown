@@ -10,6 +10,7 @@ set(SRCS
     ${SRCDIR}/main.cpp
     ${SRCDIR}/config.cpp
     ${SRCDIR}/controller.cpp
+    ${SRCDIR}/ui.cpp
     ${SRCDIR}/i18n.cpp
     ${SRCDIR}/image-button.cpp
     ${SRCDIR}/render.cpp

@@ -1,6 +1,7 @@
 #include "render.h"
 #include <format>
 
+#include "consts/font-style.h"
 #include "app-state.h"
 #include "i18n.h"
 #include "ui.h"
@@ -12,13 +13,26 @@ std::wstring FormatTime(int seconds) {
     return std::format(L"{:02}:{:02}:{:02}", h, m, s);
 }
 
-// #region Drawing Pages
-void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
-    static auto& warnings = AppState::GetInstance().config.warnings;
-    if (warnings.empty()) {
+// & Only draw instruction needs internal state check
+void DrawInstruction(Gdiplus::Graphics& graphics, Gdiplus::RectF* rect, const std::wstring& text) {
+    static bool showInstruction = AppState::GetInstance().config.instruction == Instruction::Show;
+    if (!showInstruction) {
         return;
     }
+    static auto& colors = ColorSet::GetInstance();
+    static Gdiplus::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());
+    static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+    DrawTextParams instrParams = {.text = text,
+                                  .font = &font,
+                                  .rect = rect,
+                                  .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                  .color = &colors.TextColor,
+                                  .shadowColor = &colors.TextShadowColor};
+    DrawCachedUIText(graphics, instrParams);
+}
 
+void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
+    static auto& warnings = AppState::GetInstance().config.warnings;
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
     static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
@@ -35,30 +49,8 @@ void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
     DrawCachedUIText(graphics, warnParams);
 }
 
-void DrawInstruction(Gdiplus::Graphics& graphics, Gdiplus::RectF* rect, const std::wstring& text) {
-    static bool showInstruction = AppState::GetInstance().config.instruction == Instruction::Show;
-    if (!showInstruction) {
-        return;
-    }
-
-    static auto& colors = ColorSet::GetInstance();
-    static Gdiplus::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());
-    static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
-    DrawTextParams instrParams = {.text = text,
-                                  .font = &font,
-                                  .rect = rect,
-                                  .horizontalAlign = Gdiplus::StringAlignmentCenter,
-                                  .color = &colors.TextColor,
-                                  .shadowColor = &colors.TextShadowColor};
-    DrawCachedUIText(graphics, instrParams);
-}
-
 void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& appState = AppState::GetInstance();
-    if (!appState.isCountingDown()) {
-        return;
-    }
-
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
 
@@ -126,9 +118,9 @@ void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
     Gdiplus::RectF instrRect(0, instrY, w, h);
     DrawInstruction(graphics, &instrRect, i18n.PressAnyKeyToExit);
 }
-// #endregion
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
+    static auto& appState = AppState::GetInstance();
     static Gdiplus::SolidBrush bgBrush(AppState::GetInstance().config.backgroundColor);
 
     Gdiplus::Graphics graphics(hdcMem);
@@ -137,12 +129,15 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
     // * These functions will decide internally whether to draw based on current state
+    if (!appState.config.warnings.empty()) {
+        DrawWarning(graphics, w, h);
+    }
 
-    DrawWarning(graphics, w, h);
-
-    DrawCountdown(graphics, w, h);
-
-    DrawButtons(graphics, w, h);
+    if (appState.isCountingDown()) {
+        DrawCountdown(graphics, w, h);
+    } else {
+        DrawButtons(graphics, w, h);
+    }
 }
 
 struct WH {
