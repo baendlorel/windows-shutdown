@@ -245,7 +245,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         return ConfigWarning::InvalidBackgroundColorFormat;
     }
 
-    return ConfigWarning::None;
+    return ConfigWarning::UnknownConfigKey;
 }
 
 void Config::Load() {
@@ -270,12 +270,16 @@ void Config::Load() {
     std::streamsize size = file.tellg();
     file.seekg(0, std::ios::beg);
     std::string buffer(size, '\0');
-    if (size > 0) file.read(&buffer[0], size);
+    if (size > 0) {
+        file.read(&buffer[0], size);
+    }
     std::istringstream utf8stream(buffer);
 
     // Parse config file line by line (UTF-8)
+    short lineNo = 0;
     std::string line;
     while (std::getline(utf8stream, line)) {
+        lineNo++;
         if (line.empty()) {
             continue;
         }
@@ -285,13 +289,22 @@ void Config::Load() {
         }
         auto eq = line.find('=');
         if (eq == std::string::npos) {
+            this->warnings.push_back({.warning = ConfigWarning::NotConfigEntry, .lineNo = lineNo});
             continue;
         }
+
         std::string key = trim(line.substr(0, eq));
-        std::string value = trim(line.substr(eq + 1));
+        // Extract value, ignore any inline comment starting with '#' and trim whitespace
+        std::string rawValue = line.substr(eq + 1);
+        auto commentPos = rawValue.find('#');
+        if (commentPos != std::string::npos) {
+            rawValue = rawValue.substr(0, commentPos);
+        }
+
+        std::string value = trim(rawValue);
         auto warning = this->LoadKeyValue(key, value);
         if (warning != ConfigWarning::None) {
-            this->warnings.push_back(warning);
+            this->warnings.push_back({.warning = warning, .lineNo = lineNo});
         }
     }
 }

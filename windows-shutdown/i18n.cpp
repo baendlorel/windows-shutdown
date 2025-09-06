@@ -24,27 +24,31 @@ void I18N::SetLang(Lang lang) {
         ErrShutdownFailed = L"启动系统关机失败！";
         ErrSleepFailed = L"系统睡眠失败！可能不支持睡眠功能。";
         ErrTitle = L"错误";
-        PressAnyKeyToExit = L"按任意键或鼠标点击其他位置退出";
-        PressAnyKeyToCancel = L"按任意键或鼠标点击取消";
+        PressAnyKeyToExit = L"按任意键或鼠标点击其他位置退出。";
+        PressAnyKeyToCancel = L"按任意键或鼠标点击取消。";
+
+        LineNumber = L"行号";
 
         // config warnings
         InvalidConfig = L"config.txt 配置文件里有无效配置：";
-        InvalidLanguage = std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个。现使用默认值{}",
+        UnknownConfigKey = std::format(L"[{}]是未知的配置项，已忽略。", WIDEN(CFG_KEY_LANG));
+        NotConfigEntry = L"配置文件中有无法解析的行，已忽略。";
+        InvalidLanguage = std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个。现使用默认值{}。",
                                       WIDEN(CFG_KEY_LANG), WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN),
                                       WIDEN(CFG_LANG_EN));
         InvalidAction =
-            std::format(L"[{}]的值无效，应该是\"{}\"中的一个。现使用默认值{}",
+            std::format(L"[{}]的值无效，应该是\"{}\"中的一个。现使用默认值{}。",
                         WIDEN(CFG_KEY_ACTION), WIDEN(CFG_ACTION_SOME), WIDEN(CFG_ACTION_NONE));
-        InvalidInstruction = std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}",
-                                         WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
-                                         WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
-        InvalidDelay = std::format(L"[{}]必须是大于或等于0的整数。现使用默认值{}",
+        InvalidInstruction = std::format(
+            L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。", WIDEN(CFG_KEY_INSTRUCTION),
+            WIDEN(CFG_INSTRUCTION_SHOW), WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
+        InvalidDelay = std::format(L"[{}]必须是大于或等于0的整数。现使用默认值{}。",
                                    WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
-            std::format(L"[{}]不是有效的#RRGGBBAA或#RRGGBB格式。现使用默认值{}",
+            std::format(L"[{}]不是有效的#RRGGBBAA或#RRGGBB格式。现使用默认值{}。",
                         WIDEN(CFG_KEY_BACKGROUND_COLOR), WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
         InvalidBackgroundColorValue =
-            std::format(L"[{}]不是有效的颜色值。现使用默认值{}", WIDEN(CFG_KEY_BACKGROUND_COLOR),
+            std::format(L"[{}]不是有效的颜色值。现使用默认值{}。", WIDEN(CFG_KEY_BACKGROUND_COLOR),
                         WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
 
         // actions
@@ -73,28 +77,32 @@ void I18N::SetLang(Lang lang) {
         ErrShutdownFailed = L"Failed to initiate system shutdown!";
         ErrSleepFailed = L"System sleep failed! Sleep function may not be supported.";
         ErrTitle = L"Error";
-        PressAnyKeyToExit = L"Press any key or click elsewhere to exit";
-        PressAnyKeyToCancel = L"Press any key or click to cancel";
+        PressAnyKeyToExit = L"Press any key or click elsewhere to exit.";
+        PressAnyKeyToCancel = L"Press any key or click to cancel.";
+
+        LineNumber = L"Line";
 
         // config warnings
         InvalidConfig = L"Configuration file has some invalid values:";
+        UnknownConfigKey = L"Unknown configuration key ignored.";
+        NotConfigEntry = L"Unrecognized line in configuration file ignored.";
         InvalidLanguage = std::format(
-            L"[{}] is not valid, should be {} or {}. Using default value {}", WIDEN(CFG_KEY_LANG),
+            L"[{}] is not valid, should be {} or {}. Using default value {}.", WIDEN(CFG_KEY_LANG),
             WIDEN(CFG_LANG_ZH), WIDEN(CFG_LANG_EN), WIDEN(CFG_LANG_EN));
         InvalidAction =
-            std::format(L"[{}] is not valid, should be one of {}. Using default value {}",
+            std::format(L"[{}] is not valid, should be one of {}. Using default value {}.",
                         WIDEN(CFG_KEY_ACTION), WIDEN(CFG_ACTION_SOME), WIDEN(CFG_ACTION_NONE));
         InvalidInstruction =
-            std::format(L"[{}] is not valid, should be {} or {}. Using default value {}",
+            std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
                         WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
                         WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
-        InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}",
+        InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}.",
                                    WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
-            std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format. Using default value {}",
+            std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format. Using default value {}.",
                         WIDEN(CFG_KEY_BACKGROUND_COLOR), WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
         InvalidBackgroundColorValue =
-            std::format(L"[{}] is not a valid color value. Using default value {}",
+            std::format(L"[{}] is not a valid color value. Using default value {}.",
                         WIDEN(CFG_KEY_BACKGROUND_COLOR), WIDEN(CFG_BACKGROUND_COLOR_DEFAULT));
 
         // actions
@@ -109,31 +117,38 @@ void I18N::SetLang(Lang lang) {
     }
 }
 
-std::wstring I18N::GetConfigWarnings(const std::vector<ConfigWarning>& warnings) const {
+std::wstring I18N::GetConfigWarningText(const std::vector<ConfigWarnInfo>& entries) const {
     std::wstring result = this->InvalidConfig + L"\n";
-    for (const auto& warn : warnings) {
-        switch (warn) {
+    for (const auto& entry : entries) {
+        switch (entry.warning) {
             case ConfigWarning::InvalidLanguage:
-                result += this->InvalidLanguage + L"\n";
+                result += this->InvalidLanguage;
                 break;
             case ConfigWarning::InvalidAction:
-                result += this->InvalidAction + L"\n";
+                result += this->InvalidAction;
                 break;
             case ConfigWarning::InvalidInstruction:
-                result += this->InvalidInstruction + L"\n";
+                result += this->InvalidInstruction;
+                break;
+            case ConfigWarning::UnknownConfigKey:
+                result += this->UnknownConfigKey;
+                break;
+            case ConfigWarning::NotConfigEntry:
+                result += this->NotConfigEntry;
                 break;
             case ConfigWarning::InvalidDelay:
-                result += this->InvalidDelay + L"\n";
+                result += this->InvalidDelay;
                 break;
             case ConfigWarning::InvalidBackgroundColorFormat:
-                result += this->InvalidBackgroundColorFormat + L"\n";
+                result += this->InvalidBackgroundColorFormat;
                 break;
             case ConfigWarning::InvalidBackgroundColorValue:
-                result += this->InvalidBackgroundColorValue + L"\n";
+                result += this->InvalidBackgroundColorValue;
                 break;
             default:
                 break;
         }
+        result += std::format(L" ({} {})\n", this->LineNumber, entry.lineNo);
     }
     return result;
 }

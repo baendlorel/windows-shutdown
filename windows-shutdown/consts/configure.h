@@ -32,12 +32,19 @@ constexpr int CFG_DEFAULT_DELAY = 3;
 // config warnings
 enum class ConfigWarning {
     None,
+    UnknownConfigKey,  // key not recognized
+    NotConfigEntry,    // neither comment nor key-value pair
     InvalidLanguage,
     InvalidAction,
     InvalidInstruction,
     InvalidDelay,
     InvalidBackgroundColorFormat,
     InvalidBackgroundColorValue
+};
+
+struct ConfigWarnInfo {
+    ConfigWarning warning;
+    short lineNo;
 };
 
 constexpr int CFG_WARNING_X = 40;

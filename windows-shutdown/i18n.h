@@ -47,16 +47,21 @@ class I18N {
     std::wstring PressAnyKeyToExit;
     std::wstring PressAnyKeyToCancel;
 
+    // meta info
+    std::wstring LineNumber;
+
     // config warning messages
     std::wstring InvalidConfig;
     std::wstring InvalidLanguage;
+    std::wstring UnknownConfigKey;
+    std::wstring NotConfigEntry;
     std::wstring InvalidAction;
     std::wstring InvalidInstruction;
     std::wstring InvalidDelay;
     std::wstring InvalidBackgroundColorFormat;
     std::wstring InvalidBackgroundColorValue;
 
-    std::wstring GetConfigWarnings(const std::vector<ConfigWarning>& warnings) const;
+    std::wstring GetConfigWarningText(const std::vector<ConfigWarnInfo>& warnings) const;
 
     // actions
     std::wstring Shutdown;

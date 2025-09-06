@@ -32,7 +32,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     if (!warnings.empty()) {
         Gdi::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
         Gdi::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
-        DrawTextParams warnParams = {.text = i18n.GetConfigWarnings(warnings),
+        DrawTextParams warnParams = {.text = i18n.GetConfigWarningText(warnings),
                                      .font = &warnFont,
                                      .rect = &warnRect,
                                      .horizontalAlign = Gdi::StringAlignmentNear,
