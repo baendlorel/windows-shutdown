@@ -21,12 +21,12 @@
     CFG_ACTION_SLEEP ", " CFG_ACTION_SHUTDOWN ", " CFG_ACTION_RESTART ", " CFG_ACTION_LOCK
 
 #define CFG_INSTRUCTION_SHOW   "show"
-#define CFG_INSTRUCTION_HIDDEN "hidden"
+#define CFG_INSTRUCTION_HIDDEN "hide"
 
 #define CFG_BACKGROUND_COLOR_DEFAULT "#00000034"  // ARGB same as macro BACKGROUND_COLOR below
 
 enum class Lang { Zh, En };  // used in config and i18n
-enum class Instruction { Show, Hidden };
+enum class Instruction { Show, Hide };
 constexpr int CFG_DEFAULT_DELAY = 4;
 
 // config warnings

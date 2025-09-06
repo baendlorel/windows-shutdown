@@ -61,15 +61,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         DrawUIText(graphics, secondParams);
 
         // Draw cancel instruction below the number
-        Gdi::Font smallFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
         Gdi::RectF smallRect(0, y + 300, w, h);
-        DrawTextParams smallParams = {.text = i18n.PressAnyKeyToCancel,
-                                      .font = &smallFont,
-                                      .rect = &smallRect,
-                                      .horizontalAlign = Gdi::StringAlignmentCenter,
-                                      .color = &colors.TextColor,
-                                      .shadowColor = &colors.TextShadowColor};
-        DrawCachedUIText(graphics, smallParams);
+        DrawInstruction(graphics, &smallRect, i18n.PressAnyKeyToCancel);
         return;
     }
 
@@ -103,17 +96,24 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         }
     }
 
-    // Draw instruction text below buttons
-    Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
-    // Below buttons with some margin
+    // Draw exit instruction below buttons
     int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
-
-    // Draw text with beautiful rendering
     Gdi::RectF instrRect(0, instrY, w, h);
+    DrawInstruction(graphics, &instrRect, i18n.PressAnyKeyToExit);
+}
 
-    DrawTextParams instrParams = {.text = i18n.PressAnyKeyToExit,
+void DrawInstruction(Gdi::Graphics& graphics, Gdi::RectF* rect, const std::wstring& text) {
+    static bool showInstruction = AppState::GetInstance().config.instruction == Instruction::Show;
+    if (!showInstruction) {
+        return;
+    }
+
+    static auto& colors = ColorSet::GetInstance();
+    static Gdi::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());
+    static Gdi::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdi::FontStyleBold);
+    DrawTextParams instrParams = {.text = text,
                                   .font = &font,
-                                  .rect = &instrRect,
+                                  .rect = rect,
                                   .horizontalAlign = Gdi::StringAlignmentCenter,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
@@ -158,9 +158,11 @@ void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params) {
     graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
 }
 
+// Cache for rendered UI text bitmaps
+static std::unordered_map<std::wstring, Gdi::Bitmap*> cache;
+
 Gdi::Bitmap* UITextToBitmap(Gdi::Graphics& graphics, DrawTextParams& params) {
     // only wstring can be correctly hashed, while LPCWSTR cannot
-    static std::unordered_map<std::wstring, Gdi::Bitmap*> cache;
     auto it = cache.find(params.text);
     if (it != cache.end()) {
         return it->second;

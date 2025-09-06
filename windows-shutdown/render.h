@@ -16,6 +16,8 @@ struct DrawTextParams {
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h);
 
+void DrawInstruction(Gdi::Graphics& graphics, Gdi::RectF* rect, const std::wstring& text);
+
 void DrawUIText(Gdi::Graphics& graphics, DrawTextParams& params);
 
 void DrawUITextShadow(Gdi::Graphics& graphics, DrawTextParams& params);

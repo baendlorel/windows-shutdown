@@ -190,7 +190,7 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     if (key == CFG_KEY_INSTRUCTION) {
         if (value == CFG_INSTRUCTION_SHOW || value == CFG_INSTRUCTION_HIDDEN) {
             this->instruction =
-                value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hidden;
+                value == CFG_INSTRUCTION_SHOW ? Instruction::Show : Instruction::Hide;
             return static_cast<ConfigWarning>(-1);
         } else {
             return ConfigWarning::InvalidInstruction;
