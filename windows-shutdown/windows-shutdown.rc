@@ -11,8 +11,10 @@ IDB_SLEEPPNG            PNG                     "assets\\sleep.png"
 
 /////////////////////////////////////////////////////////////////////////////
 // Icon
-IDI_MAINICON            ICON                    "icon.ico"
-
+IDI_MAINICON            ICON                    "icons\\shutdown-icon.ico"
+IDI_RESTARTICON         ICON                    "icons\\restart-icon.ico"
+IDI_LOCKICON            ICON                    "icons\\lock-icon.ico"
+IDI_SLEEPICON           ICON                    "icons\\sleep-icon.ico"
 /////////////////////////////////////////////////////////////////////////////
 // String Table
 STRINGTABLE
