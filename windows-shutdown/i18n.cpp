@@ -59,6 +59,8 @@ void I18N::SetLang(Lang lang) {
         Waiting[0] = L"距离";  // e.g. "距离关机还有"
         Waiting[1] = L"还有";
         Waiting[2] = L"";  // left empty
+
+        DonateQrFileName = L"donate-zh.jpg";
     } else {
         FontFamilyName = L"Arial";
 
@@ -114,6 +116,8 @@ void I18N::SetLang(Lang lang) {
         Waiting[0] = L"Time until ";
         Waiting[1] = L"";
         Waiting[2] = L"";  // left empty
+
+        DonateQrFileName = L"donate-en.png";
     }
 }
 
@@ -179,29 +183,4 @@ std::wstring I18N::Wait(Action type, int seconds) const {
     }
     // Return only the first-line text; seconds are drawn separately as a large centered number.
     return this->Waiting[0] + actionWStr + this->Waiting[1];
-}
-
-Action I18N::FileNameToAction(const std::wstring& name) const {
-    std::wstring lowerName = name;
-    for (auto& ch : lowerName) {
-        ch = towlower(ch);
-    }
-
-    if (lowerName == EN_SLEEP || lowerName == ZH_SLEEP) {
-        return Action::Sleep;
-    }
-
-    if (lowerName == EN_RESTART || lowerName == ZH_RESTART) {
-        return Action::Restart;
-    }
-
-    if (lowerName == EN_SHUTDOWN || lowerName == ZH_SHUTDOWN) {
-        return Action::Shutdown;
-    }
-
-    if (lowerName == EN_LOCK || lowerName == ZH_LOCK) {
-        return Action::Lock;
-    }
-
-    return Action::None;
 }

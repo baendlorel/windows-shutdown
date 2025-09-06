@@ -71,7 +71,9 @@ class I18N {
     std::wstring Waiting[3] = {L"", L"", L""};
 
     std::wstring Wait(Action type, int seconds) const;
-    Action FileNameToAction(const std::wstring& name) const;
+
+    // donate
+    std::wstring DonateQrFileName;
 
    private:
     I18N() = default;

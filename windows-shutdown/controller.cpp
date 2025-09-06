@@ -155,23 +155,3 @@ void TriggerConfig(HWND hWnd) {
     appState.fadeState = FadeState::FadingOut;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
-
-void ActionByFileName(const std::wstring& name) {
-    Action action = I18N::GetInstance().FileNameToAction(name);
-    switch (action) {
-        case Action::Sleep:
-            ExecuteSleep();
-            break;
-        case Action::Shutdown:
-            ExecuteShutdown();
-            break;
-        case Action::Restart:
-            ExecuteRestart();
-            break;
-        case Action::None:
-        default:
-            // default is shutdown, but might be changed later
-            ExecuteShutdown();
-            break;
-    }
-}

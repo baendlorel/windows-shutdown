@@ -24,7 +24,6 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     Gdi::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdi::SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(Gdi::TextRenderingHintAntiAlias);
-    // Draw semi-transparent background
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
     // Not counting down

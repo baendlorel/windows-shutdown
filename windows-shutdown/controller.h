@@ -24,5 +24,3 @@ void TriggerSleep(HWND hWnd);
 void TriggerLock(HWND hWnd);
 
 void TriggerConfig(HWND hWnd);
-
-void ActionByFileName(const std::wstring& name);
