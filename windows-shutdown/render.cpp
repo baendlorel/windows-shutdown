@@ -14,7 +14,6 @@ std::wstring FormatTime(int seconds) {
 }
 
 // fixme 文字阴影很奇怪
-// fixme 按钮变成只有一个了，而且图片貌似放得巨大
 
 // & Only draw instruction needs internal state check
 void DrawInstruction(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF* rect,

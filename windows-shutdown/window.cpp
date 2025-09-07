@@ -97,25 +97,8 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
         }
 
         CancelCountdown(hWnd);
-        switch (appState.action) {
-            case Action::Sleep:
-                // Close the program first, then sleep
-                PostMessage(hWnd, WM_CLOSE, 0, 0);
-                // Use a separate thread to handle sleep after window closes
-                std::thread([]() {
-                    Sleep(500);  // Give time for window to close
-                    ExecuteSleep();
-                }).detach();
-                return;
-            case Action::Restart:
-                ExecuteRestart();
-                return;
-            case Action::Shutdown:
-                ExecuteShutdown();
-                return;
-            default:
-                break;
-        }
+        ExecuteAction(hWnd, appState.action);
+        return;
     }
 }
 
@@ -209,17 +192,17 @@ void HandleCancel(HWND hWnd) {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
-        case WM_TIMER:
-            HandleTimer(hWnd, wParam);
-            break;
-        case WM_PAINT:
-            UpdateLayered(hWnd);
-            break;
         case WM_CLOSE:
             HandleCancel(hWnd);
             break;
         case WM_DESTROY:
             PostQuitMessage(0);
+            break;
+        case WM_TIMER:
+            HandleTimer(hWnd, wParam);
+            break;
+        case WM_PAINT:
+            UpdateLayered(hWnd);
             break;
         case WM_MOUSEMOVE:
             HandleMoustMove(hWnd, lParam);

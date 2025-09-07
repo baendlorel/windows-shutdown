@@ -86,27 +86,35 @@ void ExecuteLock() {
     LockWorkStation();
 }
 
+void ExecuteAction(HWND hWnd, Action action) {
+    switch (action) {
+        case Action::Sleep:
+            ExecuteSleep();
+            break;
+        case Action::Shutdown:
+            ExecuteShutdown();
+            break;
+        case Action::Restart:
+            ExecuteRestart();
+            break;
+        case Action::Lock:
+            ExecuteLock();
+            break;
+        case Action::None:
+        default:
+            break;
+    }
+
+    // Destroy the window will trigger quit message
+    DestroyWindow(hWnd);
+    return;
+}
+
 void StartCountdown(HWND hWnd, Action action) {
     auto& appState = AppState::GetInstance();
+    // todo 理论上这里的逻辑和倒计时到期一样
     if (appState.config.delay <= 0) {
-        switch (action) {
-            case Action::Sleep:
-                // For sleep, close the program first then sleep
-                PostMessage(hWnd, WM_CLOSE, 0, 0);
-                // Use a small delay to ensure the program closes before sleeping
-                Sleep(500);
-                ExecuteSleep();
-                break;
-            case Action::Shutdown:
-                ExecuteShutdown();
-                break;
-            case Action::Restart:
-                ExecuteRestart();
-                break;
-            case Action::None:
-            default:
-                break;
-        }
+        ExecuteAction(hWnd, action);
         return;
     }
 
@@ -138,12 +146,6 @@ void TriggerSleep(HWND hWnd) {
 }
 
 void TriggerLock(HWND hWnd) {
-    auto& appState = AppState::GetInstance();
-    if (appState.windowPage.fading) {
-        return;
-    }
-    appState.windowPage.fading = true;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     ExecuteLock();
 }
 

@@ -3,13 +3,7 @@
 #include "consts/core.h"
 #include "consts/effects.h"
 
-void ExecuteRestart();
-
-void ExecuteShutdown();
-
-void ExecuteSleep();
-
-void ExecuteLock();
+void ExecuteAction(HWND hWnd, Action action);
 
 void StartCountdown(HWND hWnd, Action action);
 
