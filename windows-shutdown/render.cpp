@@ -182,7 +182,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     }
 
     DrawCountdown(graphics, appState.page.GetPageAlpha(Page::Countdown), w, h);
-    DrawButtons(graphics, appState.page.GetPageAlpha(Page::Main), w, h);
+    DrawButtons(graphics, appState.page.GetPageAlpha(Page::Home), w, h);
 }
 
 /**

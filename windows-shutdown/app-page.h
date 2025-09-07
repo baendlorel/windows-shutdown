@@ -48,4 +48,9 @@ struct AppPage {
             this->fading = false;
         }
     }
+
+    // common functions
+    void GoHome() {
+        Start(Page::Home);
+    }
 };

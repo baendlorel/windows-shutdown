@@ -53,7 +53,7 @@ BOOL InitInstance(int) {
         // countdown UI rather than the main menu, avoiding flicker.
         StartCountdown(hWnd, appState.config.action);
     } else {
-        appState.page.Start(Page::Main);
+        appState.page.GoHome();
     }
     SetTimer(hWnd, FADEIN_TIMER_ID, FRAME_TIME, NULL);
     return TRUE;
@@ -63,9 +63,9 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     static auto& appState = AppState::GetInstance();
     auto alpha = appState.page.alpha;
 
+    // todo 只保留一个定时器
     if (wParam == FADEIN_TIMER_ID) {
-        appState.page.fading = true;
-        int steps = FADEIN_DURATION / FRAME_TIME;
+        int steps = FADE_DURATION / FRAME_TIME;
         BYTE step = (MAX_ALPHA + steps - 1) / steps;
         if (alpha < MAX_ALPHA) {
             appState.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
@@ -73,13 +73,11 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             return;
         }
         KillTimer(hWnd, FADEIN_TIMER_ID);
-        appState.page.fading = false;
         return;
     }
 
     if (wParam == FADEOUT_TIMER_ID) {
-        appState.page.fading = true;
-        int steps = FADEIN_DURATION / FRAME_TIME;
+        int steps = FADE_DURATION / FRAME_TIME;
         BYTE step = (MAX_ALPHA + steps - 1) / steps;
         if (alpha > 0) {
             appState.page.SetAlpha((alpha < step) ? 0 : alpha - step);
@@ -87,7 +85,6 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             return;
         }
         KillTimer(hWnd, FADEOUT_TIMER_ID);
-        appState.page.fading = false;
         DestroyWindow(hWnd);
         return;
     }
@@ -180,8 +177,14 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         }
         break;
     }
+
+    // If not clicking on any button, return to main page or exit
     if (!hit && !appState.page.fading) {
-        appState.page.fading = true;
+        if (appState.page.current == Page::Home) {
+            appState.page.Start(Page::None);
+        } else  {
+            appState.page.GoHome();
+        }
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
@@ -191,8 +194,10 @@ void HandleCancel(HWND hWnd) {
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
     }
+
+    // return to main page if not already there
     if (!appState.page.fading) {
-        appState.page.fading = true;
+        appState.page.GoHome();
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }

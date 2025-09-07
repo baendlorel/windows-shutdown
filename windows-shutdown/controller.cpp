@@ -127,7 +127,7 @@ void CancelCountdown(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         appState.action = Action::None;
-        appState.page.Start(Page::Main);
+        appState.page.GoHome();
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
         UpdateLayered(hWnd);  // Redraw to hide countdown
     }
