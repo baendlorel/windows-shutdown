@@ -60,7 +60,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     auto alpha = appState.windowPage.alpha;
 
     if (wParam == FADEIN_TIMER_ID) {
-        appState.windowPage.fadeState = FadeState::FadingIn;
+        appState.windowPage.fading = true;
         int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha < TARGET_ALPHA) {
@@ -69,12 +69,12 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             return;
         }
         KillTimer(hWnd, FADEIN_TIMER_ID);
-        appState.windowPage.fadeState = FadeState::None;
+        appState.windowPage.fading = false;
         return;
     }
 
     if (wParam == FADEOUT_TIMER_ID) {
-        appState.windowPage.fadeState = FadeState::FadingOut;
+        appState.windowPage.fading = true;
         int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha > 0) {
@@ -83,7 +83,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             return;
         }
         KillTimer(hWnd, FADEOUT_TIMER_ID);
-        appState.windowPage.fadeState = FadeState::None;
+        appState.windowPage.fading = false;
         DestroyWindow(hWnd);
         return;
     }
@@ -125,10 +125,10 @@ void HandleKeydown(HWND hWnd) {
         CancelCountdown(hWnd);
         return;
     }
-    if (appState.windowPage.fadeState != FadeState::None) {
+    if (appState.windowPage.fading) {
         return;
     }
-    appState.windowPage.fadeState = FadeState::FadingOut;
+    appState.windowPage.fading = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
@@ -190,8 +190,8 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         }
         break;
     }
-    if (!hit && appState.windowPage.fadeState == FadeState::None) {
-        appState.windowPage.fadeState = FadeState::FadingOut;
+    if (!hit && !appState.windowPage.fading) {
+        appState.windowPage.fading = true;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
@@ -201,8 +201,8 @@ void HandleCancel(HWND hWnd) {
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
     }
-    if (appState.windowPage.fadeState == FadeState::None) {
-        appState.windowPage.fadeState = FadeState::FadingOut;
+    if (!appState.windowPage.fading) {
+        appState.windowPage.fading = true;
         SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     }
 }
@@ -226,13 +226,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
-            if (AppState::GetInstance().windowPage.fadeState == FadeState::None) {
+            if (!AppState::GetInstance().windowPage.fading) {
                 HandleKeydown(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
-            if (AppState::GetInstance().windowPage.fadeState == FadeState::None) {
+            if (!AppState::GetInstance().windowPage.fading) {
                 HandleLeftClick(hWnd, lParam);
             }
             break;
