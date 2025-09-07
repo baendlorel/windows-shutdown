@@ -42,7 +42,7 @@ BOOL InitInstance(int) {
     }
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
-    appState.windowPage.alpha = 0;
+    appState.windowPage.SetAlpha(0);  // start fully transparent
     // If config requests immediate action, initialize the immediate action
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
@@ -64,7 +64,8 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
         int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha < TARGET_ALPHA) {
-            appState.windowPage.alpha = (alpha + step > TARGET_ALPHA) ? TARGET_ALPHA : alpha + step;
+            appState.windowPage.SetAlpha((alpha + step > TARGET_ALPHA) ? TARGET_ALPHA
+                                                                       : alpha + step);
             UpdateLayered(hWnd);
             return;
         }
@@ -78,7 +79,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
         int steps = FADEIN_DURATION / FRAME_TIME;
         BYTE step = (TARGET_ALPHA + steps - 1) / steps;
         if (alpha > 0) {
-            appState.windowPage.alpha = (alpha < step) ? 0 : alpha - step;
+            appState.windowPage.SetAlpha((alpha < step) ? 0 : alpha - step);
             UpdateLayered(hWnd);
             return;
         }

@@ -29,6 +29,24 @@ struct WindowPage {
             return 0;
         }
     }
+
+    void Start(Page next) {
+        if (next == this->current) {
+            return;
+        }
+        this->next = next;
+        this->fading = true;
+        this->alpha = 0;
+    }
+
+    void SetAlpha(BYTE alpha) {
+        this->alpha = alpha;
+        if (alpha == TARGET_ALPHA) {
+            this->current = this->next;
+            this->next = Page::None;
+            this->fading = false;
+        }
+    }
 };
 
 class AppState {

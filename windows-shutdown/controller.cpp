@@ -112,13 +112,13 @@ void ExecuteAction(HWND hWnd, Action action) {
 
 void StartCountdown(HWND hWnd, Action action) {
     auto& appState = AppState::GetInstance();
-    // todo 理论上这里的逻辑和倒计时到期一样
     if (appState.config.delay <= 0) {
         ExecuteAction(hWnd, action);
         return;
     }
 
     appState.action = action;
+    appState.windowPage.Start(Page::Countdown);
     appState.countdownSeconds = appState.config.delay;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
     UpdateLayered(hWnd);                             // Redraw to show countdown
@@ -128,6 +128,7 @@ void CancelCountdown(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         appState.action = Action::None;
+        appState.windowPage.Start(Page::Main);
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
         UpdateLayered(hWnd);  // Redraw to hide countdown
     }
