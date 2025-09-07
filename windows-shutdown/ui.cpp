@@ -5,7 +5,7 @@
 #include "consts/effects.h"
 
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
-    if (alpha == TARGET_ALPHA) {
+    if (alpha == MAX_ALPHA) {
         return *color;
     }
 
@@ -20,7 +20,7 @@ Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
 };
 
 std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
-    if (alpha == TARGET_ALPHA) {
+    if (alpha == MAX_ALPHA) {
         return nullptr;
     }
 
@@ -44,7 +44,7 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     auto compositingMode = graphics.GetCompositingMode();
     graphics.SetCompositingMode(Gdiplus::CompositingModeSourceCopy);
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
-        BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * TARGET_ALPHA);
+        BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * MAX_ALPHA);
         brush.SetColor(ApplyAlpha(params.shadowColor, alpha));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
@@ -123,7 +123,7 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
 
     // temporarily set alpha to 255 to get correct cached bitmap
     BYTE alpha = params.alpha;
-    params.alpha = TARGET_ALPHA;
+    params.alpha = MAX_ALPHA;
     Gdiplus::Bitmap* img = UITextToBitmap(graphics, params);
     if (!img) {
         return;
@@ -143,7 +143,7 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
         }
     }
 
-    if (alpha == TARGET_ALPHA) {
+    if (alpha == MAX_ALPHA) {
         graphics.DrawImage(img, drawX, drawY);
     } else {
         auto imgAttr = ImageAttrWithAlpha(img, alpha);

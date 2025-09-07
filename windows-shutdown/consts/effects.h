@@ -5,7 +5,7 @@ typedef unsigned char BYTE;
 enum class FadeState { None, FadingIn, FadingOut };
 
 // effects
-constexpr BYTE TARGET_ALPHA = 255;
+constexpr BYTE MAX_ALPHA = 255;
 constexpr int MAX_LOADSTRING = 100;   // ms
 constexpr int FADEIN_DURATION = 200;  // ms
 constexpr int FRAME_TIME = 20;  // & It is no need to be 10, since 30 fps(33ms/frame) is enough

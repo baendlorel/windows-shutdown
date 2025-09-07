@@ -2,6 +2,7 @@
 #include <format>
 
 #include "consts/button-style.h"
+#include "consts/effects.h"
 #include "consts/font-style.h"
 #include "consts/color-set.h"
 
@@ -177,10 +178,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // * These functions will decide internally whether to draw based on current state
     if (!appState.config.warnings.empty()) {
-        DrawWarning(graphics, TARGET_ALPHA, w, h);
+        DrawWarning(graphics, MAX_ALPHA, w, h);
     }
 
-    // fixme 调试这里来看为什么按钮突然不见了
     DrawCountdown(graphics, appState.page.GetPageAlpha(Page::Countdown), w, h);
     DrawButtons(graphics, appState.page.GetPageAlpha(Page::Main), w, h);
 }
@@ -238,7 +238,8 @@ void UpdateLayered(HWND hWnd) {
     DrawToMemoryDC(hdcMem, wh.w, wh.h);
     POINT ptWin = {0, 0};
     SIZE sizeWin = {wh.w, wh.h};
-    BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.page.alpha, AC_SRC_ALPHA};
+    // appState.page.alpha
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, MAX_ALPHA, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
     DeleteObject(hBitmap);

@@ -19,11 +19,11 @@ struct AppPage {
 
     BYTE GetPageAlpha(Page page) {
         if (!fading) {
-            return (current == page) ? TARGET_ALPHA : 0;
+            return (current == page) ? MAX_ALPHA : 0;
         }
 
         if (current == page) {
-            return TARGET_ALPHA - alpha;
+            return MAX_ALPHA - alpha;
         } else if (next == page) {
             return alpha;
         } else {
@@ -42,7 +42,7 @@ struct AppPage {
 
     void SetAlpha(BYTE alpha) {
         this->alpha = alpha;
-        if (alpha == TARGET_ALPHA) {
+        if (alpha == MAX_ALPHA) {
             this->current = this->next;
             this->next = Page::None;
             this->fading = false;

@@ -66,9 +66,9 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     if (wParam == FADEIN_TIMER_ID) {
         appState.page.fading = true;
         int steps = FADEIN_DURATION / FRAME_TIME;
-        BYTE step = (TARGET_ALPHA + steps - 1) / steps;
-        if (alpha < TARGET_ALPHA) {
-            appState.page.SetAlpha((alpha + step > TARGET_ALPHA) ? TARGET_ALPHA : alpha + step);
+        BYTE step = (MAX_ALPHA + steps - 1) / steps;
+        if (alpha < MAX_ALPHA) {
+            appState.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
             UpdateLayered(hWnd);
             return;
         }
@@ -80,7 +80,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     if (wParam == FADEOUT_TIMER_ID) {
         appState.page.fading = true;
         int steps = FADEIN_DURATION / FRAME_TIME;
-        BYTE step = (TARGET_ALPHA + steps - 1) / steps;
+        BYTE step = (MAX_ALPHA + steps - 1) / steps;
         if (alpha > 0) {
             appState.page.SetAlpha((alpha < step) ? 0 : alpha - step);
             UpdateLayered(hWnd);
@@ -173,6 +173,9 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
                 break;
             case Action::Shutdown:
                 StartCountdown(hWnd, Action::Shutdown);
+                break;
+            case Action::None:
+                // do nothing
                 break;
         }
         break;
