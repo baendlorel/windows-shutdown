@@ -1,5 +1,4 @@
 #include "ui.h"
-#include <memory>
 #include "consts/font-style.h"
 #include "consts/effects.h"
 #include "app-state.h"

@@ -128,10 +128,10 @@ void DrawButtons(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
         int x = appState.buttons[i].x - BUTTON_RADIUS;
         int y = appState.buttons[i].y - BUTTON_RADIUS;
 
-        auto* attr = ImageAttrWithAlpha(appState.buttons[i].png, alpha);
+        auto imgAttr = ImageAttrWithAlpha(appState.buttons[i].png, alpha);
         Gdiplus::Rect rect(x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
         graphics.DrawImage(appState.buttons[i].png, rect, 0, 0, BUTTON_DIAMETER, BUTTON_DIAMETER,
-                           Gdiplus::UnitPixel, attr);
+                           Gdiplus::UnitPixel, imgAttr.get());
         // If hovered, overlay a semi-transparent white, but scaled by overall alpha
         if (i == appState.hoveredIndex) {
             Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, alpha));
