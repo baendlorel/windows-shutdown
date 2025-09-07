@@ -125,13 +125,20 @@ void DrawButtons(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
 
     // Draw image buttons (original logic)
     for (int i = 0; i < appState.buttons.size(); ++i) {
-        int x = appState.buttons[i].x - BUTTON_RADIUS;
-        int y = appState.buttons[i].y - BUTTON_RADIUS;
+        auto& b = appState.buttons[i];
+        int x = b.x - BUTTON_RADIUS;
+        int y = b.y - BUTTON_RADIUS;
 
-        auto imgAttr = ImageAttrWithAlpha(appState.buttons[i].png, alpha);
+        auto imgAttr = ImageAttrWithAlpha(b.png, alpha);
+
+        // where and what size to draw
         Gdiplus::Rect rect(x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
-        graphics.DrawImage(appState.buttons[i].png, rect, 0, 0, BUTTON_DIAMETER, BUTTON_DIAMETER,
+
+        // x, y, w, h cut from the source image
+        // Since button images are 512x512, appState.buttons[i].png->GetWidth() is acutally 512
+        graphics.DrawImage(b.png, rect, 0, 0, b.png->GetWidth(), b.png->GetHeight(),
                            Gdiplus::UnitPixel, imgAttr.get());
+
         // If hovered, overlay a semi-transparent white, but scaled by overall alpha
         if (i == appState.hoveredIndex) {
             Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, alpha));
@@ -191,7 +198,7 @@ WH GetWH(HWND hWnd, AppState& appState) {
 
     for (short i = 0; i < buttonCount; i++) {
         int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (i - centerIndex));
-        appState.buttons[i].Center(BUTTON_MARGIN_LEFT, BUTTON_MARGIN_TOP, w, h);
+        appState.buttons[i].Center(BUTTON_MARGIN_LEFT + delta, BUTTON_MARGIN_TOP, w, h);
     }
     return {w, h};
 }
