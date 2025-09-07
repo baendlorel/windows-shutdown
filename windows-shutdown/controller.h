@@ -1,7 +1,6 @@
 #pragma once
 #include "framework.h"
 #include "consts/core.h"
-#include "consts/effects.h"
 
 void ExecuteAction(HWND hWnd, Action action);
 

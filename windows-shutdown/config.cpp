@@ -1,11 +1,11 @@
 #include "config.h"
 
 #include <windows.h>
-
-#include <algorithm>
 #include <format>
 #include <fstream>
 #include <sstream>
+
+#include "consts/color-set.h"
 
 std::string DefaultConfigZh() {
     // Create default

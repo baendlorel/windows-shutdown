@@ -1,5 +1,7 @@
 #pragma once
 
+typedef unsigned char BYTE;
+
 enum class FadeState { None, FadingIn, FadingOut };
 
 // effects

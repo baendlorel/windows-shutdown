@@ -12,7 +12,7 @@ struct AppPage {
     Page next = Page::None;
 
     // Opacity of current page, 0-255
-    unsigned char alpha = 0;
+    BYTE alpha = 0;
 
     // Only consider one page fading to another, no need to distinguish fading out or in
     bool fading = false;

@@ -60,10 +60,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     I18N::GetInstance().SetLang(appState.config.lang);
 
-    appState.page.current = Page::None;
-    appState.page.next = Page::Main;
-    appState.page.alpha = 0;
-
     LoadStringW(hInstance, IDS_APP_TITLE, appState.szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, appState.szWindowClass, MAX_LOADSTRING);
     MyRegisterClass();

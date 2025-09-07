@@ -1,5 +1,6 @@
 #include "i18n.h"
 #include <format>
+#include "consts/util.h"
 
 I18N& I18N::GetInstance() {
     static I18N instance;

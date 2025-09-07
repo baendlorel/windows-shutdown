@@ -1,7 +1,10 @@
 #include "render.h"
 #include <format>
 
+#include "consts/button-style.h"
 #include "consts/font-style.h"
+#include "consts/color-set.h"
+
 #include "app-state.h"
 #include "i18n.h"
 #include "ui.h"

@@ -1,7 +1,5 @@
 #pragma once
 #include "framework.h"
-#include "consts/core.h"
-#include "consts/effects.h"
 
 ATOM MyRegisterClass();
 

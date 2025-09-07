@@ -3,7 +3,6 @@
 #include <vector>
 #include "consts/configure.h"
 #include "consts/core.h"
-#include "consts/util.h"
 
 #define EN_SHUTDOWN L"shutdown"
 #define EN_SLEEP    L"sleep"

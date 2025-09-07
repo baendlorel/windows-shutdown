@@ -1,7 +1,8 @@
 #include "ui.h"
+#include <unordered_map>
+
 #include "consts/font-style.h"
 #include "consts/effects.h"
-#include "app-state.h"
 
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
     if (alpha == TARGET_ALPHA) {
