@@ -3,9 +3,9 @@
 #include "consts/effects.h"
 #include "app-state.h"
 
-Gdiplus::Color* ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
+Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
     if (alpha == TARGET_ALPHA) {
-        return color;
+        return *color;
     }
 
     // overallAlpha in 0..255, srcA in 0..255
@@ -15,8 +15,7 @@ Gdiplus::Color* ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
     } else if (blended > 255) {
         blended = 255;
     }
-    Gdiplus::Color result(blended, color->GetR(), color->GetG(), color->GetB());
-    return &result;
+    return Gdiplus::Color(blended, color->GetR(), color->GetG(), color->GetB());
 };
 
 Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
@@ -44,10 +43,8 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     auto compositingMode = graphics.GetCompositingMode();
     graphics.SetCompositingMode(Gdiplus::CompositingModeSourceCopy);
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
-        int alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * TARGET_ALPHA);
-        auto* color = ApplyAlpha(params.shadowColor, alpha);
-
-        brush.SetColor(*color);
+        BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * TARGET_ALPHA);
+        brush.SetColor(ApplyAlpha(params.shadowColor, alpha));
         for (int i = 0; i < 8; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
@@ -66,7 +63,7 @@ void DrawUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
 
     DrawUITextShadow(graphics, params);
 
-    Gdiplus::SolidBrush brush(*ApplyAlpha(params.color, params.alpha));
+    Gdiplus::SolidBrush brush(ApplyAlpha(params.color, params.alpha));
     Gdiplus::StringFormat format;
     // & Better to be handled in DrawCachedUIText, here we always use near
     // format.SetAlignment(params.horizontalAlign);

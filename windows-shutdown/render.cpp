@@ -13,8 +13,11 @@ std::wstring FormatTime(int seconds) {
     return std::format(L"{:02}:{:02}:{:02}", h, m, s);
 }
 
+// fixme 文字阴影很奇怪
+// fixme 按钮变成只有一个了，而且图片貌似放得巨大
+
 // & Only draw instruction needs internal state check
-void DrawInstruction(Gdiplus::Graphics& graphics, int alpha, Gdiplus::RectF* rect,
+void DrawInstruction(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF* rect,
                      const std::wstring& text) {
     if (alpha == 0) {
         return;
@@ -37,7 +40,7 @@ void DrawInstruction(Gdiplus::Graphics& graphics, int alpha, Gdiplus::RectF* rec
     DrawCachedUIText(graphics, instrParams);
 }
 
-void DrawWarning(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
     if (alpha == 0) {
         return;
     }
@@ -60,7 +63,7 @@ void DrawWarning(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
     DrawCachedUIText(graphics, warnParams);
 }
 
-void DrawCountdown(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+void DrawCountdown(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
     if (alpha == 0) {
         return;
     }
@@ -111,7 +114,7 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
 }
 
 // alpha: 0-255 overall opacity multiplier for all painted colors in this function
-void DrawButtons(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+void DrawButtons(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
     if (alpha == 0) {
         return;
     }
@@ -131,7 +134,7 @@ void DrawButtons(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
                            Gdiplus::UnitPixel, attr);
         // If hovered, overlay a semi-transparent white, but scaled by overall alpha
         if (i == appState.hoveredIndex) {
-            Gdiplus::Color blended(*ApplyAlpha(&colors.ButtonHighlightColor, alpha));
+            Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, alpha));
             Gdiplus::SolidBrush highlightBrush(blended);
             graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
                                  BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2,
@@ -154,7 +157,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static Gdiplus::Color baseBgColor = AppState::GetInstance().config.backgroundColor;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(*ApplyAlpha(&baseBgColor, appState.windowPage.alpha));
+    Gdiplus::SolidBrush bgBrush(ApplyAlpha(&baseBgColor, appState.windowPage.alpha));
 
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);

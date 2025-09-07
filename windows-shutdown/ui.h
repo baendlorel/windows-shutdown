@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "framework.h"
+#include "consts/effects.h"
 
 struct DrawTextParams {
     std::wstring text;
@@ -13,7 +14,7 @@ struct DrawTextParams {
     Gdiplus::Color* shadowColor;
 };
 
-Gdiplus::Color* ApplyAlpha(Gdiplus::Color* color, BYTE alpha);
+Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha);
 
 Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha);
 

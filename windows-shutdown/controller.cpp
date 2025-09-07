@@ -139,10 +139,10 @@ void TriggerSleep(HWND hWnd) {
 
 void TriggerLock(HWND hWnd) {
     auto& appState = AppState::GetInstance();
-    if (appState.windowPage.fadeState != FadeState::None) {
+    if (appState.windowPage.fading) {
         return;
     }
-    appState.windowPage.fadeState = FadeState::FadingOut;
+    appState.windowPage.fading = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
     ExecuteLock();
 }
@@ -151,10 +151,10 @@ void TriggerConfig(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     std::wstring configPath = appState.config.GetConfigPath();
     ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
-    if (appState.windowPage.fadeState != FadeState::None) {
+    if (appState.windowPage.fading) {
         return;
     }
-    appState.windowPage.fadeState = FadeState::FadingOut;
+    appState.windowPage.fading = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 
