@@ -16,7 +16,7 @@ struct DrawTextParams {
 
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha);
 
-Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha);
+std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha);
 
 void DrawUIText(Gdiplus::Graphics& graphics, DrawTextParams& params);
 

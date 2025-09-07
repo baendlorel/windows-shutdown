@@ -1,4 +1,5 @@
 #include "ui.h"
+#include <memory>
 #include "consts/font-style.h"
 #include "consts/effects.h"
 #include "app-state.h"
@@ -18,7 +19,7 @@ Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
     return Gdiplus::Color(blended, color->GetR(), color->GetG(), color->GetB());
 };
 
-Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
+std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
     if (alpha == TARGET_ALPHA) {
         return nullptr;
     }
@@ -26,9 +27,9 @@ Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) 
     Gdiplus::ColorMatrix colorMatrix = {
         1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,           1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, alpha / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-    Gdiplus::ImageAttributes imgAttr;
-    imgAttr.SetColorMatrix(&colorMatrix);
-    return &imgAttr;
+    auto imgAttr = std::make_unique<Gdiplus::ImageAttributes>();
+    imgAttr->SetColorMatrix(&colorMatrix);
+    return imgAttr;
 }
 
 void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
@@ -145,8 +146,9 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     if (alpha == TARGET_ALPHA) {
         graphics.DrawImage(img, drawX, drawY);
     } else {
-        auto* imgAttr = ImageAttrWithAlpha(img, alpha);
+        auto imgAttr = ImageAttrWithAlpha(img, alpha);
         Gdiplus::RectF rect(drawX, drawY, img->GetWidth(), img->GetHeight());
-        graphics.DrawImage(img, rect, 0, 0, rect.Width, rect.Height, Gdiplus::UnitPixel, imgAttr);
+        graphics.DrawImage(img, rect, 0, 0, rect.Width, rect.Height, Gdiplus::UnitPixel,
+                           imgAttr.get());
     }
 }
