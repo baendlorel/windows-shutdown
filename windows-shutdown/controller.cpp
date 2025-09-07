@@ -133,18 +133,6 @@ void CancelCountdown(HWND hWnd) {
     }
 }
 
-void TriggerRestart(HWND hWnd) {
-    StartCountdown(hWnd, Action::Restart);
-}
-
-void TriggerShutdown(HWND hWnd) {
-    StartCountdown(hWnd, Action::Shutdown);
-}
-
-void TriggerSleep(HWND hWnd) {
-    StartCountdown(hWnd, Action::Sleep);
-}
-
 void TriggerLock(HWND hWnd) {
     ExecuteLock();
 }

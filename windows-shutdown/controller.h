@@ -14,9 +14,3 @@ void TriggerDonate(HWND hWnd);
 void TriggerConfig(HWND hWnd);
 
 void TriggerLock(HWND hWnd);
-
-void TriggerSleep(HWND hWnd);
-
-void TriggerRestart(HWND hWnd);
-
-void TriggerShutdown(HWND hWnd);

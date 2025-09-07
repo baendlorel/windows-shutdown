@@ -153,7 +153,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         // todo 编写donate功能
         switch (appState.buttons[i].action) {
             case Action::Donate:
-                TriggerConfig(hWnd);
+                TriggerDonate(hWnd);
                 break;
             case Action::Config:
                 TriggerConfig(hWnd);
@@ -162,13 +162,13 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
                 TriggerLock(hWnd);
                 break;
             case Action::Sleep:
-                TriggerSleep(hWnd);
+                StartCountdown(hWnd, Action::Sleep);
                 break;
             case Action::Restart:
-                TriggerRestart(hWnd);
+                StartCountdown(hWnd, Action::Restart);
                 break;
             case Action::Shutdown:
-                TriggerShutdown(hWnd);
+                StartCountdown(hWnd, Action::Shutdown);
                 break;
         }
         break;
