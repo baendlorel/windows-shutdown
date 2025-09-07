@@ -8,14 +8,17 @@ struct DrawTextParams {
     Gdiplus::RectF* rect;
     bool manualAlign = true;
     Gdiplus::StringAlignment horizontalAlign;
+    BYTE alpha = TARGET_ALPHA;  // overall alpha for this text
     Gdiplus::Color* color;
     Gdiplus::Color* shadowColor;
 };
 
+Gdiplus::Color* ApplyAlpha(Gdiplus::Color* color, BYTE alpha);
+
+Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha);
+
 void DrawUIText(Gdiplus::Graphics& graphics, DrawTextParams& params);
 
 void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params);
-
-Gdiplus::Bitmap* UITextToBitmap(Gdiplus::Graphics& graphics, DrawTextParams& params);
 
 void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params);

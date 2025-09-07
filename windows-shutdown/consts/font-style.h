@@ -1,6 +1,7 @@
 #pragma once
 
 // font styles
+constexpr int TEXT_SHADOW_ALPHA = 80;  // max alpha for text shadow
 constexpr int TEXT_SHADOW_RADIUS = 8;
 constexpr int TEXT_SHADOW_RADIUS_STEP = 2;
 constexpr int COUNT_DOWN_FONT_SIZE = 48;

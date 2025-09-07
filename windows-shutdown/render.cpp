@@ -13,35 +13,6 @@ std::wstring FormatTime(int seconds) {
     return std::format(L"{:02}:{:02}:{:02}", h, m, s);
 }
 
-Gdiplus::Color* ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
-    if (alpha == TARGET_ALPHA) {
-        return color;
-    }
-
-    // overallAlpha in 0..255, srcA in 0..255
-    int blended = (alpha * color->GetA()) / 255;
-    if (blended < 0) {
-        blended = 0;
-    } else if (blended > 255) {
-        blended = 255;
-    }
-    Gdiplus::Color result(blended, color->GetR(), color->GetG(), color->GetB());
-    return &result;
-};
-
-Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
-    if (alpha == TARGET_ALPHA) {
-        return nullptr;
-    }
-
-    Gdiplus::ColorMatrix colorMatrix = {
-        1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,           1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, alpha / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-    Gdiplus::ImageAttributes imgAttr;
-    imgAttr.SetColorMatrix(&colorMatrix);
-    return &imgAttr;
-}
-
 // & Only draw instruction needs internal state check
 void DrawInstruction(Gdiplus::Graphics& graphics, Gdiplus::RectF* rect, const std::wstring& text) {
     static bool showInstruction = AppState::GetInstance().config.instruction == Instruction::Show;
@@ -78,7 +49,7 @@ void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
     DrawCachedUIText(graphics, warnParams);
 }
 
-void DrawCountdown(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
@@ -123,10 +94,11 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
 }
 
 // alpha: 0-255 overall opacity multiplier for all painted colors in this function
-void DrawButtons(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
+    int alpha = appState.windowPage.alpha;
     if (alpha == 0) {
         return;
     }
@@ -180,7 +152,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     if (appState.isCountingDown()) {
         DrawCountdown(graphics, w, h);
     } else {
-        DrawButtons(graphics, appState.windowPage.alpha, w, h);
+        DrawButtons(graphics, w, h);
     }
 }
 
