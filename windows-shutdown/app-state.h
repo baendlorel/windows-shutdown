@@ -4,50 +4,10 @@
 #include "framework.h"
 #include "consts/effects.h"
 #include "consts/core.h"
+#include "app-page.h"
+
 #include "config.h"
 #include "image-button.h"
-
-struct WindowPage {
-    // Current page being displayed
-    Page current = Page::Main;
-
-    // Page to fade into, normaly none
-    Page next = Page::None;
-
-    // Opacity of current page, 0-255
-    unsigned char alpha = 0;
-
-    // Only consider one page fading to another, no need to distinguish fading out or in
-    bool fading = false;
-
-    BYTE GetPageAlpha(Page page) {
-        if (current == page) {
-            return alpha;
-        } else if (next == page) {
-            return TARGET_ALPHA - alpha;
-        } else {
-            return 0;
-        }
-    }
-
-    void Start(Page next) {
-        if (next == this->current) {
-            return;
-        }
-        this->next = next;
-        this->fading = true;
-        this->alpha = 0;
-    }
-
-    void SetAlpha(BYTE alpha) {
-        this->alpha = alpha;
-        if (alpha == TARGET_ALPHA) {
-            this->current = this->next;
-            this->next = Page::None;
-            this->fading = false;
-        }
-    }
-};
 
 class AppState {
    public:
@@ -65,7 +25,7 @@ class AppState {
 
     HINSTANCE hInst = nullptr;
 
-    WindowPage windowPage;
+    AppPage page;
 
     // size
     int screenW = 0;

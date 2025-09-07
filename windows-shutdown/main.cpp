@@ -43,7 +43,6 @@ static void EnsureDpiAwareness() {
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-
     EnsureDpiAwareness();
 
     auto& appState = AppState::GetInstance();
@@ -61,12 +60,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     I18N::GetInstance().SetLang(appState.config.lang);
 
+    appState.page.current = Page::None;
+    appState.page.next = Page::Main;
+    appState.page.alpha = 0;
+
     LoadStringW(hInstance, IDS_APP_TITLE, appState.szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, appState.szWindowClass, MAX_LOADSTRING);
     MyRegisterClass();
     if (!InitInstance(nShowCmd)) {
         return FALSE;
     }
+
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);

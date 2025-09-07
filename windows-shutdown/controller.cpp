@@ -118,7 +118,7 @@ void StartCountdown(HWND hWnd, Action action) {
     }
 
     appState.action = action;
-    appState.windowPage.Start(Page::Countdown);
+    appState.page.Start(Page::Countdown);
     appState.countdownSeconds = appState.config.delay;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
     UpdateLayered(hWnd);                             // Redraw to show countdown
@@ -128,7 +128,7 @@ void CancelCountdown(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         appState.action = Action::None;
-        appState.windowPage.Start(Page::Main);
+        appState.page.Start(Page::Main);
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
         UpdateLayered(hWnd);  // Redraw to hide countdown
     }
@@ -142,10 +142,10 @@ void TriggerConfig(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     std::wstring configPath = appState.config.GetConfigPath();
     ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
-    if (appState.windowPage.fading) {
+    if (appState.page.fading) {
         return;
     }
-    appState.windowPage.fading = true;
+    appState.page.fading = true;
     SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
 }
 

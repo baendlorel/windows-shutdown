@@ -7,13 +7,15 @@
 #include "ui.h"
 
 std::wstring FormatTime(int seconds) {
+    static auto pad = [](int num) {
+        return (num > 9) ? std::format(L"{}", num) : std::format(L"0{}", num);
+    };
+
     int h = seconds / 3600;
     int m = (seconds % 3600) / 60;
     int s = seconds % 60;
-    return std::format(L"{:02}:{:02}:{:02}", h, m, s);
+    return std::format(L"{}:{}:{}", pad(h), pad(m), pad(s));
 }
-
-// fixme 文字阴影很奇怪
 
 // & Only draw instruction needs internal state check
 void DrawInstruction(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF* rect,
@@ -163,7 +165,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static Gdiplus::Color baseBgColor = AppState::GetInstance().config.backgroundColor;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(ApplyAlpha(&baseBgColor, appState.windowPage.alpha));
+    Gdiplus::SolidBrush bgBrush(ApplyAlpha(&baseBgColor, appState.page.alpha));
 
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -175,10 +177,14 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         DrawWarning(graphics, TARGET_ALPHA, w, h);
     }
 
-    DrawCountdown(graphics, appState.windowPage.GetPageAlpha(Page::Countdown), w, h);
-    DrawButtons(graphics, appState.windowPage.GetPageAlpha(Page::Main), w, h);
+    // fixme 调试这里来看为什么按钮突然不见了
+    DrawCountdown(graphics, appState.page.GetPageAlpha(Page::Countdown), w, h);
+    DrawButtons(graphics, appState.page.GetPageAlpha(Page::Main), w, h);
 }
 
+/**
+ * @brief  sadf
+ */
 struct WH {
     int w;
     int h;
@@ -229,7 +235,7 @@ void UpdateLayered(HWND hWnd) {
     DrawToMemoryDC(hdcMem, wh.w, wh.h);
     POINT ptWin = {0, 0};
     SIZE sizeWin = {wh.w, wh.h};
-    BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.windowPage.alpha, AC_SRC_ALPHA};
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, appState.page.alpha, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
     DeleteObject(hBitmap);
