@@ -14,7 +14,12 @@ std::wstring FormatTime(int seconds) {
 }
 
 // & Only draw instruction needs internal state check
-void DrawInstruction(Gdiplus::Graphics& graphics, Gdiplus::RectF* rect, const std::wstring& text) {
+void DrawInstruction(Gdiplus::Graphics& graphics, int alpha, Gdiplus::RectF* rect,
+                     const std::wstring& text) {
+    if (alpha == 0) {
+        return;
+    }
+
     static bool showInstruction = AppState::GetInstance().config.instruction == Instruction::Show;
     if (!showInstruction) {
         return;
@@ -26,12 +31,17 @@ void DrawInstruction(Gdiplus::Graphics& graphics, Gdiplus::RectF* rect, const st
                                   .font = &font,
                                   .rect = rect,
                                   .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                  .alpha = alpha,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, instrParams);
 }
 
-void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
+void DrawWarning(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+    if (alpha == 0) {
+        return;
+    }
+
     static auto& warnings = AppState::GetInstance().config.warnings;
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
@@ -43,13 +53,18 @@ void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
                                  .font = &warnFont,
                                  .rect = &warnRect,
                                  .horizontalAlign = Gdiplus::StringAlignmentNear,
+                                 .alpha = alpha,
                                  .color = &colors.TextWarnColor,
                                  //  .color = &colors.TextDangerColor,
                                  .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, warnParams);
 }
 
-void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
+void DrawCountdown(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
+    if (alpha == 0) {
+        return;
+    }
+
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
@@ -69,6 +84,7 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
                                   .font = &firstFont,
                                   .rect = &firstRect,
                                   .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                  .alpha = alpha,
                                   .color = &colors.TextColor,
                                   .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, firstParams);
@@ -83,6 +99,7 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
                                    .rect = &secondRect,
                                    .manualAlign = false,
                                    .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                   .alpha = alpha,
                                    .color = &colors.TextWarnColor,
                                    .shadowColor = &colors.TextShadowColor};
     // & seconds cannot use cache since it changes every second
@@ -90,18 +107,18 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
 
     // Draw cancel instruction below the number
     Gdiplus::RectF smallRect(0, y + 300, w, h);
-    DrawInstruction(graphics, &smallRect, i18n.PressAnyKeyToCancel);
+    DrawInstruction(graphics, alpha, &smallRect, i18n.PressAnyKeyToCancel);
 }
 
 // alpha: 0-255 overall opacity multiplier for all painted colors in this function
-void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
-    static auto& appState = AppState::GetInstance();
-    static auto& i18n = I18N::GetInstance();
-    static auto& colors = ColorSet::GetInstance();
-    int alpha = appState.windowPage.alpha;
+void DrawButtons(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
     if (alpha == 0) {
         return;
     }
+
+    static auto& appState = AppState::GetInstance();
+    static auto& i18n = I18N::GetInstance();
+    static auto& colors = ColorSet::GetInstance();
 
     // Draw image buttons (original logic)
     for (int i = 0; i < appState.buttons.size(); ++i) {
@@ -125,7 +142,7 @@ void DrawButtons(Gdiplus::Graphics& graphics, int w, int h) {
     // Draw exit instruction below buttons
     int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
     Gdiplus::RectF instrRect(0, instrY, w, h);
-    DrawInstruction(graphics, &instrRect, i18n.PressAnyKeyToExit);
+    DrawInstruction(graphics, alpha, &instrRect, i18n.PressAnyKeyToExit);
 }
 
 void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
@@ -146,14 +163,11 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // * These functions will decide internally whether to draw based on current state
     if (!appState.config.warnings.empty()) {
-        DrawWarning(graphics, w, h);
+        DrawWarning(graphics, TARGET_ALPHA, w, h);
     }
 
-    if (appState.isCountingDown()) {
-        DrawCountdown(graphics, w, h);
-    } else {
-        DrawButtons(graphics, w, h);
-    }
+    DrawCountdown(graphics, appState.windowPage.GetPageAlpha(Page::Countdown), w, h);
+    DrawButtons(graphics, appState.windowPage.GetPageAlpha(Page::Main), w, h);
 }
 
 struct WH {

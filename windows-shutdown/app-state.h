@@ -19,6 +19,16 @@ struct WindowPage {
 
     // Only consider one page fading to another, no need to distinguish fading out or in
     bool fading = false;
+
+    BYTE GetPageAlpha(Page page) {
+        if (current == page) {
+            return alpha;
+        } else if (next == page) {
+            return TARGET_ALPHA - alpha;
+        } else {
+            return 0;
+        }
+    }
 };
 
 class AppState {
