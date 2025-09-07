@@ -13,18 +13,27 @@ std::wstring FormatTime(int seconds) {
     return std::format(L"{:02}:{:02}:{:02}", h, m, s);
 }
 
-Gdiplus::Color ApplyAlpha(Gdiplus::Color color, BYTE outerAlpha) {
+Gdiplus::Color* ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
+    if (alpha == TARGET_ALPHA) {
+        return color;
+    }
+
     // overallAlpha in 0..255, srcA in 0..255
-    int blended = (outerAlpha * color.GetA()) / 255;
+    int blended = (alpha * color->GetA()) / 255;
     if (blended < 0) {
         blended = 0;
     } else if (blended > 255) {
         blended = 255;
     }
-    return Gdiplus::Color(blended, color.GetR(), color.GetG(), color.GetB());
+    Gdiplus::Color result(blended, color->GetR(), color->GetG(), color->GetB());
+    return &result;
 };
 
 Gdiplus::ImageAttributes* ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
+    if (alpha == TARGET_ALPHA) {
+        return nullptr;
+    }
+
     Gdiplus::ColorMatrix colorMatrix = {
         1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,           1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, alpha / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
@@ -69,7 +78,7 @@ void DrawWarning(Gdiplus::Graphics& graphics, int w, int h) {
     DrawCachedUIText(graphics, warnParams);
 }
 
-void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
+void DrawCountdown(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
@@ -118,6 +127,9 @@ void DrawButtons(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
+    if (alpha == 0) {
+        return;
+    }
 
     // Draw image buttons (original logic)
     for (int i = 0; i < appState.buttons.size(); ++i) {
@@ -130,7 +142,7 @@ void DrawButtons(Gdiplus::Graphics& graphics, int alpha, int w, int h) {
                            Gdiplus::UnitPixel, attr);
         // If hovered, overlay a semi-transparent white, but scaled by overall alpha
         if (i == appState.hoveredIndex) {
-            Gdiplus::Color blended(ApplyAlpha(colors.ButtonHighlightColor, alpha));
+            Gdiplus::Color blended(*ApplyAlpha(&colors.ButtonHighlightColor, alpha));
             Gdiplus::SolidBrush highlightBrush(blended);
             graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
                                  BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2,
@@ -153,7 +165,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static Gdiplus::Color baseBgColor = AppState::GetInstance().config.backgroundColor;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(ApplyAlpha(baseBgColor, appState.windowPage.alpha));
+    Gdiplus::SolidBrush bgBrush(*ApplyAlpha(&baseBgColor, appState.windowPage.alpha));
 
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
