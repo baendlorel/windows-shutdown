@@ -207,8 +207,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             HandleMoustMove(hWnd, lParam);
             break;
         case WM_KEYDOWN:
-        case WM_SYSKEYDOWN:
-            if (!AppState::GetInstance().page.fading) {
+            if (!AppState::GetInstance().page.fading && wParam == VK_ESCAPE) {
                 HandleKeydown(hWnd);
             }
             break;

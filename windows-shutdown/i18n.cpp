@@ -26,8 +26,8 @@ void I18N::SetLang(Lang lang) {
         ErrShutdownFailed = L"启动系统关机失败！";
         ErrSleepFailed = L"系统睡眠失败！可能不支持睡眠功能。";
         ErrTitle = L"错误";
-        PressAnyKeyToExit = L"按任意键或鼠标点击其他位置退出。";
-        PressAnyKeyToCancel = L"按任意键或鼠标点击取消。";
+        PressAnyKeyToExit = L"按 ESC 键或鼠标点击其他位置退出。";
+        PressAnyKeyToCancel = L"按 ESC 键或鼠标点击取消。";
 
         LineNumber = L"行号";
 
@@ -86,8 +86,8 @@ void I18N::SetLang(Lang lang) {
         ErrShutdownFailed = L"Failed to initiate system shutdown!";
         ErrSleepFailed = L"System sleep failed! Sleep function may not be supported.";
         ErrTitle = L"Error";
-        PressAnyKeyToExit = L"Press any key or click elsewhere to exit.";
-        PressAnyKeyToCancel = L"Press any key or click to cancel.";
+        PressAnyKeyToExit = L"Press ESC key or click elsewhere to exit.";
+        PressAnyKeyToCancel = L"Press ESC key or click to cancel.";
 
         LineNumber = L"Line";
 
