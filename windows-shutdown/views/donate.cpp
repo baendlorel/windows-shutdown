@@ -1,34 +1,18 @@
-#include "countdown.h"
+#include "donate.h"
 
 #include "consts/effects.h"
 #include "consts/color-set.h"
 #include "consts/font-style.h"
 #include "app-state.h"
 #include "i18n.h"
+#include "bitmap-loader.h"
 #include "ui.h"
-
-// (original empty stub removed)
 
 // Load and cache donate bitmap from assets folder using I18N::DonateQrFileName
 static Gdiplus::Bitmap* LoadDonateBitmap() {
-    static Gdiplus::Bitmap* cached = nullptr;
-    if (cached) {
-        return cached;
-    }
-
-    auto& i18n = I18N::GetInstance();
-    // assets path relative to executable / project. Assume assets are in "assets/" next to binary.
-    std::wstring filePath = L"assets/" + i18n.DonateQrFileName;
-
-    Gdiplus::Bitmap* img = Gdiplus::Bitmap::FromFile(filePath.c_str());
-    if (!img || img->GetLastStatus() != Gdiplus::Ok) {
-        // fail quietly and return nullptr
-        delete img;
-        cached = nullptr;
-        return nullptr;
-    }
-    cached = img;
-    return cached;
+    static Gdiplus::Bitmap* img = LoadBitmapByResourceId(AppState::GetInstance().hInst,
+                                                         I18N::GetInstance().DonateQRResourceID);
+    return img;
 }
 
 void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
@@ -45,21 +29,18 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
     std::wstring thankText = i18n.DonateThank;
 
     Gdiplus::Bitmap* img = LoadDonateBitmap();
-    if (!img) {
-        // still draw the text centered if image not available
-        Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
-        Gdiplus::RectF textRect(0, static_cast<Gdiplus::REAL>(h) / 2 - 50.0f,
-                                static_cast<Gdiplus::REAL>(w), static_cast<Gdiplus::REAL>(h));
-        DrawTextParams params = {.text = thankText,
-                                 .font = &font,
-                                 .rect = &textRect,
-                                 .horizontalAlign = Gdiplus::StringAlignmentCenter,
-                                 .alpha = alpha,
-                                 .color = &colors.TextColor,
-                                 .shadowColor = &colors.TextShadowColor};
-        DrawCachedUIText(graphics, params);
-        return;
-    }
+
+    // still draw the text centered if image not available
+    Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+    Gdiplus::RectF textRect(0, 0.5f * h - 60, w, h);
+    DrawTextParams params = {.text = thankText,
+                             .font = &font,
+                             .rect = &textRect,
+                             .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                             .alpha = alpha,
+                             .color = &colors.TextColor,
+                             .shadowColor = &colors.TextShadowColor};
+    DrawCachedUIText(graphics, params);
 
     // Draw image centered
     int imgW = img->GetWidth();

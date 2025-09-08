@@ -6,16 +6,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SRCDIR "${CMAKE_SOURCE_DIR}/windows-shutdown")
 
-set(SRCS
-    ${SRCDIR}/main.cpp
-    ${SRCDIR}/config.cpp
-    ${SRCDIR}/controller.cpp
-    ${SRCDIR}/ui.cpp
-    ${SRCDIR}/i18n.cpp
-    ${SRCDIR}/menu-button.cpp
-    ${SRCDIR}/render.cpp
-    ${SRCDIR}/window.cpp
+## Collect all .cpp sources under ${SRCDIR} recursively.
+## Using CONFIGURE_DEPENDS makes CMake re-run configuration when the file list changes
+## (requires CMake >= 3.12; project sets 3.15 so it's available).
+file(GLOB_RECURSE CPP_SRCS
+    CONFIGURE_DEPENDS
+    "${SRCDIR}/*.cpp"
+    "${SRCDIR}/*/*.cpp"
 )
+
+set(SRCS ${CPP_SRCS})
 
 # Resource handling: MSVC supports .rc directly; MinGW needs windres to produce an object
 # The goal is to make the resource file part of the dependency graph so changes to the

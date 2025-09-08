@@ -1,6 +1,7 @@
 #include "i18n.h"
 #include <format>
 #include "consts/util.h"
+#include "resource.h"
 
 I18N& I18N::GetInstance() {
     static I18N instance;
@@ -61,7 +62,7 @@ void I18N::SetLang(Lang lang) {
         Waiting[1] = L"还有";
         Waiting[2] = L"";  // left empty
 
-        DonateQrFileName = L"donate-zh.jpg";
+        DonateQRResourceID = IDB_DONATEZHPNG;
         DonateThank = L"谢谢你的支持，给我满满的动力～";
     } else {
         FontFamilyName = L"Arial";
@@ -119,7 +120,7 @@ void I18N::SetLang(Lang lang) {
         Waiting[1] = L"";
         Waiting[2] = L"";  // left empty
 
-        DonateQrFileName = L"donate-en.png";
+        DonateQRResourceID = IDB_DONATEENPNG;
         DonateThank = L"Thanks for your support — you keep me going!";
     }
 }

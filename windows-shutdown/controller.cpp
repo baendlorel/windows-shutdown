@@ -149,4 +149,5 @@ void TriggerConfig(HWND hWnd) {
 
 void TriggerDonate(HWND hWnd) {
     auto& appState = AppState::GetInstance();
+    appState.page.Start(Page::Donate, hWnd);
 }
