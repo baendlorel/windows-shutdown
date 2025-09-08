@@ -62,6 +62,7 @@ void I18N::SetLang(Lang lang) {
         Waiting[2] = L"";  // left empty
 
         DonateQrFileName = L"donate-zh.jpg";
+        DonateThank = L"谢谢你的支持，给我满满的动力～";
     } else {
         FontFamilyName = L"Arial";
 
@@ -119,6 +120,7 @@ void I18N::SetLang(Lang lang) {
         Waiting[2] = L"";  // left empty
 
         DonateQrFileName = L"donate-en.png";
+        DonateThank = L"Thanks for your support — you keep me going!";
     }
 }
 

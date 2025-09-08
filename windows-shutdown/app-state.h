@@ -7,7 +7,7 @@
 #include "app-page.h"
 
 #include "config.h"
-#include "menu-button.h"
+#include "components/menu-button.h"
 
 class AppState {
    public:

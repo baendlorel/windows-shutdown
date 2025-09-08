@@ -73,6 +73,8 @@ class I18N {
 
     // donate
     std::wstring DonateQrFileName;
+    // localized thank-you text shown above donate QR code
+    std::wstring DonateThank;
 
    private:
     I18N() = default;

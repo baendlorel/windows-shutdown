@@ -3,6 +3,7 @@
 
 #include "components/config-warning.h"
 #include "views/countdown.h"
+#include "views/donate.h"
 #include "views/home.h"
 
 #include "consts/font-style.h"
@@ -42,8 +43,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // ! __DrawDebug(graphics, w, h);
 
-    DrawCountdown(graphics, appState.page.GetPageAlpha(Page::Countdown), w, h);
-    DrawHome(graphics, appState.page.GetPageAlpha(Page::Home), w, h);
+    DrawCountdown(graphics, w, h);
+    DrawDonate(graphics, w, h);
+    DrawHome(graphics, w, h);
 }
 
 /**

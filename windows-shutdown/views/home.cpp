@@ -46,7 +46,8 @@ void DrawMenuButtons(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
     DrawInstruction(graphics, alpha, &instrRect, i18n.PressAnyKeyToExit);
 }
 
-void DrawHome(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
+void DrawHome(Gdiplus::Graphics& graphics, int w, int h) {
+    BYTE alpha = AppState::GetInstance().page.GetPageAlpha(Page::Home);
     if (alpha == 0) {
         return;
     }

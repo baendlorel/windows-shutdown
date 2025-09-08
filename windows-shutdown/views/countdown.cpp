@@ -8,12 +8,13 @@
 #include "i18n.h"
 #include "ui.h"
 
-void DrawCountdown(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
+void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
+    static auto& appState = AppState::GetInstance();
+    BYTE alpha = appState.page.GetPageAlpha(Page::Countdown);
     if (alpha == 0) {
         return;
     }
 
-    static auto& appState = AppState::GetInstance();
     static auto& i18n = I18N::GetInstance();
     static auto& colors = ColorSet::GetInstance();
 
