@@ -9,7 +9,7 @@ IDB_CONFIGPNG           PNG                     "assets\\config.png"
 IDB_LOCKPNG             PNG                     "assets\\lock.png"
 IDB_SLEEPPNG            PNG                     "assets\\sleep.png"
 IDB_DONATEENPNG         PNG                     "assets\\donate-en.png"
-IDB_DONATEZHPNG         PNG                     "assets\\donate-zh.jpg"
+IDB_DONATEZHPNG         PNG                     "assets\\donate-zh.png"
 IDB_DONATEPNG           PNG                     "assets\\donate.png"
 
 /////////////////////////////////////////////////////////////////////////////

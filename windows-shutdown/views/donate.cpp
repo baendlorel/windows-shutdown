@@ -30,18 +30,6 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
 
     Gdiplus::Bitmap* img = LoadDonateBitmap();
 
-    // still draw the text centered if image not available
-    Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
-    Gdiplus::RectF textRect(0, 0.5f * h - 60, w, h);
-    DrawTextParams params = {.text = thankText,
-                             .font = &font,
-                             .rect = &textRect,
-                             .horizontalAlign = Gdiplus::StringAlignmentCenter,
-                             .alpha = alpha,
-                             .color = &colors.TextColor,
-                             .shadowColor = &colors.TextShadowColor};
-    DrawCachedUIText(graphics, params);
-
     // Draw image centered
     int imgW = img->GetWidth();
     int imgH = img->GetHeight();
