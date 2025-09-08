@@ -56,7 +56,7 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
         BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * MAX_ALPHA);
         brush.SetColor(ApplyAlpha(params.shadowColor, alpha));
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 16; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
             Gdiplus::RectF rect(params.rect->X + dx, params.rect->Y + dy, params.rect->Width,

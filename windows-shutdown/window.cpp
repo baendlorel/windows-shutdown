@@ -92,17 +92,18 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
 }
 
 // todo 按任意键应该和鼠标点任意位置的行为一致
-void HandleKeydown(HWND hWnd) {
+void HandleEsc(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
         return;
     }
-    if (appState.page.fading) {
-        return;
+
+    if (appState.page.current == Page::Home) {
+        appState.page.Start(Page::None, hWnd);
+    } else {
+        appState.page.Start(Page::Home, hWnd);
     }
-    appState.page.fading = true;
-    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
 }
 
 void HandleMoustMove(HWND hWnd, LPARAM lParam) {
@@ -168,12 +169,8 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
     }
 
     // If not clicking on any button, return to main page or exit
-    if (!hit && !appState.page.fading) {
-        if (appState.page.current == Page::Home) {
-            appState.page.Start(Page::None, hWnd);
-        } else {
-            appState.page.Start(Page::Home, hWnd);
-        }
+    if (!hit) {
+        HandleEsc(hWnd);
     }
 }
 
@@ -190,6 +187,7 @@ void HandleCancel(HWND hWnd) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    static auto& appState = AppState::GetInstance();
     switch (message) {
         case WM_CLOSE:
             HandleCancel(hWnd);
@@ -207,13 +205,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             HandleMoustMove(hWnd, lParam);
             break;
         case WM_KEYDOWN:
-            if (!AppState::GetInstance().page.fading && wParam == VK_ESCAPE) {
-                HandleKeydown(hWnd);
+            if (!appState.page.fading && wParam == VK_ESCAPE) {
+                HandleEsc(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
-            if (!AppState::GetInstance().page.fading) {
+            if (!appState.page.fading) {
                 HandleLeftClick(hWnd, lParam);
             }
             break;
