@@ -47,10 +47,6 @@ BOOL InitInstance(int) {
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
     if (appState.config.isImmediate()) {
-        appState.page.Start(Page::Countdown);
-
-        // Start countdown immediately so the first painted frame shows the
-        // countdown UI rather than the main menu, avoiding flicker.
         StartCountdown(hWnd, appState.config.action);
     } else {
         appState.page.GoHome();

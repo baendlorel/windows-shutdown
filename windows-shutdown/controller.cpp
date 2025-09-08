@@ -109,6 +109,7 @@ void ExecuteAction(HWND hWnd, Action action) {
     return;
 }
 
+// Jump to countdown page and start countdown timer
 void StartCountdown(HWND hWnd, Action action) {
     auto& appState = AppState::GetInstance();
     if (appState.config.delay <= 0) {
@@ -117,9 +118,9 @@ void StartCountdown(HWND hWnd, Action action) {
     }
 
     appState.action = action;
-    appState.page.Start(Page::Countdown);
     appState.countdownSeconds = appState.config.delay;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
+    appState.page.Start(Page::Countdown);
     UpdateLayered(hWnd);                             // Redraw to show countdown
 }
 
