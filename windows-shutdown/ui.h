@@ -14,6 +14,8 @@ struct DrawTextParams {
     Gdiplus::Color* shadowColor;
 };
 
+std::wstring FormatTime(int seconds);
+
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha);
 
 std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha);

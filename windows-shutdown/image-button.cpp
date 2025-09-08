@@ -46,11 +46,14 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     this->png = image;
 }
 
-void ImageButton::Center(int marginLeft, int marginTop, int w, int h) {
+void ImageButton::Center(int buttonCount, int index, int w, int h) {
+    float centerIndex = (buttonCount - 1) * 0.5f;
+    int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (index - centerIndex));
+
     int centerX = w / 2;
     int centerY = h / 2;
-    this->x = centerX + marginLeft;
-    this->y = centerY + marginTop;
+    this->x = centerX + BUTTON_MARGIN_LEFT + delta;
+    this->y = centerY + BUTTON_MARGIN_TOP;
 }
 
 bool ImageButton::MouseHit(int mx, int my) const {

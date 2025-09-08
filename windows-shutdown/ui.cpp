@@ -1,8 +1,20 @@
 #include "ui.h"
 #include <unordered_map>
+#include <format>
 
 #include "consts/font-style.h"
 #include "consts/effects.h"
+
+std::wstring FormatTime(int seconds) {
+    static auto pad = [](int num) {
+        return (num > 9) ? std::format(L"{}", num) : std::format(L"0{}", num);
+    };
+
+    int h = seconds / 3600;
+    int m = (seconds % 3600) / 60;
+    int s = seconds % 60;
+    return std::format(L"{}:{}:{}", pad(h), pad(m), pad(s));
+}
 
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
     if (alpha == MAX_ALPHA) {

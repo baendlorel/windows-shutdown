@@ -19,7 +19,7 @@ struct ImageButton {
 
     void LoadPNGFromResource(HINSTANCE hInst);
 
-    void Center(int marginLeft, int marginTop, int w, int h);
+    void Center(int buttonCount, int index, int w, int h);
 
     bool MouseHit(int mx, int my) const;
 };
