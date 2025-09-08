@@ -91,6 +91,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     }
 }
 
+// todo 按任意键应该和鼠标点任意位置的行为一致
 void HandleKeydown(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {

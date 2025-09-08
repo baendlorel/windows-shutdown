@@ -56,7 +56,7 @@ std::string DefaultConfigZh() {
         "{}\n"
         "\n"
         "{}\n",
-        lang, action, delay, instruction, donateButton, delay, bgColor);
+        lang, action, delay, instruction, donateButton, bgColor);
 }
 
 std::string DefaultConfigEn() {
@@ -107,7 +107,7 @@ std::string DefaultConfigEn() {
         "{}\n"
         "\n"
         "{}\n",
-        lang, action, delay, instruction, donateButton, delay, bgColor);
+        lang, action, delay, instruction, donateButton, bgColor);
 }
 
 std::string trim(const std::string& s) {

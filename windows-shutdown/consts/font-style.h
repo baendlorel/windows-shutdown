@@ -1,7 +1,7 @@
 #pragma once
 
 // font styles
-constexpr int TEXT_SHADOW_ALPHA = 230;  // max alpha for text shadow
+constexpr int TEXT_SHADOW_ALPHA = 160;  // max alpha for text shadow
 constexpr int TEXT_SHADOW_RADIUS = 8;
 constexpr int TEXT_SHADOW_RADIUS_STEP = 2;
 constexpr int COUNT_DOWN_FONT_SIZE = 48;
@@ -9,6 +9,8 @@ constexpr int COUNT_DOWN_NUMBER_FONT_SIZE =
     64;  // font size for the large seconds number on the second line
 constexpr int INSTRUCTION_FONT_SIZE = 20;
 constexpr int FONT_OUTLINE_WIDTH = 3;
+
+// todo 这里可以增加更多值
 constexpr float SHADOW_OFFSET[8][2] = {
     {1.000f, 0.000f},    // 0
     {0.707f, 0.707f},    // 45

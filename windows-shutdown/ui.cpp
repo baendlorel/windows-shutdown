@@ -53,8 +53,6 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     Gdiplus::SolidBrush brush(Gdiplus::Color(0, 0, 0, 0));
 
     // temporarily change compositing mode to SourceCopy to avoid blending multiple shadows
-    auto compositingMode = graphics.GetCompositingMode();
-    graphics.SetCompositingMode(Gdiplus::CompositingModeSourceCopy);
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
         BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * MAX_ALPHA);
         brush.SetColor(ApplyAlpha(params.shadowColor, alpha));
@@ -66,7 +64,6 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
             graphics.DrawString(params.text.c_str(), -1, params.font, rect, &format, &brush);
         }
     }
-    graphics.SetCompositingMode(compositingMode);
 }
 
 void DrawUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
