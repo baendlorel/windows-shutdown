@@ -117,16 +117,16 @@ void StartCountdown(HWND hWnd, Action action) {
         return;
     }
 
-    appState.action = action;
     appState.countdownSeconds = appState.config.delay;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
+    appState.action = action;
     appState.page.Start(Page::Countdown, hWnd);
 }
 
 void CancelCountdown(HWND hWnd) {
     auto& appState = AppState::GetInstance();
     if (appState.page.current == Page::Countdown) {
-        appState.action = Action::None;
+        // & do this in page.SetAlpha: appState.action = Action::None;
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
         appState.page.Start(Page::Home, hWnd);
     }

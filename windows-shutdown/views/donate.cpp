@@ -37,14 +37,12 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
     int drawY = (h - imgH) / 2;
 
     auto imgAttr = ImageAttrWithAlpha(img, alpha);
-    Gdiplus::RectF imgRect(static_cast<Gdiplus::REAL>(drawX), static_cast<Gdiplus::REAL>(drawY),
-                           static_cast<Gdiplus::REAL>(imgW), static_cast<Gdiplus::REAL>(imgH));
+    Gdiplus::RectF imgRect(drawX, drawY, imgW, imgH);
     graphics.DrawImage(img, imgRect, 0, 0, imgW, imgH, Gdiplus::UnitPixel, imgAttr.get());
 
     // Draw thank-you text above image
-    Gdiplus::Font thankFont(&fontFamily, INSTRUCTION_FONT_SIZE + 2, Gdiplus::FontStyleBold);
-    Gdiplus::RectF thankRect(0, static_cast<Gdiplus::REAL>(drawY) - 60.0f,
-                             static_cast<Gdiplus::REAL>(w), static_cast<Gdiplus::REAL>(h));
+    Gdiplus::Font thankFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+    Gdiplus::RectF thankRect(0, drawY - 100, w, h);
     DrawTextParams thankParams = {.text = thankText,
                                   .font = &thankFont,
                                   .rect = &thankRect,
