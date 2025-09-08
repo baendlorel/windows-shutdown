@@ -14,6 +14,7 @@ struct Config {
     Lang lang;
     Action action;
     Instruction instruction;
+    DonateButton donateButton;
     int delay;
     Gdiplus::Color backgroundColor;  // ARGB , same as Gdiplus::Color
     std::vector<ConfigWarnInfo> warnings;

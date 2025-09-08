@@ -26,6 +26,12 @@ std::string DefaultConfigZh() {
         "{}={}",
         CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
+    std::string donateButton = std::format(
+        "# 可填：{}, {}（默认）\n"
+        "{}={}",
+        CFG_DONATE_BUTTON_HIDE, CFG_DONATE_BUTTON_SHOW, CFG_KEY_DONATE_BUTTON,
+        CFG_DONATE_BUTTON_SHOW);
+
     std::string delay = std::format(
         "# 在执行操作之前等待这么多秒，默认{}秒\n"
         "{}={}",
@@ -47,8 +53,10 @@ std::string DefaultConfigZh() {
         "\n"
         "{}\n"
         "\n"
+        "{}\n"
+        "\n"
         "{}\n",
-        lang, action, delay, instruction, delay, bgColor);
+        lang, action, delay, instruction, donateButton, delay, bgColor);
 }
 
 std::string DefaultConfigEn() {
@@ -68,6 +76,12 @@ std::string DefaultConfigEn() {
         "# Options: {}, {}(Default)\n"
         "{}={}",
         CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
+
+    std::string donateButton = std::format(
+        "# Options: {}, {}(Default)\n"
+        "{}={}",
+        CFG_DONATE_BUTTON_HIDE, CFG_DONATE_BUTTON_SHOW, CFG_KEY_DONATE_BUTTON,
+        CFG_DONATE_BUTTON_SHOW);
 
     std::string delay = std::format(
         "# Wait time (in seconds, default is {}s) before action.\n"
@@ -90,8 +104,10 @@ std::string DefaultConfigEn() {
         "\n"
         "{}\n"
         "\n"
+        "{}\n"
+        "\n"
         "{}\n",
-        lang, action, delay, instruction, delay, bgColor);
+        lang, action, delay, instruction, donateButton, delay, bgColor);
 }
 
 std::string trim(const std::string& s) {
@@ -117,6 +133,7 @@ Config::Config()
     : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
       action(Action::None),
       instruction(Instruction::Show),
+      donateButton(DonateButton::Show),
       delay(CFG_DEFAULT_DELAY),
       backgroundColor(ColorSet::GetInstance().BackgroundColor) {
     this->Load();
@@ -199,6 +216,20 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         }
 
         return ConfigWarning::InvalidInstruction;
+    }
+
+    if (key == CFG_KEY_DONATE_BUTTON) {
+        if (value == CFG_DONATE_BUTTON_SHOW) {
+            this->donateButton = DonateButton::Show;
+            return ConfigWarning::None;
+        }
+
+        if (value == CFG_DONATE_BUTTON_HIDE) {
+            this->donateButton = DonateButton::Hide;
+            return ConfigWarning::None;
+        }
+
+        return ConfigWarning::InvalidDonateButton;
     }
 
     if (key == CFG_KEY_DELAY) {

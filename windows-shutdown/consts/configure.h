@@ -7,6 +7,7 @@
 #define CFG_KEY_ACTION           "action"
 #define CFG_KEY_DELAY            "delay"
 #define CFG_KEY_INSTRUCTION      "instruction"
+#define CFG_KEY_DONATE_BUTTON    "donateButton"
 #define CFG_KEY_BACKGROUND_COLOR "backgroundColor"
 
 #define CFG_LANG_ZH "zh"
@@ -23,10 +24,14 @@
 #define CFG_INSTRUCTION_SHOW "show"
 #define CFG_INSTRUCTION_HIDE "hide"
 
+#define CFG_DONATE_BUTTON_SHOW "show"
+#define CFG_DONATE_BUTTON_HIDE "hide"
+
 #define CFG_BACKGROUND_COLOR_DEFAULT "#00000034"  // ARGB same as macro BACKGROUND_COLOR below
 
 enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hide };
+enum class DonateButton { Show, Hide };
 constexpr int CFG_DEFAULT_DELAY = 3;
 
 // config warnings
@@ -37,6 +42,7 @@ enum class ConfigWarning {
     InvalidLanguage,
     InvalidAction,
     InvalidInstruction,
+    InvalidDonateButton,
     InvalidDelay,
     InvalidBackgroundColorFormat,
     InvalidBackgroundColorValue

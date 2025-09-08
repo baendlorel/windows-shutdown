@@ -62,7 +62,10 @@ class AppState {
 
    private:
     AppState() {
-        this->buttons.push_back(MenuButton(IDB_DONATEPNG, Action::Donate));
+        // Add donate button only if configuration allows it
+        if (config.donateButton == DonateButton::Show) {
+            this->buttons.push_back(MenuButton(IDB_DONATEPNG, Action::Donate));
+        }
         this->buttons.push_back(MenuButton(IDB_CONFIGPNG, Action::Config));
         this->buttons.push_back(MenuButton(IDB_LOCKPNG, Action::Lock));
         this->buttons.push_back(MenuButton(IDB_SLEEPPNG, Action::Sleep));
