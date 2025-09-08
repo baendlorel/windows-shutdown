@@ -1,4 +1,5 @@
 #pragma once
+#include "framework.h"
 #include "consts/core.h"
 #include "consts/effects.h"
 
@@ -31,13 +32,18 @@ struct AppPage {
         }
     }
 
-    void Start(Page next) {
+    // If hWnd is provided, start a fading timer
+    void Start(Page next, HWND hWnd) {
         if (next == this->current) {
             return;
         }
         this->next = next;
         this->fading = true;
         this->alpha = 0;
+
+        if (hWnd != nullptr) {
+            SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
+        }
     }
 
     void SetAlpha(BYTE alpha) {
@@ -47,10 +53,5 @@ struct AppPage {
             this->next = Page::None;
             this->fading = false;
         }
-    }
-
-    // common functions
-    void GoHome() {
-        Start(Page::Home);
     }
 };

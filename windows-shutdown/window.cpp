@@ -49,9 +49,8 @@ BOOL InitInstance(int) {
     if (appState.config.isImmediate()) {
         StartCountdown(hWnd, appState.config.action);
     } else {
-        appState.page.GoHome();
+        appState.page.Start(Page::Home, hWnd);
     }
-    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
     return TRUE;
 }
 
@@ -170,11 +169,10 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
     // If not clicking on any button, return to main page or exit
     if (!hit && !appState.page.fading) {
         if (appState.page.current == Page::Home) {
-            appState.page.Start(Page::None);
-        } else  {
-            appState.page.GoHome();
+            appState.page.Start(Page::None, hWnd);
+        } else {
+            appState.page.Start(Page::Home, hWnd);
         }
-        SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
     }
 }
 
@@ -186,8 +184,7 @@ void HandleCancel(HWND hWnd) {
 
     // return to main page if not already there
     if (!appState.page.fading) {
-        appState.page.GoHome();
-        SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
+        appState.page.Start(Page::Home, hWnd);
     }
 }
 

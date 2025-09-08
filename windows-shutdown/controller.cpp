@@ -120,9 +120,7 @@ void StartCountdown(HWND hWnd, Action action) {
     appState.action = action;
     appState.countdownSeconds = appState.config.delay;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
-    appState.page.Start(Page::Countdown);
-    // UpdateLayered(hWnd);                             // Redraw to show countdown
-    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
+    appState.page.Start(Page::Countdown, hWnd);
 }
 
 void CancelCountdown(HWND hWnd) {
@@ -130,9 +128,7 @@ void CancelCountdown(HWND hWnd) {
     if (appState.page.current == Page::Countdown) {
         appState.action = Action::None;
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
-        // UpdateLayered(hWnd);  // Redraw to hide countdown
-        appState.page.GoHome();
-        SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
+        appState.page.Start(Page::Home, hWnd);
     }
 }
 
@@ -148,9 +144,7 @@ void TriggerConfig(HWND hWnd) {
         return;
     }
 
-    // todo 许多page转换和timer一体，是否融合为一个函数
-    appState.page.Start(Page::None);
-    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
+    appState.page.Start(Page::None, hWnd);
 }
 
 void TriggerDonate(HWND hWnd) {
