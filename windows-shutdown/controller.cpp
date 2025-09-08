@@ -121,16 +121,18 @@ void StartCountdown(HWND hWnd, Action action) {
     appState.countdownSeconds = appState.config.delay;
     SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
     appState.page.Start(Page::Countdown);
-    UpdateLayered(hWnd);                             // Redraw to show countdown
+    // UpdateLayered(hWnd);                             // Redraw to show countdown
+    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
 }
 
 void CancelCountdown(HWND hWnd) {
     auto& appState = AppState::GetInstance();
-    if (appState.isCountingDown()) {
+    if (appState.page.current == Page::Countdown) {
         appState.action = Action::None;
-        appState.page.GoHome();
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
-        UpdateLayered(hWnd);  // Redraw to hide countdown
+        // UpdateLayered(hWnd);  // Redraw to hide countdown
+        appState.page.GoHome();
+        SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
     }
 }
 
