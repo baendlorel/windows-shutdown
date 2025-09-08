@@ -54,4 +54,22 @@ struct AppPage {
             this->fading = false;
         }
     }
+
+    bool isOpening() const {
+        return this->current == Page::None && this->fading;
+    }
+
+    bool isClosing() const {
+        return this->next == Page::None && this->fading;
+    }
+
+    BYTE GetBackgroundAlpha() const {
+        if (isOpening()) {
+            return this->alpha;
+        }
+        if (isClosing()) {
+            return MAX_ALPHA - this->alpha;
+        }
+        return MAX_ALPHA;
+    }
 };
