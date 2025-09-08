@@ -144,8 +144,10 @@ void TriggerConfig(HWND hWnd) {
     if (appState.page.fading) {
         return;
     }
-    appState.page.fading = true;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
+
+    // todo 许多page转换和timer一体，是否融合为一个函数
+    appState.page.Start(Page::None);
+    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
 }
 
 void TriggerDonate(HWND hWnd) {

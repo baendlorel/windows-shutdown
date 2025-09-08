@@ -55,7 +55,7 @@ BOOL InitInstance(int) {
     } else {
         appState.page.GoHome();
     }
-    SetTimer(hWnd, FADEIN_TIMER_ID, FRAME_TIME, NULL);
+    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
     return TRUE;
 }
 
@@ -63,8 +63,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     static auto& appState = AppState::GetInstance();
     auto alpha = appState.page.alpha;
 
-    // todo 只保留一个定时器
-    if (wParam == FADEIN_TIMER_ID) {
+    if (wParam == FADE_TIMER_ID) {
         int steps = FADE_DURATION / FRAME_TIME;
         BYTE step = (MAX_ALPHA + steps - 1) / steps;
         if (alpha < MAX_ALPHA) {
@@ -72,20 +71,14 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
             UpdateLayered(hWnd);
             return;
         }
-        KillTimer(hWnd, FADEIN_TIMER_ID);
-        return;
-    }
 
-    if (wParam == FADEOUT_TIMER_ID) {
-        int steps = FADE_DURATION / FRAME_TIME;
-        BYTE step = (MAX_ALPHA + steps - 1) / steps;
-        if (alpha > 0) {
-            appState.page.SetAlpha((alpha < step) ? 0 : alpha - step);
-            UpdateLayered(hWnd);
+        KillTimer(hWnd, FADE_TIMER_ID);
+
+        // If fading out to close, close now
+        if (appState.page.current == Page::None) {
+            DestroyWindow(hWnd);
             return;
         }
-        KillTimer(hWnd, FADEOUT_TIMER_ID);
-        DestroyWindow(hWnd);
         return;
     }
 
@@ -113,7 +106,7 @@ void HandleKeydown(HWND hWnd) {
         return;
     }
     appState.page.fading = true;
-    SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
+    SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
 }
 
 void HandleMoustMove(HWND hWnd, LPARAM lParam) {
@@ -185,7 +178,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
         } else  {
             appState.page.GoHome();
         }
-        SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
+        SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
     }
 }
 
@@ -198,7 +191,7 @@ void HandleCancel(HWND hWnd) {
     // return to main page if not already there
     if (!appState.page.fading) {
         appState.page.GoHome();
-        SetTimer(hWnd, FADEOUT_TIMER_ID, FRAME_TIME, NULL);
+        SetTimer(hWnd, FADE_TIMER_ID, FRAME_TIME, NULL);
     }
 }
 
