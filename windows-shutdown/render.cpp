@@ -42,6 +42,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     }
 
     // ! __DrawDebug(graphics, w, h);
+    // fixme 未知的点击ESC无响应问题
+    __DrawDebug(graphics, w, h);
 
     DrawCountdown(graphics, w, h);
     DrawDonate(graphics, w, h);

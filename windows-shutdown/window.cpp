@@ -91,7 +91,6 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     }
 }
 
-// todo 按任意键应该和鼠标点任意位置的行为一致
 void HandleEsc(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
@@ -141,7 +140,6 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
             continue;
         }
         hit = true;
-        // todo 编写donate功能
         switch (appState.buttons[i].action) {
             case Action::Donate:
                 TriggerDonate(hWnd);

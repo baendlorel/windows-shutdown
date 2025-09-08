@@ -11,6 +11,18 @@ IDB_SLEEPPNG            PNG                     "assets\\sleep.png"
 IDB_DONATEENPNG         PNG                     "assets\\donate-en.png"
 IDB_DONATEZHPNG         PNG                     "assets\\donate-zh.png"
 IDB_DONATEPNG           PNG                     "assets\\donate.png"
+IDB_NIXIE_0             PNG                     "assets\\nixie-tube\\0.png"
+IDB_NIXIE_1             PNG                     "assets\\nixie-tube\\1.png"
+IDB_NIXIE_2             PNG                     "assets\\nixie-tube\\2.png"
+IDB_NIXIE_3             PNG                     "assets\\nixie-tube\\3.png"
+IDB_NIXIE_4             PNG                     "assets\\nixie-tube\\4.png"
+IDB_NIXIE_5             PNG                     "assets\\nixie-tube\\5.png"
+IDB_NIXIE_6             PNG                     "assets\\nixie-tube\\6.png"
+IDB_NIXIE_7             PNG                     "assets\\nixie-tube\\7.png"
+IDB_NIXIE_8             PNG                     "assets\\nixie-tube\\8.png"
+IDB_NIXIE_9             PNG                     "assets\\nixie-tube\\9.png"
+IDB_NIXIE_BLANK         PNG                     "assets\\nixie-tube\\blank.png"
+IDB_NIXIE_PERIOD        PNG                     "assets\\nixie-tube\\period.png"
 
 /////////////////////////////////////////////////////////////////////////////
 // Icon

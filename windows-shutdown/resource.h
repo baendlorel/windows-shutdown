@@ -13,6 +13,20 @@
 #define IDB_DONATEZHPNG     141
 #define IDB_DONATEPNG       142
 
+// nixie tube digits
+#define IDB_NIXIE_0      143
+#define IDB_NIXIE_1      144
+#define IDB_NIXIE_2      145
+#define IDB_NIXIE_3      146
+#define IDB_NIXIE_4      147
+#define IDB_NIXIE_5      148
+#define IDB_NIXIE_6      149
+#define IDB_NIXIE_7      150
+#define IDB_NIXIE_8      151
+#define IDB_NIXIE_9      152
+#define IDB_NIXIE_BLANK  153
+#define IDB_NIXIE_PERIOD 154
+
 // icons
 #define IDI_MAINICON    300
 #define IDI_RESTARTICON 301
@@ -24,7 +38,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC              1
-#define _APS_NEXT_RESOURCE_VALUE 143
+#define _APS_NEXT_RESOURCE_VALUE 155
 #define _APS_NEXT_COMMAND_VALUE  32771
 #define _APS_NEXT_CONTROL_VALUE  1000
 #define _APS_NEXT_SYMED_VALUE    110
