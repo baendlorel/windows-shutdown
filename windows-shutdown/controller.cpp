@@ -129,6 +129,7 @@ void CancelCountdown(HWND hWnd) {
         // & do this in page.SetAlpha: appState.action = Action::None;
         KillTimer(hWnd, COUNTDOWN_TIMER_ID);
         appState.page.Start(Page::Home, hWnd);
+        appState.page.OnFadeEnd([&appState]() { appState.action = Action::None; });
     }
 }
 

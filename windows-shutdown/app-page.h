@@ -2,6 +2,7 @@
 #include "framework.h"
 #include "consts/core.h"
 #include "consts/effects.h"
+#include <functional>
 
 typedef unsigned char BYTE;
 
@@ -52,7 +53,17 @@ struct AppPage {
             this->current = this->next;
             this->next = Page::None;
             this->fading = false;
+            // invoke and clear fade-end callback if present
+            if (onFadeEnd) {
+                onFadeEnd();
+                onFadeEnd = {};
+            }
         }
+    }
+
+    // Register a callback to be invoked once when a fade finishes (alpha reaches MAX_ALPHA).
+    void OnFadeEnd(std::function<void()> cb) {
+        onFadeEnd = std::move(cb);
     }
 
     bool isOpening() const {
@@ -72,4 +83,7 @@ struct AppPage {
         }
         return MAX_ALPHA;
     }
+
+   private:
+    std::function<void()> onFadeEnd;
 };
