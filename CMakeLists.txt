@@ -12,7 +12,7 @@ set(SRCS
     ${SRCDIR}/controller.cpp
     ${SRCDIR}/ui.cpp
     ${SRCDIR}/i18n.cpp
-    ${SRCDIR}/image-button.cpp
+    ${SRCDIR}/menu-button.cpp
     ${SRCDIR}/render.cpp
     ${SRCDIR}/window.cpp
 )

@@ -7,7 +7,7 @@
 #include "app-page.h"
 
 #include "config.h"
-#include "image-button.h"
+#include "menu-button.h"
 
 class AppState {
    public:
@@ -45,7 +45,7 @@ class AppState {
     WCHAR szWindowClass[MAX_LOADSTRING] = L"";
 
     Config config;
-    std::vector<ImageButton> buttons;
+    std::vector<MenuButton> buttons;
 
     bool isCountingDown() const {
         switch (action) {
@@ -62,11 +62,11 @@ class AppState {
 
    private:
     AppState() {
-        this->buttons.push_back(ImageButton(IDB_DONATEPNG, Action::Donate));
-        this->buttons.push_back(ImageButton(IDB_CONFIGPNG, Action::Config));
-        this->buttons.push_back(ImageButton(IDB_LOCKPNG, Action::Lock));
-        this->buttons.push_back(ImageButton(IDB_SLEEPPNG, Action::Sleep));
-        this->buttons.push_back(ImageButton(IDB_RESTARTPNG, Action::Restart));
-        this->buttons.push_back(ImageButton(IDB_SHUTDOWNPNG, Action::Shutdown));
+        this->buttons.push_back(MenuButton(IDB_DONATEPNG, Action::Donate));
+        this->buttons.push_back(MenuButton(IDB_CONFIGPNG, Action::Config));
+        this->buttons.push_back(MenuButton(IDB_LOCKPNG, Action::Lock));
+        this->buttons.push_back(MenuButton(IDB_SLEEPPNG, Action::Sleep));
+        this->buttons.push_back(MenuButton(IDB_RESTARTPNG, Action::Restart));
+        this->buttons.push_back(MenuButton(IDB_SHUTDOWNPNG, Action::Shutdown));
     }
 };

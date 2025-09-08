@@ -1,8 +1,8 @@
 #include "consts/button-style.h"
-#include "image-button.h"
+#include "menu-button.h"
 #include "i18n.h"
 
-ImageButton::ImageButton(int resId, Action action) {
+MenuButton::MenuButton(int resId, Action action) {
     this->x = 0;
     this->y = 0;
     this->png = nullptr;
@@ -10,7 +10,7 @@ ImageButton::ImageButton(int resId, Action action) {
     this->action = action;
 }
 
-void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
+void MenuButton::LoadPNGFromResource(HINSTANCE hInst) {
     auto& i18n = I18N::GetInstance();
     HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
     if (!hRes) {
@@ -46,7 +46,7 @@ void ImageButton::LoadPNGFromResource(HINSTANCE hInst) {
     this->png = image;
 }
 
-void ImageButton::Center(int buttonCount, int index, int w, int h) {
+void MenuButton::Center(int buttonCount, int index, int w, int h) {
     float centerIndex = (buttonCount - 1) * 0.5f;
     int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (index - centerIndex));
 
@@ -56,7 +56,7 @@ void ImageButton::Center(int buttonCount, int index, int w, int h) {
     this->y = centerY + BUTTON_MARGIN_TOP;
 }
 
-bool ImageButton::MouseHit(int mx, int my) const {
+bool MenuButton::MouseHit(int mx, int my) const {
     // Account for the same margins used when rendering the button so that
     // hit testing uses the visual center rather than the stored center.
     int dx = mx - this->x;

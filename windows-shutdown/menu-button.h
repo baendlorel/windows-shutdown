@@ -4,7 +4,7 @@
 // consts
 #include "consts/core.h"
 
-struct ImageButton {
+struct MenuButton {
    public:
     Action action;
 
@@ -15,7 +15,7 @@ struct ImageButton {
     Gdiplus::Bitmap* png;
 
    public:
-    ImageButton(int resId, Action action);
+    MenuButton(int resId, Action action);
 
     void LoadPNGFromResource(HINSTANCE hInst);
 
