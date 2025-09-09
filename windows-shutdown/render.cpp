@@ -19,9 +19,26 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     static const Gdiplus::Font font =
         Gdiplus::Font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
     static auto& page = AppState::GetInstance().page;
-    auto alphaStr = std::format(L"Home:{}, Cnt:{}, None:{}", page.GetPageAlpha(Page::Home),
-                                page.GetPageAlpha(Page::Countdown), page.GetPageAlpha(Page::None));
-    graphics.DrawString(alphaStr.c_str(), -1, &font, rect, &format, &brush);
+    auto pageName = [](Page p) -> const wchar_t* {
+        switch (p) {
+            case Page::None:
+                return L"None";
+            case Page::Home:
+                return L"Home";
+            case Page::Countdown:
+                return L"Countdown";
+            case Page::Donate:
+                return L"Donate";
+            default:
+                return L"Unknown";
+        }
+    };
+
+    auto str = std::format(L"Home:{}, Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}",
+                           page.GetPageAlpha(Page::Home), page.GetPageAlpha(Page::Countdown),
+                           page.GetPageAlpha(Page::None), pageName(page.current),
+                           pageName(page.next), (page.fading ? L"true" : L"false"));
+    graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {

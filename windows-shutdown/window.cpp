@@ -91,7 +91,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     }
 }
 
-void HandleEsc(HWND hWnd) {
+void HandleCancel(HWND hWnd) {
     static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
@@ -168,19 +168,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
 
     // If not clicking on any button, return to main page or exit
     if (!hit) {
-        HandleEsc(hWnd);
-    }
-}
-
-void HandleCancel(HWND hWnd) {
-    static auto& appState = AppState::GetInstance();
-    if (appState.isCountingDown()) {
-        CancelCountdown(hWnd);
-    }
-
-    // return to main page if not already there
-    if (!appState.page.fading) {
-        appState.page.Start(Page::Home, hWnd);
+        HandleCancel(hWnd);
     }
 }
 
@@ -188,6 +176,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     static auto& appState = AppState::GetInstance();
     switch (message) {
         case WM_CLOSE:
+            // Treat close like pressing Esc: if on Home start fade-out to close,
+            // otherwise navigate back to Home. This lets taskbar "Close" actually
+            // begin the shutdown/fade-out sequence instead of only cancelling.
             HandleCancel(hWnd);
             break;
         case WM_DESTROY:
@@ -204,7 +195,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_KEYDOWN:
             if (!appState.page.fading && wParam == VK_ESCAPE) {
-                HandleEsc(hWnd);
+                HandleCancel(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
