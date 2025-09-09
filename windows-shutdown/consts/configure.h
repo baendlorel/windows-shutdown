@@ -22,6 +22,17 @@
 #define CFG_ACTION_SOME \
     CFG_ACTION_SLEEP ", " CFG_ACTION_SHUTDOWN ", " CFG_ACTION_RESTART ", " CFG_ACTION_LOCK
 
+#define CFG_MENU_BUTTON_DONATE   "donate"
+#define CFG_MENU_BUTTON_CONFIG   "config"
+#define CFG_MENU_BUTTON_LOCK     "lock"
+#define CFG_MENU_BUTTON_SLEEP    "sleep"
+#define CFG_MENU_BUTTON_RESTART  "restart"
+#define CFG_MENU_BUTTON_SHUTDOWN "shutdown"
+#define CFG_MENU_BUTTONS_SOME                                                      \
+    CFG_MENU_BUTTON_DONATE ", " CFG_MENU_BUTTON_CONFIG ", " CFG_MENU_BUTTON_LOCK   \
+                           ", " CFG_MENU_BUTTON_SLEEP ", " CFG_MENU_BUTTON_RESTART \
+                           ", " CFG_MENU_BUTTON_SHUTDOWN
+
 #define CFG_INSTRUCTION_SHOW "show"
 #define CFG_INSTRUCTION_HIDE "hide"
 

@@ -19,7 +19,7 @@ struct MenuButton {
     std::function<void(HWND)> onClickCallback;
 
    public:
-    MenuButton(int resId, Action action);
+    MenuButton(Action action);
 
     void LoadPNGFromResource(HINSTANCE hInst);
 

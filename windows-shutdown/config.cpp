@@ -4,6 +4,8 @@
 #include <format>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <cctype>
 
 #include "consts/color-set.h"
 
@@ -27,9 +29,10 @@ std::string DefaultConfigZh() {
         CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string menuButtons = std::format(
-        "# 菜单按钮配置，以英文逗号分隔，可填：Donate, Config, Lock, Sleep, Restart, Shutdown\n"
-        "{}=Donate, Config, Lock, Sleep, Restart, Shutdown",
-        CFG_KEY_MENU_BUTTONS);
+        "# 菜单按钮配置，以英文逗号分隔，可填：{}\n"
+        "{}={}",
+        CFG_MENU_BUTTON_DONATE, CFG_MENU_BUTTONS_SOME, CFG_MENU_BUTTON_RESTART,
+        CFG_MENU_BUTTONS_SOME);
 
     std::string countdownStyle = std::format(
         "# 倒计时风格：{}, {}（默认）\n"
@@ -85,10 +88,10 @@ std::string DefaultConfigEn() {
         CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
     std::string menuButtons = std::format(
-        "# Menu buttons configuration, comma separated. Options: Donate, Config, Lock, Sleep, "
-        "Restart, Shutdown\n"
-        "{}=Donate, Config, Lock, Sleep, Restart, Shutdown",
-        CFG_KEY_MENU_BUTTONS);
+        "# Menu buttons configuration, comma separated. Options: {}\n"
+        "{}={}",
+        CFG_MENU_BUTTON_DONATE, CFG_MENU_BUTTONS_SOME, CFG_MENU_BUTTON_RESTART,
+        CFG_MENU_BUTTONS_SOME);
 
     std::string countdownStyle = std::format(
         "# Countdown style: {}, {}(Default)\n"
@@ -138,6 +141,13 @@ std::string trim(const std::string& s) {
     return (start <= end) ? std::string(start, end + 1) : "";
 }
 
+// Convert string to lowercase for case-insensitive comparison
+std::string toLower(const std::string& str) {
+    std::string result = str;
+    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;
+}
+
 bool IsSysLangChinese() {
     LANGID langId = GetUserDefaultUILanguage();
     WORD primaryLang = PRIMARYLANGID(langId);
@@ -180,14 +190,28 @@ std::string WStringToUtf8(const std::wstring& wstr) {
     return strTo;
 }
 
-// Helper function to parse Action from string
+// Helper function to parse Action from string (case-insensitive)
 Action ParseActionFromString(const std::string& actionStr) {
-    if (actionStr == "Donate") return Action::Donate;
-    if (actionStr == "Config") return Action::Config;
-    if (actionStr == "Lock") return Action::Lock;
-    if (actionStr == "Sleep") return Action::Sleep;
-    if (actionStr == "Restart") return Action::Restart;
-    if (actionStr == "Shutdown") return Action::Shutdown;
+    std::string lowerStr = toLower(actionStr);
+
+    if (lowerStr == CFG_MENU_BUTTON_DONATE) {
+        return Action::Donate;
+    }
+    if (lowerStr == CFG_MENU_BUTTON_CONFIG) {
+        return Action::Config;
+    }
+    if (lowerStr == CFG_MENU_BUTTON_LOCK) {
+        return Action::Lock;
+    }
+    if (lowerStr == CFG_MENU_BUTTON_SLEEP) {
+        return Action::Sleep;
+    }
+    if (lowerStr == CFG_MENU_BUTTON_RESTART) {
+        return Action::Restart;
+    }
+    if (lowerStr == CFG_MENU_BUTTON_SHUTDOWN) {
+        return Action::Shutdown;
+    }
     return Action::None;  // Invalid action
 }
 
@@ -245,10 +269,12 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         return ConfigWarning::InvalidInstruction;
     }
 
+    // fixme 这里应该是一行里面的
     if (key == CFG_KEY_MENU_BUTTONS) {
         this->menuButtons.clear();
         std::stringstream ss(value);
         std::string item;
+        bool hasInvalidItems = false;
 
         while (std::getline(ss, item, ',')) {
             // Remove leading and trailing spaces
@@ -260,8 +286,8 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                 if (action != Action::None) {
                     this->menuButtons.push_back(action);
                 } else {
-                    // Invalid menu button name, but continue parsing
-                    // The warning will be added to the warnings list in the Load() function
+                    // Invalid menu button name, mark as having invalid items
+                    hasInvalidItems = true;
                 }
             }
         }
@@ -273,7 +299,8 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
             return ConfigWarning::InvalidMenuButton;
         }
 
-        return ConfigWarning::None;
+        // Return warning if we had invalid items but some valid ones
+        return hasInvalidItems ? ConfigWarning::InvalidMenuButton : ConfigWarning::None;
     }
 
     if (key == CFG_KEY_COUNTDOWN_STYLE) {

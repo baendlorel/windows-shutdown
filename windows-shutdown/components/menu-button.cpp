@@ -1,14 +1,35 @@
+#include "resource.h"
 #include "consts/button-style.h"
 #include "bitmap-loader.h"
 #include "menu-button.h"
 #include "i18n.h"
 
-MenuButton::MenuButton(int resId, Action action) {
+// Helper function to get resource ID from Action
+int GetResourceIdFromAction(Action action) {
+    switch (action) {
+        case Action::Donate:
+            return IDB_DONATEPNG;
+        case Action::Config:
+            return IDB_CONFIGPNG;
+        case Action::Lock:
+            return IDB_LOCKPNG;
+        case Action::Sleep:
+            return IDB_SLEEPPNG;
+        case Action::Restart:
+            return IDB_RESTARTPNG;
+        case Action::Shutdown:
+            return IDB_SHUTDOWNPNG;
+        default:
+            return IDB_CONFIGPNG;  // Default to config icon
+    }
+}
+
+MenuButton::MenuButton(Action action) {
     this->x = 0;
     this->y = 0;
     this->png = nullptr;
-    this->resId = resId;
     this->action = action;
+    this->resId = GetResourceIdFromAction(action);
 }
 
 void MenuButton::LoadPNGFromResource(HINSTANCE hInst) {

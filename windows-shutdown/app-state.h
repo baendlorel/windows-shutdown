@@ -55,29 +55,7 @@ class AppState {
     AppState() {
         // Initialize buttons based on menuButtons configuration
         for (const auto& action : config.menuButtons) {
-            switch (action) {
-                case Action::Donate:
-                    this->buttons.push_back(MenuButton(IDB_DONATEPNG, Action::Donate));
-                    break;
-                case Action::Config:
-                    this->buttons.push_back(MenuButton(IDB_CONFIGPNG, Action::Config));
-                    break;
-                case Action::Lock:
-                    this->buttons.push_back(MenuButton(IDB_LOCKPNG, Action::Lock));
-                    break;
-                case Action::Sleep:
-                    this->buttons.push_back(MenuButton(IDB_SLEEPPNG, Action::Sleep));
-                    break;
-                case Action::Restart:
-                    this->buttons.push_back(MenuButton(IDB_RESTARTPNG, Action::Restart));
-                    break;
-                case Action::Shutdown:
-                    this->buttons.push_back(MenuButton(IDB_SHUTDOWNPNG, Action::Shutdown));
-                    break;
-                default:
-                    // Skip invalid actions
-                    break;
-            }
+            this->buttons.push_back(MenuButton(action));
         }
     }
 };
