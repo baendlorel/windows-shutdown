@@ -26,11 +26,10 @@ std::string DefaultConfigZh() {
         "{}={}",
         CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
-    std::string donateButton = std::format(
-        "# 可填：{}, {}（默认）\n"
-        "{}={}",
-        CFG_DONATE_BUTTON_HIDE, CFG_DONATE_BUTTON_SHOW, CFG_KEY_DONATE_BUTTON,
-        CFG_DONATE_BUTTON_SHOW);
+    std::string menuButtons = std::format(
+        "# 菜单按钮配置，以英文逗号分隔，可填：Donate, Config, Lock, Sleep, Restart, Shutdown\n"
+        "{}=Donate, Config, Lock, Sleep, Restart, Shutdown",
+        CFG_KEY_MENU_BUTTONS);
 
     std::string countdownStyle = std::format(
         "# 倒计时风格：{}, {}（默认）\n"
@@ -64,7 +63,7 @@ std::string DefaultConfigZh() {
         "{}\n"
         "\n"
         "{}\n",
-        lang, action, delay, instruction, donateButton, countdownStyle, bgColor);
+        lang, action, delay, instruction, menuButtons, countdownStyle, bgColor);
 }
 
 std::string DefaultConfigEn() {
@@ -85,11 +84,11 @@ std::string DefaultConfigEn() {
         "{}={}",
         CFG_INSTRUCTION_HIDE, CFG_INSTRUCTION_SHOW, CFG_KEY_INSTRUCTION, CFG_INSTRUCTION_SHOW);
 
-    std::string donateButton = std::format(
-        "# Options: {}, {}(Default)\n"
-        "{}={}",
-        CFG_DONATE_BUTTON_HIDE, CFG_DONATE_BUTTON_SHOW, CFG_KEY_DONATE_BUTTON,
-        CFG_DONATE_BUTTON_SHOW);
+    std::string menuButtons = std::format(
+        "# Menu buttons configuration, comma separated. Options: Donate, Config, Lock, Sleep, "
+        "Restart, Shutdown\n"
+        "{}=Donate, Config, Lock, Sleep, Restart, Shutdown",
+        CFG_KEY_MENU_BUTTONS);
 
     std::string countdownStyle = std::format(
         "# Countdown style: {}, {}(Default)\n"
@@ -108,7 +107,7 @@ std::string DefaultConfigEn() {
         CFG_KEY_BACKGROUND_COLOR, CFG_BACKGROUND_COLOR_DEFAULT);
 
     return std::format(
-        "# When loading is failed, we will use default config values.\n"
+        "# Default configuration will be used if loading config fails.\n"
         "\n"
         "{}\n"
         "\n"
@@ -123,7 +122,7 @@ std::string DefaultConfigEn() {
         "{}\n"
         "\n"
         "{}\n",
-        lang, action, delay, instruction, donateButton, countdownStyle, bgColor);
+        lang, action, delay, instruction, menuButtons, countdownStyle, bgColor);
 }
 
 std::string trim(const std::string& s) {
@@ -149,7 +148,7 @@ Config::Config()
     : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
       action(Action::None),
       instruction(Instruction::Show),
-      donateButton(DonateButton::Show),
+      menuButtons({}),
       countdownStyle(CountdownStyle::Normal),
       delay(CFG_DEFAULT_DELAY),
       backgroundColor(ColorSet::GetInstance().BackgroundColor) {
@@ -179,6 +178,17 @@ std::string WStringToUtf8(const std::wstring& wstr) {
     WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), &strTo[0], size_needed, nullptr,
                         nullptr);
     return strTo;
+}
+
+// Helper function to parse Action from string
+Action ParseActionFromString(const std::string& actionStr) {
+    if (actionStr == "Donate") return Action::Donate;
+    if (actionStr == "Config") return Action::Config;
+    if (actionStr == "Lock") return Action::Lock;
+    if (actionStr == "Sleep") return Action::Sleep;
+    if (actionStr == "Restart") return Action::Restart;
+    if (actionStr == "Shutdown") return Action::Shutdown;
+    return Action::None;  // Invalid action
 }
 
 ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
@@ -235,18 +245,35 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         return ConfigWarning::InvalidInstruction;
     }
 
-    if (key == CFG_KEY_DONATE_BUTTON) {
-        if (value == CFG_DONATE_BUTTON_SHOW) {
-            this->donateButton = DonateButton::Show;
-            return ConfigWarning::None;
+    if (key == CFG_KEY_MENU_BUTTONS) {
+        this->menuButtons.clear();
+        std::stringstream ss(value);
+        std::string item;
+
+        while (std::getline(ss, item, ',')) {
+            // Remove leading and trailing spaces
+            item.erase(0, item.find_first_not_of(" \t"));
+            item.erase(item.find_last_not_of(" \t") + 1);
+
+            if (!item.empty()) {
+                Action action = ParseActionFromString(item);
+                if (action != Action::None) {
+                    this->menuButtons.push_back(action);
+                } else {
+                    // Invalid menu button name, but continue parsing
+                    // The warning will be added to the warnings list in the Load() function
+                }
+            }
         }
 
-        if (value == CFG_DONATE_BUTTON_HIDE) {
-            this->donateButton = DonateButton::Hide;
-            return ConfigWarning::None;
+        // If no valid buttons were parsed, use default
+        if (this->menuButtons.empty()) {
+            this->menuButtons = {Action::Donate, Action::Config,  Action::Lock,
+                                 Action::Sleep,  Action::Restart, Action::Shutdown};
+            return ConfigWarning::InvalidMenuButton;
         }
 
-        return ConfigWarning::InvalidDonateButton;
+        return ConfigWarning::None;
     }
 
     if (key == CFG_KEY_COUNTDOWN_STYLE) {

@@ -14,7 +14,7 @@ struct Config {
     Lang lang;
     Action action;
     Instruction instruction;
-    DonateButton donateButton;
+    std::vector<Action> menuButtons;
     CountdownStyle countdownStyle;
     int delay;
     Gdiplus::Color backgroundColor;  // ARGB , same as Gdiplus::Color

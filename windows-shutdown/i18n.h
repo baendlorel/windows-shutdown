@@ -56,7 +56,8 @@ class I18N {
     std::wstring NotConfigEntry;
     std::wstring InvalidAction;
     std::wstring InvalidInstruction;
-    std::wstring InvalidDonateButton;
+    std::wstring InvalidMenuButton;
+    std::wstring InvalidCountdownStyle;
     std::wstring InvalidDelay;
     std::wstring InvalidBackgroundColorFormat;
     std::wstring InvalidBackgroundColorValue;

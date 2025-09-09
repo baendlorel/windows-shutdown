@@ -44,10 +44,14 @@ void I18N::SetLang(Lang lang) {
         InvalidInstruction = std::format(
             L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。", WIDEN(CFG_KEY_INSTRUCTION),
             WIDEN(CFG_INSTRUCTION_SHOW), WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
-        InvalidDonateButton =
-            std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。",
-                        WIDEN(CFG_KEY_DONATE_BUTTON), WIDEN(CFG_DONATE_BUTTON_SHOW),
-                        WIDEN(CFG_DONATE_BUTTON_HIDE), WIDEN(CFG_DONATE_BUTTON_SHOW));
+        InvalidMenuButton = std::format(
+            L"[{}]的值无效，应该是以英文逗号分隔的Action枚举名称（如：Donate, Config, Lock, Sleep, "
+            L"Restart, Shutdown）。现使用默认值。",
+            WIDEN(CFG_KEY_MENU_BUTTONS));
+        InvalidCountdownStyle = std::format(
+            L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。",
+            WIDEN(CFG_KEY_COUNTDOWN_STYLE), WIDEN(CFG_COUNTDOWN_STYLE_NORMAL),
+            WIDEN(CFG_COUNTDOWN_STYLE_STEINS_GATE), WIDEN(CFG_COUNTDOWN_STYLE_STEINS_GATE));
         InvalidDelay = std::format(L"[{}]必须是大于或等于0的整数。现使用默认值{}。",
                                    WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
@@ -105,10 +109,14 @@ void I18N::SetLang(Lang lang) {
             std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
                         WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
                         WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
-        InvalidDonateButton =
-            std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
-                        WIDEN(CFG_KEY_DONATE_BUTTON), WIDEN(CFG_DONATE_BUTTON_SHOW),
-                        WIDEN(CFG_DONATE_BUTTON_HIDE), WIDEN(CFG_DONATE_BUTTON_SHOW));
+        InvalidMenuButton = std::format(
+            L"[{}] is not valid, should be comma-separated Action enum names (like: Donate, "
+            L"Config, Lock, Sleep, Restart, Shutdown). Using default values.",
+            WIDEN(CFG_KEY_MENU_BUTTONS));
+        InvalidCountdownStyle = std::format(
+            L"[{}] is not valid, should be {} or {}. Using default value {}.",
+            WIDEN(CFG_KEY_COUNTDOWN_STYLE), WIDEN(CFG_COUNTDOWN_STYLE_NORMAL),
+            WIDEN(CFG_COUNTDOWN_STYLE_STEINS_GATE), WIDEN(CFG_COUNTDOWN_STYLE_STEINS_GATE));
         InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}.",
                                    WIDEN(CFG_KEY_DELAY), CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
@@ -149,8 +157,11 @@ std::wstring I18N::GetConfigWarningText(const std::vector<ConfigWarnInfo>& entri
             case ConfigWarning::InvalidInstruction:
                 text = this->InvalidInstruction;
                 break;
-            case ConfigWarning::InvalidDonateButton:
-                text = this->InvalidDonateButton;
+            case ConfigWarning::InvalidMenuButton:
+                text = this->InvalidMenuButton;
+                break;
+            case ConfigWarning::InvalidCountdownStyle:
+                text = this->InvalidCountdownStyle;
                 break;
             case ConfigWarning::UnknownConfigKey:
                 text = this->UnknownConfigKey;
