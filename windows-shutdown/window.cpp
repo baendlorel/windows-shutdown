@@ -173,29 +173,6 @@ void HandleClick(HWND hWnd, LPARAM lParam) {
                 continue;
             }
             appState.buttons[i].onClickCallback(hWnd);
-            // switch (appState.buttons[i].action) {
-            //     case Action::Donate:
-            //         TriggerDonate(hWnd);
-            //         break;
-            //     case Action::Config:
-            //         TriggerConfig(hWnd);
-            //         break;
-            //     case Action::Lock:
-            //         TriggerLock(hWnd);
-            //         break;
-            //     case Action::Sleep:
-            //         StartCountdown(hWnd, Action::Sleep);
-            //         break;
-            //     case Action::Restart:
-            //         StartCountdown(hWnd, Action::Restart);
-            //         break;
-            //     case Action::Shutdown:
-            //         StartCountdown(hWnd, Action::Shutdown);
-            //         break;
-            //     case Action::None:
-            //         // do nothing
-            //         break;
-            // }
             return;
         }
     }
