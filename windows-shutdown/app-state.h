@@ -49,16 +49,6 @@ class AppState {
 
     bool isCountingDown() const {
         return countdownSeconds > 0;
-        // switch (action) {
-        //     case Action::Restart:
-        //         return true;
-        //     case Action::Sleep:
-        //         return true;
-        //     case Action::Shutdown:
-        //         return true;
-        //     default:
-        //         return false;
-        // }
     }
 
    private:
