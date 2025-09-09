@@ -27,6 +27,35 @@ ATOM MyRegisterClass() {
     return RegisterClassExW(&wcex);
 }
 
+void RegisterMenuButtonClickCallback() {
+    auto& appState = AppState::GetInstance();
+    for (auto& button : appState.buttons) {
+        switch (button.action) {
+            case Action::Donate:
+                button.OnClick([](HWND hWnd) { TriggerDonate(hWnd); });
+                break;
+            case Action::Config:
+                button.OnClick([](HWND hWnd) { TriggerConfig(hWnd); });
+                break;
+            case Action::Lock:
+                button.OnClick([](HWND hWnd) { TriggerLock(hWnd); });
+                break;
+            case Action::Sleep:
+                button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Sleep); });
+                break;
+            case Action::Restart:
+                button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Restart); });
+                break;
+            case Action::Shutdown:
+                button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Shutdown); });
+                break;
+            case Action::None:
+                // do nothing
+                break;
+        }
+    }
+}
+
 // int nCmdShow
 BOOL InitInstance(int) {
     auto& appState = AppState::GetInstance();
@@ -42,7 +71,9 @@ BOOL InitInstance(int) {
     }
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
-    appState.page.SetAlpha(0);  // start fully transparent
+
+    RegisterMenuButtonClickCallback();
+
     // If config requests immediate action, initialize the immediate action
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
@@ -132,45 +163,45 @@ void HandleClick(HWND hWnd, LPARAM lParam) {
         CancelCountdown(hWnd);
         return;
     }
-    int mx = LOWORD(lParam);
-    int my = HIWORD(lParam);
-    bool hit = false;
-    // todo 制作成事件驱动
-    for (int i = 0; i < appState.buttons.size(); ++i) {
-        if (!appState.buttons[i].MouseHit(mx, my)) {
-            continue;
+
+    // if clicked, return after handling
+    if (appState.page.current == Page::Home) {
+        int mx = LOWORD(lParam);
+        int my = HIWORD(lParam);
+        for (int i = 0; i < appState.buttons.size(); ++i) {
+            if (!appState.buttons[i].MouseHit(mx, my)) {
+                continue;
+            }
+            appState.buttons[i].onClickCallback(hWnd);
+            // switch (appState.buttons[i].action) {
+            //     case Action::Donate:
+            //         TriggerDonate(hWnd);
+            //         break;
+            //     case Action::Config:
+            //         TriggerConfig(hWnd);
+            //         break;
+            //     case Action::Lock:
+            //         TriggerLock(hWnd);
+            //         break;
+            //     case Action::Sleep:
+            //         StartCountdown(hWnd, Action::Sleep);
+            //         break;
+            //     case Action::Restart:
+            //         StartCountdown(hWnd, Action::Restart);
+            //         break;
+            //     case Action::Shutdown:
+            //         StartCountdown(hWnd, Action::Shutdown);
+            //         break;
+            //     case Action::None:
+            //         // do nothing
+            //         break;
+            // }
+            return;
         }
-        hit = true;
-        switch (appState.buttons[i].action) {
-            case Action::Donate:
-                TriggerDonate(hWnd);
-                break;
-            case Action::Config:
-                TriggerConfig(hWnd);
-                break;
-            case Action::Lock:
-                TriggerLock(hWnd);
-                break;
-            case Action::Sleep:
-                StartCountdown(hWnd, Action::Sleep);
-                break;
-            case Action::Restart:
-                StartCountdown(hWnd, Action::Restart);
-                break;
-            case Action::Shutdown:
-                StartCountdown(hWnd, Action::Shutdown);
-                break;
-            case Action::None:
-                // do nothing
-                break;
-        }
-        break;
     }
 
     // If not clicking on any button, return to main page or exit
-    if (!hit) {
-        HandleCancel(hWnd);
-    }
+    HandleCancel(hWnd);
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {

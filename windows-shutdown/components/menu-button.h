@@ -1,5 +1,6 @@
 #pragma once
 #include "framework.h"
+#include <functional>
 
 // consts
 #include "consts/core.h"
@@ -14,6 +15,9 @@ struct MenuButton {
     int resId;
     Gdiplus::Bitmap* png;
 
+    // Callback invoked when this menu button is clicked. Receives the HWND of the window.
+    std::function<void(HWND)> onClickCallback;
+
    public:
     MenuButton(int resId, Action action);
 
@@ -23,5 +27,7 @@ struct MenuButton {
 
     bool MouseHit(int mx, int my) const;
 
-    void OnClick();
+    void OnClick(std::function<void(HWND)> cb) {
+        this->onClickCallback = std::move(cb);
+    }
 };

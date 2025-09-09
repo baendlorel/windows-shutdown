@@ -3,6 +3,8 @@
 
 ATOM MyRegisterClass();
 
+void RegisterMenuButtonClickCallback();
+
 BOOL InitInstance(int nCmdShow);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
