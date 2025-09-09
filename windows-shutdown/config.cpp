@@ -31,8 +31,7 @@ std::string DefaultConfigZh() {
     std::string menuButtons = std::format(
         "# 菜单按钮配置，以英文逗号分隔，可填：{}\n"
         "{}={}",
-        CFG_MENU_BUTTON_DONATE, CFG_MENU_BUTTONS_SOME, CFG_MENU_BUTTON_RESTART,
-        CFG_MENU_BUTTONS_SOME);
+        CFG_MENU_BUTTONS_SOME, CFG_KEY_MENU_BUTTONS, CFG_MENU_BUTTONS_SOME);
 
     std::string countdownStyle = std::format(
         "# 倒计时风格：{}, {}（默认）\n"
@@ -90,8 +89,7 @@ std::string DefaultConfigEn() {
     std::string menuButtons = std::format(
         "# Menu buttons configuration, comma separated. Options: {}\n"
         "{}={}",
-        CFG_MENU_BUTTON_DONATE, CFG_MENU_BUTTONS_SOME, CFG_MENU_BUTTON_RESTART,
-        CFG_MENU_BUTTONS_SOME);
+        CFG_MENU_BUTTONS_SOME, CFG_KEY_MENU_BUTTONS, CFG_MENU_BUTTONS_SOME);
 
     std::string countdownStyle = std::format(
         "# Countdown style: {}, {}(Default)\n"
@@ -158,7 +156,8 @@ Config::Config()
     : lang(IsSysLangChinese() ? Lang::Zh : Lang::En),
       action(Action::None),
       instruction(Instruction::Show),
-      menuButtons({}),
+      menuButtons({Action::Donate, Action::Config, Action::Lock, Action::Sleep, Action::Restart,
+                   Action::Shutdown}),
       countdownStyle(CountdownStyle::Normal),
       delay(CFG_DEFAULT_DELAY),
       backgroundColor(ColorSet::GetInstance().BackgroundColor) {
@@ -270,13 +269,11 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_MENU_BUTTONS) {
-        this->menuButtons.clear();
         if (value.empty()) {
-            this->menuButtons = {Action::Donate, Action::Config,  Action::Lock,
-                                 Action::Sleep,  Action::Restart, Action::Shutdown};
             return ConfigWarning::InvalidMenuButton;
         }
 
+        std::vector<Action> buttons;
         std::stringstream ss(value);
         std::string item;
         bool hasInvalidItems = false;
@@ -293,15 +290,15 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
                     hasInvalidItems = true;
                     continue;
                 }
-                this->menuButtons.push_back(action);
+                buttons.push_back(action);
             }
         }
 
         // If no valid buttons were parsed, use default
-        if (this->menuButtons.empty()) {
-            this->menuButtons = {Action::Donate, Action::Config,  Action::Lock,
-                                 Action::Sleep,  Action::Restart, Action::Shutdown};
+        if (buttons.empty()) {
             return ConfigWarning::InvalidMenuButton;
+        } else {
+            this->menuButtons = buttons;
         }
 
         // Return warning if we had invalid items but some valid ones
