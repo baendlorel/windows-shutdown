@@ -40,12 +40,12 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
         DrawCachedUIText(graphics, firstParams);
 
         // Nixie tube clock in the center
-        Gdiplus::RectF clockRect(w * 0.5f, y + 120, 0, 0);
-        DrawNixieTubeClock(graphics, alpha, clockRect, Gdiplus::PointF(0.5f, 0.5f),
+        Gdiplus::RectF clockRect(w * 0.5f, y + 140, 0, 0);
+        DrawNixieTubeClock(graphics, alpha, clockRect, Gdiplus::PointF(0.5f, 0.0f),
                            appState.countdownSeconds);
 
         // Draw cancel instruction below
-        Gdiplus::RectF smallRect(0, y + 280, w, h);
+        Gdiplus::RectF smallRect(0, y + 450, w, h);
         DrawInstruction(graphics, alpha, &smallRect, i18n.PressAnyKeyToCancel);
     } else {
         // Normal style (original)
