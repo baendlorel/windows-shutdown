@@ -32,6 +32,12 @@ std::string DefaultConfigZh() {
         CFG_DONATE_BUTTON_HIDE, CFG_DONATE_BUTTON_SHOW, CFG_KEY_DONATE_BUTTON,
         CFG_DONATE_BUTTON_SHOW);
 
+    std::string countdownStyle = std::format(
+        "# 倒计时风格：{}, {}（默认）\n"
+        "{}={}",
+        CFG_COUNTDOWN_STYLE_NORMAL, CFG_COUNTDOWN_STYLE_STEINS_GATE, CFG_KEY_COUNTDOWN_STYLE,
+        CFG_COUNTDOWN_STYLE_NORMAL);
+
     std::string delay = std::format(
         "# 在执行操作之前等待这么多秒，默认{}秒\n"
         "{}={}",
@@ -55,8 +61,10 @@ std::string DefaultConfigZh() {
         "\n"
         "{}\n"
         "\n"
+        "{}\n"
+        "\n"
         "{}\n",
-        lang, action, delay, instruction, donateButton, bgColor);
+        lang, action, delay, instruction, donateButton, countdownStyle, bgColor);
 }
 
 std::string DefaultConfigEn() {
@@ -83,6 +91,12 @@ std::string DefaultConfigEn() {
         CFG_DONATE_BUTTON_HIDE, CFG_DONATE_BUTTON_SHOW, CFG_KEY_DONATE_BUTTON,
         CFG_DONATE_BUTTON_SHOW);
 
+    std::string countdownStyle = std::format(
+        "# Countdown style: {}, {}(Default)\n"
+        "{}={}",
+        CFG_COUNTDOWN_STYLE_NORMAL, CFG_COUNTDOWN_STYLE_STEINS_GATE, CFG_KEY_COUNTDOWN_STYLE,
+        CFG_COUNTDOWN_STYLE_NORMAL);
+
     std::string delay = std::format(
         "# Wait time (in seconds, default is {}s) before action.\n"
         "{}={}",
@@ -106,8 +120,10 @@ std::string DefaultConfigEn() {
         "\n"
         "{}\n"
         "\n"
+        "{}\n"
+        "\n"
         "{}\n",
-        lang, action, delay, instruction, donateButton, bgColor);
+        lang, action, delay, instruction, donateButton, countdownStyle, bgColor);
 }
 
 std::string trim(const std::string& s) {
@@ -134,6 +150,7 @@ Config::Config()
       action(Action::None),
       instruction(Instruction::Show),
       donateButton(DonateButton::Show),
+      countdownStyle(CountdownStyle::Normal),
       delay(CFG_DEFAULT_DELAY),
       backgroundColor(ColorSet::GetInstance().BackgroundColor) {
     this->Load();
@@ -230,6 +247,20 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         }
 
         return ConfigWarning::InvalidDonateButton;
+    }
+
+    if (key == CFG_KEY_COUNTDOWN_STYLE) {
+        if (value == CFG_COUNTDOWN_STYLE_NORMAL) {
+            this->countdownStyle = CountdownStyle::Normal;
+            return ConfigWarning::None;
+        }
+
+        if (value == CFG_COUNTDOWN_STYLE_STEINS_GATE) {
+            this->countdownStyle = CountdownStyle::SteinsGate;
+            return ConfigWarning::None;
+        }
+
+        return ConfigWarning::InvalidCountdownStyle;
     }
 
     if (key == CFG_KEY_DELAY) {
