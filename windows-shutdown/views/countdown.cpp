@@ -41,7 +41,8 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
 
         // Nixie tube clock in the center
         Gdiplus::RectF clockRect(w * 0.2f, y + 120, w * 0.6f, 120);
-        DrawNixieTubeClock(graphics, alpha, clockRect, appState.countdownSeconds);
+        DrawNixieTubeClock(graphics, alpha, clockRect, Gdiplus::PointF(0.5f, 0.5f),
+                           appState.countdownSeconds);
 
         // Draw cancel instruction below
         Gdiplus::RectF smallRect(0, y + 280, w, h);

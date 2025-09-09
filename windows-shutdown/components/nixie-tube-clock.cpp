@@ -6,8 +6,8 @@
 // Return pointer to array of bitmaps
 Gdiplus::Bitmap** LoadNixieBitmap() {
     HINSTANCE hInst = AppState::GetInstance().hInst;
-    // Allocate on heap to avoid returning pointer to stack memory
-    Gdiplus::Bitmap** nixieBitmaps = new Gdiplus::Bitmap*[12];  // 0-9, blank, period
+    // Use static array so it's loaded once and no heap management needed
+    static Gdiplus::Bitmap* nixieBitmaps[12];  // 0-9, blank, period
     nixieBitmaps[0] = LoadBitmapByResourceId(hInst, IDB_NIXIE_0);
     nixieBitmaps[1] = LoadBitmapByResourceId(hInst, IDB_NIXIE_1);
     nixieBitmaps[2] = LoadBitmapByResourceId(hInst, IDB_NIXIE_2);
@@ -21,10 +21,11 @@ Gdiplus::Bitmap** LoadNixieBitmap() {
     nixieBitmaps[10] = LoadBitmapByResourceId(hInst, IDB_NIXIE_BLANK);   // blank
     nixieBitmaps[11] = LoadBitmapByResourceId(hInst, IDB_NIXIE_PERIOD);  // period/colon
     return nixieBitmaps;
-};
+}
 
 // Draw nixie tube clock with HH:MM:SS format
-void DrawNixieTubeClock(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF rect, int seconds) {
+void DrawNixieTubeClock(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF rect,
+                        Gdiplus::PointF anchor, int seconds) {
     if (alpha == 0) {
         return;
     }
@@ -78,29 +79,58 @@ void DrawNixieTubeClock(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF 
         digitIndices[7] = secs % 10;
     }
 
-    // Calculate individual digit size and positions
+    // Determine drawing sizes. If rect width/height are zero, use bitmap native sizes
     float totalWidth = rect.Width;
     float totalHeight = rect.Height;
-    float digitWidth = totalWidth / 8.0f;  // 8 positions total
-    float digitHeight = totalHeight;
+    bool useNativeSize = (totalWidth == 0.0f || totalHeight == 0.0f);
 
-    // Set up alpha blending
+    float digitWidth = 0.0f;
+    float digitHeight = 0.0f;
+    if (useNativeSize) {
+        // Use first available digit (assume all digits same size) to compute native sizes
+        Gdiplus::Bitmap* sample = nixieBitmaps[0] ? nixieBitmaps[0] : nixieBitmaps[10];
+        if (sample) {
+            digitWidth = static_cast<float>(sample->GetWidth());
+            digitHeight = static_cast<float>(sample->GetHeight());
+        } else {
+            // fallback to small defaults
+            digitWidth = 20.0f;
+            digitHeight = 40.0f;
+        }
+        totalWidth = digitWidth * 8.0f;
+        totalHeight = digitHeight;
+    } else {
+        digitWidth = totalWidth / 8.0f;  // 8 positions total
+        digitHeight = totalHeight;
+    }
+
+    // Set up alpha blending (color matrix is 5x5 row-major)
     Gdiplus::ColorMatrix colorMatrix = {
         1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,           1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, alpha / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
     Gdiplus::ImageAttributes imageAttributes;
-    imageAttributes.SetColorMatrix(&colorMatrix);
+    imageAttributes.SetColorMatrix(&colorMatrix, Gdiplus::ColorMatrixFlagsDefault,
+                                   Gdiplus::ColorAdjustTypeBitmap);
+
+    // Compute origin position: if using native size and rect was zero-sized, use anchor
+    float originX = rect.X;
+    float originY = rect.Y;
+    if (useNativeSize) {
+        // anchor is (0..1) where (0,0)=top-left, (0.5,0.5)=center
+        originX = rect.X - anchor.X * totalWidth;
+        originY = rect.Y - anchor.Y * totalHeight;
+    }
 
     // Draw each digit/colon
     for (int i = 0; i < 8; i++) {
         Gdiplus::Bitmap* bitmap = nixieBitmaps[digitIndices[i]];
-        if (bitmap) {
-            Gdiplus::RectF digitRect(rect.X + i * digitWidth, rect.Y, digitWidth, digitHeight);
+        if (!bitmap) continue;
 
-            graphics.DrawImage(bitmap, digitRect, 0, 0, static_cast<float>(bitmap->GetWidth()),
-                               static_cast<float>(bitmap->GetHeight()), Gdiplus::UnitPixel,
-                               &imageAttributes);
-        }
+        Gdiplus::RectF digitRect(originX + i * digitWidth, originY, digitWidth, digitHeight);
+
+        graphics.DrawImage(bitmap, digitRect, 0, 0, static_cast<float>(bitmap->GetWidth()),
+                           static_cast<float>(bitmap->GetHeight()), Gdiplus::UnitPixel,
+                           &imageAttributes);
     }
 }

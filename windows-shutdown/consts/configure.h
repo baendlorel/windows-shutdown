@@ -37,7 +37,7 @@ enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hide };
 enum class DonateButton { Show, Hide };
 enum class CountdownStyle { Normal, SteinsGate };
-constexpr int CFG_DEFAULT_DELAY = 3;
+constexpr int CFG_DEFAULT_DELAY = 5;
 
 // config warnings
 enum class ConfigWarning {

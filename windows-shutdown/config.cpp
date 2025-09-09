@@ -36,7 +36,7 @@ std::string DefaultConfigZh() {
         "# 倒计时风格：{}, {}（默认）\n"
         "{}={}",
         CFG_COUNTDOWN_STYLE_NORMAL, CFG_COUNTDOWN_STYLE_STEINS_GATE, CFG_KEY_COUNTDOWN_STYLE,
-        CFG_COUNTDOWN_STYLE_NORMAL);
+        CFG_COUNTDOWN_STYLE_STEINS_GATE);
 
     std::string delay = std::format(
         "# 在执行操作之前等待这么多秒，默认{}秒\n"
@@ -95,7 +95,7 @@ std::string DefaultConfigEn() {
         "# Countdown style: {}, {}(Default)\n"
         "{}={}",
         CFG_COUNTDOWN_STYLE_NORMAL, CFG_COUNTDOWN_STYLE_STEINS_GATE, CFG_KEY_COUNTDOWN_STYLE,
-        CFG_COUNTDOWN_STYLE_NORMAL);
+        CFG_COUNTDOWN_STYLE_STEINS_GATE);
 
     std::string delay = std::format(
         "# Wait time (in seconds, default is {}s) before action.\n"
