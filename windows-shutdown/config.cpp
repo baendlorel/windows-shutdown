@@ -158,7 +158,7 @@ Config::Config()
       instruction(Instruction::Show),
       menuButtons({Action::Donate, Action::Config, Action::Lock, Action::Sleep, Action::Restart,
                    Action::Shutdown}),
-      countdownStyle(CountdownStyle::Normal),
+      countdownStyle(CountdownStyle::SteinsGate),
       delay(CFG_DEFAULT_DELAY),
       backgroundColor(ColorSet::GetInstance().BackgroundColor) {
     this->Load();
