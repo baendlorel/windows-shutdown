@@ -5,7 +5,6 @@
 
 #include "app-state.h"
 #include "config.h"
-#include "render.h"
 #include "i18n.h"
 
 // msvc use: #pragma comment(lib, "PowrProf.lib")

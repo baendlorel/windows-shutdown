@@ -32,13 +32,13 @@ void RegisterMenuButtonClickCallback() {
     for (auto& button : appState.buttons) {
         switch (button.action) {
             case Action::Donate:
-                button.OnClick([](HWND hWnd) { TriggerDonate(hWnd); });
+                button.OnClick(TriggerDonate);
                 break;
             case Action::Config:
-                button.OnClick([](HWND hWnd) { TriggerConfig(hWnd); });
+                button.OnClick(TriggerConfig);
                 break;
             case Action::Lock:
-                button.OnClick([](HWND hWnd) { TriggerLock(hWnd); });
+                button.OnClick(TriggerLock);
                 break;
             case Action::Sleep:
                 button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Sleep); });
