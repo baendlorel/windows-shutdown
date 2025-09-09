@@ -22,4 +22,6 @@ struct MenuButton {
     void Center(int buttonCount, int index, int w, int h);
 
     bool MouseHit(int mx, int my) const;
+
+    void OnClick();
 };

@@ -126,7 +126,7 @@ void HandleMoustMove(HWND hWnd, LPARAM lParam) {
     }
 }
 
-void HandleLeftClick(HWND hWnd, LPARAM lParam) {
+void HandleClick(HWND hWnd, LPARAM lParam) {
     static auto& appState = AppState::GetInstance();
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
@@ -135,6 +135,7 @@ void HandleLeftClick(HWND hWnd, LPARAM lParam) {
     int mx = LOWORD(lParam);
     int my = HIWORD(lParam);
     bool hit = false;
+    // todo 制作成事件驱动
     for (int i = 0; i < appState.buttons.size(); ++i) {
         if (!appState.buttons[i].MouseHit(mx, my)) {
             continue;
@@ -194,14 +195,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             HandleMoustMove(hWnd, lParam);
             break;
         case WM_KEYDOWN:
+            // Must not be fading
             if (!appState.page.fading && wParam == VK_ESCAPE) {
                 HandleCancel(hWnd);
             }
             break;
-        case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
+            // Must not be fading
             if (!appState.page.fading) {
-                HandleLeftClick(hWnd, lParam);
+                HandleCancel(hWnd);
+            }
+            break;
+        case WM_LBUTTONDOWN:
+            if (!appState.page.fading) {
+                HandleClick(hWnd, lParam);
             }
             break;
         default:
