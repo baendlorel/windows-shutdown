@@ -45,9 +45,9 @@ void I18N::SetLang(Lang lang) {
             L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。", WIDEN(CFG_KEY_INSTRUCTION),
             WIDEN(CFG_INSTRUCTION_SHOW), WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
         InvalidMenuButton = std::format(
-            L"[{}]的值无效，应该是以英文逗号分隔的Action枚举名称（如：Donate, Config, Lock, Sleep, "
-            L"Restart, Shutdown）。现使用默认值。",
-            WIDEN(CFG_KEY_MENU_BUTTONS));
+            L"[{}]的值无效，应该是以英文逗号分隔的Action枚举名称（如：{}）。现使用默认值。{}",
+            WIDEN(CFG_KEY_MENU_BUTTONS), WIDEN(CFG_MENU_BUTTONS_SOME),
+            WIDEN(CFG_MENU_BUTTONS_SOME));
         InvalidCountdownStyle = std::format(
             L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。",
             WIDEN(CFG_KEY_COUNTDOWN_STYLE), WIDEN(CFG_COUNTDOWN_STYLE_NORMAL),
@@ -110,9 +110,10 @@ void I18N::SetLang(Lang lang) {
                         WIDEN(CFG_KEY_INSTRUCTION), WIDEN(CFG_INSTRUCTION_SHOW),
                         WIDEN(CFG_INSTRUCTION_HIDE), WIDEN(CFG_INSTRUCTION_SHOW));
         InvalidMenuButton = std::format(
-            L"[{}] is not valid, should be comma-separated Action enum names (like: Donate, "
-            L"Config, Lock, Sleep, Restart, Shutdown). Using default values.",
-            WIDEN(CFG_KEY_MENU_BUTTONS));
+            L"[{}] is not valid, should be comma-separated Action enum names (like: {}). Using "
+            L"default value {}.",
+            WIDEN(CFG_KEY_MENU_BUTTONS), WIDEN(CFG_MENU_BUTTONS_SOME),
+            WIDEN(CFG_MENU_BUTTONS_SOME));
         InvalidCountdownStyle = std::format(
             L"[{}] is not valid, should be {} or {}. Using default value {}.",
             WIDEN(CFG_KEY_COUNTDOWN_STYLE), WIDEN(CFG_COUNTDOWN_STYLE_NORMAL),

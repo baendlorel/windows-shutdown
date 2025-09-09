@@ -269,9 +269,14 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
         return ConfigWarning::InvalidInstruction;
     }
 
-    // fixme 这里应该是一行里面的
     if (key == CFG_KEY_MENU_BUTTONS) {
         this->menuButtons.clear();
+        if (value.empty()) {
+            this->menuButtons = {Action::Donate, Action::Config,  Action::Lock,
+                                 Action::Sleep,  Action::Restart, Action::Shutdown};
+            return ConfigWarning::InvalidMenuButton;
+        }
+
         std::stringstream ss(value);
         std::string item;
         bool hasInvalidItems = false;
@@ -283,12 +288,12 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
 
             if (!item.empty()) {
                 Action action = ParseActionFromString(item);
-                if (action != Action::None) {
-                    this->menuButtons.push_back(action);
-                } else {
+                if (action == Action::None) {
                     // Invalid menu button name, mark as having invalid items
                     hasInvalidItems = true;
+                    continue;
                 }
+                this->menuButtons.push_back(action);
             }
         }
 
