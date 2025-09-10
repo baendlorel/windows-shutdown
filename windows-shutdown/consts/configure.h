@@ -37,7 +37,7 @@
 #define CFG_INSTRUCTION_HIDE "hide"
 
 #define CFG_COUNTDOWN_STYLE_NORMAL      "normal"
-#define CFG_COUNTDOWN_STYLE_STEINS_GATE "Steins;Gate"
+#define CFG_COUNTDOWN_STYLE_STEINS_GATE "nixietube"
 
 #define CFG_BACKGROUND_COLOR_DEFAULT "#00000034"  // ARGB same as macro BACKGROUND_COLOR below
 

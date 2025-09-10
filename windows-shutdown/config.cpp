@@ -216,12 +216,13 @@ Action ParseActionFromString(const std::string& actionStr) {
 
 ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     if (key == CFG_KEY_LANG) {
-        if (value == CFG_LANG_EN) {
+        std::string valLower = toLower(value);
+        if (valLower == CFG_LANG_EN) {
             this->lang = Lang::En;
             return ConfigWarning::None;
         }
 
-        if (value == CFG_LANG_ZH) {
+        if (valLower == CFG_LANG_ZH) {
             this->lang = Lang::Zh;
             return ConfigWarning::None;
         }
@@ -230,23 +231,24 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_ACTION) {
-        if (value == CFG_ACTION_NONE) {
+        std::string valLower = toLower(value);
+        if (valLower == CFG_ACTION_NONE) {
             this->action = Action::None;
             return ConfigWarning::None;
         }
-        if (value == CFG_ACTION_SLEEP) {
+        if (valLower == CFG_ACTION_SLEEP) {
             this->action = Action::Sleep;
             return ConfigWarning::None;
         }
-        if (value == CFG_ACTION_SHUTDOWN) {
+        if (valLower == CFG_ACTION_SHUTDOWN) {
             this->action = Action::Shutdown;
             return ConfigWarning::None;
         }
-        if (value == CFG_ACTION_RESTART) {
+        if (valLower == CFG_ACTION_RESTART) {
             this->action = Action::Restart;
             return ConfigWarning::None;
         }
-        if (value == CFG_ACTION_LOCK) {
+        if (valLower == CFG_ACTION_LOCK) {
             this->action = Action::Lock;
             return ConfigWarning::None;
         }
@@ -255,12 +257,13 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_INSTRUCTION) {
-        if (value == CFG_INSTRUCTION_SHOW) {
+        std::string valLower = toLower(value);
+        if (valLower == CFG_INSTRUCTION_SHOW) {
             this->instruction = Instruction::Show;
             return ConfigWarning::None;
         }
 
-        if (value == CFG_INSTRUCTION_HIDE) {
+        if (valLower == CFG_INSTRUCTION_HIDE) {
             this->instruction = Instruction::Hide;
             return ConfigWarning::None;
         }
@@ -306,12 +309,13 @@ ConfigWarning Config::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_COUNTDOWN_STYLE) {
-        if (value == CFG_COUNTDOWN_STYLE_NORMAL) {
+        std::string valLower = toLower(value);
+        if (valLower == CFG_COUNTDOWN_STYLE_NORMAL) {
             this->countdownStyle = CountdownStyle::Normal;
             return ConfigWarning::None;
         }
 
-        if (value == CFG_COUNTDOWN_STYLE_STEINS_GATE) {
+        if (valLower == CFG_COUNTDOWN_STYLE_STEINS_GATE) {
             this->countdownStyle = CountdownStyle::SteinsGate;
             return ConfigWarning::None;
         }
