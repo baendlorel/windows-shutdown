@@ -1,31 +1,19 @@
 #pragma once
-#include "framework.h"
 #include <functional>
-
-// consts
+#include "div.h"
 #include "consts/core.h"
 
-struct MenuButton {
+class MenuButton : public Div {
    public:
-    int x;
-    int y;
-    std::function<void(HWND)> onClickCallback;
-
     Action action;
-
     int resId;
     Gdiplus::Bitmap* png;
 
    public:
-    MenuButton(Action action);
-
-    void LoadPNGFromResource(HINSTANCE hInst);
-
+    MenuButton(int x, int y, Action action);
     void Center(int buttonCount, int index, int w, int h);
-
     bool MouseHit(int mx, int my) const;
 
-    void OnClick(std::function<void(HWND)> cb) {
-        this->onClickCallback = std::move(cb);
-    }
+   private:
+    void LoadPNGFromResource(HINSTANCE hInst);
 };

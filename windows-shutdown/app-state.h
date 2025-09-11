@@ -7,7 +7,6 @@
 #include "app-page.h"
 
 #include "config.h"
-#include "components/menu-button.h"
 
 class AppState {
    public:
@@ -33,9 +32,6 @@ class AppState {
 
     // effects
 
-    // buttons
-    short hoveredIndex = -1;
-
     // actions
     Action action = Action::None;
     short countdownSeconds = 0;
@@ -45,7 +41,6 @@ class AppState {
     WCHAR szWindowClass[MAX_LOADSTRING] = L"";
 
     Config config;
-    std::vector<MenuButton> buttons;
 
     bool isCountingDown() const {
         return countdownSeconds > 0;
@@ -53,9 +48,10 @@ class AppState {
 
    private:
     AppState() {
-        // Initialize buttons based on menuButtons configuration
-        for (const auto& action : config.menuButtons) {
-            this->buttons.push_back(MenuButton(action));
-        }
+        // todo 这里的按钮要加入到view里作为children，short hoveredIndex = -1;
+        // // Initialize buttons based on menuButtons configuration
+        // for (const auto& action : config.menuButtons) {
+        //     this->buttons.push_back(MenuButton(action));
+        // }
     }
 };

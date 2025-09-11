@@ -24,17 +24,20 @@ int GetResourceIdFromAction(Action action) {
     }
 }
 
-MenuButton::MenuButton(Action action) {
-    this->x = 0;
-    this->y = 0;
-    this->png = nullptr;
-    this->action = action;
-    this->resId = GetResourceIdFromAction(action);
-}
-
 void MenuButton::LoadPNGFromResource(HINSTANCE hInst) {
     auto& i18n = I18N::GetInstance();
     this->png = LoadBitmapByResourceId(hInst, this->resId);
+}
+
+MenuButton::MenuButton(int x, int y, Action action) {
+    Div(ElementTag::Button, rect);
+    Gdiplus::RectF rect(x, y, BUTTON_RADIUS, BUTTON_RADIUS);
+
+    this->png = nullptr;
+    this->action = action;
+
+    this->resId = GetResourceIdFromAction(action);
+    LoadPNGFromResource(appState.hInst);
 }
 
 void MenuButton::Center(int buttonCount, int index, int w, int h) {
@@ -43,14 +46,12 @@ void MenuButton::Center(int buttonCount, int index, int w, int h) {
 
     int centerX = w / 2;
     int centerY = h / 2;
-    this->x = centerX + BUTTON_MARGIN_LEFT + delta;
-    this->y = centerY + BUTTON_MARGIN_TOP;
+    this->rect.X = centerX + BUTTON_MARGIN_LEFT + delta;
+    this->rect.Y = centerY + BUTTON_MARGIN_TOP;
 }
 
 bool MenuButton::MouseHit(int mx, int my) const {
-    // Account for the same margins used when rendering the button so that
-    // hit testing uses the visual center rather than the stored center.
-    int dx = mx - this->x;
-    int dy = my - this->y;
+    int dx = mx - this->rect.X;
+    int dy = my - this->rect.Y;
     return (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
 }
