@@ -29,12 +29,14 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
 
     // localized polite & cute thank-you line from i18n
     // std::wstring thankText = std::format(L"{}\n {}", i18n.Author, i18n.DonateThank);
+    constexpr int lineHeight = 80;
+    constexpr int marginTop = 100;
 
     // Draw image centered
     int imgW = img->GetWidth();
     int imgH = img->GetHeight();
     int drawX = (w - imgW) / 2;
-    int drawY = (h - imgH) / 2;
+    int drawY = (h - imgH) / 2 + marginTop;
 
     auto imgAttr = ImageAttrWithAlpha(img, alpha);
     Gdiplus::RectF imgRect(drawX, drawY, imgW, imgH);
@@ -43,7 +45,7 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
     // Draw about text above image
     Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
 
-    Gdiplus::RectF line1(0, drawY - 300, w, h);
+    Gdiplus::RectF line1(0, drawY - lineHeight * 3, w, h);
     DrawTextParams line1Params = {.text = i18n.Author,
                                   .font = &font,
                                   .rect = &line1,
@@ -53,7 +55,7 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
                                   .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, line1Params);
 
-    Gdiplus::RectF line2(0, drawY - 200, w, h);
+    Gdiplus::RectF line2(0, drawY - lineHeight * 2, w, h);
     DrawTextParams line2Params = {.text = i18n.AuthorInfo,
                                   .font = &font,
                                   .rect = &line2,
@@ -63,7 +65,7 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
                                   .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, line2Params);
 
-    Gdiplus::RectF line3(0, drawY - 100, w, h);
+    Gdiplus::RectF line3(0, drawY - lineHeight * 1, w, h);
     DrawTextParams line3Params = {.text = i18n.DonateThank,
                                   .font = &font,
                                   .rect = &line3,
