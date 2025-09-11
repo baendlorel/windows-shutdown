@@ -4,12 +4,12 @@
 
 class A : public Div {
    public:
-    std::string url;
+    std::wstring url;
     std::wstring text;
 
    public:
-    A(const Gdiplus::RectF& rect, std::string url, std::wstring text);
+    A(const Gdiplus::RectF& rect, std::wstring url, std::wstring text);
 
    public:
-    void Draw(const Gdiplus::Graphics* graphics, DrawContext& ctx);
+    void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
 };

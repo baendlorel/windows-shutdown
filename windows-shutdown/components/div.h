@@ -1,16 +1,19 @@
 // Base UI container for shared data
 #pragma once
+#include <functional>
 #include "framework.h"
 #include "consts/core.h"
 #include "consts/color-set.h"
 #include "app-state.h"
 #include "i18n.h"
-#include <functional>
+#include "ui.h"
 
-struct DrawContext {
-    Gdiplus::Graphics* graphics;
+struct DrawParams {
     unsigned char alpha;
-    Gdiplus::RectF rect;
+
+    // optional, for text drawing or image drawing
+    Gdiplus::RectF* rect = nullptr;
+    DrawTextParams* textParams = nullptr;
 };
 
 class Div {
@@ -29,7 +32,7 @@ class Div {
     std::function<void(HWND)> onClickCallback;
 
     virtual bool MouseHit(int mx, int my) const;
-    virtual void Draw(const Gdiplus::Graphics* graphics, DrawContext& ctx);
+    virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
 
     void OnClick(std::function<void(HWND)> cb) {
         this->onClickCallback = std::move(cb);
