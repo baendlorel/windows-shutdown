@@ -47,11 +47,5 @@ class AppState {
     }
 
    private:
-    AppState() {
-        // todo 这里的按钮要加入到view里作为children，short hoveredIndex = -1;
-        // // Initialize buttons based on menuButtons configuration
-        // for (const auto& action : config.menuButtons) {
-        //     this->buttons.push_back(MenuButton(action));
-        // }
-    }
+    AppState();
 };

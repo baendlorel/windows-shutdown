@@ -11,8 +11,11 @@ class MenuButton : public Div {
 
    public:
     MenuButton(int x, int y, Action action);
-    void Center(int buttonCount, int index, int w, int h);
     bool MouseHit(int mx, int my) const;
+    void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
+    void DrawHighlight(Gdiplus::Graphics& graphics, DrawParams& params);
+
+    void Center(int buttonCount, int index, int w, int h);
 
    private:
     void LoadPNGFromResource(HINSTANCE hInst);
