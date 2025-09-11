@@ -1,4 +1,8 @@
 #pragma once
 #include "framework.h"
+#include "view.h"
 
-void DrawDonate(Gdiplus::Graphics& graphics, int w, int h);
+class DonateView : View {
+   public:
+    void DrawView(Gdiplus::Graphics& graphics, int w, int h);
+};

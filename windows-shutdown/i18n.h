@@ -73,6 +73,7 @@ class I18N {
 
     std::wstring Wait(Action type, int seconds) const;
 
+    // zh and en uses different resource ids
     int DonateQRResourceID;
     std::wstring Author = L"Kasukabe Tsumugi<futami16237@gmail.com>";
     std::wstring AuthorInfo;

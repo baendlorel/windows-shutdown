@@ -9,14 +9,7 @@
 #include "bitmap-loader.h"
 #include "ui.h"
 
-// Load and cache donate bitmap from assets folder using I18N::DonateQrFileName
-static Gdiplus::Bitmap* LoadDonateBitmap() {
-    static Gdiplus::Bitmap* img = LoadBitmapByResourceId(AppState::GetInstance().hInst,
-                                                         I18N::GetInstance().DonateQRResourceID);
-    return img;
-}
-
-void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
+void DonateView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& i18n = I18N::GetInstance();
     BYTE alpha = AppState::GetInstance().page.GetPageAlpha(Page::Donate);
     if (alpha == 0) {
@@ -25,7 +18,7 @@ void DrawDonate(Gdiplus::Graphics& graphics, int w, int h) {
 
     static auto& colors = ColorSet::GetInstance();
     static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
-    static Gdiplus::Bitmap* img = LoadDonateBitmap();
+    static Gdiplus::Bitmap* img = LoadBitmapByResourceId(appState.hInst, i18n.DonateQRResourceID);
 
     // localized polite & cute thank-you line from i18n
     // std::wstring thankText = std::format(L"{}\n {}", i18n.Author, i18n.DonateThank);
