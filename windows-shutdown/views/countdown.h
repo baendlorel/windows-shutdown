@@ -1,4 +1,7 @@
 #pragma once
 #include "framework.h"
+#include "view.h"
 
-void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h);
+class CountdownView : View {
+    void DrawView(Gdiplus::Graphics& graphics, int w, int h);
+};
