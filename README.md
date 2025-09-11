@@ -1,4 +1,6 @@
-# windows-shutdown.exe
+# windows-shutdown.exe v1.2
+
+[简体中文说明](README_ZH.md)
 
 A small, simple Windows utility that shows a minimal UI for locking, sleeping, restarting, or shutting down the system. It supports a lightweight configuration file (`config.txt`) for language, automatic actions, delay, and background color.
 
@@ -18,7 +20,7 @@ A small, simple Windows utility that shows a minimal UI for locking, sleeping, r
 - Optional automatic action after a configurable delay.
 - Configurable language (English/Chinese) and background color.
 - Creates a `config.txt` next to the executable when missing (UTF-8 with BOM).
-- Beautiful Steins;Gate-inspired countdown design! (Normal design is also available.)
+- Beautiful Steins;Gate-inspired nixie tube countdown design! (Normal design is also available.)
 
 <p align="center">
   <img src="draft/example-en.png" alt="NixieTube" width="320" />
@@ -41,7 +43,7 @@ action=shutdown
 delay=60
 ```
 
-> Note: `delay` must be a non-negative integer (default is 3 seconds).
+> Note: `delay` must be a non-negative integer (default is 5 seconds).
 
 ## Custom action with custom shortcut icon 🖼️
 
@@ -57,7 +59,11 @@ Valid keys (case-sensitive):
 
 - `language` — UI language. Allowed values:
 
-  - `zh` — Chinese (default uses system language to decide)
+### Supported keys:
+
+- `language` — UI language. Allowed values:
+
+  - `zh` — Chinese (default: auto-detect by system language)
   - `en` — English
 
 - `action` — Automatic action mode. Allowed values:
@@ -75,13 +81,21 @@ Valid keys (case-sensitive):
 
 - `delay` — seconds to wait before performing the automatic action. Must be a non-negative integer. Default: 4
 
+- `menuButtons` — menu button configuration, comma separated. Allowed values:
+
+  - `Donate`, `Config`, `Lock`, `Sleep`, `Restart`, `Shutdown`
+  - Example: `menuButtons=Donate,Config,Lock,Sleep,Restart,Shutdown` (default: all)
+
+- `countdownStyle` — countdown style. Allowed values:
+
+  - `normal` — normal style
+  - `nixietube` — Steins;Gate-inspired style (default)
+
 - `backgroundColor` — background color of the UI. Accepted formats:
-  - `#RRGGBBAA` — full ARGB hex (example: `#11223344`) where the last two hex digits are alpha
-  - `#RRGGBB` — RGB hex (example: `#112233`), alpha defaults to a semi-transparent value
+  - `#RRGGBBAA` — full ARGB hex (example: `#11223344`, last two hex digits are alpha)
+  - `#RRGGBB` — RGB hex (example: `#112233`), alpha defaults to semi-transparent
 
-Behavior and warnings:
+### Behavior and warnings:
 
-- Invalid or malformed values are ignored and the defaults are used. The application collects warnings and displays them in the UI when `config.txt` contains invalid entries.
-- Accepted color examples:
-  - `#00000034` — black with semi-transparency (default)
-  - `#FF0000FF` — red with full alpha (opaque)
+- Invalid or malformed values are ignored and defaults are used. The application collects warnings and displays them in the UI when `config.txt` contains invalid entries.
+- The program auto-generates a config file with detailed comments if missing.

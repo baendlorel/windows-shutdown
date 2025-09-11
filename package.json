@@ -3,5 +3,6 @@
   "version": "1.2.0",
   "description": "A handy and beautiful tool for shutdown/sleep/lock/restart, which can be used by double-clicking on the desktop with a little configuration",
   "description_zh": "一个方便美观的关机/睡眠/锁屏/重启小工具，稍加配置，放在桌面上双击使用",
-  "purpose": "app"
+  "purpose": "app",
+  "license": "GPL-3.0-only"
 }
