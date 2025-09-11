@@ -146,6 +146,10 @@ void I18N::SetLang(Lang lang) {
 }
 
 std::wstring I18N::GetConfigWarningText(const std::vector<ConfigWarnInfo>& entries) const {
+    if (entries.empty()) {
+        return std::wstring();
+    }
+
     std::wstring result = this->InvalidConfig + L"\n";
     for (int i = 0; i < entries.size(); i++) {
         auto& entry = entries[i];

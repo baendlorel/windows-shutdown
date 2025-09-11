@@ -3,7 +3,7 @@
 #include "framework.h"
 #include "div.h"
 
-class A : Div {
+class A : public Div {
    public:
     void Draw(Gdiplus::Graphics* graphics, const Gdiplus::RectF& rect, const std::wstring& url,
               const std::wstring& text = std::wstring());

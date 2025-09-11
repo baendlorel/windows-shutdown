@@ -1,7 +1,7 @@
 #include "render.h"
 #include <format>
 
-#include "components/config-warning.h"
+#include "components/warning.h"
 #include "views/countdown.h"
 #include "views/donate.h"
 #include "views/home.h"
@@ -43,6 +43,7 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
+    static auto warningWStr = I18N::GetInstance().GetConfigWarningText(appState.config.warnings);
     static Gdiplus::Color baseBgColor = AppState::GetInstance().config.backgroundColor;
     static HomeView homeView;
     static CountdownView countdownView;
@@ -57,8 +58,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     graphics.FillRectangle(&bgBrush, 0, 0, w, h);
 
     // * These functions will decide internally whether to draw based on current state
-    if (!appState.config.warnings.empty()) {
-        DrawWarning(graphics, MAX_ALPHA, w, h);
+    if (!warningWStr.empty()) {
+        DrawWarning(graphics, MAX_ALPHA, w, h, warningWStr);
     }
 
     // ! __DrawDebug(graphics, w, h);
