@@ -2,7 +2,7 @@
 #include "framework.h"
 #include "view.h"
 
-class HomeView : View {
-   public:
+class HomeView : public View {
+   private:
     void DrawView(Gdiplus::Graphics& graphics, int w, int h);
 };

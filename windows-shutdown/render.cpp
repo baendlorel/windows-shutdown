@@ -44,6 +44,9 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& appState = AppState::GetInstance();
     static Gdiplus::Color baseBgColor = AppState::GetInstance().config.backgroundColor;
+    static HomeView homeView;
+    static CountdownView countdownView;
+    static DonateView donateView;
 
     // Create a background brush with appState.windowPage.alpha applied
     Gdiplus::SolidBrush bgBrush(ApplyAlpha(&baseBgColor, appState.page.GetBackgroundAlpha()));
@@ -60,9 +63,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // ! __DrawDebug(graphics, w, h);
 
-    DrawCountdown(graphics, w, h);
-    DrawDonate(graphics, w, h);
-    DrawHome(graphics, w, h);
+    homeView.Draw(graphics, w, h);
+    countdownView.Draw(graphics, w, h);
+    donateView.Draw(graphics, w, h);
 }
 
 /**

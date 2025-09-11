@@ -25,6 +25,6 @@ class View {
         this->DrawView(graphics, w, h);
     }
 
-   protected:
+   private:
     void DrawView(Gdiplus::Graphics& graphics, int w, int h);
 };

@@ -2,6 +2,7 @@
 #include "framework.h"
 #include "view.h"
 
-class CountdownView : View {
+class CountdownView : public View {
+   private:
     void DrawView(Gdiplus::Graphics& graphics, int w, int h);
 };
