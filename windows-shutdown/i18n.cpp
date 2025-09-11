@@ -71,6 +71,7 @@ void I18N::SetLang(Lang lang) {
         Waiting[2] = L"";  // left empty
 
         DonateQRResourceID = IDB_DONATEZHPNG;
+        AuthorInfo = L"欢迎访问 https://baendlorel.github.io/ 查看更多有趣项目和App";
         DonateThank = L"谢谢你的支持，给我满满的动力～";
     } else {
         FontFamilyName = L"Arial";
@@ -138,6 +139,8 @@ void I18N::SetLang(Lang lang) {
         Waiting[2] = L"";  // left empty
 
         DonateQRResourceID = IDB_DONATEENPNG;
+        AuthorInfo = L"Welcome to https://baendlorel.github.io/ for more interesting apps\n";
+
         DonateThank = L"Thanks for your support — you keep me going!";
     }
 }

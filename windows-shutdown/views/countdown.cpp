@@ -40,7 +40,7 @@ void DrawCountdown(Gdiplus::Graphics& graphics, int w, int h) {
         DrawCachedUIText(graphics, firstParams);
 
         // Nixie tube clock in the center
-        Gdiplus::RectF clockRect(w * 0.5f, y + 140, 0, 0);
+        Gdiplus::RectF clockRect(w * 0.5f, y + 125, 0, 0);
         DrawNixieTubeClock(graphics, alpha, clockRect, Gdiplus::PointF(0.5f, 0.0f),
                            appState.countdownSeconds);
 

@@ -3,11 +3,12 @@
 A small, simple Windows utility that shows a minimal UI for locking, sleeping, restarting, or shutting down the system. It supports a lightweight configuration file (`config.txt`) for language, automatic actions, delay, and background color.
 
 <p align="center">
-  <img src="windows-shutdown/assets/config.png" alt="config" width="80" style="margin-right:2px" />
-  <img src="windows-shutdown/assets/lock.png" alt="lock" width="80" style="margin-right:2px" />
-  <img src="windows-shutdown/assets/restart.png" alt="restart" width="80" style="margin-right:2px" />
-  <img src="windows-shutdown/assets/shutdown.png" alt="shutdown" width="80" style="margin-right:2px" />
-  <img src="windows-shutdown/assets/sleep.png" alt="sleep" width="80" />
+  <img src="windows-shutdown/assets/donate.png" alt="donate" width="60" style="margin-right:2px" />
+  <img src="windows-shutdown/assets/config.png" alt="config" width="60" style="margin-right:2px" />
+  <img src="windows-shutdown/assets/lock.png" alt="lock" width="60" style="margin-right:2px" />
+  <img src="windows-shutdown/assets/sleep.png" alt="sleep" width="60" />
+  <img src="windows-shutdown/assets/restart.png" alt="restart" width="60" style="margin-right:2px" />
+  <img src="windows-shutdown/assets/shutdown.png" alt="shutdown" width="60" style="margin-right:2px" />
 </p>
 
 ## Features
@@ -17,6 +18,11 @@ A small, simple Windows utility that shows a minimal UI for locking, sleeping, r
 - Optional automatic action after a configurable delay.
 - Configurable language (English/Chinese) and background color.
 - Creates a `config.txt` next to the executable when missing (UTF-8 with BOM).
+- Beautiful Steins;Gate-inspired countdown design! (Normal design is also available.)
+
+<p align="center">
+  <img src="draft/example-en.png" alt="NixieTube" width="320" />
+</p>
 
 ## Interactive mode
 
@@ -79,47 +85,3 @@ Behavior and warnings:
 - Accepted color examples:
   - `#00000034` — black with semi-transparency (default)
   - `#FF0000FF` — red with full alpha (opaque)
-
-### Example `config.txt` files
-
-Interactive, English UI with semi-transparent black background:
-
-language=en
-action=none
-instruction=show
-delay=4
-backgroundColor=#00000034
-
-Automatic sleep in 30 seconds, hide instruction:
-
-language=zh
-action=sleep
-instruction=hide
-delay=30
-backgroundColor=#00000034
-
-## Where to find the config file
-
-The application writes or reads `config.txt` from the same folder as the executable. If you run the app from a release build folder, place `config.txt` next to the `.exe` in that folder.
-
-## Troubleshooting
-
-- If an action like shutdown or restart fails, the program will display an error message: the process may need elevated privileges to perform system shutdown/restart.
-- If `config.txt` contains invalid lines, the invalid entries are skipped and a warning appears in the UI.
-
-## Building / Running (developer notes)
-
-This project uses CMake. There are example build folders (`build/`, `build-release/`) in the repo. Typical steps on Windows with Ninja:
-
-- Configure and build (Release):
-
-# run these in PowerShell in the repo root
-
-cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build build-release --config Release
-
-After build, copy or run the produced `windows-shutdown.exe` from `x64/Release/` or your chosen output folder.
-
-## License & Credits
-
-This README documents the small utility in this repository. See source files for more implementation details. 🧰

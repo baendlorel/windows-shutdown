@@ -73,9 +73,9 @@ class I18N {
 
     std::wstring Wait(Action type, int seconds) const;
 
-    // donate: resource id for QR image (from resource.h)
     int DonateQRResourceID;
-    // localized thank-you text shown above donate QR code
+    std::wstring Author = L"Kasukabe Tsumugi<futami16237@gmail.com>";
+    std::wstring AuthorInfo;
     std::wstring DonateThank;
 
    private:
