@@ -8,11 +8,8 @@
 #include "i18n.h"
 #include "ui.h"
 
-// alpha: 0-255 overall opacity multiplier for all painted colors in this function
-void DrawMenuButtons(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
-    static auto& appState = AppState::GetInstance();
-    static auto& i18n = I18N::GetInstance();
-    static auto& colors = ColorSet::GetInstance();
+void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
+    BYTE alpha = appState.page.GetPageAlpha(Page::Home);
 
     // Draw image buttons (original logic)
     for (int i = 0; i < appState.buttons.size(); ++i) {
@@ -44,12 +41,4 @@ void DrawMenuButtons(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h) {
     int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
     Gdiplus::RectF instrRect(0, instrY, w, h);
     DrawInstruction(graphics, alpha, &instrRect, i18n.PressAnyKeyToExit);
-}
-
-void DrawHome(Gdiplus::Graphics& graphics, int w, int h) {
-    BYTE alpha = AppState::GetInstance().page.GetPageAlpha(Page::Home);
-    if (alpha == 0) {
-        return;
-    }
-    DrawMenuButtons(graphics, alpha, w, h);
 }

@@ -1,0 +1,26 @@
+## [1.2.0] - 2025-09-11
+
+### Added
+
+- Donate page and donate button, with new icons and QR code support.
+- Steins;Gate-inspired Nixie tube countdown style, now default.
+- MenuButtons configuration is now fully customizable via config file.
+- Event-driven button click handling, with callback registration.
+- Configurable background color and improved config warnings display.
+- English and Chinese documentation.
+- GPLv3 license and license switching support.
+
+### Improved
+
+- Countdown and instruction text layout and style.
+- Button margin, position, and hit detection logic.
+- Fade-in/fade-out transitions and page switching.
+- Donate page UI and margin adjustments.
+- Error and warning messages in config parsing.
+- General code refactoring and modularization (views/components split).
+
+### Fixed
+
+- Various countdown, button, and layout bugs.
+- Default values and config parsing edge cases.
+- Improved DPI awareness and rendering quality.
