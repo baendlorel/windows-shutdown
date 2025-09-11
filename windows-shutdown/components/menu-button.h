@@ -7,16 +7,14 @@
 
 struct MenuButton {
    public:
-    Action action;
-
     int x;
     int y;
+    std::function<void(HWND)> onClickCallback;
+
+    Action action;
 
     int resId;
     Gdiplus::Bitmap* png;
-
-    // Callback invoked when this menu button is clicked. Receives the HWND of the window.
-    std::function<void(HWND)> onClickCallback;
 
    public:
     MenuButton(Action action);
