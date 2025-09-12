@@ -22,6 +22,7 @@ class AppState {
     AppState(AppState&&) = delete;
     AppState& operator=(AppState&&) = delete;
 
+   public:
     HINSTANCE hInst = nullptr;
 
     AppPage page;
@@ -30,7 +31,9 @@ class AppState {
     int screenW = 0;
     int screenH = 0;
 
-    // effects
+    // mouse
+    int mouseX = 0;
+    int mouseY = 0;
 
     // actions
     Action action = Action::None;

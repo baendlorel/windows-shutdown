@@ -8,32 +8,39 @@
 #include "i18n.h"
 #include "ui.h"
 
+void HomeView::initMenu() {
+    // Clear existing buttons
+    this->buttons.clear();
+
+    // Define the actions for the buttons
+    auto& actions = this->appState.config.menuButtons;
+
+    // Create and position buttons
+    int buttonCount = static_cast<int>(actions.size());
+    for (int i = 0; i < buttonCount; ++i) {
+        this->buttons.push_back(MenuButton(0, 0, actions[i]));
+        this->buttons[i].Center(buttonCount, i, appState.screenW, appState.screenH);
+    }
+}
+
 void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
     BYTE alpha = appState.page.GetPageAlpha(Page::Home);
 
     // Draw image buttons (original logic)
-    for (int i = 0; i < appState.buttons.size(); ++i) {
-        auto& b = appState.buttons[i];
-        int x = b.x - BUTTON_RADIUS;
-        int y = b.y - BUTTON_RADIUS;
-
-        auto imgAttr = ImageAttrWithAlpha(b.png, alpha);
+    for (int i = 0; i < this->buttons.size(); ++i) {
+        auto& b = this->buttons[i];
+        int x = b.rect.X - BUTTON_RADIUS;
+        int y = b.rect.Y - BUTTON_RADIUS;
 
         // where and what size to draw
-        Gdiplus::Rect rect(x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
+        DrawParams params = {.alpha = alpha};
+        b.Draw(graphics, params);
 
-        // x, y, w, h cut from the source image
-        // Since button images are 512x512, appState.buttons[i].png->GetWidth() is acutally 512
-        graphics.DrawImage(b.png, rect, 0, 0, b.png->GetWidth(), b.png->GetHeight(),
-                           Gdiplus::UnitPixel, imgAttr.get());
-
-        // If hovered, overlay a semi-transparent white, but scaled by overall alpha
-        if (i == appState.hoveredIndex) {
-            Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, alpha));
-            Gdiplus::SolidBrush highlightBrush(blended);
-            graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
-                                 BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2,
-                                 BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2);
+        // Draw highlight if mouse is over the button
+        bool isHit = b.MouseHit(appState.mouseX, appState.mouseY);
+        if (isHit) {
+            DrawParams highlightParams = {.alpha = MAX_ALPHA};
+            b.DrawHighlight(graphics, highlightParams);
         }
     }
 
