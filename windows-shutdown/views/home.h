@@ -7,7 +7,8 @@ class HomeView : public View {
    public:
     void initMenu();
 
+    std::vector<MenuButton> menu;
+
    private:
-    std::vector<MenuButton> buttons;
     void DrawView(Gdiplus::Graphics& graphics, int w, int h);
 };

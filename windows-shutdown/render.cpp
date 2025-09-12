@@ -2,9 +2,7 @@
 #include <format>
 
 #include "components/warning.h"
-#include "views/countdown.h"
-#include "views/donate.h"
-#include "views/home.h"
+#include "views/app.h"
 
 #include "consts/font-style.h"
 #include "app-state.h"
@@ -42,12 +40,10 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
 }
 
 void DrawToMemoryDC(HDC hdcMem, int w, int h) {
+    static auto& app = App::GetInstance();
     static auto& appState = AppState::GetInstance();
     static auto warningWStr = I18N::GetInstance().GetConfigWarningText(appState.config.warnings);
     static Gdiplus::Color baseBgColor = AppState::GetInstance().config.backgroundColor;
-    static HomeView homeView;
-    static CountdownView countdownView;
-    static DonateView donateView;
 
     // Create a background brush with appState.windowPage.alpha applied
     Gdiplus::SolidBrush bgBrush(ApplyAlpha(&baseBgColor, appState.page.GetBackgroundAlpha()));
@@ -64,9 +60,9 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // ! __DrawDebug(graphics, w, h);
 
-    homeView.Draw(graphics, w, h);
-    countdownView.Draw(graphics, w, h);
-    donateView.Draw(graphics, w, h);
+    app.home.Draw(graphics, w, h);
+    app.countdown.Draw(graphics, w, h);
+    app.donate.Draw(graphics, w, h);
 }
 
 /**
@@ -80,23 +76,23 @@ struct WH {
 // & Here we do not use appState.screenW/H.
 // Although they are equivalent, we still need to write program that has
 // more compilcated logic. Consider future features like responsive layout.
-WH GetWH(HWND hWnd, AppState& appState) {
+WH GetWH(HWND hWnd) {
+    auto& menu = App::GetInstance().home.menu;
     RECT rc;
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
-    int buttonCount = static_cast<int>(appState.buttons.size());
+    int buttonCount = static_cast<int>(menu.size());
     float centerIndex = (buttonCount - 1) * 0.5f;
 
     for (short i = 0; i < buttonCount; i++) {
-        appState.buttons[i].Center(buttonCount, i, w, h);
+        menu[i].Center(buttonCount, i, w, h);
     }
     return {w, h};
 }
 
 void UpdateLayered(HWND hWnd) {
-    static auto& appState = AppState::GetInstance();
-    static WH wh = GetWH(hWnd, appState);
+    static WH wh = GetWH(hWnd);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
 

@@ -8,6 +8,7 @@
 #include "controller.h"
 #include "render.h"
 #include "i18n.h"
+#include "views/app.h"
 
 ATOM MyRegisterClass() {
     auto& appState = AppState::GetInstance();
@@ -28,8 +29,8 @@ ATOM MyRegisterClass() {
 }
 
 void RegisterMenuButtonClickCallback() {
-    auto& appState = AppState::GetInstance();
-    for (auto& button : appState.buttons) {
+    auto& menu = App::GetInstance().home.menu;
+    for (auto& button : menu) {
         switch (button.action) {
             case Action::Donate:
                 button.OnClick(TriggerDonate);
@@ -138,27 +139,13 @@ void HandleCancel(HWND hWnd) {
 
 void HandleMoustMove(HWND hWnd, LPARAM lParam) {
     static auto& appState = AppState::GetInstance();
-    if (appState.isCountingDown()) {
-        return;  // Ignore mouse move during countdown
-    }
-    int mx = LOWORD(lParam);
-    int my = HIWORD(lParam);
-    int newHover = -1;
-    for (int i = 0; i < appState.buttons.size(); ++i) {
-        if (appState.buttons[i].MouseHit(mx, my)) {
-            newHover = i;
-            break;
-        }
-    }
-
-    if (newHover != appState.hoveredIndex) {
-        appState.hoveredIndex = newHover;
-        UpdateLayered(hWnd);
-    }
+    appState.mouseX = LOWORD(lParam);
+    appState.mouseY = HIWORD(lParam);
 }
 
 void HandleClick(HWND hWnd, LPARAM lParam) {
     static auto& appState = AppState::GetInstance();
+    static auto& menu = App::GetInstance().home.menu;
     if (appState.isCountingDown()) {
         CancelCountdown(hWnd);
         return;
@@ -168,11 +155,11 @@ void HandleClick(HWND hWnd, LPARAM lParam) {
     if (appState.page.current == Page::Home) {
         int mx = LOWORD(lParam);
         int my = HIWORD(lParam);
-        for (int i = 0; i < appState.buttons.size(); ++i) {
-            if (!appState.buttons[i].MouseHit(mx, my)) {
+        for (int i = 0; i < menu.size(); ++i) {
+            if (!menu[i].MouseHit(mx, my)) {
                 continue;
             }
-            appState.buttons[i].onClickCallback(hWnd);
+            menu[i].TriggerClick(hWnd);
             return;
         }
     }
