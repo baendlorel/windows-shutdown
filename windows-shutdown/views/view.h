@@ -10,6 +10,7 @@ class View {
     I18N& i18n = I18N::GetInstance();
     ColorSet& colors = ColorSet::GetInstance();
     Page page = Page::None;
+    bool active = false;
 
    public:
     virtual ~View() = default;
@@ -21,9 +22,29 @@ class View {
 
     void Draw(Gdiplus::Graphics& graphics, int w, int h) {
         if (this->isInvisible()) {
+            this->Deactivate();
             return;
         }
+
+        if (appState.page.fading) {
+            this->Deactivate();
+        } else {
+            this->Activate();
+        }
+
         this->DrawView(graphics, w, h);
+    }
+
+    bool IsActive() const {
+        return this->active;
+    }
+
+    virtual void Activate() {
+        this->active = true;
+    }
+
+    virtual void Deactivate() {
+        this->active = false;
     }
 
    private:

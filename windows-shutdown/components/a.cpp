@@ -19,6 +19,5 @@ void A::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
         MessageBoxW(nullptr, m.c_str(), L"Error", MB_ICONERROR);
         return;
     }
-    this->active = (params.alpha == MAX_ALPHA);
     DrawCachedUIText(graphics, *params.textParams);
 }

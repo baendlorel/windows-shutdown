@@ -23,7 +23,7 @@ void HomeView::initMenu() {
 }
 
 void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
-    BYTE alpha = appState.page.GetPageAlpha(Page::Home);
+    BYTE alpha = appState.page.GetPageAlpha(this->page);
 
     // Draw image buttons (original logic)
     for (int i = 0; i < this->menu.size(); ++i) {
@@ -40,4 +40,18 @@ void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
     static Gdiplus::RectF instrRect(
         0, (h / 2.0f) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM, w, h);
     DrawInstruction(graphics, alpha, &instrRect, i18n.PressAnyKeyToExit);
+}
+
+void HomeView::Activate() {
+    this->Activate();
+    for (auto& b : this->menu) {
+        b.Activate();
+    }
+}
+
+void HomeView::Deactivate() {
+    this->Deactivate();
+    for (auto& b : this->menu) {
+        b.Deactivate();
+    }
 }

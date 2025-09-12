@@ -9,6 +9,9 @@ class HomeView : public View {
 
     std::vector<MenuButton> menu;
 
+    void Activate();
+    void Deactivate();
+
    private:
     void DrawView(Gdiplus::Graphics& graphics, int w, int h);
 };

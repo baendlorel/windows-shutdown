@@ -49,6 +49,14 @@ class Div {
         }
     }
 
+    void Activate() {
+        this->active = true;
+    }
+
+    void Deactivate() {
+        this->active = false;
+    }
+
     bool IsActive() const {
         return this->active;
     }

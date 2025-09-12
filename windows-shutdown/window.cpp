@@ -95,6 +95,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
     if (wParam == FADE_TIMER_ID) {
         int steps = FADE_DURATION / FRAME_TIME;
         BYTE step = (MAX_ALPHA + steps - 1) / steps;
+
         if (alpha < MAX_ALPHA) {
             appState.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
             UpdateLayered(hWnd);
