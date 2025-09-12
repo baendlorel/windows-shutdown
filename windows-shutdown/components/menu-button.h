@@ -1,5 +1,4 @@
 #pragma once
-#include <functional>
 #include "div.h"
 #include "consts/core.h"
 
@@ -14,6 +13,7 @@ class MenuButton : public Div {
     bool MouseHit(int mx, int my) const;
     void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
 
+   public:
     void Center(int buttonCount, int index, int w, int h);
 
    private:

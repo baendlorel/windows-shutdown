@@ -5,9 +5,9 @@
 
 A::A(const Gdiplus::RectF& rect, std::wstring url, std::wstring text)
     : Div(ElementTag::A, rect), url(std::move(url)), text(std::move(text)) {
-    this->onClickCallback = [this](HWND hwnd) {
+    this->OnClick([this](HWND hwnd) {
         ShellExecuteW(hwnd, L"open", this->url.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
-    };
+    });
 };
 
 void A::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
@@ -19,5 +19,6 @@ void A::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
         MessageBoxW(nullptr, m.c_str(), L"Error", MB_ICONERROR);
         return;
     }
+    this->active = (params.alpha == MAX_ALPHA);
     DrawCachedUIText(graphics, *params.textParams);
 }

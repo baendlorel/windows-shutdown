@@ -22,19 +22,30 @@ class Div {
     I18N& i18n = I18N::GetInstance();
     ColorSet& colors = ColorSet::GetInstance();
 
+    // when alpha is MAX_ALPHA, active state is true
+    bool active = false;
+
    public:
     Div(ElementTag tag, const Gdiplus::RectF& rect) : tag(tag), rect(rect) {};
     virtual ~Div() = default;
 
+   private:
+    std::function<void(HWND)> onClickCallback;
+
    public:
     ElementTag tag;
     Gdiplus::RectF rect;  // Position and size
-    std::function<void(HWND)> onClickCallback;
 
     virtual bool MouseHit(int mx, int my) const;
     virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
 
     void OnClick(std::function<void(HWND)> cb) {
         this->onClickCallback = std::move(cb);
+    }
+
+    void TriggerClick(HWND hwnd) {
+        if (this->onClickCallback && this->active) {
+            this->onClickCallback(hwnd);
+        }
     }
 };
