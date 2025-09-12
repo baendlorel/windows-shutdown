@@ -35,6 +35,12 @@ class AppState {
     int mouseX = 0;
     int mouseY = 0;
 
+    // todo 可能要在这里用来触发一些事件
+    void SetMousePos(int x, int y) {
+        this->mouseX = x;
+        this->mouseY = y;
+    }
+
     // actions
     Action action = Action::None;
     short countdownSeconds = 0;

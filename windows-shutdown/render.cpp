@@ -41,11 +41,14 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
         __drawingalpha = app.home.menu[0].__drawingalpha;
     }
 
+    static int count = 0;
+    count++;
     auto str = std::format(
-        L"Home:{} (menu active: {}, {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}",
+        L"{}, Home:{} (menu active: {}, {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}", count,
         page.GetPageAlpha(Page::Home), menuActive, __drawingalpha,
         page.GetPageAlpha(Page::Countdown), page.GetPageAlpha(Page::None), pageName(page.current),
         pageName(page.next), (page.fading ? L"true" : L"false"));
+
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
@@ -126,6 +129,7 @@ void UpdateLayered(HWND hWnd) {
     DrawToMemoryDC(hdcMem, wh.w, wh.h);
     POINT ptWin = {0, 0};
     SIZE sizeWin = {wh.w, wh.h};
+
     // appState.page.alpha
     BLENDFUNCTION blend = {AC_SRC_OVER, 0, MAX_ALPHA, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);

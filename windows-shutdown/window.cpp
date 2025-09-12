@@ -197,6 +197,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             if (!appState.page.fading && wParam == VK_ESCAPE) {
                 HandleCancel(hWnd);
             }
+            // & after test, it is found that activate really works
+            if (!appState.page.fading && wParam == VK_F5) {
+                UpdateLayered(hWnd);
+            }
             break;
         case WM_RBUTTONDOWN:
             // Must not be fading
