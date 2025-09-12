@@ -60,9 +60,7 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
 
     // ! __DrawDebug(graphics, w, h);
 
-    app.home.Draw(graphics, w, h);
-    app.countdown.Draw(graphics, w, h);
-    app.donate.Draw(graphics, w, h);
+    app.Draw(graphics, w, h);
 }
 
 /**

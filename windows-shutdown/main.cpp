@@ -53,12 +53,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-    // todo 改到view里去
-    // must put this after GdiplusStartup, or images will not be loaded correctly
-    for (short i = 0; i < appState.buttons.size(); i++) {
-        appState.buttons[i].LoadPNGFromResource(hInstance);
-    }
-
     I18N::GetInstance().SetLang(appState.config.lang);
 
     LoadStringW(hInstance, IDS_APP_TITLE, appState.szTitle, MAX_LOADSTRING);

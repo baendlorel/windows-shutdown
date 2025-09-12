@@ -27,5 +27,5 @@ class View {
     }
 
    private:
-    void DrawView(Gdiplus::Graphics& graphics, int w, int h);
+    virtual void DrawView(Gdiplus::Graphics& graphics, int w, int h) = 0;
 };

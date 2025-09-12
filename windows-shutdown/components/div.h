@@ -37,7 +37,7 @@ class Div {
     Gdiplus::RectF rect;  // Position and size
 
     virtual bool MouseHit(int mx, int my) const;
-    virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
+    virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params) = 0;
 
     void OnClick(std::function<void(HWND)> cb) {
         this->onClickCallback = std::move(cb);

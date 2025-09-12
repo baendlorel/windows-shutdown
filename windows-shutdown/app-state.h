@@ -50,5 +50,5 @@ class AppState {
     }
 
    private:
-    AppState();
+    AppState() = default;
 };

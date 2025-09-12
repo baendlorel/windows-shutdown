@@ -14,6 +14,13 @@ struct App {
     DonateView donate;
     CountdownView countdown;
 
+   public:
+    void Draw(Gdiplus::Graphics& graphics, int w, int h) {
+        home.Draw(graphics, w, h);
+        countdown.Draw(graphics, w, h);
+        donate.Draw(graphics, w, h);
+    }
+
    private:
     App() = default;
 };
