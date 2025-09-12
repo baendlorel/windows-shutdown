@@ -61,6 +61,7 @@ void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
     int y = this->rect.Y - BUTTON_RADIUS;
 
     this->active = (params.alpha == MAX_ALPHA);
+    __drawingalpha = params.alpha;
 
     auto imgAttr = ImageAttrWithAlpha(this->png, params.alpha);
 

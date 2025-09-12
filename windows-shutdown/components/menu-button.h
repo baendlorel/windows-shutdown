@@ -8,6 +8,8 @@ class MenuButton : public Div {
     int resId;
     Gdiplus::Bitmap* png;
 
+    BYTE __drawingalpha = 0;
+
    public:
     MenuButton(int x, int y, Action action);
     bool MouseHit(int mx, int my) const;

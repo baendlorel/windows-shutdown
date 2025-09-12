@@ -34,16 +34,18 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
 
     auto& app = App::GetInstance();
     auto menuActive = -1;
+    auto __drawingalpha = -1;
 
     if (app.home.menu.size() > 0) {
         menuActive = app.home.menu[0].IsActive() ? 1 : 0;
+        __drawingalpha = app.home.menu[0].__drawingalpha;
     }
 
-    auto str =
-        std::format(L"Home:{} (menu active: {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}",
-                    page.GetPageAlpha(Page::Home), menuActive, page.GetPageAlpha(Page::Countdown),
-                    page.GetPageAlpha(Page::None), pageName(page.current), pageName(page.next),
-                    (page.fading ? L"true" : L"false"));
+    auto str = std::format(
+        L"Home:{} (menu active: {}, {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}",
+        page.GetPageAlpha(Page::Home), menuActive, __drawingalpha,
+        page.GetPageAlpha(Page::Countdown), page.GetPageAlpha(Page::None), pageName(page.current),
+        pageName(page.next), (page.fading ? L"true" : L"false"));
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
