@@ -1,12 +1,11 @@
 #include "home.h"
 #include "components/instruction.h"
+#include "components/menu-button.h"
 #include "consts/button-style.h"
 
 #include "consts/effects.h"
-#include "consts/color-set.h"
 #include "app-state.h"
 #include "i18n.h"
-#include "ui.h"
 
 void HomeView::initMenu() {
     // Clear existing buttons
@@ -35,17 +34,10 @@ void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
         // where and what size to draw
         DrawParams params = {.alpha = alpha};
         b.Draw(graphics, params);
-
-        // Draw highlight if mouse is over the button
-        bool isHit = b.MouseHit(appState.mouseX, appState.mouseY);
-        if (isHit) {
-            DrawParams highlightParams = {.alpha = MAX_ALPHA};
-            b.DrawHighlight(graphics, highlightParams);
-        }
     }
 
     // Draw exit instruction below buttons
-    int instrY = (h / 2) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM;
-    Gdiplus::RectF instrRect(0, instrY, w, h);
+    static Gdiplus::RectF instrRect(
+        0, (h / 2.0f) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM, w, h);
     DrawInstruction(graphics, alpha, &instrRect, i18n.PressAnyKeyToExit);
 }

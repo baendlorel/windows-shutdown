@@ -69,12 +69,12 @@ void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
     // Since button images are 512x512, appState.buttons[i].png->GetWidth() is acutally 512
     graphics.DrawImage(this->png, rect, 0, 0, this->png->GetWidth(), this->png->GetHeight(),
                        Gdiplus::UnitPixel, imgAttr.get());
-}
 
-void MenuButton::DrawHighlight(Gdiplus::Graphics& graphics, DrawParams& params) {
-    // todo 也许这里的xy要重新看一下到底是什么意思，有时候加有时候减的
-    int x = this->rect.X - BUTTON_RADIUS;
-    int y = this->rect.Y - BUTTON_RADIUS;
+    // highlight
+    bool isHit = this->MouseHit(appState.mouseX, appState.mouseY);
+    if (!isHit) {
+        return;
+    }
 
     Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, params.alpha));
     Gdiplus::SolidBrush highlightBrush(blended);

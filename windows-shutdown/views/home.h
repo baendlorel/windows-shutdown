@@ -1,6 +1,7 @@
 #pragma once
 #include "framework.h"
 #include "view.h"
+#include "components/menu-button.h"
 
 class HomeView : public View {
    public:

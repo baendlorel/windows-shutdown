@@ -1,7 +1,5 @@
 #pragma once
-#include <vector>
 #include "framework.h"
-#include "components/menu-button.h"
 #include "consts/color-set.h"
 #include "app-state.h"
 #include "i18n.h"
