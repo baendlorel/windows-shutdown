@@ -32,10 +32,18 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
         }
     };
 
-    auto str = std::format(L"Home:{}, Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}",
-                           page.GetPageAlpha(Page::Home), page.GetPageAlpha(Page::Countdown),
-                           page.GetPageAlpha(Page::None), pageName(page.current),
-                           pageName(page.next), (page.fading ? L"true" : L"false"));
+    auto& app = App::GetInstance();
+    auto menuActive = -1;
+
+    if (app.home.menu.size() > 0) {
+        menuActive = app.home.menu[0].IsActive() ? 1 : 0;
+    }
+
+    auto str =
+        std::format(L"Home:{} (menu active: {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}",
+                    page.GetPageAlpha(Page::Home), menuActive, page.GetPageAlpha(Page::Countdown),
+                    page.GetPageAlpha(Page::None), pageName(page.current), pageName(page.next),
+                    (page.fading ? L"true" : L"false"));
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
@@ -58,7 +66,8 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
         DrawWarning(graphics, MAX_ALPHA, w, h, warningWStr);
     }
 
-    // ! __DrawDebug(graphics, w, h);
+    // !
+    __DrawDebug(graphics, w, h);
 
     app.Draw(graphics, w, h);
 }

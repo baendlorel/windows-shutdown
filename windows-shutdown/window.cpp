@@ -73,6 +73,8 @@ BOOL InitInstance(int) {
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
 
+    // ui
+    App::GetInstance().home.initMenu();
     RegisterMenuButtonClickCallback();
 
     // If config requests immediate action, initialize the immediate action

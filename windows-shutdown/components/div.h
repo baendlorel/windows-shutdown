@@ -48,4 +48,8 @@ class Div {
             this->onClickCallback(hwnd);
         }
     }
+
+    bool IsActive() const {
+        return this->active;
+    }
 };
