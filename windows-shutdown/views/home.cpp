@@ -43,14 +43,14 @@ void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
 }
 
 void HomeView::Activate() {
-    this->Activate();
+    View::Activate();
     for (auto& b : this->menu) {
         b.Activate();
     }
 }
 
 void HomeView::Deactivate() {
-    this->Deactivate();
+    View::Deactivate();
     for (auto& b : this->menu) {
         b.Deactivate();
     }

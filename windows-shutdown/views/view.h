@@ -13,6 +13,7 @@ class View {
     bool active = false;
 
    public:
+    View(Page page) : page(page) {};
     virtual ~View() = default;
 
    public:
