@@ -25,7 +25,7 @@ Gdiplus::Bitmap* LoadBitmapByResourceId(HINSTANCE hInst, int resId) {
     ULONG written;
     pStream->Write(pData, size, &written);
     // LARGE_INTEGER li = {0};
-    LARGE_INTEGER li;
+    LARGE_INTEGER li = {0};
     pStream->Seek(li, STREAM_SEEK_SET, NULL);
     Gdiplus::Bitmap* image = Gdiplus::Bitmap::FromStream(pStream);
     pStream->Release();

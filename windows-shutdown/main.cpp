@@ -56,10 +56,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     LoadStringW(hInstance, IDS_APP_TITLE, app.state.szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, app.state.szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass();
+
+    auto& window = Window::GetInstance();
+    window.MyRegisterClass();
 
     // fixme nono无响应退出了
-    if (!InitInstance(nShowCmd)) {
+    if (!window.InitInstance(nShowCmd)) {
         return FALSE;
     }
 
