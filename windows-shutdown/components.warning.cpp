@@ -7,7 +7,8 @@
 
 #include "mini-ui.h"
 
-void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h, std::wstring text) {
+void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::REAL w, Gdiplus::REAL h,
+                 std::wstring text) {
     if (alpha == 0) {
         return;
     }

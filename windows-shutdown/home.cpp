@@ -1,6 +1,7 @@
 #include "home.h"
 #include "style.button.h"
 #include "style.fade.h"
+#include "realify.h"
 
 #include "components.instruction.h"
 #include "components.menu-button.h"
@@ -20,14 +21,14 @@ void HomeView::initMenu() {
     }
 }
 
-void HomeView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
+void HomeView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
     BYTE alpha = app.page.GetPageAlpha(this->page);
 
     // Draw image buttons (original logic)
     for (int i = 0; i < this->menu.size(); ++i) {
         auto& b = this->menu[i];
-        int x = b.rect.X - BUTTON_RADIUS;
-        int y = b.rect.Y - BUTTON_RADIUS;
+        int x = INTIFY(b.rect.X - BUTTON_RADIUS);
+        int y = INTIFY(b.rect.Y - BUTTON_RADIUS);
 
         // where and what size to draw
         DrawParams params = {.alpha = alpha};

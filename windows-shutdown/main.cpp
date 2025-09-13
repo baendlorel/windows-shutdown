@@ -39,7 +39,8 @@ static void EnsureDpiAwareness() {
 }
 
 // msvc use: int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
+                      _In_ LPWSTR lpCmdLine, _In_ int nCmdShow) {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     EnsureDpiAwareness();
@@ -61,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     window.MyRegisterClass();
 
     // fixme nono无响应退出了
-    if (!window.InitInstance(nShowCmd)) {
+    if (!window.InitInstance(nCmdShow)) {
         return FALSE;
     }
 

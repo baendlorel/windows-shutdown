@@ -1,4 +1,5 @@
 #pragma once
+#include "framework.h"
 #include "singleton.h"
 
 #include "home.h"
@@ -14,7 +15,7 @@ struct Index {
     CountdownView countdown;
 
    public:
-    void Draw(Gdiplus::Graphics& graphics, int w, int h) {
+    void Draw(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
         home.Draw(graphics, w, h);
         countdown.Draw(graphics, w, h);
         donate.Draw(graphics, w, h);

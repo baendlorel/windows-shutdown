@@ -10,7 +10,6 @@ constexpr int COUNT_DOWN_NUMBER_FONT_SIZE =
 constexpr int INSTRUCTION_FONT_SIZE = 20;
 constexpr int FONT_OUTLINE_WIDTH = 3;
 
-// 增加到 16 个方向（每 22.5°），使阴影更丰富
 constexpr float SHADOW_OFFSET[16][2] = {
     {1.000f, 0.000f},    // 0
     {0.924f, 0.383f},    // 22.5

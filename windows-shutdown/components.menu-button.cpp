@@ -1,6 +1,8 @@
 #include "components.menu-button.h"
 
 #include "resource.h"
+#include "realify.h"
+
 #include "style.button.h"
 #include "bitmap-loader.h"
 
@@ -29,7 +31,8 @@ void MenuButton::LoadPNGFromResource(HINSTANCE hInst) {
 }
 
 MenuButton::MenuButton(int x, int y, Action action)
-    : Div(ElementTag::Button, Gdiplus::RectF(x, y, BUTTON_RADIUS, BUTTON_RADIUS)) {
+    : Div(ElementTag::Button,
+          Gdiplus::RectF(REALIFY(x), REALIFY(y), REALIFY(BUTTON_RADIUS), REALIFY(BUTTON_RADIUS))) {
     this->png = nullptr;
     this->action = action;
 
@@ -43,21 +46,21 @@ void MenuButton::Center(int buttonCount, int index, int w, int h) {
 
     int centerX = w / 2;
     int centerY = h / 2;
-    this->rect.X = centerX + BUTTON_MARGIN_LEFT + delta;
-    this->rect.Y = centerY + BUTTON_MARGIN_TOP;
+    this->rect.X = centerX + REALIFY(BUTTON_MARGIN_LEFT) + delta;
+    this->rect.Y = centerY + REALIFY(BUTTON_MARGIN_TOP);
 }
 
 bool MenuButton::MouseHit(int mx, int my) const {
-    int x = this->rect.X + BUTTON_RADIUS;
-    int y = this->rect.Y + BUTTON_RADIUS;
+    int x = INTIFY(this->rect.X + BUTTON_RADIUS);
+    int y = INTIFY(this->rect.Y + BUTTON_RADIUS);
     int dx = mx - x;
     int dy = my - y;
     return (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
 }
 
 void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
-    int x = this->rect.X - BUTTON_RADIUS;
-    int y = this->rect.Y - BUTTON_RADIUS;
+    int x = INTIFY(this->rect.X - BUTTON_RADIUS);
+    int y = INTIFY(this->rect.Y - BUTTON_RADIUS);
 
     __drawingalpha = params.alpha;
 

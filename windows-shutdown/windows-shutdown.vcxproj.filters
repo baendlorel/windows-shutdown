@@ -124,9 +124,6 @@
     <ClInclude Include="home.h">
       <Filter>src\ui\views</Filter>
     </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>project-metadata</Filter>
-    </ClInclude>
     <ClInclude Include="style.color.h">
       <Filter>src\consts\styles</Filter>
     </ClInclude>
@@ -138,6 +135,12 @@
     </ClInclude>
     <ClInclude Include="app.core.h">
       <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="realify.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="home.cpp">
       <Filter>src\ui\views</Filter>
+    </ClCompile>
+    <ClCompile Include="dtm.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

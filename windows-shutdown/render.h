@@ -13,10 +13,10 @@ class Render {
     Index& index = Index::GetInstance();
 
    public:
-    void DrawToMemoryDC(HDC hdcMem, int w, int h);
+    void DrawToMemoryDC(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h);
     void UpdateLayered(HWND hWnd);
 
    private:
-    void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h);
+    void __DrawDebug(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h);
     SIZE GetWH(HWND hWnd);
 };

@@ -89,7 +89,7 @@ class View {
         return app.page.GetPageAlpha(this->page) == 0;
     }
 
-    void Draw(Gdiplus::Graphics& graphics, int w, int h) {
+    void Draw(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
         if (this->isInvisible()) {
             this->Deactivate();
             return;
@@ -117,7 +117,7 @@ class View {
     }
 
    private:
-    virtual void DrawView(Gdiplus::Graphics& graphics, int w, int h) = 0;
+    virtual void DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) = 0;
 };
 
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha);

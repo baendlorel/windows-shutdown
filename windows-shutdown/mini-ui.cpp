@@ -144,7 +144,9 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
         graphics.DrawImage(img, drawX, drawY);
     } else {
         auto imgAttr = ImageAttrWithAlpha(img, alpha);
-        Gdiplus::RectF rect(drawX, drawY, img->GetWidth(), img->GetHeight());
+        Gdiplus::REAL imgW = static_cast<Gdiplus::REAL>(img->GetWidth());
+        Gdiplus::REAL imgH = static_cast<Gdiplus::REAL>(img->GetHeight());
+        Gdiplus::RectF rect(drawX, drawY, imgW, imgH);
         graphics.DrawImage(img, rect, 0, 0, rect.Width, rect.Height, Gdiplus::UnitPixel,
                            imgAttr.get());
     }

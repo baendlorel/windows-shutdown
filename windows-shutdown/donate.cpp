@@ -3,12 +3,13 @@
 #include "style.fade.h"
 #include "style.font.h"
 #include "style.color.h"
+#include "realify.h"
 
 #include "mini-ui.h"
 
 #include "bitmap-loader.h"
 
-void DonateView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
+void DonateView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
     BYTE alpha = AppPage::GetInstance().GetPageAlpha(Page::Donate);
     if (alpha == 0) {
         return;
@@ -25,10 +26,10 @@ void DonateView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
     constexpr int marginTop = 100;
 
     // Draw image centered
-    int imgW = img->GetWidth();
-    int imgH = img->GetHeight();
-    int drawX = (w - imgW) / 2;
-    int drawY = (h - imgH) / 2 + marginTop;
+    Gdiplus::REAL imgW = REALIFY(img->GetWidth());
+    Gdiplus::REAL imgH = REALIFY(img->GetHeight());
+    Gdiplus::REAL drawX = (w - imgW) / 2;
+    Gdiplus::REAL drawY = (h - imgH) / 2 + marginTop;
 
     auto imgAttr = ImageAttrWithAlpha(img, alpha);
     Gdiplus::RectF imgRect(drawX, drawY, imgW, imgH);

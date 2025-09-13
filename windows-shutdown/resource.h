@@ -1,6 +1,4 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 windows-shutdown.rc 使用
 //
 #define IDS_APP_TITLE       103
 #define IDC_WINDOWSSHUTDOWN 109

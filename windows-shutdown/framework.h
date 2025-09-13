@@ -4,6 +4,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <vector>
 #include <string>
+#include <xstring>
 #include <memory>
 #include <functional>
 

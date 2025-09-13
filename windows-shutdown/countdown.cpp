@@ -9,7 +9,7 @@
 #include "mini-ui.h"
 #include "dtm.h"
 
-void CountdownView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
+void CountdownView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
     BYTE alpha = app.page.GetPageAlpha(Page::Countdown);
     static auto& countdownStyle = app.config.countdownStyle;
 

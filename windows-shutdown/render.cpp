@@ -1,11 +1,12 @@
 #include "render.h"
 #include <format>
 #include "style.font.h"
+#include "realify.h"
 
 #include "mini-ui.h"
 #include "components.warning.h"
 
-void Render::__DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
+void Render::__DrawDebug(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
     static auto& app = App::GetInstance();
     static auto& index = Index::GetInstance();
     static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
@@ -49,7 +50,7 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
-void Render::DrawToMemoryDC(HDC hdcMem, int w, int h) {
+void Render::DrawToMemoryDC(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h) {
     static auto& app = App::GetInstance();
     static auto& index = Index::GetInstance();
     static auto warningWStr = app.i18n.GetConfigWarningText(app.config.warnings);
@@ -61,7 +62,7 @@ void Render::DrawToMemoryDC(HDC hdcMem, int w, int h) {
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
-    graphics.FillRectangle(&bgBrush, 0, 0, w, h);
+    graphics.FillRectangle(&bgBrush, 0, 0, INTIFY(w), INTIFY(h));
 
     // * These functions will decide internally whether to draw based on current state
     if (!warningWStr.empty()) {
@@ -92,14 +93,14 @@ SIZE Render::GetWH(HWND hWnd) {
 }
 
 void Render::UpdateLayered(HWND hWnd) {
-    static SIZE wh = GetWH(hWnd);
+    static SIZE sizeWin = GetWH(hWnd);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
 
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = wh.cx;
-    bmi.bmiHeader.biHeight = -wh.cy;
+    bmi.bmiHeader.biWidth = sizeWin.cx;
+    bmi.bmiHeader.biHeight = -sizeWin.cy;
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
@@ -114,9 +115,8 @@ void Render::UpdateLayered(HWND hWnd) {
     }
 
     HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-    DrawToMemoryDC(hdcMem, wh.cx, wh.cy);
+    DrawToMemoryDC(hdcMem, REALIFY(sizeWin.cx), REALIFY(sizeWin.cy));
     POINT ptWin = {0, 0};
-    SIZE sizeWin = {wh.cx, wh.cy};
 
     // appState.page.alpha
     BLENDFUNCTION blend = {AC_SRC_OVER, 0, MAX_ALPHA, AC_SRC_ALPHA};
