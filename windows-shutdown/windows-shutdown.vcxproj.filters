@@ -212,11 +212,11 @@
     <None Include="..\make-icon.py">
       <Filter>scripts</Filter>
     </None>
-    <None Include="to-utf8-lf.py">
+    <None Include="..\to-utf8-lf.py">
       <Filter>scripts</Filter>
     </None>
-    <None Include="..\.editorconfig">
-      <Filter>project-metadata</Filter>
+    <None Include="..\check-ctrl.py">
+      <Filter>scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

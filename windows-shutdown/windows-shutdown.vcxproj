@@ -70,6 +70,7 @@
     <None Include="..\.clang-format" />
     <None Include="..\.gitignore" />
     <None Include="..\CHANGELOG" />
+    <None Include="..\check-ctrl.py" />
     <None Include="..\LICENSE" />
     <None Include="..\make-icon.py" />
     <None Include="..\package.json" />
