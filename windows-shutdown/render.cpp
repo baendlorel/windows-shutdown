@@ -1,14 +1,11 @@
 #include "render.h"
 #include <format>
-
 #include "style.font.h"
-#include "app.core.h"
 
 #include "mini-ui.h"
 #include "components.warning.h"
-#include "index.h"
 
-void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
+void Renderer::__DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& app = App::GetInstance();
     static auto& index = Index::GetInstance();
     static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
@@ -52,7 +49,7 @@ void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
-void DrawToMemoryDC(HDC hdcMem, int w, int h) {
+void Renderer::DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& app = App::GetInstance();
     static auto& index = Index::GetInstance();
     static auto warningWStr = app.i18n.GetConfigWarningText(app.config.warnings);
@@ -77,42 +74,32 @@ void DrawToMemoryDC(HDC hdcMem, int w, int h) {
     index.Draw(graphics, w, h);
 }
 
-/**
- * @brief  sadf
- */
-struct WH {
-    int w;
-    int h;
-};
-
 // & Here we do not use appState.screenW/H.
 // Although they are equivalent, we still need to write program that has
 // more compilcated logic. Consider future features like responsive layout.
-WH GetWH(HWND hWnd) {
-    auto& menu = Index::GetInstance().home.menu;
+SIZE Renderer::GetWH(HWND hWnd) {
     RECT rc;
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
     int h = rc.bottom - rc.top;
-    int buttonCount = static_cast<int>(menu.size());
+    int buttonCount = static_cast<int>(index.home.menu.size());
     float centerIndex = (buttonCount - 1) * 0.5f;
 
     for (short i = 0; i < buttonCount; i++) {
-        menu[i].Center(buttonCount, i, w, h);
+        index.home.menu[i].Center(buttonCount, i, w, h);
     }
     return {w, h};
 }
 
-void UpdateLayered(HWND hWnd) {
-    static auto& app = App::GetInstance();
-    static WH wh = GetWH(hWnd);
+void Renderer::UpdateLayered(HWND hWnd) {
+    static SIZE wh = GetWH(hWnd);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);
 
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = wh.w;
-    bmi.bmiHeader.biHeight = -wh.h;
+    bmi.bmiHeader.biWidth = wh.cx;
+    bmi.bmiHeader.biHeight = -wh.cy;
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
@@ -127,9 +114,9 @@ void UpdateLayered(HWND hWnd) {
     }
 
     HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-    DrawToMemoryDC(hdcMem, wh.w, wh.h);
+    DrawToMemoryDC(hdcMem, wh.cx, wh.cy);
     POINT ptWin = {0, 0};
-    SIZE sizeWin = {wh.w, wh.h};
+    SIZE sizeWin = {wh.cx, wh.cy};
 
     // appState.page.alpha
     BLENDFUNCTION blend = {AC_SRC_OVER, 0, MAX_ALPHA, AC_SRC_ALPHA};
