@@ -3,9 +3,7 @@
 #include <powrprof.h>
 #include <shellapi.h>
 
-#include "app.core.h"
-
-// msvc use: #pragma comment(lib, "PowrProf.lib")
+#pragma comment(lib, "PowrProf.lib")
 
 void Controller::ExecuteRestart() {
     HANDLE hToken;

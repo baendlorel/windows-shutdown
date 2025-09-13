@@ -1,8 +1,8 @@
 #include "bitmap-loader.h"
-#include "i18n.h"
+#include "app.core.h"
 
 Gdiplus::Bitmap* LoadBitmapByResourceId(HINSTANCE hInst, int resId) {
-    auto& i18n = I18N::GetInstance();
+    auto& i18n = App::GetInstance().i18n;
     HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
     if (!hRes) {
         MessageBoxW(nullptr, i18n.ErrResourceNotFound.c_str(), i18n.ErrTitle.c_str(), MB_ICONERROR);

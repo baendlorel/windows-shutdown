@@ -1,6 +1,7 @@
 #pragma once
 #include "framework.h"
 #include "singleton.h"
+#include "app.core.h"
 
 class Controller {
     SINGLETON(Controller)
