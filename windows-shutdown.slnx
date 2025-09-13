@@ -3,5 +3,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
   <Project Path="windows-shutdown/windows-shutdown.vcxproj" Id="35555c6b-92cb-4085-869a-d24fbcbe59b7" />
 </Solution>

@@ -1,7 +1,7 @@
 ﻿#include "app.i18n.h"
 #include <format>
 #include "resource.h"
-#include "widen.h"
+#include "utils.string.h"
 
 void AppI18N::SetLang(Lang lang) {
     if (lang == Lang::Zh) {

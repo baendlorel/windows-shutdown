@@ -67,7 +67,7 @@
     <ClInclude Include="mini-ui.h">
       <Filter>src\mini-ui</Filter>
     </ClInclude>
-    <ClInclude Include="widen.h">
+    <ClInclude Include="utils.string.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="bitmap-loader.h">
@@ -190,6 +190,9 @@
       <Filter>src\ui\views</Filter>
     </ClCompile>
     <ClCompile Include="dtm.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.string.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>

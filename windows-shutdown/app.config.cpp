@@ -1,12 +1,11 @@
 ﻿#include "app.config.h"
 
 #include <format>
-#include <fstream>
 #include <sstream>
-#include <algorithm>
-#include <cctype>
+#include <fstream>
 
 #include "style.color.h"
+#include "utils.string.h"
 
 std::string DefaultConfigZh() {
     // Create default
@@ -125,26 +124,6 @@ std::string DefaultConfigEn() {
         lang, action, delay, instruction, menuButtons, countdownStyle, bgColor);
 }
 
-std::string trim(const std::string& s) {
-    auto start = s.begin();
-    while (start != s.end() && isspace(*start)) {
-        ++start;
-    }
-    auto end = s.end();
-    do {
-        --end;
-    } while (end >= start && isspace(*end));
-
-    return (start <= end) ? std::string(start, end + 1) : "";
-}
-
-// Convert string to lowercase for case-insensitive comparison
-std::string toLower(const std::string& str) {
-    std::string result = str;
-    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
-    return result;
-}
-
 bool IsSysLangChinese() {
     LANGID langId = GetUserDefaultUILanguage();
     WORD primaryLang = PRIMARYLANGID(langId);
@@ -178,7 +157,7 @@ std::string WStringToUtf8(const std::wstring& wstr) {
 
 // Helper function to parse Action from string (case-insensitive)
 Action ParseActionFromString(const std::string& actionStr) {
-    std::string lowerStr = toLower(actionStr);
+    std::string lowerStr = to_lowercase(actionStr);
 
     if (lowerStr == CFG_MENU_BUTTON_DONATE) {
         return Action::Donate;
@@ -202,14 +181,16 @@ Action ParseActionFromString(const std::string& actionStr) {
 }
 
 ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
+    key = to_lowercase(key);
+    value = to_lowercase(value);
+
     if (key == CFG_KEY_LANG) {
-        std::string valLower = toLower(value);
-        if (valLower == CFG_LANG_EN) {
+        if (value == CFG_LANG_EN) {
             this->lang = Lang::En;
             return ConfigWarning::None;
         }
 
-        if (valLower == CFG_LANG_ZH) {
+        if (value == CFG_LANG_ZH) {
             this->lang = Lang::Zh;
             return ConfigWarning::None;
         }
@@ -218,24 +199,23 @@ ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_ACTION) {
-        std::string valLower = toLower(value);
-        if (valLower == CFG_ACTION_NONE) {
+        if (value == CFG_ACTION_NONE) {
             this->action = Action::None;
             return ConfigWarning::None;
         }
-        if (valLower == CFG_ACTION_SLEEP) {
+        if (value == CFG_ACTION_SLEEP) {
             this->action = Action::Sleep;
             return ConfigWarning::None;
         }
-        if (valLower == CFG_ACTION_SHUTDOWN) {
+        if (value == CFG_ACTION_SHUTDOWN) {
             this->action = Action::Shutdown;
             return ConfigWarning::None;
         }
-        if (valLower == CFG_ACTION_RESTART) {
+        if (value == CFG_ACTION_RESTART) {
             this->action = Action::Restart;
             return ConfigWarning::None;
         }
-        if (valLower == CFG_ACTION_LOCK) {
+        if (value == CFG_ACTION_LOCK) {
             this->action = Action::Lock;
             return ConfigWarning::None;
         }
@@ -244,13 +224,12 @@ ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_INSTRUCTION) {
-        std::string valLower = toLower(value);
-        if (valLower == CFG_INSTRUCTION_SHOW) {
+        if (value == CFG_INSTRUCTION_SHOW) {
             this->instruction = Instruction::Show;
             return ConfigWarning::None;
         }
 
-        if (valLower == CFG_INSTRUCTION_HIDE) {
+        if (value == CFG_INSTRUCTION_HIDE) {
             this->instruction = Instruction::Hide;
             return ConfigWarning::None;
         }
@@ -296,13 +275,12 @@ ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
     }
 
     if (key == CFG_KEY_COUNTDOWN_STYLE) {
-        std::string valLower = toLower(value);
-        if (valLower == CFG_COUNTDOWN_STYLE_NORMAL) {
+        if (value == CFG_COUNTDOWN_STYLE_NORMAL) {
             this->countdownStyle = CountdownStyle::Normal;
             return ConfigWarning::None;
         }
 
-        if (valLower == CFG_COUNTDOWN_STYLE_STEINS_GATE) {
+        if (value == CFG_COUNTDOWN_STYLE_STEINS_GATE) {
             this->countdownStyle = CountdownStyle::SteinsGate;
             return ConfigWarning::None;
         }
