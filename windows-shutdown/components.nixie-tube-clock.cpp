@@ -1,4 +1,4 @@
-#include "components.nixie-tube-clock.h"
+﻿#include "components.nixie-tube-clock.h"
 
 #include "resource.h"
 #include "bitmap-loader.h"

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 enum class Action { None, Donate, Config, Lock, Sleep, Restart, Shutdown };
 
 enum class Page { None, Home, Countdown, Donate };

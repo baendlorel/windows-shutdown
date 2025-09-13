@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "app.config.h"
 #include "app.page.h"
 #include "app.state.h"

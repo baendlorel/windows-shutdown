@@ -1,4 +1,4 @@
-#include "dtm.h"
+﻿#include "dtm.h"
 
 std::wstring FormatTime(int seconds) {
     static auto pad = [](int num) {

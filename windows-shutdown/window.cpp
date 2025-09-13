@@ -1,4 +1,4 @@
-#include "window.h"
+﻿#include "window.h"
 
 #include "consts.app.h"
 #include "style.fade.h"

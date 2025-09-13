@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "framework.h"
 
 // & Only draw instruction needs internal state check

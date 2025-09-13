@@ -1,4 +1,4 @@
-#include "app.config.h"
+﻿#include "app.config.h"
 
 #include <format>
 #include <fstream>

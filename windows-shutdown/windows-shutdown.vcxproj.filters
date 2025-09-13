@@ -156,7 +156,7 @@
     <ClCompile Include="mini-ui.cpp">
       <Filter>src\mini-ui</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="windows-shutdown.cpp">
       <Filter>src\main</Filter>
     </ClCompile>
     <ClCompile Include="window.cpp">
@@ -215,13 +215,16 @@
     <None Include="..\README_ZH.md">
       <Filter>project-metadata</Filter>
     </None>
-    <None Include="..\make-icon.py">
+    <None Include="..\scripts\check-ctrl.py">
       <Filter>scripts</Filter>
     </None>
-    <None Include="..\to-utf8-lf.py">
+    <None Include="..\scripts\make-icon.py">
       <Filter>scripts</Filter>
     </None>
-    <None Include="..\check-ctrl.py">
+    <None Include="..\scripts\to-utf8bom.py">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="..\scripts\to-utf8-lf.py">
       <Filter>scripts</Filter>
     </None>
   </ItemGroup>

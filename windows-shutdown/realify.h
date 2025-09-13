@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 // #define REALIFY(x) static_cast<Gdiplus::REAL>(x)
 // #define INTIFY(x) static_cast<int>(x)
 

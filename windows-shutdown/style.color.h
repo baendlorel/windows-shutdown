@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 // order below must be preserved
 #include "framework.h"
 #include "style.font.h"

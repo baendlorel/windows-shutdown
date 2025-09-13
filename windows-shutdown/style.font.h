@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // font styles
 constexpr int TEXT_SHADOW_ALPHA = 160;  // max alpha for text shadow

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "framework.h"
 
 // Draw nixie tube clock with HH:MM:SS format

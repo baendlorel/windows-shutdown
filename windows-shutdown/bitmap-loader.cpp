@@ -1,4 +1,4 @@
-#include "bitmap-loader.h"
+﻿#include "bitmap-loader.h"
 #include "app.core.h"
 
 Gdiplus::Bitmap* LoadBitmapByResourceId(HINSTANCE hInst, int resId) {

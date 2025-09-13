@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // BUTTON
 constexpr int BUTTON_RADIUS = 80;

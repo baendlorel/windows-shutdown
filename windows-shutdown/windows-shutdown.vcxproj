@@ -63,7 +63,7 @@
     <ClCompile Include="dtm.cpp" />
     <ClCompile Include="home.cpp" />
     <ClCompile Include="app.i18n.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="windows-shutdown.cpp" />
     <ClCompile Include="mini-ui.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="window.cpp" />
@@ -72,13 +72,14 @@
     <None Include="..\.clang-format" />
     <None Include="..\.gitignore" />
     <None Include="..\CHANGELOG" />
-    <None Include="..\check-ctrl.py" />
     <None Include="..\LICENSE" />
-    <None Include="..\make-icon.py" />
     <None Include="..\package.json" />
     <None Include="..\README.md" />
     <None Include="..\README_ZH.md" />
-    <None Include="..\to-utf8-lf.py" />
+    <None Include="..\scripts\check-ctrl.py" />
+    <None Include="..\scripts\make-icon.py" />
+    <None Include="..\scripts\to-utf8-lf.py" />
+    <None Include="..\scripts\to-utf8bom.py" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\config.png" />
@@ -194,7 +195,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>

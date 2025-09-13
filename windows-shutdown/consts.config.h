@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // configs
 #define CFG_FILE_NAME L"config.txt"

@@ -1,4 +1,4 @@
-#include "controller.h"
+﻿#include "controller.h"
 
 #include <powrprof.h>
 #include <shellapi.h>

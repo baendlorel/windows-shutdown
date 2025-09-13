@@ -1,4 +1,4 @@
-#include "components.warning.h"
+﻿#include "components.warning.h"
 
 #include "style.fade.h"
 #include "style.color.h"

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "mini-ui.h"
 #include "consts.app.h"
 
