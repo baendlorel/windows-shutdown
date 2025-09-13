@@ -1,14 +1,12 @@
 #include "window.h"
 
-#include "consts/core.h"
-#include "consts/effects.h"
+#include "consts.app.h"
+#include "style.fade.h"
+#include "app.core.h"
 
-#include "resource.h"
-#include "app-state.h"
 #include "controller.h"
 #include "render.h"
-#include "i18n.h"
-#include "views/app.h"
+#include "index.h"
 
 ATOM MyRegisterClass() {
     auto& appState = AppState::GetInstance();
@@ -29,7 +27,7 @@ ATOM MyRegisterClass() {
 }
 
 void RegisterMenuButtonClickCallback() {
-    auto& menu = App::GetInstance().home.menu;
+    auto& menu = Index::GetInstance().home.menu;
     for (auto& button : menu) {
         switch (button.action) {
             case Action::Donate:
@@ -59,45 +57,45 @@ void RegisterMenuButtonClickCallback() {
 
 // int nCmdShow
 BOOL InitInstance(int) {
-    auto& appState = AppState::GetInstance();
-    appState.screenW = GetSystemMetrics(SM_CXSCREEN);
-    appState.screenH = GetSystemMetrics(SM_CYSCREEN);
-    HWND hWnd = CreateWindowExW(WS_EX_LAYERED, appState.szWindowClass, appState.szTitle, WS_POPUP,
-                                0, 0, appState.screenW, appState.screenH, nullptr, nullptr,
-                                appState.hInst, nullptr);
+    auto& app = App::GetInstance();
+    app.state.screenW = GetSystemMetrics(SM_CXSCREEN);
+    app.state.screenH = GetSystemMetrics(SM_CYSCREEN);
+    HWND hWnd = CreateWindowExW(WS_EX_LAYERED, app.state.szWindowClass, app.state.szTitle, WS_POPUP,
+                                0, 0, app.state.screenW, app.state.screenH, nullptr, nullptr,
+                                app.state.hInst, nullptr);
     if (!hWnd) {
-        auto& i18n = I18N::GetInstance();
-        MessageBoxW(nullptr, i18n.ErrCreateWindow.c_str(), i18n.ErrTitle.c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, app.i18n.ErrCreateWindow.c_str(), app.i18n.ErrTitle.c_str(),
+                    MB_ICONERROR);
         return FALSE;
     }
     ShowWindow(hWnd, SW_SHOW);
     UpdateWindow(hWnd);
 
     // ui
-    App::GetInstance().home.initMenu();
+    Index::GetInstance().home.initMenu();
     RegisterMenuButtonClickCallback();
 
     // If config requests immediate action, initialize the immediate action
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
-    if (appState.config.isImmediate()) {
-        StartCountdown(hWnd, appState.config.action);
+    if (app.config.IsImmediate()) {
+        StartCountdown(hWnd, app.config.action);
     } else {
-        appState.page.Start(Page::Home, hWnd);
+        app.page.Start(Page::Home, hWnd);
     }
     return TRUE;
 }
 
 void HandleTimer(HWND hWnd, WPARAM wParam) {
-    static auto& appState = AppState::GetInstance();
-    auto alpha = appState.page.alpha;
+    static auto& app = App::GetInstance();
+    auto alpha = app.page.alpha;
 
     if (wParam == FADE_TIMER_ID) {
         int steps = FADE_DURATION / FRAME_TIME;
         BYTE step = (MAX_ALPHA + steps - 1) / steps;
 
         if (alpha < MAX_ALPHA) {
-            appState.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
+            app.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
             UpdateLayered(hWnd);
             return;
         }
@@ -105,57 +103,57 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
         KillTimer(hWnd, FADE_TIMER_ID);
 
         // If fading out to close, close now
-        if (appState.page.current == Page::None) {
+        if (app.page.current == Page::None) {
             DestroyWindow(hWnd);
             return;
         }
         return;
     }
 
-    if (wParam == COUNTDOWN_TIMER_ID && appState.isCountingDown()) {
-        appState.countdownSeconds--;
-        if (appState.countdownSeconds > 0) {
+    if (wParam == COUNTDOWN_TIMER_ID && app.state.isCountingDown()) {
+        app.state.countdownSeconds--;
+        if (app.state.countdownSeconds > 0) {
             // Redraw to update countdown
             UpdateLayered(hWnd);
             return;
         }
 
         CancelCountdown(hWnd);
-        ExecuteAction(hWnd, appState.action);
+        ExecuteAction(hWnd, app.state.action);
         return;
     }
 }
 
 void HandleCancel(HWND hWnd) {
-    static auto& appState = AppState::GetInstance();
-    if (appState.isCountingDown()) {
+    static auto& app = App::GetInstance();
+    if (app.state.isCountingDown()) {
         CancelCountdown(hWnd);
         return;
     }
 
-    if (appState.page.current == Page::Home) {
-        appState.page.Start(Page::None, hWnd);
+    if (app.page.current == Page::Home) {
+        app.page.Start(Page::None, hWnd);
     } else {
-        appState.page.Start(Page::Home, hWnd);
+        app.page.Start(Page::Home, hWnd);
     }
 }
 
 void HandleMoustMove(HWND hWnd, LPARAM lParam) {
-    static auto& appState = AppState::GetInstance();
-    appState.mouseX = LOWORD(lParam);
-    appState.mouseY = HIWORD(lParam);
+    static auto& app = App::GetInstance();
+    app.state.mouseX = LOWORD(lParam);
+    app.state.mouseY = HIWORD(lParam);
 }
 
 void HandleClick(HWND hWnd, LPARAM lParam) {
-    static auto& appState = AppState::GetInstance();
-    static auto& menu = App::GetInstance().home.menu;
-    if (appState.isCountingDown()) {
+    static auto& app = App::GetInstance();
+    static auto& menu = Index::GetInstance().home.menu;
+    if (app.state.isCountingDown()) {
         CancelCountdown(hWnd);
         return;
     }
 
     // if clicked, return after handling
-    if (appState.page.current == Page::Home) {
+    if (app.page.current == Page::Home) {
         int mx = LOWORD(lParam);
         int my = HIWORD(lParam);
         for (int i = 0; i < menu.size(); ++i) {
@@ -172,7 +170,7 @@ void HandleClick(HWND hWnd, LPARAM lParam) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    static auto& appState = AppState::GetInstance();
+    static auto& app = App::GetInstance();
     switch (message) {
         case WM_CLOSE:
             // Treat close like pressing Esc: if on Home start fade-out to close,
@@ -194,22 +192,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_KEYDOWN:
             // Must not be fading
-            if (!appState.page.fading && wParam == VK_ESCAPE) {
+            if (!app.page.fading && wParam == VK_ESCAPE) {
                 HandleCancel(hWnd);
             }
             // & after test, it is found that activate really works
-            if (!appState.page.fading && wParam == VK_F5) {
+            if (!app.page.fading && wParam == VK_F5) {
                 UpdateLayered(hWnd);
             }
             break;
         case WM_RBUTTONDOWN:
             // Must not be fading
-            if (!appState.page.fading) {
+            if (!app.page.fading) {
                 HandleCancel(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
-            if (!appState.page.fading) {
+            if (!app.page.fading) {
                 HandleClick(hWnd, lParam);
             }
             break;

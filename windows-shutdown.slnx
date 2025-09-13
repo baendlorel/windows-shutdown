@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="windows-shutdown/windows-shutdown.vcxproj" Id="35555c6b-92cb-4085-869a-d24fbcbe59b7" />
+</Solution>

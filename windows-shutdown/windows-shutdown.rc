@@ -1,40 +1,105 @@
-#pragma code_page(65001)
+// Microsoft Visual C++ generated resource script.
+//
 #include "resource.h"
 
+#define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
-// PNG
-IDB_RESTARTPNG          PNG                     "assets\\restart.png"
-IDB_SHUTDOWNPNG         PNG                     "assets\\shutdown.png"
-IDB_CONFIGPNG           PNG                     "assets\\config.png"
-IDB_LOCKPNG             PNG                     "assets\\lock.png"
-IDB_SLEEPPNG            PNG                     "assets\\sleep.png"
-IDB_DONATEENPNG         PNG                     "assets\\donate-en.png"
-IDB_DONATEZHPNG         PNG                     "assets\\donate-zh.png"
-IDB_DONATEPNG           PNG                     "assets\\donate.png"
-IDB_NIXIE_0             PNG                     "assets\\nixie-tube\\0.png"
-IDB_NIXIE_1             PNG                     "assets\\nixie-tube\\1.png"
-IDB_NIXIE_2             PNG                     "assets\\nixie-tube\\2.png"
-IDB_NIXIE_3             PNG                     "assets\\nixie-tube\\3.png"
-IDB_NIXIE_4             PNG                     "assets\\nixie-tube\\4.png"
-IDB_NIXIE_5             PNG                     "assets\\nixie-tube\\5.png"
-IDB_NIXIE_6             PNG                     "assets\\nixie-tube\\6.png"
-IDB_NIXIE_7             PNG                     "assets\\nixie-tube\\7.png"
-IDB_NIXIE_8             PNG                     "assets\\nixie-tube\\8.png"
-IDB_NIXIE_9             PNG                     "assets\\nixie-tube\\9.png"
-IDB_NIXIE_BLANK         PNG                     "assets\\nixie-tube\\blank.png"
-IDB_NIXIE_PERIOD        PNG                     "assets\\nixie-tube\\period.png"
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// Icon
-IDI_MAINICON            ICON                    "icons\\icon-shutdown.ico"
-IDI_RESTARTICON         ICON                    "icons\\icon-restart.ico"
-IDI_LOCKICON            ICON                    "icons\\icon-lock.ico"
-IDI_SLEEPICON           ICON                    "icons\\icon-sleep.ico"
-/////////////////////////////////////////////////////////////////////////////
-// String Table
-STRINGTABLE
-BEGIN
-    IDS_APP_TITLE           "windows-shutdown"
-    IDC_WINDOWSSHUTDOWN     "WINDOWSSHUTDOWN"
-END
+#undef APSTUDIO_READONLY_SYMBOLS
 
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+#ifdef APSTUDIO_INVOKED
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // TEXTINCLUDE
+    //
+
+    1 TEXTINCLUDE BEGIN "resource1.h\0" END
+
+    2 TEXTINCLUDE BEGIN
+    "#include "
+    "winres.h"
+    "\r\n"
+    "\0" END
+
+    3 TEXTINCLUDE BEGIN
+    "\r\n"
+    "\0" END
+
+#endif  // APSTUDIO_INVOKED
+
+        /////////////////////////////////////////////////////////////////////////////
+        //
+        // PNG
+        //
+
+        IDB_CONFIGPNG PNG "assets\\config.png"
+
+    IDB_DONATEPNG PNG "assets\\donate.png"
+
+    IDB_DONATEENPNG PNG "assets\\donate-en.png"
+
+    IDB_DONATEZHPNG PNG "assets\\donate-zh.png"
+
+    IDB_LOCKPNG PNG "assets\\lock.png"
+
+    IDB_RESTARTPNG PNG "assets\\restart.png"
+
+    IDB_SHUTDOWNPNG PNG "assets\\shutdown.png"
+
+    IDB_SLEEPPNG PNG "assets\\sleep.png"
+
+    IDB_NIXIE_0 PNG "assets\\nixie-tube\\0.png"
+
+    IDB_NIXIE_1 PNG "assets\\nixie-tube\\1.png"
+
+    IDB_NIXIE_2 PNG "assets\\nixie-tube\\2.png"
+
+    IDB_NIXIE_3 PNG "assets\\nixie-tube\\3.png"
+
+    IDB_NIXIE_4 PNG "assets\\nixie-tube\\4.png"
+
+    IDB_NIXIE_5 PNG "assets\\nixie-tube\\5.png"
+
+    IDB_NIXIE_6 PNG "assets\\nixie-tube\\6.png"
+
+    IDB_NIXIE_7 PNG "assets\\nixie-tube\\7.png"
+
+    IDB_NIXIE_8 PNG "assets\\nixie-tube\\8.png"
+
+    IDB_NIXIE_9 PNG "assets\\nixie-tube\\9.png"
+
+    IDB_NIXIE_BLANK PNG "assets\\nixie-tube\\blank.png"
+
+    IDB_NIXIE_PERIOD PNG "assets\\nixie-tube\\period.png"
+
+    IDI_MAINICON PNG "assets\\icons\\icon-shutdown.ico"
+
+    IDI_RESTARTICON PNG "assets\\icons\\icon-restart.ico"
+
+    IDI_LOCKICON PNG "assets\\icons\\icon-lock.ico"
+
+    IDI_SLEEPICON PNG "assets\\icons\\icon-sleep.ico"
+
+#endif  // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+/////////////////////////////////////////////////////////////////////////////
+#endif  // not APSTUDIO_INVOKED

@@ -1,13 +1,13 @@
 #include "render.h"
 #include <format>
 
-#include "components/warning.h"
-#include "views/app.h"
+#include "warning.h"
+#include "aa.目标.cpp"
 
-#include "consts/font-style.h"
-#include "app-state.h"
+#include "style.font.h"
+#include "app.state.h"
 #include "i18n.h"
-#include "ui.h"
+#include "mini-ui.h"
 
 void __DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     static Gdiplus::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());

@@ -1,8 +1,12 @@
-﻿#pragma once
+#pragma once
 
-#include "targetver.h"
+#include <SDKDDKVer.h>
 #define WIN32_LEAN_AND_MEAN
+#include <vector>
 #include <string>
+#include <memory>
+#include <functional>
+
 #include <malloc.h>
 #include <memory.h>
 #include <stdlib.h>
@@ -12,5 +16,7 @@
 // order below must be preserved
 #include <objidl.h>
 #include <gdiplus.h>
+#pragma comment(lib, "Gdiplus.lib")
 
-// msvc use: #pragma comment(lib, "Gdiplus.lib")
+// mine
+#include "resource.h"

@@ -1,15 +1,22 @@
 #pragma once
 #include "framework.h"
-#include "consts/core.h"
+#include "singleton.h"
 
-void ExecuteAction(HWND hWnd, Action action);
+class Controller {
+    SINGLETON(Controller)
 
-void StartCountdown(HWND hWnd, Action action);
+   private:
+    App& app = App::GetInstance();
 
-void CancelCountdown(HWND hWnd);
-
-void TriggerDonate(HWND hWnd);
-
-void TriggerConfig(HWND hWnd);
-
-void TriggerLock(HWND hWnd);
+   public:
+    void ExecuteRestart();
+    void ExecuteShutdown();
+    void ExecuteSleep();
+    void ExecuteLock();
+    void ExecuteAction(HWND hWnd, Action action);
+    void StartCountdown(HWND hWnd, Action action);
+    void CancelCountdown(HWND hWnd);
+    void TriggerDonate(HWND hWnd);
+    void TriggerConfig(HWND hWnd);
+    void TriggerLock(HWND hWnd);
+};

@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="project-metadata">
+      <UniqueIdentifier>{be13b9e1-1629-45d4-a082-08dc42c30c56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="resource\nixie-tube">
+      <UniqueIdentifier>{aba963f0-a9f7-4d81-8127-682d673069d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource\menu-buttons">
+      <UniqueIdentifier>{e84e1846-a4ed-48d8-9044-17b02f77664d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource\donate-qr">
+      <UniqueIdentifier>{5f2d5803-b0e4-4611-b89c-65dbeb629b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{b9efad3a-9292-4a72-9121-806e99a8fead}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{626224dc-6583-415a-9f21-5d7fbd85dd85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\views">
+      <UniqueIdentifier>{41211c1e-f457-471e-8e3e-7548ac0ead61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{4162c3a0-7cfe-49c1-852b-7fe5489ba4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mini-ui">
+      <UniqueIdentifier>{a2d6f266-5fd0-4501-aa8b-30a3ecfe4abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\main">
+      <UniqueIdentifier>{9072eae4-c401-44f5-8a3b-0782948b484f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{2355e05d-aa00-4fa2-9dff-2de6782fb255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\consts">
+      <UniqueIdentifier>{042609f7-5908-47b5-97a9-d177875ce274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\consts\styles">
+      <UniqueIdentifier>{d7b4d1f5-38c4-40b9-8298-0a85de93d62d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\components">
+      <UniqueIdentifier>{32c1c023-ac7a-43e0-88a7-85b208b8508a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scripts">
+      <UniqueIdentifier>{752b1e50-e36c-4bf6-94b0-050c8937138c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="consts.config.h">
+      <Filter>src\consts</Filter>
+    </ClInclude>
+    <ClInclude Include="style.button.h">
+      <Filter>src\consts\styles</Filter>
+    </ClInclude>
+    <ClInclude Include="style.font.h">
+      <Filter>src\consts\styles</Filter>
+    </ClInclude>
+    <ClInclude Include="style.fade.h">
+      <Filter>src\consts\styles</Filter>
+    </ClInclude>
+    <ClInclude Include="mini-ui.h">
+      <Filter>src\mini-ui</Filter>
+    </ClInclude>
+    <ClInclude Include="widen.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="bitmap-loader.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="app.i18n.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="consts.app.h">
+      <Filter>src\consts</Filter>
+    </ClInclude>
+    <ClInclude Include="app.config.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="dtm.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="window.h">
+      <Filter>src\main</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>src\main</Filter>
+    </ClInclude>
+    <ClInclude Include="render.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="components.instruction.h">
+      <Filter>src\components</Filter>
+    </ClInclude>
+    <ClInclude Include="components.menu-button.h">
+      <Filter>src\components</Filter>
+    </ClInclude>
+    <ClInclude Include="components.nixie-tube-clock.h">
+      <Filter>src\components</Filter>
+    </ClInclude>
+    <ClInclude Include="components.warning.h">
+      <Filter>src\components</Filter>
+    </ClInclude>
+    <ClInclude Include="index.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="app.page.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="app.state.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="countdown.h">
+      <Filter>src\ui\views</Filter>
+    </ClInclude>
+    <ClInclude Include="donate.h">
+      <Filter>src\ui\views</Filter>
+    </ClInclude>
+    <ClInclude Include="home.h">
+      <Filter>src\ui\views</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>project-metadata</Filter>
+    </ClInclude>
+    <ClInclude Include="style.color.h">
+      <Filter>src\consts\styles</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="singleton.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="app.core.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bitmap-loader.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="app.i18n.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="app.config.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="mini-ui.cpp">
+      <Filter>src\mini-ui</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>src\main</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>src\main</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>src\main</Filter>
+    </ClCompile>
+    <ClCompile Include="render.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="components.instruction.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="components.menu-button.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="components.nixie-tube-clock.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="components.warning.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="countdown.cpp">
+      <Filter>src\ui\views</Filter>
+    </ClCompile>
+    <ClCompile Include="donate.cpp">
+      <Filter>src\ui\views</Filter>
+    </ClCompile>
+    <ClCompile Include="home.cpp">
+      <Filter>src\ui\views</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CHANGELOG">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\.gitignore">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\.clang-format">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\LICENSE">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\package.json">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\README_ZH.md">
+      <Filter>project-metadata</Filter>
+    </None>
+    <None Include="..\make-icon.py">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="to-utf8-lf.py">
+      <Filter>scripts</Filter>
+    </None>
+    <None Include="..\.editorconfig">
+      <Filter>project-metadata</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\nixie-tube\blank.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\0.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\1.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\2.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\3.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\4.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\5.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\6.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\7.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\8.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\9.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\nixie-tube\period.png">
+      <Filter>resource\nixie-tube</Filter>
+    </Image>
+    <Image Include="assets\config.png">
+      <Filter>resource\menu-buttons</Filter>
+    </Image>
+    <Image Include="assets\donate.png">
+      <Filter>resource\menu-buttons</Filter>
+    </Image>
+    <Image Include="assets\lock.png">
+      <Filter>resource\menu-buttons</Filter>
+    </Image>
+    <Image Include="assets\restart.png">
+      <Filter>resource\menu-buttons</Filter>
+    </Image>
+    <Image Include="assets\shutdown.png">
+      <Filter>resource\menu-buttons</Filter>
+    </Image>
+    <Image Include="assets\sleep.png">
+      <Filter>resource\menu-buttons</Filter>
+    </Image>
+    <Image Include="assets\donate-en.png">
+      <Filter>resource\donate-qr</Filter>
+    </Image>
+    <Image Include="assets\donate-zh.png">
+      <Filter>resource\donate-qr</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="windows-shutdown.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

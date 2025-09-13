@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="app.core.h" />
+    <ClInclude Include="index.h" />
+    <ClInclude Include="app.page.h" />
+    <ClInclude Include="app.state.h" />
+    <ClInclude Include="bitmap-loader.h" />
+    <ClInclude Include="app.config.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="style.color.h" />
+    <ClInclude Include="consts.config.h" />
+    <ClInclude Include="consts.app.h" />
+    <ClInclude Include="controller.h" />
+    <ClInclude Include="countdown.h" />
+    <ClInclude Include="donate.h" />
+    <ClInclude Include="dtm.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="home.h" />
+    <ClInclude Include="app.i18n.h" />
+    <ClInclude Include="components.instruction.h" />
+    <ClInclude Include="components.menu-button.h" />
+    <ClInclude Include="mini-ui.h" />
+    <ClInclude Include="components.nixie-tube-clock.h" />
+    <ClInclude Include="render.h" />
+    <ClInclude Include="singleton.h" />
+    <ClInclude Include="style.button.h" />
+    <ClInclude Include="style.fade.h" />
+    <ClInclude Include="style.font.h" />
+    <ClInclude Include="widen.h" />
+    <ClInclude Include="components.warning.h" />
+    <ClInclude Include="window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bitmap-loader.cpp" />
+    <ClCompile Include="components.instruction.cpp" />
+    <ClCompile Include="components.menu-button.cpp" />
+    <ClCompile Include="components.nixie-tube-clock.cpp" />
+    <ClCompile Include="components.warning.cpp" />
+    <ClCompile Include="app.config.cpp" />
+    <ClCompile Include="controller.cpp" />
+    <ClCompile Include="countdown.cpp" />
+    <ClCompile Include="donate.cpp" />
+    <ClCompile Include="home.cpp" />
+    <ClCompile Include="app.i18n.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mini-ui.cpp" />
+    <ClCompile Include="render.cpp" />
+    <ClCompile Include="window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.clang-format" />
+    <None Include="..\.editorconfig" />
+    <None Include="..\.gitignore" />
+    <None Include="..\CHANGELOG" />
+    <None Include="..\LICENSE" />
+    <None Include="..\make-icon.py" />
+    <None Include="..\package.json" />
+    <None Include="..\README.md" />
+    <None Include="..\README_ZH.md" />
+    <None Include="to-utf8-lf.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\config.png" />
+    <Image Include="assets\donate-en.png" />
+    <Image Include="assets\donate-zh.png" />
+    <Image Include="assets\donate.png" />
+    <Image Include="assets\lock.png" />
+    <Image Include="assets\nixie-tube\0.png" />
+    <Image Include="assets\nixie-tube\1.png" />
+    <Image Include="assets\nixie-tube\2.png" />
+    <Image Include="assets\nixie-tube\3.png" />
+    <Image Include="assets\nixie-tube\4.png" />
+    <Image Include="assets\nixie-tube\5.png" />
+    <Image Include="assets\nixie-tube\6.png" />
+    <Image Include="assets\nixie-tube\7.png" />
+    <Image Include="assets\nixie-tube\8.png" />
+    <Image Include="assets\nixie-tube\9.png" />
+    <Image Include="assets\nixie-tube\blank.png" />
+    <Image Include="assets\nixie-tube\period.png" />
+    <Image Include="assets\restart.png" />
+    <Image Include="assets\shutdown.png" />
+    <Image Include="assets\sleep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="windows-shutdown.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{35555c6b-92cb-4085-869a-d24fbcbe59b7}</ProjectGuid>
+    <RootNamespace>windowsshutdown</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,10 +1,9 @@
-﻿#include "framework.h"
-#include "resource.h"
-#include "app-state.h"
-#include "i18n.h"
+#include "framework.h"
+#include "style.fade.h"
+#include "app.core.h"
+
 #include "controller.h"
 #include "window.h"
-#include "consts/effects.h"
 
 //  _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 // Try modern DPI APIs first (SetProcessDpiAwareness in shcore.dll), fall back to
@@ -45,18 +44,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     UNREFERENCED_PARAMETER(lpCmdLine);
     EnsureDpiAwareness();
 
-    auto& appState = AppState::GetInstance();
-    appState.hInst = hInstance;
+    auto& app = App::GetInstance();
+    app.config.Load();
+    app.i18n.SetLang(app.config.lang);
+    app.state.hInst = hInstance;
 
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     ULONG_PTR gdiplusToken;
 
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-    I18N::GetInstance().SetLang(appState.config.lang);
-
-    LoadStringW(hInstance, IDS_APP_TITLE, appState.szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, appState.szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDS_APP_TITLE, app.state.szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, app.state.szWindowClass, MAX_LOADSTRING);
     MyRegisterClass();
 
     // fixme nono无响应退出了

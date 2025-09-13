@@ -1,0 +1,23 @@
+#pragma once
+#include "mini-ui.h"
+#include "consts.app.h"
+
+class MenuButton : public Div {
+   public:
+    Action action;
+    int resId;
+    Gdiplus::Bitmap* png;
+
+    BYTE __drawingalpha = 0;
+
+   public:
+    MenuButton(int x, int y, Action action);
+    bool MouseHit(int mx, int my) const;
+    void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
+
+   public:
+    void Center(int buttonCount, int index, int w, int h);
+
+   private:
+    void LoadPNGFromResource(HINSTANCE hInst);
+};
