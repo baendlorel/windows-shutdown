@@ -1,5 +1,6 @@
 #pragma once
 #include "framework.h"
+#include "style.fade.h"
 #include "consts.app.h"
 
 typedef unsigned char BYTE;

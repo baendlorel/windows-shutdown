@@ -5,8 +5,8 @@
 
 #include "index.h"
 
-class Renderer {
-    SINGLETON(Renderer)
+class Render {
+    SINGLETON(Render)
 
    public:
     App& app = App::GetInstance();

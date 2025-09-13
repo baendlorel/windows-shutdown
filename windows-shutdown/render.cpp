@@ -5,7 +5,7 @@
 #include "mini-ui.h"
 #include "components.warning.h"
 
-void Renderer::__DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
+void Render::__DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     static auto& app = App::GetInstance();
     static auto& index = Index::GetInstance();
     static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
@@ -49,7 +49,7 @@ void Renderer::__DrawDebug(Gdiplus::Graphics& graphics, int w, int h) {
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
-void Renderer::DrawToMemoryDC(HDC hdcMem, int w, int h) {
+void Render::DrawToMemoryDC(HDC hdcMem, int w, int h) {
     static auto& app = App::GetInstance();
     static auto& index = Index::GetInstance();
     static auto warningWStr = app.i18n.GetConfigWarningText(app.config.warnings);
@@ -77,7 +77,7 @@ void Renderer::DrawToMemoryDC(HDC hdcMem, int w, int h) {
 // & Here we do not use appState.screenW/H.
 // Although they are equivalent, we still need to write program that has
 // more compilcated logic. Consider future features like responsive layout.
-SIZE Renderer::GetWH(HWND hWnd) {
+SIZE Render::GetWH(HWND hWnd) {
     RECT rc;
     GetClientRect(hWnd, &rc);
     int w = rc.right - rc.left;
@@ -91,7 +91,7 @@ SIZE Renderer::GetWH(HWND hWnd) {
     return {w, h};
 }
 
-void Renderer::UpdateLayered(HWND hWnd) {
+void Render::UpdateLayered(HWND hWnd) {
     static SIZE wh = GetWH(hWnd);
     HDC hdcScreen = GetDC(NULL);
     HDC hdcMem = CreateCompatibleDC(hdcScreen);

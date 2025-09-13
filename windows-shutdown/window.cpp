@@ -8,7 +8,7 @@
 #include "render.h"
 #include "index.h"
 
-ATOM MyRegisterClass() {
+ATOM Window::MyRegisterClass() {
     auto& appState = AppState::GetInstance();
     WNDCLASSEXW wcex{};
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -26,27 +26,28 @@ ATOM MyRegisterClass() {
     return RegisterClassExW(&wcex);
 }
 
-void RegisterMenuButtonClickCallback() {
+void Window::RegisterMenuButtonClickCallback() {
     auto& menu = Index::GetInstance().home.menu;
+    auto& ctrl = controller;
     for (auto& button : menu) {
         switch (button.action) {
             case Action::Donate:
-                button.OnClick(TriggerDonate);
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.TriggerDonate(hWnd); });
                 break;
             case Action::Config:
-                button.OnClick(TriggerConfig);
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.TriggerConfig(hWnd); });
                 break;
             case Action::Lock:
-                button.OnClick(TriggerLock);
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.TriggerLock(hWnd); });
                 break;
             case Action::Sleep:
-                button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Sleep); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.StartCountdown(hWnd, Action::Sleep); });
                 break;
             case Action::Restart:
-                button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Restart); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.StartCountdown(hWnd, Action::Restart); });
                 break;
             case Action::Shutdown:
-                button.OnClick([](HWND hWnd) { StartCountdown(hWnd, Action::Shutdown); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.StartCountdown(hWnd, Action::Shutdown); });
                 break;
             case Action::None:
                 // do nothing
@@ -56,7 +57,7 @@ void RegisterMenuButtonClickCallback() {
 }
 
 // int nCmdShow
-BOOL InitInstance(int) {
+BOOL Window::InitInstance(int) {
     auto& app = App::GetInstance();
     app.state.screenW = GetSystemMetrics(SM_CXSCREEN);
     app.state.screenH = GetSystemMetrics(SM_CYSCREEN);
@@ -79,14 +80,14 @@ BOOL InitInstance(int) {
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
     if (app.config.IsImmediate()) {
-        StartCountdown(hWnd, app.config.action);
+        controller.StartCountdown(hWnd, app.config.action);
     } else {
         app.page.Start(Page::Home, hWnd);
     }
     return TRUE;
 }
 
-void HandleTimer(HWND hWnd, WPARAM wParam) {
+void Window::HandleTimer(HWND hWnd, WPARAM wParam) {
     static auto& app = App::GetInstance();
     auto alpha = app.page.alpha;
 
@@ -96,7 +97,7 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
 
         if (alpha < MAX_ALPHA) {
             app.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
-            UpdateLayered(hWnd);
+            render.UpdateLayered(hWnd);
             return;
         }
 
@@ -114,20 +115,20 @@ void HandleTimer(HWND hWnd, WPARAM wParam) {
         app.state.countdownSeconds--;
         if (app.state.countdownSeconds > 0) {
             // Redraw to update countdown
-            UpdateLayered(hWnd);
+            render.UpdateLayered(hWnd);
             return;
         }
 
-        CancelCountdown(hWnd);
-        ExecuteAction(hWnd, app.state.action);
+        controller.CancelCountdown(hWnd);
+        controller.ExecuteAction(hWnd, app.state.action);
         return;
     }
 }
 
-void HandleCancel(HWND hWnd) {
+void Window::HandleCancel(HWND hWnd) {
     static auto& app = App::GetInstance();
     if (app.state.isCountingDown()) {
-        CancelCountdown(hWnd);
+        controller.CancelCountdown(hWnd);
         return;
     }
 
@@ -138,17 +139,17 @@ void HandleCancel(HWND hWnd) {
     }
 }
 
-void HandleMoustMove(HWND hWnd, LPARAM lParam) {
+void Window::HandleMoustMove(HWND hWnd, LPARAM lParam) {
     static auto& app = App::GetInstance();
     app.state.mouseX = LOWORD(lParam);
     app.state.mouseY = HIWORD(lParam);
 }
 
-void HandleClick(HWND hWnd, LPARAM lParam) {
+void Window::HandleClick(HWND hWnd, LPARAM lParam) {
     static auto& app = App::GetInstance();
     static auto& menu = Index::GetInstance().home.menu;
     if (app.state.isCountingDown()) {
-        CancelCountdown(hWnd);
+        controller.CancelCountdown(hWnd);
         return;
     }
 
@@ -171,44 +172,47 @@ void HandleClick(HWND hWnd, LPARAM lParam) {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     static auto& app = App::GetInstance();
+    static auto& window = Window::GetInstance();
+    static auto& render = Render::GetInstance();
+
     switch (message) {
         case WM_CLOSE:
             // Treat close like pressing Esc: if on Home start fade-out to close,
             // otherwise navigate back to Home. This lets taskbar "Close" actually
             // begin the shutdown/fade-out sequence instead of only cancelling.
-            HandleCancel(hWnd);
+            window.HandleCancel(hWnd);
             break;
         case WM_DESTROY:
             PostQuitMessage(0);
             break;
         case WM_TIMER:
-            HandleTimer(hWnd, wParam);
+            window.HandleTimer(hWnd, wParam);
             break;
         case WM_PAINT:
-            UpdateLayered(hWnd);
+            render.UpdateLayered(hWnd);
             break;
         case WM_MOUSEMOVE:
-            HandleMoustMove(hWnd, lParam);
+            window.HandleMoustMove(hWnd, lParam);
             break;
         case WM_KEYDOWN:
             // Must not be fading
             if (!app.page.fading && wParam == VK_ESCAPE) {
-                HandleCancel(hWnd);
+                window.HandleCancel(hWnd);
             }
             // & after test, it is found that activate really works
             if (!app.page.fading && wParam == VK_F5) {
-                UpdateLayered(hWnd);
+                render.UpdateLayered(hWnd);
             }
             break;
         case WM_RBUTTONDOWN:
             // Must not be fading
             if (!app.page.fading) {
-                HandleCancel(hWnd);
+                window.HandleCancel(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
             if (!app.page.fading) {
-                HandleClick(hWnd, lParam);
+                window.HandleClick(hWnd, lParam);
             }
             break;
         default:
