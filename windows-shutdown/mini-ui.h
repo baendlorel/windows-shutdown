@@ -2,8 +2,7 @@
 #include "framework.h"
 #include "style.color.h"
 #include "style.fade.h"
-#include "app.state.h"
-#include "i18n.h"
+#include "app.core.h"
 
 struct DrawTextParams {
     std::wstring text;
@@ -26,9 +25,7 @@ struct DrawParams {
 
 class Div {
    protected:
-    AppState& appState = AppState::GetInstance();
-    AppPage& appPage = AppPage::GetInstance();
-    I18N& i18n = I18N::GetInstance();
+    App& app = App::GetInstance();
     ColorSet& colors = ColorSet::GetInstance();
 
     // when alpha is MAX_ALPHA, active state is true
@@ -76,12 +73,10 @@ class Div {
 
 class View {
    protected:
-    AppConfig& appState = AppConfig::GetInstance();
-    AppState& appState = AppState::GetInstance();
-    AppPage& appPage = AppPage::GetInstance();
-    I18N& i18n = I18N::GetInstance();
+    App& app = App::GetInstance();
     ColorSet& colors = ColorSet::GetInstance();
 
+    // Page identifier
     Page page = Page::None;
     bool active = false;
 
@@ -91,7 +86,7 @@ class View {
 
    public:
     bool isInvisible() const {
-        return appPage.GetPageAlpha(this->page) == 0;
+        return app.page.GetPageAlpha(this->page) == 0;
     }
 
     void Draw(Gdiplus::Graphics& graphics, int w, int h) {
@@ -100,7 +95,7 @@ class View {
             return;
         }
 
-        if (appPage.fading) {
+        if (app.page.fading) {
             this->Deactivate();
         } else {
             this->Activate();

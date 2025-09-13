@@ -1,8 +1,6 @@
 #include "home.h"
 #include "style.button.h"
 #include "style.fade.h"
-#include "app.state.h"
-#include "i18n.h"
 
 #include "components.instruction.h"
 #include "components.menu-button.h"
@@ -12,7 +10,7 @@ void HomeView::initMenu() {
     this->menu.clear();
 
     // Define the actions for the buttons
-    auto& actions = this->appState.config.menuButtons;
+    auto& actions = this->app.config.menuButtons;
 
     // Create and position buttons
     int buttonCount = static_cast<int>(actions.size());

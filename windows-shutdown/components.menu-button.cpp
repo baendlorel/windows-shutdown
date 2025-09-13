@@ -3,7 +3,6 @@
 #include "resource.h"
 #include "style.button.h"
 #include "bitmap-loader.h"
-#include "i18n.h"
 
 // Helper function to get resource ID from Action
 int GetResourceIdFromAction(Action action) {
@@ -26,7 +25,6 @@ int GetResourceIdFromAction(Action action) {
 }
 
 void MenuButton::LoadPNGFromResource(HINSTANCE hInst) {
-    auto& i18n = I18N::GetInstance();
     this->png = LoadBitmapByResourceId(hInst, this->resId);
 }
 
@@ -36,7 +34,7 @@ MenuButton::MenuButton(int x, int y, Action action)
     this->action = action;
 
     this->resId = GetResourceIdFromAction(action);
-    LoadPNGFromResource(appState.hInst);
+    LoadPNGFromResource(app.state.hInst);
 }
 
 void MenuButton::Center(int buttonCount, int index, int w, int h) {
@@ -74,7 +72,7 @@ void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
                        Gdiplus::UnitPixel, imgAttr.get());
 
     // highlight
-    bool isHit = this->MouseHit(appState.mouseX, appState.mouseY);
+    bool isHit = this->MouseHit(app.state.mouseX, app.state.mouseY);
     if (!isHit) {
         return;
     }

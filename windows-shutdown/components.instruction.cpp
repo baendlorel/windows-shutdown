@@ -2,8 +2,8 @@
 
 #include "style.font.h"
 #include "style.color.h"
-#include "config.h"
-#include "i18n.h"
+#include "app.core.h"
+
 #include "mini-ui.h"
 
 // & Only draw instruction needs internal state check
@@ -12,14 +12,16 @@ void DrawInstruction(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF* re
     if (alpha == 0) {
         return;
     }
+    static auto& app = App::GetInstance();
+    static bool showInstruction = app.config.instruction == Instruction::Show;
+    static auto& colors = ColorSet::GetInstance();
+    static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
+    static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
 
-    static bool showInstruction = Config::GetInstance().instruction == Instruction::Show;
     if (!showInstruction) {
         return;
     }
-    static auto& colors = ColorSet::GetInstance();
-    static Gdiplus::FontFamily fontFamily(I18N::GetInstance().FontFamilyName.c_str());
-    static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+
     DrawTextParams instrParams = {.text = text,
                                   .font = &font,
                                   .rect = rect,

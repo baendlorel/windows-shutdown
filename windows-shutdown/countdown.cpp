@@ -6,22 +6,20 @@
 #include "style.color.h"
 #include "style.font.h"
 
-#include "app.state.h"
-#include "i18n.h"
 #include "mini-ui.h"
 #include "dtm.h"
 
 void CountdownView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
-    BYTE alpha = appPage.GetPageAlpha(Page::Countdown);
-    static auto& countdownStyle = config.countdownStyle;
+    BYTE alpha = app.page.GetPageAlpha(Page::Countdown);
+    static auto& countdownStyle = app.config.countdownStyle;
 
     // Check countdown style configuration
     if (countdownStyle == CountdownStyle::SteinsGate) {
         // Steins;Gate style with nixie tubes
 
         // First line: action description
-        std::wstring firstLine = i18n.Wait(appState.action, appState.countdownSeconds);
-        static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+        std::wstring firstLine = app.i18n.Wait(app.state.action, app.state.countdownSeconds);
+        static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
         Gdiplus::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdiplus::FontStyleBold);
         Gdiplus::REAL y = h * 0.32f;
         Gdiplus::RectF firstRect(0, y, w, h);
@@ -37,20 +35,20 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
         // Nixie tube clock in the center
         Gdiplus::RectF clockRect(w * 0.5f, y + 125, 0, 0);
         DrawNixieTubeClock(graphics, alpha, clockRect, Gdiplus::PointF(0.5f, 0.0f),
-                           appState.countdownSeconds);
+                           app.state.countdownSeconds);
 
         // Draw cancel instruction below
         Gdiplus::RectF smallRect(0, y + 520, w, h);
-        DrawInstruction(graphics, alpha, &smallRect, i18n.PressAnyKeyToCancel);
+        DrawInstruction(graphics, alpha, &smallRect, app.i18n.PressAnyKeyToCancel);
         return;
     }
 
     // * Normal style (original)
-    static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+    static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
     static auto* mono = Gdiplus::FontFamily::GenericMonospace();
 
     // First line: original style (left/right language preserved by i18n.Wait)
-    std::wstring firstLine = i18n.Wait(appState.action, appState.countdownSeconds);
+    std::wstring firstLine = app.i18n.Wait(app.state.action, app.state.countdownSeconds);
 
     // Fonts
     Gdiplus::Font firstFont(&fontFamily, COUNT_DOWN_FONT_SIZE, Gdiplus::FontStyleBold);
@@ -67,7 +65,7 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
     DrawCachedUIText(graphics, firstParams);
 
     // Second line: large centered numeric seconds
-    std::wstring secondLine = FormatTime(appState.countdownSeconds) + i18n.Waiting[2];
+    std::wstring secondLine = FormatTime(app.state.countdownSeconds) + app.i18n.Waiting[2];
     // Position second (number) centered below the first line
     Gdiplus::Font secondFont(mono, COUNT_DOWN_NUMBER_FONT_SIZE, Gdiplus::FontStyleBold);
     Gdiplus::RectF secondRect(0, y + 140, w, h);
@@ -84,5 +82,5 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, int w, int h) {
 
     // Draw cancel instruction below the number
     Gdiplus::RectF smallRect(0, y + 300, w, h);
-    DrawInstruction(graphics, alpha, &smallRect, i18n.PressAnyKeyToCancel);
+    DrawInstruction(graphics, alpha, &smallRect, app.i18n.PressAnyKeyToCancel);
 }

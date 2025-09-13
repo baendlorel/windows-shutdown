@@ -3,7 +3,8 @@
 #include "style.fade.h"
 #include "style.color.h"
 #include "style.font.h"
-#include "i18n.h"
+#include "app.core.h"
+
 #include "mini-ui.h"
 
 void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h, std::wstring text) {
@@ -11,9 +12,7 @@ void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h, std::wst
         return;
     }
 
-    // static auto& warnings = AppState::GetInstance().config.warnings;
-    // text = i18n.GetConfigWarningText(warnings)
-    static auto& i18n = I18N::GetInstance();
+    static auto& i18n = App::GetInstance().i18n;
     static auto& colors = ColorSet::GetInstance();
     static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
 
@@ -25,7 +24,6 @@ void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, int w, int h, std::wst
                                  .horizontalAlign = Gdiplus::StringAlignmentNear,
                                  .alpha = alpha,
                                  .color = &colors.TextWarnColor,
-                                 //  .color = &colors.TextDangerColor,
                                  .shadowColor = &colors.TextShadowColor};
     DrawCachedUIText(graphics, warnParams);
 }

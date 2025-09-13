@@ -2,11 +2,11 @@
 
 #include "resource.h"
 #include "bitmap-loader.h"
-#include "app.state.h"
+#include "app.core.h"
 
 // Return pointer to array of bitmaps
 Gdiplus::Bitmap** LoadNixieBitmap() {
-    HINSTANCE hInst = AppState::GetInstance().hInst;
+    HINSTANCE hInst = App::GetInstance().state.hInst;
     // Use static array so it's loaded once and no heap management needed
     static Gdiplus::Bitmap* nixieBitmaps[12];  // 0-9, blank, period
     nixieBitmaps[0] = LoadBitmapByResourceId(hInst, IDB_NIXIE_0);
