@@ -66,7 +66,7 @@ void Render::DrawToMemoryDC(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h) {
 
     // * These functions will decide internally whether to draw based on current state
     if (!warningWStr.empty()) {
-        DrawWarning(graphics, MAX_ALPHA, w, h, warningWStr);
+        DrawWarning(graphics, FADE::MAX_ALPHA, w, h, warningWStr);
     }
 
     // !
@@ -119,7 +119,7 @@ void Render::UpdateLayered(HWND hWnd) {
     POINT ptWin = {0, 0};
 
     // appState.page.alpha
-    BLENDFUNCTION blend = {AC_SRC_OVER, 0, MAX_ALPHA, AC_SRC_ALPHA};
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, FADE::MAX_ALPHA, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
     DeleteObject(hBitmap);

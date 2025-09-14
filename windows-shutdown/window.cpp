@@ -91,17 +91,17 @@ void Window::HandleTimer(HWND hWnd, WPARAM wParam) {
     static auto& app = App::GetInstance();
     auto alpha = app.page.alpha;
 
-    if (wParam == FADE_TIMER_ID) {
-        int steps = FADE_DURATION / FRAME_TIME;
-        BYTE step = (MAX_ALPHA + steps - 1) / steps;
+    if (wParam == FADE::TIMER_ID) {
+        int steps = FADE::DURATION / FADE::FRAME_TIME;
+        BYTE step = (FADE::MAX_ALPHA + steps - 1) / steps;
 
-        if (alpha < MAX_ALPHA) {
-            app.page.SetAlpha((alpha + step > MAX_ALPHA) ? MAX_ALPHA : alpha + step);
+        if (alpha < FADE::MAX_ALPHA) {
+            app.page.SetAlpha((alpha + step > FADE::MAX_ALPHA) ? FADE::MAX_ALPHA : alpha + step);
             render.UpdateLayered(hWnd);
             return;
         }
 
-        KillTimer(hWnd, FADE_TIMER_ID);
+        KillTimer(hWnd, FADE::TIMER_ID);
 
         // If fading out to close, close now
         if (app.page.current == Page::None) {

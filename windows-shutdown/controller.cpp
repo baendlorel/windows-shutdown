@@ -2,8 +2,9 @@
 
 #include <powrprof.h>
 #include <shellapi.h>
-
 #pragma comment(lib, "PowrProf.lib")
+
+#include "consts.app.h"
 
 void Controller::ExecuteRestart() {
     HANDLE hToken;

@@ -10,7 +10,7 @@ struct DrawTextParams {
     Gdiplus::RectF* rect;
     bool manualAlign = true;
     Gdiplus::StringAlignment horizontalAlign;
-    BYTE alpha = MAX_ALPHA;  // overall alpha for this text
+    BYTE alpha = FADE::MAX_ALPHA;  // overall alpha for this text
     Gdiplus::Color* color;
     Gdiplus::Color* shadowColor;
 };
