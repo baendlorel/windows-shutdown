@@ -60,8 +60,9 @@ void MenuButton::Center(int buttonCount, int index, int w, int h) {
 }
 
 bool MenuButton::MouseHit(int mx, int my) {
-    int x = INTIFY(this->rect.X + BUTTON_RADIUS);
-    int y = INTIFY(this->rect.Y + BUTTON_RADIUS);
+    // x, y of the rect means center of a circle
+    int x = INTIFY(this->rect.X);
+    int y = INTIFY(this->rect.Y);
     int dx = mx - x;
     int dy = my - y;
     this->hovered = (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
