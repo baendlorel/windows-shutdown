@@ -6,6 +6,9 @@
 #include "components.instruction.h"
 #include "components.menu-button.h"
 
+HomeView::HomeView() : View(Page::Home) {
+}
+
 void HomeView::initMenu() {
     // Clear existing buttons
     this->menu.clear();

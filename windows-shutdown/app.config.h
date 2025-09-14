@@ -10,11 +10,13 @@
 class AppConfig {
     SINGLETON(AppConfig)
 
+    // config entries
    public:
     CFG::Lang lang = CFG::Lang::Zh;
     Action action = Action::None;
     CFG::Instruction instruction = CFG::Instruction::Show;
-    std::vector<Action> menuButtons;
+    std::vector<Action> menuButtons = {Action::Donate, Action::Config,  Action::Lock,
+                                       Action::Sleep,  Action::Restart, Action::Shutdown};
     CFG::CountdownStyle countdownStyle = CFG::CountdownStyle::SteinsGate;
     int delay = CFG::CFG_DEFAULT_DELAY;
     Gdiplus::Color backgroundColor = ColorSet::GetInstance().BackgroundColor;

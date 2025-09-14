@@ -14,4 +14,17 @@
     };                                               \
                                                      \
    private:                                          \
-    ClassName() = default;\
+    ClassName() = default;
+
+#define SINGLETON_WITH_CUSTOM_CONTRUCTOR(ClassName)  \
+   public:                                           \
+    ClassName(const ClassName&) = delete;            \
+    ClassName& operator=(const ClassName&) = delete; \
+                                                     \
+    ClassName(ClassName&&) = delete;                 \
+    ClassName& operator=(ClassName&&) = delete;      \
+                                                     \
+    static ClassName& GetInstance() {                \
+        static ClassName instance;                   \
+        return instance;                             \
+    };

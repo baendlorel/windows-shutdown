@@ -41,14 +41,14 @@
     <Filter Include="src\consts">
       <UniqueIdentifier>{042609f7-5908-47b5-97a9-d177875ce274}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\consts\styles">
-      <UniqueIdentifier>{d7b4d1f5-38c4-40b9-8298-0a85de93d62d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\components">
       <UniqueIdentifier>{32c1c023-ac7a-43e0-88a7-85b208b8508a}</UniqueIdentifier>
     </Filter>
     <Filter Include="scripts">
       <UniqueIdentifier>{752b1e50-e36c-4bf6-94b0-050c8937138c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\styles">
+      <UniqueIdentifier>{d7b4d1f5-38c4-40b9-8298-0a85de93d62d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,13 +56,13 @@
       <Filter>src\consts</Filter>
     </ClInclude>
     <ClInclude Include="style.button.h">
-      <Filter>src\consts\styles</Filter>
+      <Filter>src\styles</Filter>
     </ClInclude>
     <ClInclude Include="style.font.h">
-      <Filter>src\consts\styles</Filter>
+      <Filter>src\styles</Filter>
     </ClInclude>
     <ClInclude Include="style.fade.h">
-      <Filter>src\consts\styles</Filter>
+      <Filter>src\styles</Filter>
     </ClInclude>
     <ClInclude Include="mini-ui.h">
       <Filter>src\mini-ui</Filter>
@@ -125,7 +125,7 @@
       <Filter>src\ui\views</Filter>
     </ClInclude>
     <ClInclude Include="style.color.h">
-      <Filter>src\consts\styles</Filter>
+      <Filter>src\styles</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>resource</Filter>

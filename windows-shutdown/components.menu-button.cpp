@@ -22,12 +22,8 @@ int GetResourceIdFromAction(Action action) {
         case Action::Shutdown:
             return IDB_SHUTDOWNPNG;
         default:
-            return IDB_CONFIGPNG;  // Default to config icon
+            return IDB_DONATEPNG;  // Default to config icon
     }
-}
-
-void MenuButton::LoadPNGFromResource(HINSTANCE hInst) {
-    this->png = LoadBitmapByResourceId(hInst, this->resId);
 }
 
 MenuButton::MenuButton(int x, int y, Action action)
@@ -37,7 +33,20 @@ MenuButton::MenuButton(int x, int y, Action action)
     this->action = action;
 
     this->resId = GetResourceIdFromAction(action);
-    LoadPNGFromResource(app.state.hInst);
+    this->png = LoadBitmapByResourceId(app.state.hInst, this->resId);
+
+    app.event.On(EventType::MouseMove, [this]() {
+        if (!this->active) {
+            return;
+        }
+
+        // highlight changed
+        bool before = this->hovered;
+        bool after = this->MouseHit(app.state.mouseX, app.state.mouseY);
+        if (before != after) {
+            app.event.Emit(EventType::Redraw);
+        }
+    });
 }
 
 void MenuButton::Center(int buttonCount, int index, int w, int h) {
@@ -50,12 +59,13 @@ void MenuButton::Center(int buttonCount, int index, int w, int h) {
     this->rect.Y = centerY + REALIFY(BUTTON_MARGIN_TOP);
 }
 
-bool MenuButton::MouseHit(int mx, int my) const {
+bool MenuButton::MouseHit(int mx, int my) {
     int x = INTIFY(this->rect.X + BUTTON_RADIUS);
     int y = INTIFY(this->rect.Y + BUTTON_RADIUS);
     int dx = mx - x;
     int dy = my - y;
-    return (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
+    this->hovered = (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
+    return this->hovered;
 }
 
 void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {

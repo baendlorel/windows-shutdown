@@ -41,9 +41,12 @@ class Div {
    public:
     ElementTag tag;
     Gdiplus::RectF rect;  // Position and size
+    bool hovered = false;
 
-    virtual bool MouseHit(int mx, int my) const {
-        return mx >= rect.X && mx <= rect.Y && my >= rect.GetTop() && my <= rect.GetBottom();
+    virtual bool MouseHit(int mx, int my) {
+        this->hovered =
+            mx >= rect.X && mx <= rect.Y && my >= rect.GetTop() && my <= rect.GetBottom();
+        return this->hovered;
     }
 
     virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params) = 0;

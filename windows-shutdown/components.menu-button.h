@@ -12,12 +12,11 @@ class MenuButton : public Div {
 
    public:
     MenuButton(int x, int y, Action action);
-    bool MouseHit(int mx, int my) const;
-    void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
 
    public:
-    void Center(int buttonCount, int index, int w, int h);
+    bool MouseHit(int mx, int my);
+    void Draw(Gdiplus::Graphics& graphics, DrawParams& params);
 
-   private:
-    void LoadPNGFromResource(HINSTANCE hInst);
+    // menu buttons are centered horizontally
+    void Center(int buttonCount, int index, int w, int h);
 };

@@ -5,7 +5,7 @@
 
 class HomeView : public View {
    public:
-    HomeView() : View(Page::Home) {};
+    HomeView();
 
     void initMenu();
     std::vector<MenuButton> menu;

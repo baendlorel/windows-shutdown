@@ -1,12 +1,9 @@
-﻿#include "framework.h"
-#include "singleton.h"
+﻿#pragma once
 #include <unordered_map>
+#include "framework.h"
+#include "singleton.h"
 
-enum class EventType {
-    MouseMove,
-    MouseClick,
-    KeyPress,
-};
+enum class EventType { MouseMove, MouseClick, KeyPress, Redraw };
 
 // Global event hub
 class AppEvent {
