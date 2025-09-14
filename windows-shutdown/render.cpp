@@ -125,4 +125,6 @@ void Render::UpdateLayered(HWND hWnd) {
     DeleteObject(hBitmap);
     DeleteDC(hdcMem);
     ReleaseDC(NULL, hdcScreen);
+
+    app.state.needRedraw = false;
 }

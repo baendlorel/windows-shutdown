@@ -84,6 +84,7 @@ void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
     graphics.DrawImage(this->png, rect, 0, 0, this->png->GetWidth(), this->png->GetHeight(),
                        Gdiplus::UnitPixel, imgAttr.get());
 
+    // todo 按钮高光位置有异常
     // highlight
     bool isHit = this->MouseHit(app.state.mouseX, app.state.mouseY);
     if (!isHit) {

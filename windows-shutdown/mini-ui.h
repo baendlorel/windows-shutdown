@@ -8,7 +8,7 @@ struct DrawTextParams {
     std::wstring text;
     Gdiplus::Font* font;
     Gdiplus::RectF* rect;
-    bool manualAlign = true;
+    bool manualAlign = true;  // controls whether to use horizontalAlign or always near
     Gdiplus::StringAlignment horizontalAlign;
     BYTE alpha = FADE::MAX_ALPHA;  // overall alpha for this text
     Gdiplus::Color* color;
@@ -20,16 +20,63 @@ struct DrawParams {
 
     // optional, for text drawing or image drawing
     Gdiplus::RectF* rect = nullptr;
+
+    // optional, for text drawing
     DrawTextParams* textParams = nullptr;
 };
 
-class Div {
+class Element {
+   public:
+    Element() = default;
+
    protected:
     App& app = App::GetInstance();
     ColorSet& colors = ColorSet::GetInstance();
 
     // when alpha is MAX_ALPHA, active state is true
     bool active = false;
+
+   public:
+    void Activate() {
+        this->active = true;
+    }
+
+    void Deactivate() {
+        this->active = false;
+    }
+
+    bool IsActive() const {
+        return this->active;
+    }
+
+    // normally use page alpha to determine visibility
+    virtual bool IsInvisible() const {
+        return false;
+    }
+
+    virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
+        if (this->IsInvisible()) {
+            this->Deactivate();
+            return;
+        }
+
+        if (app.page.fading) {
+            this->Deactivate();
+        } else {
+            this->Activate();
+        }
+
+        this->DrawView(graphics, params);
+    }
+
+   protected:
+    virtual void DrawView(Gdiplus::Graphics& graphics, DrawParams& params) = 0;
+};
+
+class Div : public Element {
+   protected:
+    App& app = App::GetInstance();
+    ColorSet& colors = ColorSet::GetInstance();
 
    public:
     Div(ElementTag tag, const Gdiplus::RectF& rect) : tag(tag), rect(rect) {};
@@ -49,8 +96,6 @@ class Div {
         return this->hovered;
     }
 
-    virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params) = 0;
-
     void OnClick(std::function<void(HWND)> cb) {
         this->onClickCallback = std::move(cb);
     }
@@ -60,67 +105,21 @@ class Div {
             this->onClickCallback(hwnd);
         }
     }
-
-    void Activate() {
-        this->active = true;
-    }
-
-    void Deactivate() {
-        this->active = false;
-    }
-
-    bool IsActive() const {
-        return this->active;
-    }
 };
 
-class View {
+class View : public Element {
    protected:
-    App& app = App::GetInstance();
-    ColorSet& colors = ColorSet::GetInstance();
-
     // Page identifier
     Page page = Page::None;
-    bool active = false;
 
    public:
     View(Page page) : page(page) {};
     virtual ~View() = default;
 
    public:
-    bool isInvisible() const {
+    bool IsInvisible() const override {
         return app.page.GetPageAlpha(this->page) == 0;
     }
-
-    void Draw(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
-        if (this->isInvisible()) {
-            this->Deactivate();
-            return;
-        }
-
-        if (app.page.fading) {
-            this->Deactivate();
-        } else {
-            this->Activate();
-        }
-
-        this->DrawView(graphics, w, h);
-    }
-
-    bool IsActive() const {
-        return this->active;
-    }
-
-    virtual void Activate() {
-        this->active = true;
-    }
-
-    virtual void Deactivate() {
-        this->active = false;
-    }
-
-   private:
-    virtual void DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) = 0;
 };
 
 Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha);

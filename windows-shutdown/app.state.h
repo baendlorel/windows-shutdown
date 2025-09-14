@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <vector>
 #include "framework.h"
 #include "singleton.h"
 
@@ -50,6 +49,7 @@ class AppState {
         static auto& appEvent = AppEvent::GetInstance();
         this->mouseX = x;
         this->mouseY = y;
+
         appEvent.Emit(EventType::MouseMove);
     }
 };

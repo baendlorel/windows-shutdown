@@ -191,7 +191,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             render.UpdateLayered(hWnd);
             break;
         case WM_MOUSEMOVE:
-            // todo 用事件思路触发移动hover事件
             window.HandleMoustMove(hWnd, lParam);
             break;
         case WM_KEYDOWN:
@@ -216,7 +215,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             }
             break;
         default:
+            // mousemove -> menubuttonhover -> before != after -> redraw
+            if (app.state.needRedraw) {
+                render.UpdateLayered(hWnd);
+            }
             return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+
+    if (app.state.needRedraw) {
+        render.UpdateLayered(hWnd);
     }
     return 0;
 }
