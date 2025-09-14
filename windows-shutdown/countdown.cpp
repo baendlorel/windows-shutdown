@@ -9,9 +9,16 @@
 #include "mini-ui.h"
 #include "dtm.h"
 
-void CountdownView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
+void CountdownView::DrawView(Gdiplus::Graphics& graphics, DrawParams& params) {
     BYTE alpha = app.page.GetPageAlpha(Page::Countdown);
     static auto& countdownStyle = app.config.countdownStyle;
+
+    if (!params.rect) {
+        throw "rect为空";
+    }
+
+    int w = params.rect->Width;
+    int h = params.rect->Height;
 
     // Check countdown style configuration
     if (countdownStyle == CFG::CountdownStyle::SteinsGate) {

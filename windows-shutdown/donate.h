@@ -7,5 +7,5 @@ class DonateView : public View {
     DonateView() : View(Page::Donate) {};
 
    private:
-    void DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h);
+    void DrawView(Gdiplus::Graphics& graphics, DrawParams& params) override;
 };

@@ -7,5 +7,5 @@ class CountdownView : public View {
     CountdownView() : View(Page::Countdown) {};
 
    private:
-    void DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h);
+    void DrawView(Gdiplus::Graphics& graphics, DrawParams& params) override;
 };

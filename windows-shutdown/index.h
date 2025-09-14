@@ -15,9 +15,9 @@ struct Index {
     CountdownView countdown;
 
    public:
-    void Draw(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
-        home.Draw(graphics, w, h);
-        countdown.Draw(graphics, w, h);
-        donate.Draw(graphics, w, h);
+    void Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
+        home.Draw(graphics, params);
+        countdown.Draw(graphics, params);
+        donate.Draw(graphics, params);
     }
 };

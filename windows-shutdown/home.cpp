@@ -24,8 +24,14 @@ void HomeView::initMenu() {
     }
 }
 
-void HomeView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
+void HomeView::DrawView(Gdiplus::Graphics& graphics, DrawParams& params) {
     BYTE alpha = app.page.GetPageAlpha(this->page);
+    if (!params.rect) {
+        throw "rect为空";
+    }
+
+    int w = params.rect->Width;
+    int h = params.rect->Height;
 
     // Draw image buttons (original logic)
     for (int i = 0; i < this->menu.size(); ++i) {

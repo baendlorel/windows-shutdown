@@ -9,11 +9,15 @@
 
 #include "bitmap-loader.h"
 
-void DonateView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
+void DonateView::DrawView(Gdiplus::Graphics& graphics, DrawParams& params) {
+    // TODO 这里要改成统一的isinvisible
     BYTE alpha = AppPage::GetInstance().GetPageAlpha(Page::Donate);
-    if (alpha == 0) {
-        return;
+    if (!params.rect) {
+        throw "rect为空";
     }
+
+    int w = params.rect->Width;
+    int h = params.rect->Height;
 
     static auto& colors = ColorSet::GetInstance();
     static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
@@ -21,7 +25,6 @@ void DonateView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus:
         LoadBitmapByResourceId(app.state.hInst, app.i18n.DonateQRResourceID);
 
     // localized polite & cute thank-you line from i18n
-    // std::wstring thankText = std::format(L"{}\n {}", i18n.Author, i18n.DonateThank);
     constexpr int lineHeight = 80;
     constexpr int marginTop = 100;
 
