@@ -1,5 +1,5 @@
 ﻿#include "home.h"
-#include "style.button.h"
+#include "style.menu-button.h"
 #include "style.fade.h"
 #include "realify.h"
 
@@ -30,14 +30,14 @@ void HomeView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) {
         throw "rect为空";
     }
 
-    int w = params.rect->Width;
-    int h = params.rect->Height;
+    int w = INTIFY(params.rect->Width);
+    int h = INTIFY(params.rect->Height);
 
     // Draw image buttons (original logic)
     for (int i = 0; i < this->menu.size(); ++i) {
         auto& b = this->menu[i];
-        int x = INTIFY(b.rect.X - BUTTON_RADIUS);
-        int y = INTIFY(b.rect.Y - BUTTON_RADIUS);
+        int x = INTIFY(b.rect.X - MENU_BUTTON::R);
+        int y = INTIFY(b.rect.Y - MENU_BUTTON::R);
 
         // where and what size to draw
         DrawParams params = {.alpha = alpha};
@@ -46,7 +46,8 @@ void HomeView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) {
 
     // Draw exit instruction below buttons
     static Gdiplus::RectF instrRect(
-        0, (h / 2.0f) + BUTTON_RADIUS + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM, w, h);
+        0, (h / 2.0f) + MENU_BUTTON::R + MENU_BUTTON::MARGIN_TOP + MENU_BUTTON::MARGIN_BOTTOM, w,
+        h);
     DrawInstruction(graphics, alpha, &instrRect, app.i18n.PressAnyKeyToExit);
 }
 

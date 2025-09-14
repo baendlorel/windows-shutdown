@@ -47,7 +47,7 @@
     <ClInclude Include="components.nixie-tube-clock.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="singleton.h" />
-    <ClInclude Include="style.button.h" />
+    <ClInclude Include="style.menu-button.h" />
     <ClInclude Include="style.fade.h" />
     <ClInclude Include="style.font.h" />
     <ClInclude Include="utils.fs.h" />

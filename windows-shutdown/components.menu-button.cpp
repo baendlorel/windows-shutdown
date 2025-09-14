@@ -3,7 +3,7 @@
 #include "resource.h"
 #include "realify.h"
 
-#include "style.button.h"
+#include "style.menu-button.h"
 #include "bitmap-loader.h"
 
 // Helper function to get resource ID from Action
@@ -27,8 +27,8 @@ int GetResourceIdFromAction(Action action) {
 }
 
 MenuButton::MenuButton(int x, int y, Action action)
-    : Div(ElementTag::Button,
-          Gdiplus::RectF(REALIFY(x), REALIFY(y), REALIFY(BUTTON_RADIUS), REALIFY(BUTTON_RADIUS))) {
+    : Div(ElementTag::Button, Gdiplus::RectF(REALIFY(x), REALIFY(y), REALIFY(MENU_BUTTON::R),
+                                             REALIFY(MENU_BUTTON::R))) {
     this->png = nullptr;
     this->action = action;
 
@@ -51,12 +51,12 @@ MenuButton::MenuButton(int x, int y, Action action)
 
 void MenuButton::Center(int buttonCount, int index, int w, int h) {
     float centerIndex = (buttonCount - 1) * 0.5f;
-    int delta = static_cast<int>(BUTTON_CENTER_DISTANCE * (index - centerIndex));
+    int delta = static_cast<int>(MENU_BUTTON::CENTER_DIST * (index - centerIndex));
 
     int centerX = w / 2;
     int centerY = h / 2;
-    this->rect.X = centerX + REALIFY(BUTTON_MARGIN_LEFT) + delta;
-    this->rect.Y = centerY + REALIFY(BUTTON_MARGIN_TOP);
+    this->rect.X = centerX + REALIFY(MENU_BUTTON::MARGIN_LEFT) + delta;
+    this->rect.Y = centerY + REALIFY(MENU_BUTTON::MARGIN_TOP);
 }
 
 bool MenuButton::MouseHit(int mx, int my) {
@@ -65,20 +65,20 @@ bool MenuButton::MouseHit(int mx, int my) {
     int y = INTIFY(this->rect.Y);
     int dx = mx - x;
     int dy = my - y;
-    this->hovered = (dx * dx + dy * dy <= BUTTON_TRUE_RADIUS_SQUARED);
+    this->hovered = (dx * dx + dy * dy <= MENU_BUTTON::TRUE_R_SQUARED);
     return this->hovered;
 }
 
 void MenuButton::Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-    int x = INTIFY(this->rect.X - BUTTON_RADIUS);
-    int y = INTIFY(this->rect.Y - BUTTON_RADIUS);
+    int x = INTIFY(this->rect.X - MENU_BUTTON::R);
+    int y = INTIFY(this->rect.Y - MENU_BUTTON::R);
 
     __drawingalpha = params.alpha;
 
     auto imgAttr = ImageAttrWithAlpha(this->png, params.alpha);
 
     // where and what size to draw
-    Gdiplus::Rect rect(x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
+    Gdiplus::Rect rect(x, y, MENU_BUTTON::D, MENU_BUTTON::D);
 
     // x, y, w, h cut from the source image
     // Since button images are 512x512, appState.buttons[i].png->GetWidth() is acutally 512
@@ -94,7 +94,8 @@ void MenuButton::Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
 
     Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, params.alpha));
     Gdiplus::SolidBrush highlightBrush(blended);
-    graphics.FillEllipse(&highlightBrush, x + BUTTON_SHADOW_WIDTH, y + BUTTON_SHADOW_WIDTH,
-                         BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2,
-                         BUTTON_DIAMETER - BUTTON_SHADOW_WIDTH * 2);
+    graphics.FillEllipse(&highlightBrush, x + MENU_BUTTON::SHADOW_WIDTH,
+                         y + MENU_BUTTON::SHADOW_WIDTH,
+                         MENU_BUTTON::D - MENU_BUTTON::SHADOW_WIDTH * 2,
+                         MENU_BUTTON::D - MENU_BUTTON::SHADOW_WIDTH * 2);
 }

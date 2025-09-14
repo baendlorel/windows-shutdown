@@ -55,7 +55,7 @@
     <ClInclude Include="consts.config.h">
       <Filter>src\consts</Filter>
     </ClInclude>
-    <ClInclude Include="style.button.h">
+    <ClInclude Include="style.menu-button.h">
       <Filter>src\styles</Filter>
     </ClInclude>
     <ClInclude Include="style.font.h">
