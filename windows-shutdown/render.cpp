@@ -73,8 +73,7 @@ void Render::DrawToMemoryDC(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h) {
     __DrawDebug(graphics, w, h);
 
     Gdiplus::RectF rect(0, 0, w, h);
-    DrawParams params = {.rect = &rect};
-    index.Draw(graphics, params);
+    index.Draw(graphics, {.rect = &rect});
 }
 
 // & Here we do not use appState.screenW/H.

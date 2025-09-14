@@ -14,5 +14,5 @@ class HomeView : public View {
     void Deactivate();
 
    private:
-    void DrawView(Gdiplus::Graphics& graphics, DrawParams& params) override;
+    void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 };

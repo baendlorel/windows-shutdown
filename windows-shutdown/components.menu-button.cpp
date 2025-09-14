@@ -68,7 +68,7 @@ bool MenuButton::MouseHit(int mx, int my) {
     return this->hovered;
 }
 
-void MenuButton::Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
+void MenuButton::Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     int x = INTIFY(this->rect.X - BUTTON_RADIUS);
     int y = INTIFY(this->rect.Y - BUTTON_RADIUS);
 

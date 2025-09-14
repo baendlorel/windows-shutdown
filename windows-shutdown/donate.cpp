@@ -9,7 +9,7 @@
 
 #include "bitmap-loader.h"
 
-void DonateView::DrawView(Gdiplus::Graphics& graphics, DrawParams& params) {
+void DonateView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) {
     // TODO 这里要改成统一的isinvisible
     BYTE alpha = AppPage::GetInstance().GetPageAlpha(Page::Donate);
     if (!params.rect) {

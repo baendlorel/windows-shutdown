@@ -24,7 +24,7 @@ void HomeView::initMenu() {
     }
 }
 
-void HomeView::DrawView(Gdiplus::Graphics& graphics, DrawParams& params) {
+void HomeView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) {
     BYTE alpha = app.page.GetPageAlpha(this->page);
     if (!params.rect) {
         throw "rect为空";

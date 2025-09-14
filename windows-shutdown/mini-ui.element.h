@@ -31,7 +31,7 @@ class Element {
         return false;
     }
 
-    virtual void Draw(Gdiplus::Graphics& graphics, DrawParams& params) {
+    virtual void Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
         if (this->IsInvisible()) {
             this->Deactivate();
             return;
@@ -47,5 +47,5 @@ class Element {
     }
 
    protected:
-    virtual void DrawView(Gdiplus::Graphics& graphics, DrawParams& params) = 0;
+    virtual void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) = 0;
 };

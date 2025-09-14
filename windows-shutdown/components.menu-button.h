@@ -15,12 +15,12 @@ class MenuButton : public Div {
 
    public:
     bool MouseHit(int mx, int my) override;
-    void Draw(Gdiplus::Graphics& graphics, DrawParams& params) override;
+    void Draw(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 
     // menu buttons are centered horizontally
     void Center(int buttonCount, int index, int w, int h);
 
    private:
-    void DrawView(Gdiplus::Graphics& graphics, DrawParams& params) override {
+    void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) override {
     }
 };
