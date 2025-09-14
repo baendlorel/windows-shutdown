@@ -14,7 +14,7 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdipl
     static auto& countdownStyle = app.config.countdownStyle;
 
     // Check countdown style configuration
-    if (countdownStyle == CountdownStyle::SteinsGate) {
+    if (countdownStyle == CFG::CountdownStyle::SteinsGate) {
         // Steins;Gate style with nixie tubes
 
         // First line: action description

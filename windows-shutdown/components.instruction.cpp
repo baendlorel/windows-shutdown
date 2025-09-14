@@ -13,7 +13,7 @@ void DrawInstruction(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::RectF* re
         return;
     }
     static auto& app = App::GetInstance();
-    static bool showInstruction = app.config.instruction == Instruction::Show;
+    static bool showInstruction = app.config.instruction == CFG::Instruction::Show;
     static auto& colors = ColorSet::GetInstance();
     static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
     static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);

@@ -41,7 +41,7 @@ std::string DefaultConfigZh() {
     std::string delay = std::format(
         "# 在执行操作之前等待这么多秒，默认{}秒\n"
         "{}={}",
-        CFG_DEFAULT_DELAY, CFG::KEY_DELAY, CFG_DEFAULT_DELAY);
+        CFG::CFG_DEFAULT_DELAY, CFG::KEY_DELAY, CFG::CFG_DEFAULT_DELAY);
 
     std::string bgColor = std::format(
         "# 背景色，格式为#RRGGBBAA或#RRGGBB，默认黑色半透明\n"
@@ -97,7 +97,7 @@ std::string DefaultConfigEn() {
     std::string delay = std::format(
         "# Wait time (in seconds, default is {}s) before action.\n"
         "{}={}",
-        CFG_DEFAULT_DELAY, CFG::KEY_DELAY, CFG_DEFAULT_DELAY);
+        CFG::CFG_DEFAULT_DELAY, CFG::KEY_DELAY, CFG::CFG_DEFAULT_DELAY);
 
     std::string bgColor = std::format(
         "# Background color, format: #RRGGBBAA or #RRGGBB, default is black semi-transparent\n"
@@ -178,63 +178,63 @@ Action ParseActionFromString(const std::string& actionStr) {
 }
 
 // key and value is already lowercase
-ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
+CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
     if (key == CFG::LOWER_KEY_LANG) {
         if (value == CFG::LANG_EN) {
-            this->lang = Lang::En;
-            return ConfigWarning::None;
+            this->lang = CFG::Lang::En;
+            return CFG::Warning::None;
         }
 
         if (value == CFG::LANG_ZH) {
-            this->lang = Lang::Zh;
-            return ConfigWarning::None;
+            this->lang = CFG::Lang::Zh;
+            return CFG::Warning::None;
         }
 
-        return ConfigWarning::InvalidLanguage;
+        return CFG::Warning::InvalidLanguage;
     }
 
     if (key == CFG::LOWER_KEY_ACTION) {
         if (value == CFG::ACTION_NONE) {
             this->action = Action::None;
-            return ConfigWarning::None;
+            return CFG::Warning::None;
         }
         if (value == CFG::ACTION_SLEEP) {
             this->action = Action::Sleep;
-            return ConfigWarning::None;
+            return CFG::Warning::None;
         }
         if (value == CFG::ACTION_SHUTDOWN) {
             this->action = Action::Shutdown;
-            return ConfigWarning::None;
+            return CFG::Warning::None;
         }
         if (value == CFG::ACTION_RESTART) {
             this->action = Action::Restart;
-            return ConfigWarning::None;
+            return CFG::Warning::None;
         }
         if (value == CFG::ACTION_LOCK) {
             this->action = Action::Lock;
-            return ConfigWarning::None;
+            return CFG::Warning::None;
         }
         this->action = Action::None;
-        return ConfigWarning::InvalidAction;
+        return CFG::Warning::InvalidAction;
     }
 
     if (key == CFG::LOWER_KEY_INSTRUCTION) {
         if (value == CFG::INSTRUCTION_SHOW) {
-            this->instruction = Instruction::Show;
-            return ConfigWarning::None;
+            this->instruction = CFG::Instruction::Show;
+            return CFG::Warning::None;
         }
 
         if (value == CFG::INSTRUCTION_HIDE) {
-            this->instruction = Instruction::Hide;
-            return ConfigWarning::None;
+            this->instruction = CFG::Instruction::Hide;
+            return CFG::Warning::None;
         }
 
-        return ConfigWarning::InvalidInstruction;
+        return CFG::Warning::InvalidInstruction;
     }
 
     if (key == CFG::LOWER_KEY_MENU_BUTTONS) {
         if (value.empty()) {
-            return ConfigWarning::InvalidMenuButton;
+            return CFG::Warning::InvalidMenuButton;
         }
 
         std::vector<Action> buttons;
@@ -260,41 +260,41 @@ ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
 
         // If no valid buttons were parsed, use default
         if (buttons.empty()) {
-            return ConfigWarning::InvalidMenuButton;
+            return CFG::Warning::InvalidMenuButton;
         } else {
             this->menuButtons = buttons;
         }
 
         // Return warning if we had invalid items but some valid ones
-        return hasInvalidItems ? ConfigWarning::InvalidMenuButton : ConfigWarning::None;
+        return hasInvalidItems ? CFG::Warning::InvalidMenuButton : CFG::Warning::None;
     }
 
     if (key == CFG::LOWER_KEY_COUNTDOWN_STYLE) {
         if (value == CFG::COUNTDOWN_STYLE_NORMAL) {
-            this->countdownStyle = CountdownStyle::Normal;
-            return ConfigWarning::None;
+            this->countdownStyle = CFG::CountdownStyle::Normal;
+            return CFG::Warning::None;
         }
 
         if (value == CFG::COUNTDOWN_STYLE_STEINS_GATE) {
-            this->countdownStyle = CountdownStyle::SteinsGate;
-            return ConfigWarning::None;
+            this->countdownStyle = CFG::CountdownStyle::SteinsGate;
+            return CFG::Warning::None;
         }
 
-        return ConfigWarning::InvalidCountdownStyle;
+        return CFG::Warning::InvalidCountdownStyle;
     }
 
     if (key == CFG::LOWER_KEY_DELAY) {
         try {
             int num = std::stoi(value);
             if (num < 0) {
-                this->delay = CFG_DEFAULT_DELAY;
-                return ConfigWarning::InvalidDelay;
+                this->delay = CFG::CFG_DEFAULT_DELAY;
+                return CFG::Warning::InvalidDelay;
             }
             this->delay = num;
-            return ConfigWarning::None;
+            return CFG::Warning::None;
         } catch (...) {
-            this->delay = CFG_DEFAULT_DELAY;
-            return ConfigWarning::InvalidDelay;
+            this->delay = CFG::CFG_DEFAULT_DELAY;
+            return CFG::Warning::InvalidDelay;
         }
     }
 
@@ -306,9 +306,9 @@ ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
                 this->backgroundColor = Gdiplus::Color(a, r, g, b);
-                return ConfigWarning::None;
+                return CFG::Warning::None;
             } catch (...) {
-                return ConfigWarning::InvalidBackgroundColorValue;
+                return CFG::Warning::InvalidBackgroundColorValue;
             }
         }
 
@@ -318,16 +318,16 @@ ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 this->backgroundColor = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
-                return ConfigWarning::None;
+                return CFG::Warning::None;
             } catch (...) {
-                return ConfigWarning::InvalidBackgroundColorValue;
+                return CFG::Warning::InvalidBackgroundColorValue;
             }
         }
 
-        return ConfigWarning::InvalidBackgroundColorFormat;
+        return CFG::Warning::InvalidBackgroundColorFormat;
     }
 
-    return ConfigWarning::UnknownConfigKey;
+    return CFG::Warning::UnknownConfigKey;
 }
 
 void AppConfig::Load() {
@@ -371,7 +371,7 @@ void AppConfig::Load() {
         std::string value = to_lowercase(trim(line.substr(eq + 1)));
 
         auto warning = this->LoadKeyValue(key, value);
-        if (warning != ConfigWarning::None) {
+        if (warning != CFG::Warning::None) {
             this->warnings.push_back({.warning = warning, .lineNo = lineNo});
         }
     });

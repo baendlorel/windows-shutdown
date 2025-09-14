@@ -18,7 +18,7 @@ void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::REAL w, Gdipl
     static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
 
     Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
-    Gdiplus::RectF warnRect(CFG_WARNING_X, CFG_WARNING_Y, w, h);
+    Gdiplus::RectF warnRect(CFG::WARNING_X, CFG::WARNING_Y, w, h);
     DrawTextParams warnParams = {.text = text,
                                  .font = &warnFont,
                                  .rect = &warnRect,

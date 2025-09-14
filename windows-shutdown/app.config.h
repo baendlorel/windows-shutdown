@@ -11,14 +11,14 @@ class AppConfig {
     SINGLETON(AppConfig)
 
    public:
-    Lang lang = Lang::Zh;
+    CFG::Lang lang = CFG::Lang::Zh;
     Action action = Action::None;
-    Instruction instruction = Instruction::Show;
+    CFG::Instruction instruction = CFG::Instruction::Show;
     std::vector<Action> menuButtons;
-    CountdownStyle countdownStyle = CountdownStyle::SteinsGate;
-    int delay = CFG_DEFAULT_DELAY;
+    CFG::CountdownStyle countdownStyle = CFG::CountdownStyle::SteinsGate;
+    int delay = CFG::CFG_DEFAULT_DELAY;
     Gdiplus::Color backgroundColor = ColorSet::GetInstance().BackgroundColor;
-    std::vector<ConfigWarnInfo> warnings;
+    std::vector<CFG::WarnInfo> warnings;
 
    public:
     void Load();
@@ -30,5 +30,5 @@ class AppConfig {
     std::wstring GetConfigPath();
 
    private:
-    ConfigWarning LoadKeyValue(std::string& key, std::string& value);
+    CFG::Warning LoadKeyValue(std::string& key, std::string& value);
 };
