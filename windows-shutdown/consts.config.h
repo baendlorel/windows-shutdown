@@ -7,9 +7,9 @@
 #define CFG_KEY_ACTION           "action"
 #define CFG_KEY_DELAY            "delay"
 #define CFG_KEY_INSTRUCTION      "instruction"
-#define CFG_KEY_MENU_BUTTONS     "menuButtons"
-#define CFG_KEY_BACKGROUND_COLOR "backgroundColor"
-#define CFG_KEY_COUNTDOWN_STYLE  "countdownStyle"
+#define CFG_KEY_MENU_BUTTONS     "menu-buttons"  // lower case, no space
+#define CFG_KEY_BACKGROUND_COLOR "background-color"
+#define CFG_KEY_COUNTDOWN_STYLE  "countdown-style"
 
 #define CFG_LANG_ZH "zh"
 #define CFG_LANG_EN "en"
@@ -48,22 +48,22 @@ constexpr int CFG_DEFAULT_DELAY = 5;
 
 // config warnings
 enum class ConfigWarning {
-	None,
-	UnknownConfigKey,  // key not recognized
-	NotConfigEntry,    // neither comment nor key-value pair
-	InvalidLanguage,
-	InvalidAction,
-	InvalidInstruction,
-	InvalidMenuButton,
-	InvalidCountdownStyle,
-	InvalidDelay,
-	InvalidBackgroundColorFormat,
-	InvalidBackgroundColorValue
+    None,
+    UnknownConfigKey,  // key not recognized
+    NotConfigEntry,    // neither comment nor key-value pair
+    InvalidLanguage,
+    InvalidAction,
+    InvalidInstruction,
+    InvalidMenuButton,
+    InvalidCountdownStyle,
+    InvalidDelay,
+    InvalidBackgroundColorFormat,
+    InvalidBackgroundColorValue
 };
 
 struct ConfigWarnInfo {
-	ConfigWarning warning;
-	short lineNo;
+    ConfigWarning warning;
+    short lineNo;
 };
 
 constexpr int CFG_WARNING_X = 40;
