@@ -35,8 +35,8 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
                                       .rect = &firstRect,
                                       .horizontalAlign = Gdiplus::StringAlignmentCenter,
                                       .alpha = alpha,
-                                      .color = &colors.TextColor,
-                                      .shadowColor = &colors.TextShadowColor};
+                                      .color = &colors_.TextColor,
+                                      .shadowColor = &colors_.TextShadowColor};
         DrawCachedUIText(graphics, firstParams);
 
         // Nixie tube clock in the center
@@ -67,8 +67,8 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
                                   .rect = &firstRect,
                                   .horizontalAlign = Gdiplus::StringAlignmentCenter,
                                   .alpha = alpha,
-                                  .color = &colors.TextColor,
-                                  .shadowColor = &colors.TextShadowColor};
+                                  .color = &colors_.TextColor,
+                                  .shadowColor = &colors_.TextShadowColor};
     DrawCachedUIText(graphics, firstParams);
 
     // Second line: large centered numeric seconds
@@ -82,8 +82,8 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
                                    .manualAlign = false,
                                    .horizontalAlign = Gdiplus::StringAlignmentCenter,
                                    .alpha = alpha,
-                                   .color = &colors.TextWarnColor,
-                                   .shadowColor = &colors.TextShadowColor};
+                                   .color = &colors_.TextWarnColor,
+                                   .shadowColor = &colors_.TextShadowColor};
     // & seconds cannot use cache since it changes every second
     DrawUIText(graphics, secondParams);
 

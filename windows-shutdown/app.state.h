@@ -10,7 +10,7 @@
 #include "app.config.h"
 
 class AppState {
-    SINGLETON_WITH_CUSTOM_CONTRUCTOR(AppState)
+    DELETE_COPY_AND_MOVE(AppState)
 
    private:
     AppState() {

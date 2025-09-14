@@ -30,7 +30,7 @@ class Div : public Element {
     }
 
     void TriggerClick(HWND hwnd) {
-        if (this->onClickCallback && this->active) {
+        if (this->onClickCallback && this->active_) {
             this->onClickCallback(hwnd);
         }
     }

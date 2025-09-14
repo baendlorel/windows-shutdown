@@ -7,11 +7,11 @@ class HomeView : public View {
    public:
     HomeView();
 
-    void initMenu();
+    void init_menu();
     std::vector<MenuButton> menu;
 
-    void Activate();
-    void Deactivate();
+    void activate() override;
+    void deactivate() override;
 
    private:
     void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) override;

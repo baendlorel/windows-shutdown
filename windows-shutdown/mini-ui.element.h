@@ -6,41 +6,41 @@ class Element {
     Element() = default;
 
    protected:
-    App& app = App::GetInstance();
-    ColorSet& colors = ColorSet::GetInstance();
+    App& app_ = App::GetInstance();
+    ColorSet& colors_ = ColorSet::GetInstance();
 
     // when alpha is MAX_ALPHA, active state is true
-    bool active = false;
+    bool active_ = false;
 
    public:
-    virtual void Activate() {
-        this->active = true;
+    virtual void activate() {
+        this->active_ = true;
     }
 
-    virtual void Deactivate() {
-        this->active = false;
+    virtual void deactivate() {
+        this->active_ = false;
     }
 
-    bool IsActive() const {
-        return this->active;
+    bool is_active() const {
+        return this->active_;
     }
 
     // normally use page alpha to determine visibility
     // for divs, we can always return false
-    virtual bool IsInvisible() const {
+    virtual bool is_invisible() const {
         return false;
     }
 
-    virtual void Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-        if (this->IsInvisible()) {
-            this->Deactivate();
+    virtual void draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
+        if (this->is_invisible()) {
+            this->deactivate();
             return;
         }
 
-        if (app.page.fading) {
-            this->Deactivate();
+        if (app_.page.fading) {
+            this->deactivate();
         } else {
-            this->Activate();
+            this->activate();
         }
 
         this->DrawView(graphics, params);

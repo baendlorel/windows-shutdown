@@ -27,16 +27,17 @@ int GetResourceIdFromAction(Action action) {
 }
 
 MenuButton::MenuButton(int x, int y, Action action)
-    : Div(ElementTag::Button, Gdiplus::RectF(REALIFY(x), REALIFY(y), REALIFY(MenuButtonStyle::RADIUS),
-                                             REALIFY(MenuButtonStyle::RADIUS))) {
+    : Div(ElementTag::Button,
+          Gdiplus::RectF(REALIFY(x), REALIFY(y), REALIFY(MenuButtonStyle::RADIUS),
+                         REALIFY(MenuButtonStyle::RADIUS))) {
     this->png = nullptr;
     this->action = action;
 
-    this->resId = GetResourceIdFromAction(action);
-    this->png = LoadBitmapByResourceId(app.state.hInst, this->resId);
+    this->res_id = GetResourceIdFromAction(action);
+    this->png = LoadBitmapByResourceId(app.state.hInst, this->res_id);
 
     app.event.On(EventType::MouseMove, [this]() {
-        if (!this->active) {
+        if (!this->active_) {
             return;
         }
 
@@ -49,8 +50,8 @@ MenuButton::MenuButton(int x, int y, Action action)
     });
 }
 
-void MenuButton::Center(int buttonCount, int index, int w, int h) {
-    float centerIndex = (buttonCount - 1) * 0.5f;
+void MenuButton::center(int button_count, int index, int w, int h) {
+    float centerIndex = (button_count - 1) * 0.5f;
     int delta = static_cast<int>(MenuButtonStyle::CENTER_DIST * (index - centerIndex));
 
     int centerX = w / 2;
@@ -69,7 +70,7 @@ bool MenuButton::MouseHit(int mx, int my) {
     return this->hovered;
 }
 
-void MenuButton::Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
+void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     int x = INTIFY(this->rect.X - MenuButtonStyle::RADIUS);
     int y = INTIFY(this->rect.Y - MenuButtonStyle::RADIUS);
 

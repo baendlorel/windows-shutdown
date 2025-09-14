@@ -73,7 +73,7 @@ BOOL Window::InitInstance(int) {
     UpdateWindow(hWnd);
 
     // ui
-    Index::GetInstance().home.initMenu();
+    Index::GetInstance().home.init_menu();
     RegisterMenuButtonClickCallback();
 
     // If config requests immediate action, initialize the immediate action

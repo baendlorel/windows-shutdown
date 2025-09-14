@@ -34,7 +34,7 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::
     auto __drawingalpha = -1;
 
     if (index.home.menu.size() > 0) {
-        menuActive = index.home.menu[0].IsActive() ? 1 : 0;
+        menuActive = index.home.menu[0].is_active() ? 1 : 0;
         __drawingalpha = index.home.menu[0].__drawingalpha;
     }
 
@@ -88,7 +88,7 @@ SIZE Render::GetWH(HWND hWnd) {
     float centerIndex = (buttonCount - 1) * 0.5f;
 
     for (short i = 0; i < buttonCount; i++) {
-        index.home.menu[i].Center(buttonCount, i, w, h);
+        index.home.menu[i].center(buttonCount, i, w, h);
     }
     return {w, h};
 }

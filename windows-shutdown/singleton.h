@@ -2,6 +2,7 @@
 
 #define SINGLETON(ClassName)                         \
    public:                                           \
+    ~ClassName();                                    \
     ClassName(const ClassName&) = delete;            \
     ClassName& operator=(const ClassName&) = delete; \
                                                      \
@@ -16,8 +17,9 @@
    private:                                          \
     ClassName() = default;
 
-#define SINGLETON_WITH_CUSTOM_CONTRUCTOR(ClassName)  \
+#define DELETE_COPY_AND_MOVE(ClassName)              \
    public:                                           \
+    ~ClassName();                                    \
     ClassName(const ClassName&) = delete;            \
     ClassName& operator=(const ClassName&) = delete; \
                                                      \

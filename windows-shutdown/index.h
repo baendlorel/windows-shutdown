@@ -16,8 +16,8 @@ struct Index {
 
    public:
     void Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-        home.Draw(graphics, params);
-        countdown.Draw(graphics, params);
-        donate.Draw(graphics, params);
+        home.D2DERR_BITMAP_CANNOT_DRAWraw(graphics, params);
+        countdown.D2DERR_BITMAP_CANNOT_DRAWraw(graphics, params);
+        donate.D2DERR_BITMAP_CANNOT_DRAWraw(graphics, params);
     }
 };

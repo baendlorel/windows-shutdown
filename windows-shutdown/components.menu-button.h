@@ -5,7 +5,7 @@
 class MenuButton : public Div {
    public:
     Action action;
-    int resId;
+    int res_id;
     Gdiplus::Bitmap* png;
 
     BYTE __drawingalpha = 0;
@@ -15,10 +15,10 @@ class MenuButton : public Div {
 
    public:
     bool MouseHit(int mx, int my) override;
-    void Draw(Gdiplus::Graphics& graphics, const DrawParams& params) override;
+    void draw(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 
     // menu buttons are centered horizontally
-    void Center(int buttonCount, int index, int w, int h);
+    void center(int button_count, int index, int w, int h);
 
    private:
     void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) override {

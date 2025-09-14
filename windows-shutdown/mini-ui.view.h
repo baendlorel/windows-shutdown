@@ -5,16 +5,16 @@
 class View : public Element {
    protected:
     // Page identifier
-    Page page = Page::None;
+    Page page_ = Page::None;
 
    public:
-    View(const Page page) : page(page) {
+    View(const Page page) : page_(page) {
     }
 
     virtual ~View() = default;
 
    public:
-    bool IsInvisible() const override {
-        return app.page.GetPageAlpha(this->page) == 0;
+    bool is_invisible() const override {
+        return app_.page.GetPageAlpha(this->page_) == 0;
     }
 };
