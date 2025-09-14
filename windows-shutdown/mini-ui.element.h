@@ -13,11 +13,11 @@ class Element {
     bool active = false;
 
    public:
-    void Activate() {
+    virtual void Activate() {
         this->active = true;
     }
 
-    void Deactivate() {
+    virtual void Deactivate() {
         this->active = false;
     }
 

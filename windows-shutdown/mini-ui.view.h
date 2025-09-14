@@ -8,7 +8,9 @@ class View : public Element {
     Page page = Page::None;
 
    public:
-    View(Page page) : page(page) {};
+    View(const Page page) : page(page) {
+    }
+
     virtual ~View() = default;
 
    public:

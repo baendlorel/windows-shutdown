@@ -1,6 +1,8 @@
 ﻿#include "home.h"
+
+#include <stdexcept>
+
 #include "style.menu-button.h"
-#include "style.fade.h"
 #include "realify.h"
 
 #include "components.instruction.h"
@@ -17,37 +19,37 @@ void HomeView::initMenu() {
     auto& actions = this->app.config.menuButtons;
 
     // Create and position buttons
-    int buttonCount = static_cast<int>(actions.size());
-    for (int i = 0; i < buttonCount; ++i) {
-        this->menu.push_back(MenuButton(0, 0, actions[i]));
-        this->menu[i].Center(buttonCount, i, app.state.screenW, app.state.screenH);
+    const int button_count = static_cast<int>(actions.size());
+    for (int i = 0; i < button_count; ++i) {
+        this->menu.emplace_back(0, 0, actions[i]);
+        this->menu[i].Center(button_count, i, app.state.screenW, app.state.screenH);
     }
 }
 
 void HomeView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) {
-    BYTE alpha = app.page.GetPageAlpha(this->page);
+    const BYTE alpha = app.page.GetPageAlpha(this->page);
     if (!params.rect) {
-        throw "rect为空";
+        throw std::runtime_error("rect为空");
     }
 
     int w = INTIFY(params.rect->Width);
     int h = INTIFY(params.rect->Height);
 
     // Draw image buttons (original logic)
-    for (int i = 0; i < this->menu.size(); ++i) {
-        auto& b = this->menu[i];
-        int x = INTIFY(b.rect.X - MENU_BUTTON::R);
-        int y = INTIFY(b.rect.Y - MENU_BUTTON::R);
+    for (auto& b : this->menu) {
+        int x = INTIFY(b.rect.X - MenuButtonStyle::RADIUS);
+        int y = INTIFY(b.rect.Y - MenuButtonStyle::RADIUS);
 
         // where and what size to draw
-        DrawParams params = {.alpha = alpha};
-        b.Draw(graphics, params);
+        b.Draw(graphics, {.alpha = alpha});
     }
 
     // Draw exit instruction below buttons
-    static Gdiplus::RectF instrRect(
-        0, (h / 2.0f) + MENU_BUTTON::R + MENU_BUTTON::MARGIN_TOP + MENU_BUTTON::MARGIN_BOTTOM, w,
-        h);
+    static Gdiplus::RectF instrRect(0,
+                                    (h / 2.0f) + MenuButtonStyle::RADIUS +
+                                        MenuButtonStyle::MARGIN_TOP +
+                                        MenuButtonStyle::MARGIN_BOTTOM,
+                                    w, h);
     DrawInstruction(graphics, alpha, &instrRect, app.i18n.PressAnyKeyToExit);
 }
 
