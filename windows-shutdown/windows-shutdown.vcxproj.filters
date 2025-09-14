@@ -145,6 +145,18 @@
     <ClInclude Include="utils.fs.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="mini-ui.element.h">
+      <Filter>src\mini-ui</Filter>
+    </ClInclude>
+    <ClInclude Include="mini-ui.core.h">
+      <Filter>src\mini-ui</Filter>
+    </ClInclude>
+    <ClInclude Include="mini-ui.div.h">
+      <Filter>src\mini-ui</Filter>
+    </ClInclude>
+    <ClInclude Include="mini-ui.painter.h">
+      <Filter>src\mini-ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitmap-loader.cpp">
@@ -156,7 +168,7 @@
     <ClCompile Include="app.config.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
-    <ClCompile Include="mini-ui.cpp">
+    <ClCompile Include="mini-ui.painter.cpp">
       <Filter>src\mini-ui</Filter>
     </ClCompile>
     <ClCompile Include="windows-shutdown.cpp">
@@ -203,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="app.event.h">
       <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="mini-ui.view.h">
+      <Filter>src\mini-ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

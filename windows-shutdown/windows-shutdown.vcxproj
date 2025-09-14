@@ -25,6 +25,10 @@
     <ClInclude Include="app.state.h" />
     <ClInclude Include="bitmap-loader.h" />
     <ClInclude Include="app.config.h" />
+    <ClInclude Include="mini-ui.div.h" />
+    <ClInclude Include="mini-ui.element.h" />
+    <ClInclude Include="mini-ui.core.h" />
+    <ClInclude Include="mini-ui.painter.h" />
     <ClInclude Include="realify.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="style.color.h" />
@@ -65,10 +69,11 @@
     <ClCompile Include="dtm.cpp" />
     <ClCompile Include="home.cpp" />
     <ClCompile Include="app.i18n.cpp" />
+    <ClCompile Include="mini-ui.view.h" />
     <ClCompile Include="utils.fs.cpp" />
     <ClCompile Include="utils.string.cpp" />
     <ClCompile Include="windows-shutdown.cpp" />
-    <ClCompile Include="mini-ui.cpp" />
+    <ClCompile Include="mini-ui.painter.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
