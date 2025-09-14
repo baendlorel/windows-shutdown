@@ -6,6 +6,7 @@
 #include "style.fade.h"
 #include "consts.app.h"
 
+#include "app.event.h"
 #include "app.page.h"
 #include "app.config.h"
 
@@ -23,9 +24,12 @@ class AppState {
     int mouseX = 0;
     int mouseY = 0;
 
+    // Will trigger MouseMove
     void SetMousePos(int x, int y) {
+        static auto& appEvent = AppEvent::GetInstance();
         this->mouseX = x;
         this->mouseY = y;
+        appEvent.Emit(EventType::MouseMove);
     }
 
     // actions

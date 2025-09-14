@@ -141,8 +141,7 @@ void Window::HandleCancel(HWND hWnd) {
 
 void Window::HandleMoustMove(HWND hWnd, LPARAM lParam) {
     static auto& app = App::GetInstance();
-    app.state.mouseX = LOWORD(lParam);
-    app.state.mouseY = HIWORD(lParam);
+    app.state.SetMousePos(LOWORD(lParam), HIWORD(lParam));
 }
 
 void Window::HandleClick(HWND hWnd, LPARAM lParam) {
@@ -192,6 +191,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             render.UpdateLayered(hWnd);
             break;
         case WM_MOUSEMOVE:
+            // todo 用事件思路触发移动hover事件
             window.HandleMoustMove(hWnd, lParam);
             break;
         case WM_KEYDOWN:

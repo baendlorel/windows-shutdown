@@ -201,6 +201,9 @@
     <ClCompile Include="utils.fs.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="app.event.h">
+      <Filter>src\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CHANGELOG">
