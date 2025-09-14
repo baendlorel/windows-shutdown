@@ -181,6 +181,7 @@ Action ParseActionFromString(const std::string& actionStr) {
     return Action::None;  // Invalid action
 }
 
+// key and value is already lowercase
 ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
     if (key == CFG_KEY_LANG) {
         if (value == CFG_LANG_EN) {

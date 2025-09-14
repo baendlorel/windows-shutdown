@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <string_view>
 
 // configs
 #define CFG_FILE_NAME L"config.txt"
@@ -7,9 +8,17 @@
 #define CFG_KEY_ACTION           "action"
 #define CFG_KEY_DELAY            "delay"
 #define CFG_KEY_INSTRUCTION      "instruction"
-#define CFG_KEY_MENU_BUTTONS     "menu-buttons"  // lower case, no space
-#define CFG_KEY_BACKGROUND_COLOR "background-color"
-#define CFG_KEY_COUNTDOWN_STYLE  "countdown-style"
+#define CFG_KEY_MENU_BUTTONS     "menuButtons"
+#define CFG_KEY_BACKGROUND_COLOR "backgroundColor"
+#define CFG_KEY_COUNTDOWN_STYLE  "countdownStyle"
+
+#define CFG_LOWER_KEY_LANG             "language"
+#define CFG_LOWER_KEY_ACTION           "action"
+#define CFG_LOWER_KEY_DELAY            "delay"
+#define CFG_LOWER_KEY_INSTRUCTION      "instruction"
+#define CFG_LOWER_KEY_MENU_BUTTONS     "menubuttons"
+#define CFG_LOWER_KEY_BACKGROUND_COLOR "backgroundcolor"
+#define CFG_LOWER_KEY_COUNTDOWN_STYLE  "countdownstyle"
 
 #define CFG_LANG_ZH "zh"
 #define CFG_LANG_EN "en"
@@ -40,6 +49,14 @@
 #define CFG_COUNTDOWN_STYLE_STEINS_GATE "nixietube"
 
 #define CFG_BACKGROUND_COLOR_DEFAULT "#00000034"  // ARGB same as macro BACKGROUND_COLOR below
+
+namespace CFG {
+constexpr std::wstring_view FILE_NAME = L"config.txt";
+
+constexpr std::string_view KEY_LANG = "language";
+constexpr std::string_view LOWER_KEY_LANG = "language";
+
+}  // namespace CFG
 
 enum class Lang { Zh, En };  // used in config and i18n
 enum class Instruction { Show, Hide };

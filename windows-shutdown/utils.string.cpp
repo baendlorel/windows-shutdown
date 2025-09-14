@@ -1,6 +1,6 @@
 ﻿#include "utils.string.h"
-#include <algorithm>
-#include <cctype>
+
+static constexpr char ASCII_UPLOWER_DELTA = 32;
 
 std::string trim(const std::string &s) {
     if (s.empty()) {
@@ -20,12 +20,11 @@ std::string trim(const std::string &s) {
 }
 
 std::string to_uppercase(const std::string &str) {
-    static int delta = 'a' - 'A';
     std::string result = str;
 
     for (char &ch : result) {
         if (ch >= 'a' && ch <= 'z') {
-            ch -= delta;
+            ch -= ASCII_UPLOWER_DELTA;
         }
     }
 
@@ -33,12 +32,11 @@ std::string to_uppercase(const std::string &str) {
 }
 
 std::string to_lowercase(const std::string &str) {
-    static int delta = 'a' - 'A';
     std::string result = str;
 
     for (char &ch : result) {
         if (ch >= 'A' && ch <= 'Z') {
-            ch += delta;
+            ch += ASCII_UPLOWER_DELTA;
         }
     }
 
