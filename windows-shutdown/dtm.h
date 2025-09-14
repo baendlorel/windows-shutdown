@@ -2,4 +2,4 @@
 #include <xstring>
 #include <format>
 
-std::wstring FormatTime(int seconds);
+std::wstring format_time(int seconds);

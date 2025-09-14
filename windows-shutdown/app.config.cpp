@@ -6,6 +6,7 @@
 
 #include "style.color.h"
 #include "utils.string.h"
+#include "utils.fs.h"
 
 std::string DefaultConfigZh() {
     // Create default
@@ -181,9 +182,6 @@ Action ParseActionFromString(const std::string& actionStr) {
 }
 
 ConfigWarning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
-    key = to_lowercase(key);
-    value = to_lowercase(value);
-
     if (key == CFG_KEY_LANG) {
         if (value == CFG_LANG_EN) {
             this->lang = Lang::En;
@@ -342,58 +340,42 @@ void AppConfig::Load() {
     // Read config file as UTF-8
     std::ifstream file(configPath);
     if (!file.is_open()) {
-        // If config file does not exist, create it with UTF-8 encoding
         std::string content = IsSysLangChinese() ? DefaultConfigZh() : DefaultConfigEn();
-        std::ofstream out(configPath);
-        // Write UTF-8 BOM for compatibility
-        const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-        out.write((const char*)bom, sizeof(bom));
-        out << content;
-        out.close();
+        // std::ofstream out(configPath);
+        // const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
+        // out.write((const char*)bom, sizeof(bom));
+        // out << content;
+        // out.close();
+        save_to_file(configPath, content);
         return;
     }
 
-    file.seekg(0, std::ios::end);
-    std::streamsize size = file.tellg();
-    file.seekg(0, std::ios::beg);
-    std::string buffer(size, '\0');
-    if (size > 0) {
-        file.read(&buffer[0], size);
-    }
-    std::istringstream utf8stream(buffer);
+    std::string content = read_file_content(configPath);
 
     // Parse config file line by line (UTF-8)
+
     short lineNo = 0;
-    std::string line;
-    while (std::getline(utf8stream, line)) {
+
+    for_each_line(content, [this, &lineNo](std::string line) {
         lineNo++;
         if (line.empty()) {
-            continue;
+            return;
         }
         line = trim(line);
         if (line.empty() || line[0] == '#') {
-            continue;
+            return;
         }
         auto eq = line.find('=');
         if (eq == std::string::npos) {
-            // this->warnings.push_back({.warning = ConfigWarning::NotConfigEntry, .lineNo =
-            // lineNo});
-            continue;
+            return;
         }
 
-        std::string key = trim(line.substr(0, eq));
-        // // Extract value, ignore any inline comment starting with '#' and trim whitespace
-        // std::string rawValue = line.substr(eq + 1);
-        // auto commentPos = rawValue.find('#');
-        // if (commentPos != std::string::npos) {
-        //     rawValue = rawValue.substr(0, commentPos);
-        // }
-        // std::string value = trim(rawValue);
-        std::string value = trim(line.substr(eq + 1));
+        std::string key = to_lowercase(trim(line.substr(0, eq)));
+        std::string value = to_lowercase(trim(line.substr(eq + 1)));
 
         auto warning = this->LoadKeyValue(key, value);
         if (warning != ConfigWarning::None) {
             this->warnings.push_back({.warning = warning, .lineNo = lineNo});
         }
-    }
+    });
 }

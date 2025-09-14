@@ -1,5 +1,6 @@
 ﻿#include "utils.string.h"
 #include <algorithm>
+#include <cctype>
 
 std::string trim(const std::string &s) {
     if (s.empty()) {
@@ -7,13 +8,13 @@ std::string trim(const std::string &s) {
     }
 
     auto start = s.begin();
-    while (start != s.end() && isspace(*start)) {
+    while (start != s.end() && std::isspace(static_cast<unsigned char>(*start))) {
         ++start;
     }
     auto end = s.end();
     do {
         --end;
-    } while (end >= start && isspace(*end));
+    } while (end >= start && std::isspace(static_cast<unsigned char>(*end)));
 
     return (start <= end) ? std::string(start, end + 1) : "";
 }

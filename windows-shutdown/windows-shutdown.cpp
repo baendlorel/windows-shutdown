@@ -1,4 +1,5 @@
 ﻿#include "framework.h"
+#include "consts.app.h"
 #include "style.fade.h"
 #include "app.core.h"
 

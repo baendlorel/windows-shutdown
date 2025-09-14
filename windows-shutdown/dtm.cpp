@@ -1,6 +1,6 @@
 ﻿#include "dtm.h"
 
-std::wstring FormatTime(int seconds) {
+std::wstring format_time(int seconds) {
     static auto pad = [](int num) {
         return (num > 9) ? std::format(L"{}", num) : std::format(L"0{}", num);
     };

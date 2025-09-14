@@ -5,4 +5,4 @@ enum class Page { None, Home, Countdown, Donate };
 
 enum class ElementTag { Div, A, Button };
 
-constexpr int CLOSE_TIME = 500;  // ms
+constexpr int MAX_LOADSTRING = 100;

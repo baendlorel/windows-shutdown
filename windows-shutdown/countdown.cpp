@@ -65,7 +65,7 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdipl
     DrawCachedUIText(graphics, firstParams);
 
     // Second line: large centered numeric seconds
-    std::wstring secondLine = FormatTime(app.state.countdownSeconds) + app.i18n.Waiting[2];
+    std::wstring secondLine = format_time(app.state.countdownSeconds) + app.i18n.Waiting[2];
     // Position second (number) centered below the first line
     Gdiplus::Font secondFont(mono, COUNT_DOWN_NUMBER_FONT_SIZE, Gdiplus::FontStyleBold);
     Gdiplus::RectF secondRect(0, y + 140, w, h);

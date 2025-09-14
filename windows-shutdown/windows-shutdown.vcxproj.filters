@@ -142,6 +142,9 @@
     <ClInclude Include="realify.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="utils.fs.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitmap-loader.cpp">
@@ -193,6 +196,9 @@
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="utils.string.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.fs.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
