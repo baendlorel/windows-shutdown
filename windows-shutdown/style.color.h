@@ -5,7 +5,7 @@
 #include "singleton.h"
 
 // ui/colors
-constexpr int DEFAULT_ALPHA = 52;
+inline constexpr int DEFAULT_ALPHA = 52;
 
 struct ColorSet {
     SINGLETON(ColorSet)
