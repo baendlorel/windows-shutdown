@@ -4,11 +4,13 @@
 #include <sstream>
 #include <fstream>
 
+#include "realify.h"
 #include "style.color.h"
 #include "utils.string.h"
 #include "utils.fs.h"
 
-std::string DefaultConfigZh() {
+namespace {
+std::string default_content_zh() {
     // Create default
     std::string lang = std::format(
         "# 可填：{}, {}。 默认值和系统语言相同\n"
@@ -65,7 +67,7 @@ std::string DefaultConfigZh() {
         lang, action, delay, instruction, menuButtons, countdownStyle, bgColor);
 }
 
-std::string DefaultConfigEn() {
+std::string default_content_en() {
     std::string lang = std::format(
         "# Options: {}, {}. Default: same as your system\n"
         "{}={}",
@@ -121,17 +123,54 @@ std::string DefaultConfigEn() {
         lang, action, delay, instruction, menuButtons, countdownStyle, bgColor);
 }
 
-bool IsSysLangChinese() {
-    LANGID langId = GetUserDefaultUILanguage();
-    WORD primaryLang = PRIMARYLANGID(langId);
+bool is_sys_lang_chinese() {
+    const LANGID langId = GetUserDefaultUILanguage();
+    const WORD primaryLang = PRIMARYLANGID(langId);
     return primaryLang == LANG_CHINESE;
 }
 
+// Use this in case of returning to MSVC
+std::string wstring_to_utf8(const std::wstring& s) {
+    if (s.empty()) return {};
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, s.data(), static_cast<int>(s.size()), nullptr,
+                                          0, nullptr, nullptr);
+    std::string strTo(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, s.data(), static_cast<int>(s.size()), strTo.data(), size_needed,
+                        nullptr, nullptr);
+    return strTo;
+}
+
+// Helper function to parse Action from string (case-insensitive)
+app::Action parse_action_from_string(const std::string& actionStr) {
+    std::string lowerStr = to_lowercase(actionStr);
+
+    if (lowerStr == cfg::MENU_BUTTON_DONATE) {
+        return app::Action::Donate;
+    }
+    if (lowerStr == cfg::MENU_BUTTON_CONFIG) {
+        return app::Action::Config;
+    }
+    if (lowerStr == cfg::MENU_BUTTON_LOCK) {
+        return app::Action::Lock;
+    }
+    if (lowerStr == cfg::MENU_BUTTON_SLEEP) {
+        return app::Action::Sleep;
+    }
+    if (lowerStr == cfg::MENU_BUTTON_RESTART) {
+        return app::Action::Restart;
+    }
+    if (lowerStr == cfg::MENU_BUTTON_SHUTDOWN) {
+        return app::Action::Shutdown;
+    }
+    return app::Action::None;  // Invalid action
+}
+}  // namespace
+
 std::wstring AppConfig::get_config_path() {
-    wchar_t exePath[MAX_PATH] = {0};
-    GetModuleFileNameW(NULL, exePath, MAX_PATH);
+    wchar_t exePath[MAX_PATH] = {};
+    GetModuleFileNameW(nullptr, exePath, MAX_PATH);
     std::wstring path(exePath);
-    auto pos = path.find_last_of(L"\\/");
+    const auto pos = path.find_last_of(L"\\/");
     if (pos != std::wstring::npos) {
         path = path.substr(0, pos + 1);
     } else {
@@ -141,103 +180,67 @@ std::wstring AppConfig::get_config_path() {
     return path;
 }
 
-// Use this in case of returning to MSVC
-std::string WStringToUtf8(const std::wstring& wstr) {
-    if (wstr.empty()) return {};
-    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), nullptr, 0,
-                                          nullptr, nullptr);
-    std::string strTo(size_needed, 0);
-    WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), &strTo[0], size_needed, nullptr,
-                        nullptr);
-    return strTo;
-}
-
-// Helper function to parse Action from string (case-insensitive)
-Action ParseActionFromString(const std::string& actionStr) {
-    std::string lowerStr = to_lowercase(actionStr);
-
-    if (lowerStr == cfg::MENU_BUTTON_DONATE) {
-        return Action::Donate;
-    }
-    if (lowerStr == cfg::MENU_BUTTON_CONFIG) {
-        return Action::Config;
-    }
-    if (lowerStr == cfg::MENU_BUTTON_LOCK) {
-        return Action::Lock;
-    }
-    if (lowerStr == cfg::MENU_BUTTON_SLEEP) {
-        return Action::Sleep;
-    }
-    if (lowerStr == cfg::MENU_BUTTON_RESTART) {
-        return Action::Restart;
-    }
-    if (lowerStr == cfg::MENU_BUTTON_SHUTDOWN) {
-        return Action::Shutdown;
-    }
-    return Action::None;  // Invalid action
-}
-
 // key and value is already lowercase
-cfg::Warning AppConfig::load_key_value(std::string& key, std::string& value) {
+warning::Code AppConfig::load_key_value(const std::string& key, const std::string& value) {
     if (key == cfg::LOWER_KEY_LANG) {
         if (value == cfg::LANG_EN) {
             this->lang = cfg::Lang::En;
-            return cfg::Warning::None;
+            return warning::Code::None;
         }
 
         if (value == cfg::LANG_ZH) {
             this->lang = cfg::Lang::Zh;
-            return cfg::Warning::None;
+            return warning::Code::None;
         }
 
-        return cfg::Warning::InvalidLanguage;
+        return warning::Code::InvalidLanguage;
     }
 
     if (key == cfg::LOWER_KEY_ACTION) {
         if (value == cfg::ACTION_NONE) {
-            this->action = Action::None;
-            return cfg::Warning::None;
+            this->action = app::Action::None;
+            return warning::Code::None;
         }
         if (value == cfg::ACTION_SLEEP) {
-            this->action = Action::Sleep;
-            return cfg::Warning::None;
+            this->action = app::Action::Sleep;
+            return warning::Code::None;
         }
         if (value == cfg::ACTION_SHUTDOWN) {
-            this->action = Action::Shutdown;
-            return cfg::Warning::None;
+            this->action = app::Action::Shutdown;
+            return warning::Code::None;
         }
         if (value == cfg::ACTION_RESTART) {
-            this->action = Action::Restart;
-            return cfg::Warning::None;
+            this->action = app::Action::Restart;
+            return warning::Code::None;
         }
         if (value == cfg::ACTION_LOCK) {
-            this->action = Action::Lock;
-            return cfg::Warning::None;
+            this->action = app::Action::Lock;
+            return warning::Code::None;
         }
-        this->action = Action::None;
-        return cfg::Warning::InvalidAction;
+        this->action = app::Action::None;
+        return warning::Code::InvalidAction;
     }
 
     if (key == cfg::LOWER_KEY_INSTRUCTION) {
         if (value == cfg::INSTRUCTION_SHOW) {
             this->instruction = cfg::Instruction::Show;
-            return cfg::Warning::None;
+            return warning::Code::None;
         }
 
         if (value == cfg::INSTRUCTION_HIDE) {
             this->instruction = cfg::Instruction::Hide;
-            return cfg::Warning::None;
+            return warning::Code::None;
         }
 
-        return cfg::Warning::InvalidInstruction;
+        return warning::Code::InvalidInstruction;
     }
 
     if (key == cfg::LOWER_KEY_MENU_BUTTONS) {
         if (value.empty()) {
-            return cfg::Warning::InvalidMenuButton;
+            return warning::Code::InvalidMenuButton;
         }
 
-        std::vector<Action> buttons;
+        std::vector<app::Action> buttons;
         std::stringstream ss(value);
         std::string item;
         bool hasInvalidItems = false;
@@ -248,39 +251,39 @@ cfg::Warning AppConfig::load_key_value(std::string& key, std::string& value) {
             item.erase(item.find_last_not_of(" \t") + 1);
 
             if (!item.empty()) {
-                Action action = ParseActionFromString(item);
-                if (action == Action::None) {
+                app::Action item_action = parse_action_from_string(item);
+                if (item_action == app::Action::None) {
                     // Invalid menu button name, mark as having invalid items
                     hasInvalidItems = true;
                     continue;
                 }
-                buttons.push_back(action);
+                buttons.push_back(item_action);
             }
         }
 
         // If no valid buttons were parsed, use default
         if (buttons.empty()) {
-            return cfg::Warning::InvalidMenuButton;
-        } else {
-            this->menu_buttons = buttons;
+            return warning::Code::InvalidMenuButton;
         }
 
+        this->menu_buttons = buttons;
+
         // Return warning if we had invalid items but some valid ones
-        return hasInvalidItems ? cfg::Warning::InvalidMenuButton : cfg::Warning::None;
+        return hasInvalidItems ? warning::Code::InvalidMenuButton : warning::Code::None;
     }
 
     if (key == cfg::LOWER_KEY_COUNTDOWN_STYLE) {
         if (value == cfg::COUNTDOWN_STYLE_NORMAL) {
             this->countdown_style = cfg::CountdownStyle::Normal;
-            return cfg::Warning::None;
+            return warning::Code::None;
         }
 
         if (value == cfg::COUNTDOWN_STYLE_STEINS_GATE) {
             this->countdown_style = cfg::CountdownStyle::SteinsGate;
-            return cfg::Warning::None;
+            return warning::Code::None;
         }
 
-        return cfg::Warning::InvalidCountdownStyle;
+        return warning::Code::InvalidCountdownStyle;
     }
 
     if (key == cfg::LOWER_KEY_DELAY) {
@@ -288,56 +291,57 @@ cfg::Warning AppConfig::load_key_value(std::string& key, std::string& value) {
             int num = std::stoi(value);
             if (num < 0) {
                 this->delay = cfg::CFG_DEFAULT_DELAY;
-                return cfg::Warning::InvalidDelay;
+                return warning::Code::InvalidDelay;
             }
             this->delay = num;
-            return cfg::Warning::None;
+            return warning::Code::None;
         } catch (...) {
             this->delay = cfg::CFG_DEFAULT_DELAY;
-            return cfg::Warning::InvalidDelay;
+            return warning::Code::InvalidDelay;
         }
     }
 
     if (key == cfg::LOWER_KEY_BACKGROUND_COLOR) {
         if (value.size() == 9 && value[0] == '#') {
             try {
-                BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
-                BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
-                BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
-                BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
+                const BYTE r = to_byte(std::stoi(value.substr(1, 2), nullptr, 16));
+                const BYTE g = to_byte(std::stoi(value.substr(3, 2), nullptr, 16));
+                const BYTE b = to_byte(std::stoi(value.substr(5, 2), nullptr, 16));
+                const BYTE a = to_byte(std::stoi(value.substr(7, 2), nullptr, 16));
                 this->background_color = Gdiplus::Color(a, r, g, b);
-                return cfg::Warning::None;
+                return warning::Code::None;
             } catch (...) {
-                return cfg::Warning::InvalidBackgroundColorValue;
+                return warning::Code::InvalidBackgroundColorValue;
             }
         }
 
         if (value.size() == 7 && value[0] == '#') {
             try {
-                BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
-                BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
-                BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
-                this->background_color = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
-                return cfg::Warning::None;
+                const BYTE r = to_byte(std::stoi(value.substr(1, 2), nullptr, 16));
+                const BYTE g = to_byte(std::stoi(value.substr(3, 2), nullptr, 16));
+                const BYTE b = to_byte(std::stoi(value.substr(5, 2), nullptr, 16));
+                this->background_color = Gdiplus::Color(color_set::DEFAULT_ALPHA, r, g, b);
+                return warning::Code::None;
             } catch (...) {
-                return cfg::Warning::InvalidBackgroundColorValue;
+                return warning::Code::InvalidBackgroundColorValue;
             }
         }
 
-        return cfg::Warning::InvalidBackgroundColorFormat;
+        return warning::Code::InvalidBackgroundColorFormat;
     }
 
-    return cfg::Warning::UnknownConfigKey;
+    return warning::Code::UnknownConfigKey;
 }
 
 void AppConfig::load() {
-    std::wstring configPathW = this->get_config_path();
-    std::string configPath = WStringToUtf8(configPathW);
+    const std::wstring configPathW = get_config_path();
+    const std::string configPath = wstring_to_utf8(configPathW);
 
     // Read config file as UTF-8
-    std::ifstream file(configPath);
+    const std::ifstream file(configPath);
     if (!file.is_open()) {
-        std::string content = IsSysLangChinese() ? DefaultConfigZh() : DefaultConfigEn();
+        const std::string content =
+            is_sys_lang_chinese() ? default_content_zh() : default_content_en();
         // std::ofstream out(configPath);
         // const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
         // out.write((const char*)bom, sizeof(bom));
@@ -347,14 +351,14 @@ void AppConfig::load() {
         return;
     }
 
-    std::string content = read_file_content(configPath);
+    const std::string content = read_file_content(configPath);
 
     // Parse config file line by line (UTF-8)
 
-    short lineNo = 0;
+    short line_no = 0;
 
-    for_each_line(content, [this, &lineNo](std::string line) {
-        lineNo++;
+    for_each_line(content, [this, &line_no](std::string line) {
+        line_no++;
         if (line.empty()) {
             return;
         }
@@ -362,17 +366,17 @@ void AppConfig::load() {
         if (line.empty() || line[0] == '#') {
             return;
         }
-        auto eq = line.find('=');
+        const auto eq = line.find('=');
         if (eq == std::string::npos) {
             return;
         }
 
-        std::string key = to_lowercase(trim(line.substr(0, eq)));
-        std::string value = to_lowercase(trim(line.substr(eq + 1)));
+        const std::string key = to_lowercase(trim(line.substr(0, eq)));
+        const std::string value = to_lowercase(trim(line.substr(eq + 1)));
 
-        auto warning = this->load_key_value(key, value);
-        if (warning != cfg::Warning::None) {
-            this->warnings.push_back({.warning = warning, .line_no = lineNo});
+        auto warning_code = this->load_key_value(key, value);
+        if (warning_code != warning::Code::None) {
+            this->warnings.emplace_back(warning_code, line_no);
         }
     });
 }

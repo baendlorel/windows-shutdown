@@ -148,34 +148,34 @@ std::wstring AppI18N::GetConfigWarningText(const std::vector<cfg::WarnInfo>& ent
         std::wstring text;
 
         switch (entry.warning) {
-            case cfg::Warning::InvalidLanguage:
+            case warning::Code::InvalidLanguage:
                 text = this->InvalidLanguage;
                 break;
-            case cfg::Warning::InvalidAction:
+            case warning::Code::InvalidAction:
                 text = this->InvalidAction;
                 break;
-            case cfg::Warning::InvalidInstruction:
+            case warning::Code::InvalidInstruction:
                 text = this->InvalidInstruction;
                 break;
-            case cfg::Warning::InvalidMenuButton:
+            case warning::Code::InvalidMenuButton:
                 text = this->InvalidMenuButton;
                 break;
-            case cfg::Warning::InvalidCountdownStyle:
+            case warning::Code::InvalidCountdownStyle:
                 text = this->InvalidCountdownStyle;
                 break;
-            case cfg::Warning::UnknownConfigKey:
+            case warning::Code::UnknownConfigKey:
                 text = this->UnknownConfigKey;
                 break;
-            case cfg::Warning::NotConfigEntry:
+            case warning::Code::NotConfigEntry:
                 text = this->NotConfigEntry;
                 break;
-            case cfg::Warning::InvalidDelay:
+            case warning::Code::InvalidDelay:
                 text = this->InvalidDelay;
                 break;
-            case cfg::Warning::InvalidBackgroundColorFormat:
+            case warning::Code::InvalidBackgroundColorFormat:
                 text = this->InvalidBackgroundColorFormat;
                 break;
-            case cfg::Warning::InvalidBackgroundColorValue:
+            case warning::Code::InvalidBackgroundColorValue:
                 text = this->InvalidBackgroundColorValue;
                 break;
             default:
