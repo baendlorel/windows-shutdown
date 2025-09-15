@@ -16,8 +16,8 @@ struct Index {
 
    public:
     void draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-        home.draw(graphics, params);
-        countdown.draw(graphics, params);
-        donate.draw(graphics, params);
+        home.update(graphics, params);
+        countdown.update(graphics, params);
+        donate.update(graphics, params);
     }
 };

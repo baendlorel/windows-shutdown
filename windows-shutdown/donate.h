@@ -8,5 +8,5 @@ class DonateView : public View {
     }
 
    private:
-    void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override;
+    void draw(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 };

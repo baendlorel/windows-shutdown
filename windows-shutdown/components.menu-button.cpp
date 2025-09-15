@@ -68,9 +68,6 @@ void MenuButton::center(const int button_count, const int index, const int w, co
     this->rect.Y = centerY + to_real(menu_button_style::MARGIN_TOP);
 }
 
-void MenuButton::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
-}
-
 bool MenuButton::mouse_hit(const int mx, const int my) {
     // x, y of the rect means center of a circle
     const int x = to_int(this->rect.X);

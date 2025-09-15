@@ -11,7 +11,7 @@
 #include "mini-ui.h"
 #include "utils.datetime.h"
 
-void CountdownView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
+void CountdownView::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     BYTE alpha = app::page.get_page_alpha(app::Page::Countdown);
     static auto& countdownStyle = app::config.countdown_style;
 

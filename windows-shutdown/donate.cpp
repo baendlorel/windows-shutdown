@@ -9,7 +9,7 @@
 
 #include "mini-ui.h"
 
-void DonateView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
+void DonateView::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     // TODO 这里要改成统一的is_invisible
     const BYTE alpha = AppPage::get_instance().get_page_alpha(app::Page::Donate);
     if (!params.rect) {

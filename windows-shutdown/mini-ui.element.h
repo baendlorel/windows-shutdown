@@ -33,21 +33,5 @@ class Element {
         return false;
     }
 
-    virtual void draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-        if (this->is_invisible()) {
-            this->deactivate();
-            return;
-        }
-
-        if (app::page.fading) {
-            this->deactivate();
-        } else {
-            this->activate();
-        }
-
-        this->draw_view(graphics, params);
-    }
-
-   protected:
-    virtual void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) = 0;
+    virtual void draw(Gdiplus::Graphics& graphics, const DrawParams& params) = 0;
 };

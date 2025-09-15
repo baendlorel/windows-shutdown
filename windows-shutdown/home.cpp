@@ -23,7 +23,7 @@ void HomeView::init_menu() {
     }
 }
 
-void HomeView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
+void HomeView::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     const BYTE alpha = app::page.get_page_alpha(this->page_);
     if (!params.rect) {
         throw std::runtime_error("rect为空");
