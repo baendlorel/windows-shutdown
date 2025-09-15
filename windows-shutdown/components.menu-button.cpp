@@ -29,7 +29,7 @@ int get_resource_id_from_action(const app::Action action) {
 }
 }  // namespace
 
-MenuButton::MenuButton(int x, int y, app::Action action)
+MenuButton::MenuButton(const int x, const int y, const app::Action action)
     : Div(app::ElementTag::Button,
           Gdiplus::RectF(to_real(x), to_real(y), to_real(MenuButtonStyle::RADIUS),
                          to_real(MenuButtonStyle::RADIUS))) {
@@ -64,7 +64,7 @@ void MenuButton::center(const int button_count, const int index, const int w, co
     this->rect.Y = centerY + to_real(MenuButtonStyle::MARGIN_TOP);
 }
 
-bool MenuButton::MouseHit(int mx, int my) {
+bool MenuButton::MouseHit(const int mx, const int my) {
     // x, y of the rect means center of a circle
     const int x = to_int(this->rect.X);
     const int y = to_int(this->rect.Y);
@@ -83,12 +83,13 @@ void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     const auto imgAttr = painter::image_attr_with_alpha(this->png, params.alpha);
 
     // where and what size to draw
-    Gdiplus::Rect rect(x, y, MenuButtonStyle::DIAMETER, MenuButtonStyle::DIAMETER);
+    const Gdiplus::Rect rect(x, y, MenuButtonStyle::DIAMETER, MenuButtonStyle::DIAMETER);
 
     // x, y, w, h cut from the source image
     // Since button images are 512x512, appState.buttons[i].png->GetWidth() is actually 512
-    graphics.DrawImage(this->png, rect, 0, 0, this->png->GetWidth(), this->png->GetHeight(),
-                       Gdiplus::UnitPixel, imgAttr.get());
+    const int w = static_cast<int>(this->png->GetWidth());
+    const int h = static_cast<int>(this->png->GetHeight());
+    graphics.DrawImage(this->png, rect, 0, 0, w, h, Gdiplus::UnitPixel, imgAttr.get());
 
     // todo 按钮高光位置有异常
     // highlight
