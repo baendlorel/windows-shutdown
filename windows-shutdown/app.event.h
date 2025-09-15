@@ -3,7 +3,7 @@
 #include "framework.h"
 #include "singleton.h"
 
-enum class EventType { MouseMove, MouseClick, KeyPress, Redraw };
+enum class EventType : unsigned char { MouseMove, MouseClick, KeyPress, Redraw };
 
 // Global event hub
 class AppEvent {
@@ -11,16 +11,15 @@ class AppEvent {
 
    private:
     // event listeners
-    std::unordered_map<EventType, std::vector<std::function<void()>>> listeners;
+    std::unordered_map<EventType, std::vector<std::function<void()>>> listeners_;
 
    public:
-    void On(EventType evt, std::function<void()> handler) {
-        this->listeners[evt].push_back(std::move(handler));
+    void on(const EventType evt, std::function<void()>& handler) {
+        this->listeners_[evt].push_back(std::move(handler));
     }
 
-    void Emit(EventType evt) {
-        auto& evtListeners = this->listeners[evt];
-        for (auto& evtListener : evtListeners) {
+    void emit(const EventType evt) {
+        for (auto& evtListener : this->listeners_[evt]) {
             evtListener();
         }
     }

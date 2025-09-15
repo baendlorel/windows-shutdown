@@ -1,5 +1,9 @@
 ﻿#pragma once
+
+// merge namespace app
 #include "consts.app.h"
+
+// app series
 #include "app.event.h"
 #include "app.config.h"
 #include "app.page.h"
@@ -11,5 +15,6 @@ inline constexpr AppEvent& event = AppEvent::GetInstance();
 inline constexpr AppConfig& config = AppConfig::GetInstance();
 inline constexpr AppState& state = AppState::GetInstance();
 inline constexpr AppPage& page = AppPage::GetInstance();
+// ReSharper disable once CppInconsistentNaming
 inline constexpr AppI18N& i18n = AppI18N::GetInstance();
 }  // namespace app

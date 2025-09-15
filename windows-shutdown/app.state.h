@@ -2,19 +2,14 @@
 #include "framework.h"
 #include "singleton.h"
 
-#include "style.fade.h"
-#include "consts.app.h"
-
 #include "app.event.h"
-#include "app.page.h"
-#include "app.config.h"
 
 class AppState {
     DELETE_COPY_AND_MOVE(AppState)
 
    private:
     AppState() {
-        AppEvent::GetInstance().On(EventType::Redraw, [this]() { this->needRedraw = true; });
+        AppEvent::GetInstance().on(EventType::Redraw, [this]() { this->needRedraw = true; });
     };
 
    public:
@@ -50,6 +45,6 @@ class AppState {
         this->mouseX = x;
         this->mouseY = y;
 
-        appEvent.Emit(EventType::MouseMove);
+        appEvent.emit(EventType::MouseMove);
     }
 };
