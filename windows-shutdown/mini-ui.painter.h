@@ -7,7 +7,7 @@ namespace painter {
 Gdiplus::Color apply_alpha(const Gdiplus::Color* color, BYTE alpha);
 
 std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(const Gdiplus::Image* image,
-                                                                const BYTE alpha);
+                                                                BYTE alpha);
 
 Gdiplus::Bitmap* text_to_bitmap(const Gdiplus::Graphics& graphics, const DrawTextParams& params);
 

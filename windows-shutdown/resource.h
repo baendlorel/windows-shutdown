@@ -1,4 +1,6 @@
-﻿//{{NO_DEPENDENCIES}}
+﻿// ReSharper disable CppClangTidyModernizeMacroToEnum
+// ReSharper disable IdentifierTypo
+//{{NO_DEPENDENCIES}}
 //
 #define IDS_APP_TITLE       103
 #define IDC_WINDOWSSHUTDOWN 109

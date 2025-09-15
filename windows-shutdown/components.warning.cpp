@@ -15,7 +15,7 @@ void draw_warning(Gdiplus::Graphics& graphics, const BYTE alpha, const Gdiplus::
 
     static Gdiplus::FontFamily fontFamily(app::i18n.FontFamilyName.c_str());
 
-    Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+    Gdiplus::Font warnFont(&fontFamily, font_style::INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
     Gdiplus::RectF warnRect(warning::DISPLAY_X, warning::DISPLAY_Y, w, h);
     painter::draw_cached_text(graphics, {.text = text,
                                          .font = &warnFont,

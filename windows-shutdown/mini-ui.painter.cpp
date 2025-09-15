@@ -43,13 +43,15 @@ void painter::draw_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams
     Gdiplus::SolidBrush brush(Gdiplus::Color(0, 0, 0, 0));
 
     // temporarily change compositing mode to SourceCopy to avoid blending multiple shadows
-    for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
-        const BYTE alpha = TEXT_SHADOW_ALPHA * params.alpha / ((radius + 1) * fade::MAX_ALPHA);
+    for (int radius = font_style::SHADOW_RADIUS; radius >= 1;
+         radius -= font_style::SHADOW_RADIUS_STEP) {
+        const BYTE alpha =
+            font_style::SHADOW_ALPHA * params.alpha / ((radius + 1) * fade::MAX_ALPHA);
         brush.SetColor(apply_alpha(params.shadow_color, alpha));
 
         for (const int i : std::views::iota(0, 16)) {
-            const float dx = SHADOW_OFFSET[i][0] * to_real(radius);
-            const float dy = SHADOW_OFFSET[i][1] * to_real(radius);
+            const float dx = font_style::SHADOW_OFFSET[i][0] * to_real(radius);
+            const float dy = font_style::SHADOW_OFFSET[i][1] * to_real(radius);
             Gdiplus::RectF rect(params.rect->X + dx, params.rect->Y + dy, params.rect->Width,
                                 params.rect->Height);
             graphics.DrawString(params.text.c_str(), -1, params.font, rect, &format, &brush);
@@ -93,8 +95,8 @@ Gdiplus::Bitmap* painter::text_to_bitmap(const Gdiplus::Graphics& graphics,
     graphics.MeasureString(params.text.c_str(), -1, params.font, measuredRect, &format, &box);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    const int bitmapWidth = to_int(box.Width) + TEXT_SHADOW_RADIUS * 2;
-    const int bitmapHeight = to_int(box.Height) + TEXT_SHADOW_RADIUS * 2;
+    const int bitmapWidth = to_int(box.Width) + font_style::SHADOW_RADIUS * 2;
+    const int bitmapHeight = to_int(box.Height) + font_style::SHADOW_RADIUS * 2;
 
     // Create new bitmap
     Gdiplus::Bitmap* bitmap = new Gdiplus::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
@@ -148,11 +150,11 @@ void painter::draw_cached_text(Gdiplus::Graphics& graphics, const DrawTextParams
     // Adjust X position according to alignment
     if (params.manual_align) {
         if (params.horizontal_align == Gdiplus::StringAlignmentCenter) {
-            drawX += (rect->Width - imageW) / 2 + TEXT_SHADOW_RADIUS;
+            drawX += (rect->Width - imageW) / 2 + font_style::SHADOW_RADIUS;
         } else if (params.horizontal_align == Gdiplus::StringAlignmentFar) {
-            drawX += rect->Width - imageW + TEXT_SHADOW_RADIUS;
+            drawX += rect->Width - imageW + font_style::SHADOW_RADIUS;
         } else if (params.horizontal_align == Gdiplus::StringAlignmentNear) {
-            drawX += -TEXT_SHADOW_RADIUS;
+            drawX += -font_style::SHADOW_RADIUS;
         }
     }
 

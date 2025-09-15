@@ -88,8 +88,8 @@ void draw_nixie_tube_clock(Gdiplus::Graphics& graphics, const BYTE alpha, const 
     float totalHeight = rect.Height;
     const bool useNativeSize = (totalWidth == 0.0f || totalHeight == 0.0f);
 
-    float digitWidth = 0.0f;
-    float digitHeight = 0.0f;
+    float digitWidth;
+    float digitHeight;
     if (useNativeSize) {
         // Use first available digit (assume all digits same size) to compute native sizes
         if (Gdiplus::Bitmap* sample = nixieBitmaps[0] ? nixieBitmaps[0] : nixieBitmaps[10]) {

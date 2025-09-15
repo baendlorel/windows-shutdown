@@ -8,17 +8,17 @@ class MenuButton : public Div {
     int res_id;
     Gdiplus::Bitmap* png;
 
-    BYTE __drawingalpha = 0;
+    BYTE debug_drawing_alpha = 0;
 
    public:
-    MenuButton(const int x, const int y, const app::Action action);
+    MenuButton(int x, int y, app::Action action);
 
    public:
-    bool mouse_hit(const int mx, const int my) override;
+    bool mouse_hit(int mx, int my) override;
     void draw(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 
     // menu buttons are centered horizontally
-    void center(const int button_count, const int index, const int w, const int h);
+    void center(int button_count, int index, int w, int h);
 
    private:
     void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override;

@@ -6,8 +6,8 @@
 #include "mini-ui.h"
 #include "components.warning.h"
 
-void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
-                         const Gdiplus::REAL h) {
+void Render::debug_draw_some_info(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
+                                  const Gdiplus::REAL h) const {
     static Gdiplus::FontFamily fontFamily(app::i18n.FontFamilyName.c_str());
     static Gdiplus::SolidBrush brush(Gdiplus::Color(255, 166, 0));
     static Gdiplus::StringFormat format;
@@ -28,19 +28,19 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
         return L"None";
     };
 
-    auto menuActive = -1;
-    auto __drawingalpha = -1;
+    auto menu_active = -1;
+    auto drawing_alpha = -1;
 
     if (!this->index->home.menu.empty()) {
-        menuActive = this->index->home.menu[0].is_active() ? 1 : 0;
-        __drawingalpha = this->index->home.menu[0].__drawingalpha;
+        menu_active = this->index->home.menu[0].is_active() ? 1 : 0;
+        drawing_alpha = this->index->home.menu[0].debug_drawing_alpha;
     }
 
     static int count = 0;
     count++;
     auto str = std::format(
         L"{}, Home:{} (menu active: {}, {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}", count,
-        app::page.get_page_alpha(app::Page::Home), menuActive, __drawingalpha,
+        app::page.get_page_alpha(app::Page::Home), menu_active, drawing_alpha,
         app::page.get_page_alpha(app::Page::Countdown), app::page.get_page_alpha(app::Page::None),
         pageName(app::page.current), pageName(app::page.next),
         (app::page.fading ? L"true" : L"false"));
@@ -67,7 +67,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gd
     }
 
     // !
-    __DrawDebug(graphics, w, h);
+    debug_draw_some_info(graphics, w, h);
 
     Gdiplus::RectF rect(0, 0, w, h);
     this->index->draw(graphics, {.alpha = fade::MAX_ALPHA, .rect = &rect});

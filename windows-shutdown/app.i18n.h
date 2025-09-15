@@ -71,7 +71,7 @@ class AppI18N {
     std::wstring Lock;
     std::wstring Waiting[3] = {L"", L"", L""};
 
-    [[nodiscard]] std::wstring wait(const app::Action type, const int seconds) const;
+    [[nodiscard]] std::wstring wait(app::Action type, int seconds) const;
 
     // zh and en uses different resource ids
     int DonateQRResourceID = 0;

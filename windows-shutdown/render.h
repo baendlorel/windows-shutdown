@@ -10,10 +10,10 @@ class Render {
    public:
     Index* index = Index::GetInstancePtr();
 
-    void draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gdiplus::REAL h);
-    void update_layered(const HWND hWnd);
+    void draw_to_memory_dc(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h);
+    void update_layered(HWND hWnd);
 
    private:
-    void __DrawDebug(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h);
-    SIZE get_wh(const HWND hWnd) const;
+    void debug_draw_some_info(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) const;
+    SIZE get_wh(HWND hWnd) const;
 };

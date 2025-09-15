@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-// merge namespace app
+// Explicitly merge namespace app
+// ReSharper disable once CppUnusedIncludeDirective
 #include "consts.app.h"
 
 // app series

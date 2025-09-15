@@ -81,7 +81,7 @@ void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     const int x = to_int(this->rect.X - menu_button_style::RADIUS);
     const int y = to_int(this->rect.Y - menu_button_style::RADIUS);
 
-    __drawingalpha = params.alpha;
+    debug_drawing_alpha = params.alpha;
 
     const auto imgAttr = painter::image_attr_with_alpha(this->png, params.alpha);
 

@@ -5,7 +5,6 @@
 #include "app.core.h"
 
 #include "controller.h"
-#include "render.h"
 #include "index.h"
 
 ATOM window::my_register_class() {
@@ -98,7 +97,7 @@ void window::handle_timer(HWND hWnd, WPARAM wParam) {
 
         if (alpha < fade::MAX_ALPHA) {
             app::page.set_alpha(alpha + step > fade::MAX_ALPHA ? fade::MAX_ALPHA : alpha + step);
-            render.UpdateLayered(hWnd);
+            render->update_layered(hWnd);
             return;
         }
 
@@ -116,7 +115,7 @@ void window::handle_timer(HWND hWnd, WPARAM wParam) {
         app::state.countdown_seconds--;
         if (app::state.countdown_seconds > 0) {
             // Redraw to update countdown
-            render.UpdateLayered(hWnd);
+            render->update_layered(hWnd);
             return;
         }
 
@@ -153,11 +152,11 @@ void window::handle_click(HWND hWnd, LPARAM lParam) {
     if (app::page.current == app::Page::Home) {
         const int mx = LOWORD(lParam);
         const int my = HIWORD(lParam);
-        for (int i = 0; i < menu.size(); ++i) {
-            if (!menu[i].mouse_hit(mx, my)) {
+        for (auto& b : menu) {
+            if (!b.mouse_hit(mx, my)) {
                 continue;
             }
-            menu[i].trigger_click(hWnd);
+            b.trigger_click(hWnd);
             return;
         }
     }
@@ -182,7 +181,7 @@ LRESULT CALLBACK window::WndProc(const HWND hWnd, const UINT message, WPARAM wPa
             handle_timer(hWnd, wParam);
             break;
         case WM_PAINT:
-            render.UpdateLayered(hWnd);
+            render->update_layered(hWnd);
             break;
         case WM_MOUSEMOVE:
             handle_mouse_move(hWnd, lParam);
@@ -194,7 +193,7 @@ LRESULT CALLBACK window::WndProc(const HWND hWnd, const UINT message, WPARAM wPa
             }
             // & after test, it is found that activate really works
             if (!app::page.fading && wParam == VK_F5) {
-                render.UpdateLayered(hWnd);
+                render->update_layered(hWnd);
             }
             break;
         case WM_RBUTTONDOWN:
@@ -211,13 +210,13 @@ LRESULT CALLBACK window::WndProc(const HWND hWnd, const UINT message, WPARAM wPa
         default:
             // mousemove -> menu button hover -> before != after -> redraw
             if (app::state.need_redraw) {
-                render.UpdateLayered(hWnd);
+                render->update_layered(hWnd);
             }
             return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     if (app::state.need_redraw) {
-        render.UpdateLayered(hWnd);
+        render->update_layered(hWnd);
     }
     return 0;
 }

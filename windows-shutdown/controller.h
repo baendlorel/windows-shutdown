@@ -7,10 +7,10 @@ void execute_restart();
 void execute_shutdown();
 void execute_sleep();
 void execute_lock();
-void execute_action(const HWND hWnd, const app::Action action);
-void start_countdown(const HWND hWnd, const app::Action action);
-void cancel_countdown(const HWND hWnd);
-void trigger_donate(const HWND hWnd);
-void trigger_config(const HWND hWnd);
-void trigger_lock(const HWND hWnd);
+void execute_action(HWND hWnd, app::Action action);
+void start_countdown(HWND hWnd, app::Action action);
+void cancel_countdown(HWND hWnd);
+void trigger_donate(HWND hWnd);
+void trigger_config(HWND hWnd);
+void trigger_lock(HWND hWnd);
 };  // namespace controller
