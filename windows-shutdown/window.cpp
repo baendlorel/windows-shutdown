@@ -8,49 +8,51 @@
 #include "render.h"
 #include "index.h"
 
-ATOM Window::MyRegisterClass() {
-    auto& appState = AppState::GetInstance();
-    WNDCLASSEXW wcex{};
-    wcex.cbSize = sizeof(WNDCLASSEX);
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc = WndProc;
-    wcex.cbClsExtra = 0;
-    wcex.cbWndExtra = 0;
-    wcex.hInstance = appState.hInst;
-    wcex.hIcon = LoadIcon(appState.hInst, MAKEINTRESOURCE(IDI_MAINICON));
-    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = nullptr;
-    wcex.lpszMenuName = nullptr;
-    wcex.lpszClassName = appState.szWindowClass;
-    wcex.hIconSm = LoadIcon(appState.hInst, MAKEINTRESOURCE(IDI_MAINICON));
-    return RegisterClassExW(&wcex);
+ATOM window::my_register_class() {
+    WNDCLASSEXW window_class_ex_w;
+    window_class_ex_w.cbSize = sizeof(WNDCLASSEX);
+    window_class_ex_w.style = CS_HREDRAW | CS_VREDRAW;
+    window_class_ex_w.lpfnWndProc = window::WndProc;
+    window_class_ex_w.cbClsExtra = 0;
+    window_class_ex_w.cbWndExtra = 0;
+    window_class_ex_w.hInstance = app::state.hInst;
+    window_class_ex_w.hIcon = LoadIcon(app::state.hInst, MAKEINTRESOURCE(IDI_MAINICON));
+    window_class_ex_w.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    window_class_ex_w.hbrBackground = nullptr;
+    window_class_ex_w.lpszMenuName = nullptr;
+    window_class_ex_w.lpszClassName = app::state.szWindowClass;
+    window_class_ex_w.hIconSm = LoadIcon(app::state.hInst, MAKEINTRESOURCE(IDI_MAINICON));
+    return RegisterClassExW(&window_class_ex_w);
 }
 
-void Window::RegisterMenuButtonClickCallback() {
+void window::register_menu_button_click_callback() {
     auto& menu = Index::GetInstance().home.menu;
-    auto& ctrl = controller;
     for (auto& button : menu) {
         switch (button.action) {
-            case Action::Donate:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.trigger_donate(hWnd); });
+            case app::Action::Donate:
+                button.OnClick(controller::trigger_donate);
                 break;
-            case Action::Config:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.trigger_config(hWnd); });
+            case app::Action::Config:
+                button.OnClick(controller::trigger_config);
                 break;
-            case Action::Lock:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.trigger_lock(hWnd); });
+            case app::Action::Lock:
+                button.OnClick(controller::trigger_lock);
                 break;
-            case Action::Sleep:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.start_countdown(hWnd, Action::Sleep); });
-                break;
-            case Action::Restart:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.start_countdown(hWnd, Action::Restart); });
-                break;
-            case Action::Shutdown:
+            case app::Action::Sleep:
                 button.OnClick(
-                    [&ctrl](HWND hWnd) { ctrl.start_countdown(hWnd, Action::Shutdown); });
+                    [](const HWND hWnd) { controller::start_countdown(hWnd, app::Action::Sleep); });
                 break;
-            case Action::None:
+            case app::Action::Restart:
+                button.OnClick([](const HWND hWnd) {
+                    controller::start_countdown(hWnd, app::Action::Restart);
+                });
+                break;
+            case app::Action::Shutdown:
+                button.OnClick([](const HWND hWnd) {
+                    controller::start_countdown(hWnd, app::Action::Shutdown);
+                });
+                break;
+            case app::Action::None:
                 // do nothing
                 break;
         }
@@ -58,15 +60,14 @@ void Window::RegisterMenuButtonClickCallback() {
 }
 
 // int nCmdShow
-BOOL Window::InitInstance(int) {
-    auto& app = App::GetInstance();
-    app.state.screenW = GetSystemMetrics(SM_CXSCREEN);
-    app.state.screenH = GetSystemMetrics(SM_CYSCREEN);
-    HWND hWnd = CreateWindowExW(WS_EX_LAYERED, app.state.szWindowClass, app.state.szTitle, WS_POPUP,
-                                0, 0, app.state.screenW, app.state.screenH, nullptr, nullptr,
-                                app.state.hInst, nullptr);
+BOOL window::init_instance(int) {
+    app::state.screen_w = GetSystemMetrics(SM_CXSCREEN);
+    app::state.screen_h = GetSystemMetrics(SM_CYSCREEN);
+    const HWND hWnd = CreateWindowExW(WS_EX_LAYERED, app::state.szWindowClass, app::state.szTitle,
+                                      WS_POPUP, 0, 0, app::state.screen_w, app::state.screen_h,
+                                      nullptr, nullptr, app::state.hInst, nullptr);
     if (!hWnd) {
-        MessageBoxW(nullptr, app.i18n.ErrCreateWindow.c_str(), app.i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrCreateWindow.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
         return FALSE;
     }
@@ -75,29 +76,28 @@ BOOL Window::InitInstance(int) {
 
     // ui
     Index::GetInstance().home.init_menu();
-    RegisterMenuButtonClickCallback();
+    register_menu_button_click_callback();
 
     // If config requests immediate action, initialize the immediate action
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
-    if (app.config.IsImmediate()) {
-        controller.start_countdown(hWnd, app.config.action);
+    if (app::config.is_immediate()) {
+        controller::start_countdown(hWnd, app::config.action);
     } else {
-        app.page.Start(Page::Home, hWnd);
+        app::page.start(app::Page::Home, hWnd);
     }
     return TRUE;
 }
 
-void Window::HandleTimer(HWND hWnd, WPARAM wParam) {
-    static auto& app = App::GetInstance();
-    auto alpha = app.page.alpha;
+void window::handle_timer(HWND hWnd, WPARAM wParam) {
+    const auto alpha = app::page.alpha;
 
     if (wParam == fade::TIMER_ID) {
-        int steps = fade::DURATION / fade::FRAME_TIME;
-        BYTE step = (fade::MAX_ALPHA + steps - 1) / steps;
+        constexpr int steps = fade::DURATION / fade::FRAME_TIME;
+        constexpr BYTE step = (fade::MAX_ALPHA + steps - 1) / steps;
 
         if (alpha < fade::MAX_ALPHA) {
-            app.page.SetAlpha((alpha + step > fade::MAX_ALPHA) ? fade::MAX_ALPHA : alpha + step);
+            app::page.set_alpha(alpha + step > fade::MAX_ALPHA ? fade::MAX_ALPHA : alpha + step);
             render.UpdateLayered(hWnd);
             return;
         }
@@ -105,58 +105,54 @@ void Window::HandleTimer(HWND hWnd, WPARAM wParam) {
         KillTimer(hWnd, fade::TIMER_ID);
 
         // If fading out to close, close now
-        if (app.page.current == Page::None) {
+        if (app::page.current == app::Page::None) {
             DestroyWindow(hWnd);
             return;
         }
         return;
     }
 
-    if (wParam == COUNTDOWN_TIMER_ID && app.state.isCountingDown()) {
-        app.state.countdownSeconds--;
-        if (app.state.countdownSeconds > 0) {
+    if (wParam == app::COUNTDOWN_TIMER_ID && app::state.is_counting_down()) {
+        app::state.countdown_seconds--;
+        if (app::state.countdown_seconds > 0) {
             // Redraw to update countdown
             render.UpdateLayered(hWnd);
             return;
         }
 
-        controller.cancel_countdown(hWnd);
-        controller.execute_action(hWnd, app.state.action);
-        return;
+        controller::cancel_countdown(hWnd);
+        controller::execute_action(hWnd, app::state.action);
     }
 }
 
-void Window::HandleCancel(HWND hWnd) {
-    static auto& app = App::GetInstance();
-    if (app.state.isCountingDown()) {
-        controller.cancel_countdown(hWnd);
+void window::handle_cancel(HWND hWnd) {
+    if (app::state.is_counting_down()) {
+        controller::cancel_countdown(hWnd);
         return;
     }
 
-    if (app.page.current == Page::Home) {
-        app.page.Start(Page::None, hWnd);
+    if (app::page.current == app::Page::Home) {
+        app::page.start(app::Page::None, hWnd);
     } else {
-        app.page.Start(Page::Home, hWnd);
+        app::page.start(app::Page::Home, hWnd);
     }
 }
 
-void Window::HandleMoustMove(HWND hWnd, LPARAM lParam) {
-    static auto& app = App::GetInstance();
-    app.state.SetMousePos(LOWORD(lParam), HIWORD(lParam));
+void window::handle_mouse_move(HWND hWnd, LPARAM lParam) {
+    app::state.set_mouse_pos(LOWORD(lParam), HIWORD(lParam));
 }
 
-void Window::HandleClick(HWND hWnd, LPARAM lParam) {
-    static auto& app = App::GetInstance();
+void window::handle_click(HWND hWnd, LPARAM lParam) {
     static auto& menu = Index::GetInstance().home.menu;
-    if (app.state.isCountingDown()) {
-        controller.cancel_countdown(hWnd);
+    if (app::state.is_counting_down()) {
+        controller::cancel_countdown(hWnd);
         return;
     }
 
     // if clicked, return after handling
-    if (app.page.current == Page::Home) {
-        int mx = LOWORD(lParam);
-        int my = HIWORD(lParam);
+    if (app::page.current == app::Page::Home) {
+        const int mx = LOWORD(lParam);
+        const int my = HIWORD(lParam);
         for (int i = 0; i < menu.size(); ++i) {
             if (!menu[i].MouseHit(mx, my)) {
                 continue;
@@ -167,63 +163,60 @@ void Window::HandleClick(HWND hWnd, LPARAM lParam) {
     }
 
     // If not clicking on any button, return to main page or exit
-    HandleCancel(hWnd);
+    handle_cancel(hWnd);
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    static auto& app = App::GetInstance();
-    static auto& window = Window::GetInstance();
-    static auto& render = Render::GetInstance();
-
+LRESULT CALLBACK window::WndProc(const HWND hWnd, const UINT message, WPARAM wParam,
+                                 LPARAM lParam) {
     switch (message) {
         case WM_CLOSE:
             // Treat close like pressing Esc: if on Home start fade-out to close,
             // otherwise navigate back to Home. This lets taskbar "Close" actually
             // begin the shutdown/fade-out sequence instead of only cancelling.
-            window.HandleCancel(hWnd);
+            handle_cancel(hWnd);
             break;
         case WM_DESTROY:
             PostQuitMessage(0);
             break;
         case WM_TIMER:
-            window.HandleTimer(hWnd, wParam);
+            handle_timer(hWnd, wParam);
             break;
         case WM_PAINT:
             render.UpdateLayered(hWnd);
             break;
         case WM_MOUSEMOVE:
-            window.HandleMoustMove(hWnd, lParam);
+            handle_mouse_move(hWnd, lParam);
             break;
         case WM_KEYDOWN:
             // Must not be fading
-            if (!app.page.fading && wParam == VK_ESCAPE) {
-                window.HandleCancel(hWnd);
+            if (!app::page.fading && wParam == VK_ESCAPE) {
+                handle_cancel(hWnd);
             }
             // & after test, it is found that activate really works
-            if (!app.page.fading && wParam == VK_F5) {
+            if (!app::page.fading && wParam == VK_F5) {
                 render.UpdateLayered(hWnd);
             }
             break;
         case WM_RBUTTONDOWN:
             // Must not be fading
-            if (!app.page.fading) {
-                window.HandleCancel(hWnd);
+            if (!app::page.fading) {
+                handle_cancel(hWnd);
             }
             break;
         case WM_LBUTTONDOWN:
-            if (!app.page.fading) {
-                window.HandleClick(hWnd, lParam);
+            if (!app::page.fading) {
+                handle_click(hWnd, lParam);
             }
             break;
         default:
-            // mousemove -> menubuttonhover -> before != after -> redraw
-            if (app.state.needRedraw) {
+            // mousemove -> menu button hover -> before != after -> redraw
+            if (app::state.need_redraw) {
                 render.UpdateLayered(hWnd);
             }
             return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
-    if (app.state.needRedraw) {
+    if (app::state.need_redraw) {
         render.UpdateLayered(hWnd);
     }
     return 0;

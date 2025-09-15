@@ -1,24 +1,16 @@
 ﻿#pragma once
 #include "framework.h"
-#include "singleton.h"
-#include "controller.h"
-#include "render.h"
 
-class Window {
-    SINGLETON(Window)
+namespace window {
 
-   public:
-    controller& controller = Controller::GetInstance();
-    Render& render = Render::GetInstance();
+ATOM my_register_class();
+void register_menu_button_click_callback();
+BOOL init_instance(int nCmdShow);
+void handle_timer(HWND hWnd, WPARAM wParam);
+void handle_cancel(HWND hWnd);
+void handle_mouse_move(HWND hWnd, LPARAM lParam);
+void handle_click(HWND hWnd, LPARAM lParam);
 
-   public:
-    ATOM MyRegisterClass();
-    void RegisterMenuButtonClickCallback();
-    BOOL InitInstance(int nCmdShow);
-    void HandleTimer(HWND hWnd, WPARAM wParam);
-    void HandleCancel(HWND hWnd);
-    void HandleMoustMove(HWND hWnd, LPARAM lParam);
-    void HandleClick(HWND hWnd, LPARAM lParam);
-};
-
+// ReSharper disable once CppInconsistentNaming
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+};  // namespace window
