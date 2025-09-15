@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "framework.h"
-#include "singleton.h"
+#include "utils.class.h"
 
 #include "home.h"
 #include "donate.h"

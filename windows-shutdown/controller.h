@@ -1,7 +1,5 @@
 ﻿#pragma once
 #include "framework.h"
-#include "singleton.h"
-#include "app.core.h"
 #include "consts.app.h"
 
 namespace controller {

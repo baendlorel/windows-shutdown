@@ -1,37 +1,44 @@
 ﻿#pragma once
+#include "utils.class.h"
 #include "mini-ui.core.h"
 #include "mini-ui.element.h"
+#include "realify.h"
 
 class Div : public Element {
-   protected:
-    App& app = App::GetInstance();
-    color_set& colors = color_set::GetInstance();
+    NO_COPY_DEFAULT_MOVE(Div)
 
    public:
-    Div(ElementTag tag, const Gdiplus::RectF& rect) : tag(tag), rect(rect) {};
-    virtual ~Div() = default;
+    Div(const app::ElementTag tag, const Gdiplus::RectF& rect) : tag(tag), rect(rect) {
+    }
+
+    ~Div() override = default;
 
    private:
-    std::function<void(HWND)> onClickCallback;
+    std::function<void(HWND)> on_click_callback_;
 
    public:
-    ElementTag tag;
+    app::ElementTag tag;
     Gdiplus::RectF rect;  // Position and size
     bool hovered = false;
 
-    virtual bool MouseHit(int mx, int my) {
+    virtual bool mouse_hit(const int mx, const int my) {
+        const float rx = to_real(mx);
+        const float ry = to_real(my);
         this->hovered =
-            mx >= rect.X && mx <= rect.Y && my >= rect.GetTop() && my <= rect.GetBottom();
+            rx >= rect.X && rx <= rect.Y && ry >= rect.GetTop() && ry <= rect.GetBottom();
         return this->hovered;
     }
 
-    void OnClick(std::function<void(HWND)> cb) {
-        this->onClickCallback = std::move(cb);
+    void on_click(std::function<void(HWND)> cb) {
+        this->on_click_callback_ = std::move(cb);
     }
 
-    void TriggerClick(HWND hwnd) {
-        if (this->onClickCallback && this->active_) {
-            this->onClickCallback(hwnd);
+    void trigger_click(const HWND hwnd) const {
+        if (this->on_click_callback_ && this->active_) {
+            this->on_click_callback_(hwnd);
         }
     }
+
+   protected:
+    void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 };

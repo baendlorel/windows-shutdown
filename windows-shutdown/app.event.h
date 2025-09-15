@@ -3,7 +3,7 @@
 
 #include "consts.app.h"
 #include "framework.h"
-#include "singleton.h"
+#include "utils.class.h"
 
 // Global event hub
 class AppEvent {

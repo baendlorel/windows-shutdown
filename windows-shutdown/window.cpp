@@ -30,25 +30,25 @@ void window::register_menu_button_click_callback() {
     for (auto& button : menu) {
         switch (button.action) {
             case app::Action::Donate:
-                button.OnClick(controller::trigger_donate);
+                button.on_click(controller::trigger_donate);
                 break;
             case app::Action::Config:
-                button.OnClick(controller::trigger_config);
+                button.on_click(controller::trigger_config);
                 break;
             case app::Action::Lock:
-                button.OnClick(controller::trigger_lock);
+                button.on_click(controller::trigger_lock);
                 break;
             case app::Action::Sleep:
-                button.OnClick(
+                button.on_click(
                     [](const HWND hWnd) { controller::start_countdown(hWnd, app::Action::Sleep); });
                 break;
             case app::Action::Restart:
-                button.OnClick([](const HWND hWnd) {
+                button.on_click([](const HWND hWnd) {
                     controller::start_countdown(hWnd, app::Action::Restart);
                 });
                 break;
             case app::Action::Shutdown:
-                button.OnClick([](const HWND hWnd) {
+                button.on_click([](const HWND hWnd) {
                     controller::start_countdown(hWnd, app::Action::Shutdown);
                 });
                 break;
@@ -154,10 +154,10 @@ void window::handle_click(HWND hWnd, LPARAM lParam) {
         const int mx = LOWORD(lParam);
         const int my = HIWORD(lParam);
         for (int i = 0; i < menu.size(); ++i) {
-            if (!menu[i].MouseHit(mx, my)) {
+            if (!menu[i].mouse_hit(mx, my)) {
                 continue;
             }
-            menu[i].TriggerClick(hWnd);
+            menu[i].trigger_click(hWnd);
             return;
         }
     }

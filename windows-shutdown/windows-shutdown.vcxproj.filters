@@ -130,7 +130,7 @@
     <ClInclude Include="resource.h">
       <Filter>resource</Filter>
     </ClInclude>
-    <ClInclude Include="singleton.h">
+    <ClInclude Include="utils.class.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="app.core.h">

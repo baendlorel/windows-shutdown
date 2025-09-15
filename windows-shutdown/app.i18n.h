@@ -6,7 +6,7 @@
 #include "consts.app.h"
 #include "consts.config.h"
 #include "consts.warning.h"
-#include "singleton.h"
+#include "utils.class.h"
 
 #define EN_SHUTDOWN L"shutdown"
 #define EN_SLEEP    L"sleep"

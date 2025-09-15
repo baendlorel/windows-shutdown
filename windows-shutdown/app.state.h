@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "framework.h"
-#include "singleton.h"
+#include "utils.class.h"
 
 #include "app.event.h"
 
@@ -29,7 +29,7 @@ class AppState {
 
     // actions
     app::Action action = app::Action::None;
-    int countdown_seconds = 0;
+    short countdown_seconds = 0;
 
     // ui
     // ReSharper disable once CppInconsistentNaming

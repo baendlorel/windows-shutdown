@@ -1,20 +1,23 @@
 ﻿#pragma once
+#include "utils.class.h"
 #include "mini-ui.core.h"
 #include "mini-ui.element.h"
 
 class View : public Element {
+    NO_COPY_DEFAULT_MOVE(View)
+
    protected:
     // Page identifier
-    Page page_ = Page::None;
+    app::Page page_ = app::Page::None;
 
    public:
-    View(const Page page) : page_(page) {
+    explicit View(const app::Page page) : page_(page) {
     }
 
-    virtual ~View() = default;
+    ~View() override = default;
 
    public:
-    bool is_invisible() const override {
-        return app_.page.GetPageAlpha(this->page_) == 0;
+    [[nodiscard]] bool is_invisible() const override {
+        return app::page.get_page_alpha(this->page_) == 0;
     }
 };

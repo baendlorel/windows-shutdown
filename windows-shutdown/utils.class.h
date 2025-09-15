@@ -1,4 +1,13 @@
-﻿#pragma once
+﻿// ReSharper disable CppClangTidyClangDiagnosticUnusedMacros
+// ReSharper disable CppClangTidyBugproneMacroParentheses
+#pragma once
+
+#define NO_COPY_DEFAULT_MOVE(ClassName)               \
+   public:                                            \
+    ClassName(const ClassName &) = delete;            \
+    ClassName &operator=(const ClassName &) = delete; \
+    ClassName(ClassName &&) noexcept = default;       \
+    ClassName &operator=(ClassName &&) noexcept = default;
 
 #define SINGLETON(ClassName)                          \
    public:                                            \

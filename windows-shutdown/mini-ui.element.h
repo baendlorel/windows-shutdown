@@ -1,20 +1,16 @@
 ﻿#pragma once
+#include "utils.class.h"
 #include "mini-ui.core.h"
 
 class Element {
+    NO_COPY_DEFAULT_MOVE(Element)
+
    public:
     Element() = default;
 
-    Element(const Element&) = delete;
-    Element& operator=(const Element&) = delete;
-    Element(Element&&) noexcept = default;
-    Element& operator=(Element&&) noexcept = default;
     virtual ~Element() = default;
 
    protected:
-    App* app_ = App::GetInstance();
-    color_set* colors_ = color_set::GetInstance();
-
     // when alpha is MAX_ALPHA, active state is true
     bool active_ = false;
 
@@ -43,7 +39,7 @@ class Element {
             return;
         }
 
-        if (app_.page.fading) {
+        if (app::page.fading) {
             this->deactivate();
         } else {
             this->activate();

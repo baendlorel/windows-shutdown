@@ -37,18 +37,18 @@ MenuButton::MenuButton(const int x, const int y, const app::Action action)
     this->action = action;
 
     this->res_id = get_resource_id_from_action(action);
-    this->png = load_bitmap_by_resource_id(app.state.hInst, this->res_id);
+    this->png = load_bitmap_by_resource_id(app::state.hInst, this->res_id);
 
-    app.event.On(EventType::MouseMove, [this]() {
+    app::event.on(app::EventType::MouseMove, [this]() {
         if (!this->active_) {
             return;
         }
 
         // highlight changed
         bool before = this->hovered;
-        bool after = this->MouseHit(app.state.mouseX, app.state.mouseY);
+        bool after = this->mouse_hit(app::state.mouse_x, app::state.mouse_y);
         if (before != after) {
-            app.event.Emit(EventType::Redraw);
+            app::event.emit(app::EventType::Redraw);
         }
     });
 }
@@ -64,7 +64,10 @@ void MenuButton::center(const int button_count, const int index, const int w, co
     this->rect.Y = centerY + to_real(MenuButtonStyle::MARGIN_TOP);
 }
 
-bool MenuButton::MouseHit(const int mx, const int my) {
+void MenuButton::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
+}
+
+bool MenuButton::mouse_hit(const int mx, const int my) {
     // x, y of the rect means center of a circle
     const int x = to_int(this->rect.X);
     const int y = to_int(this->rect.Y);
@@ -93,11 +96,11 @@ void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
 
     // todo 按钮高光位置有异常
     // highlight
-    if (const bool isHit = this->MouseHit(app.state.mouseX, app.state.mouseY); !isHit) {
+    if (const bool isHit = this->mouse_hit(app::state.mouse_x, app::state.mouse_y); !isHit) {
         return;
     }
 
-    const Gdiplus::Color blended(painter::apply_alpha(&colors.button_highlight, params.alpha));
+    const Gdiplus::Color blended(painter::apply_alpha(&color_set::BUTTON_HIGHLIGHT, params.alpha));
     const Gdiplus::SolidBrush highlightBrush(blended);
     graphics.FillEllipse(&highlightBrush, x + MenuButtonStyle::SHADOW_WIDTH,
                          y + MenuButtonStyle::SHADOW_WIDTH,

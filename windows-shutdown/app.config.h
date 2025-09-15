@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "framework.h"
-#include "singleton.h"
+#include "utils.class.h"
 
 #include "consts.config.h"
 #include "consts.app.h"
