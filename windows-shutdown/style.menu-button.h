@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 // menu buttons
-namespace MenuButtonStyle {
+namespace menu_button_style {
 
 // radius of the button
 inline constexpr int RADIUS = 80;
@@ -22,4 +22,4 @@ inline constexpr int MARGIN_TOP = -60;
 inline constexpr int MARGIN_BOTTOM = 45;
 inline constexpr int CENTER_DIST = 2 * RADIUS + GAP;
 
-}  // namespace MenuButtonStyle
+}  // namespace menu_button_style

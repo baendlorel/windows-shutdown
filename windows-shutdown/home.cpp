@@ -3,31 +3,27 @@
 #include <stdexcept>
 
 #include "style.menu-button.h"
-#include "realify.h"
 
 #include "components.instruction.h"
 #include "components.menu-button.h"
-
-HomeView::HomeView() : View(Page::Home) {
-}
 
 void HomeView::init_menu() {
     // Clear existing buttons
     this->menu.clear();
 
     // Define the actions for the buttons
-    auto& actions = this->app_.config.menu_buttons;
+    auto& actions = app::config.menu_buttons;
 
     // Create and position buttons
     const int button_count = static_cast<int>(actions.size());
     for (int i = 0; i < button_count; ++i) {
         this->menu.emplace_back(0, 0, actions[i]);
-        this->menu[i].center(button_count, i, app_.state.screenW, app_.state.screenH);
+        this->menu[i].center(button_count, i, app::state.screen_w, app::state.screen_h);
     }
 }
 
 void HomeView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
-    const BYTE alpha = app_.page.GetPageAlpha(this->page_);
+    const BYTE alpha = app::page.get_page_alpha(this->page_);
     if (!params.rect) {
         throw std::runtime_error("rect为空");
     }
@@ -37,8 +33,8 @@ void HomeView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) 
 
     // Draw image buttons (original logic)
     for (auto& b : this->menu) {
-        int x = to_int(b.rect.X - MenuButtonStyle::RADIUS);
-        int y = to_int(b.rect.Y - MenuButtonStyle::RADIUS);
+        // int x = to_int(b.rect.X - menu_button_style::RADIUS);
+        // int y = to_int(b.rect.Y - menu_button_style::RADIUS);
 
         // where and what size to draw
         b.draw(graphics, {.alpha = alpha});
@@ -46,11 +42,11 @@ void HomeView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) 
 
     // Draw exit instruction below buttons
     static Gdiplus::RectF instr_rect(0,
-                                     h * 0.5f + MenuButtonStyle::RADIUS +
-                                         MenuButtonStyle::MARGIN_TOP +
-                                         MenuButtonStyle::MARGIN_BOTTOM,
+                                     h * 0.5f + menu_button_style::RADIUS +
+                                         menu_button_style::MARGIN_TOP +
+                                         menu_button_style::MARGIN_BOTTOM,
                                      w, h);
-    draw_instruction(graphics, alpha, &instr_rect, app_.i18n.PressAnyKeyToExit);
+    draw_instruction(graphics, alpha, &instr_rect, app::i18n.PressAnyKeyToExit);
 }
 
 void HomeView::activate() {
