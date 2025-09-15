@@ -70,7 +70,7 @@
     <ClInclude Include="utils.string.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="bitmap-loader.h">
+    <ClInclude Include="utils.bitmap-loader.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="app.i18n.h">
@@ -82,7 +82,7 @@
     <ClInclude Include="app.config.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="dtm.h">
+    <ClInclude Include="utils.datetime.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="window.h">
@@ -162,7 +162,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bitmap-loader.cpp">
+    <ClCompile Include="utils.bitmap-loader.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="app.i18n.cpp">
@@ -207,7 +207,7 @@
     <ClCompile Include="home.cpp">
       <Filter>src\ui\views</Filter>
     </ClCompile>
-    <ClCompile Include="dtm.cpp">
+    <ClCompile Include="utils.datetime.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="utils.string.cpp">

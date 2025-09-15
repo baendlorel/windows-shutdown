@@ -24,7 +24,7 @@
     <ClInclude Include="index.h" />
     <ClInclude Include="app.page.h" />
     <ClInclude Include="app.state.h" />
-    <ClInclude Include="bitmap-loader.h" />
+    <ClInclude Include="utils.bitmap-loader.h" />
     <ClInclude Include="app.config.h" />
     <ClInclude Include="mini-ui.div.h" />
     <ClInclude Include="mini-ui.element.h" />
@@ -38,7 +38,7 @@
     <ClInclude Include="controller.h" />
     <ClInclude Include="countdown.h" />
     <ClInclude Include="donate.h" />
-    <ClInclude Include="dtm.h" />
+    <ClInclude Include="utils.datetime.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="home.h" />
     <ClInclude Include="app.i18n.h" />
@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="app.event.h" />
-    <ClCompile Include="bitmap-loader.cpp" />
+    <ClCompile Include="utils.bitmap-loader.cpp" />
     <ClCompile Include="components.instruction.cpp" />
     <ClCompile Include="components.menu-button.cpp" />
     <ClCompile Include="components.nixie-tube-clock.cpp" />
@@ -67,7 +67,7 @@
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="countdown.cpp" />
     <ClCompile Include="donate.cpp" />
-    <ClCompile Include="dtm.cpp" />
+    <ClCompile Include="utils.datetime.cpp" />
     <ClCompile Include="home.cpp" />
     <ClCompile Include="app.i18n.cpp" />
     <ClCompile Include="mini-ui.view.h" />

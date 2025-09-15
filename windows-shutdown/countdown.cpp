@@ -9,7 +9,7 @@
 #include "style.font.h"
 
 #include "mini-ui.h"
-#include "dtm.h"
+#include "utils.datetime.h"
 
 void CountdownView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
     BYTE alpha = app::page.get_page_alpha(app::Page::Countdown);

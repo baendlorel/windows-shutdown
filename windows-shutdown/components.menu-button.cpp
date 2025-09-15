@@ -4,7 +4,7 @@
 #include "realify.h"
 
 #include "style.menu-button.h"
-#include "bitmap-loader.h"
+#include "utils.bitmap-loader.h"
 
 // Helper function to get resource ID from Action
 namespace {

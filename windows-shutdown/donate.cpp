@@ -5,7 +5,7 @@
 #include "style.font.h"
 #include "style.color.h"
 #include "realify.h"
-#include "bitmap-loader.h"
+#include "utils.bitmap-loader.h"
 
 #include "mini-ui.h"
 

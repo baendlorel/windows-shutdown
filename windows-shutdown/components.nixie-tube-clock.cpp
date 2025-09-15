@@ -1,7 +1,7 @@
 ﻿#include "components.nixie-tube-clock.h"
 
 #include "resource.h"
-#include "bitmap-loader.h"
+#include "utils.bitmap-loader.h"
 #include "app.core.h"
 #include "realify.h"
 
