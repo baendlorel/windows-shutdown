@@ -12,21 +12,20 @@ void draw_instruction(Gdiplus::Graphics& graphics, const BYTE alpha, Gdiplus::Re
     if (alpha == 0) {
         return;
     }
-    static auto& app = App::GetInstance();
-    static bool showInstruction = app.config.instruction == CFG::Instruction::Show;
+    static bool showInstruction = app::config.instruction == CFG::Instruction::Show;
 
-    static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
+    static Gdiplus::FontFamily fontFamily(app::i18n.FontFamilyName.c_str());
     static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
 
     if (!showInstruction) {
         return;
     }
 
-    DrawCachedUIText(graphics, {.text = text,
-                                .font = &font,
-                                .rect = rect,
-                                .horizontal_align = Gdiplus::StringAlignmentCenter,
-                                .alpha = alpha,
-                                .color = &ColorSet::TEXT_LIGHT,
-                                .shadow_color = &ColorSet::TEXT_SHADOW});
+    painter::draw_cached_text(graphics, {.text = text,
+                                         .font = &font,
+                                         .rect = rect,
+                                         .horizontal_align = Gdiplus::StringAlignmentCenter,
+                                         .alpha = alpha,
+                                         .color = &ColorSet::TEXT_LIGHT,
+                                         .shadow_color = &ColorSet::TEXT_SHADOW});
 }
