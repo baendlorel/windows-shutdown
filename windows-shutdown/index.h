@@ -15,9 +15,9 @@ struct Index {
     CountdownView countdown;
 
    public:
-    void Draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-        home.D2DERR_BITMAP_CANNOT_DRAWraw(graphics, params);
-        countdown.D2DERR_BITMAP_CANNOT_DRAWraw(graphics, params);
-        donate.D2DERR_BITMAP_CANNOT_DRAWraw(graphics, params);
+    void draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
+        home.draw(graphics, params);
+        countdown.draw(graphics, params);
+        donate.draw(graphics, params);
     }
 };

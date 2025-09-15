@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "framework.h"
 #include "utils.class.h"
-#include "app.core.h"
 
 #include "index.h"
 

@@ -24,7 +24,7 @@ class AppConfig {
     cfg::CountdownStyle countdown_style = cfg::CountdownStyle::SteinsGate;
     int delay = cfg::CFG_DEFAULT_DELAY;
     Gdiplus::Color background_color = color_set::BACKGROUND;
-    std::vector<warning::Code> warnings;
+    std::vector<warning::Info> warnings;
 
    public:
     void load();

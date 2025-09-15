@@ -13,7 +13,7 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
     static Gdiplus::StringFormat format;
     static const Gdiplus::RectF rect(w - 900, 20, w, h);
     static const Gdiplus::Font font =
-        Gdiplus::Font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
+        Gdiplus::Font(&fontFamily, font_style::INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
     auto pageName = [](const app::Page p) -> const wchar_t* {
         switch (p) {
             case app::Page::None:
@@ -25,12 +25,13 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
             case app::Page::Donate:
                 return L"Donate";
         }
+        return L"None";
     };
 
     auto menuActive = -1;
     auto __drawingalpha = -1;
 
-    if (this->index->home.menu.size() > 0) {
+    if (!this->index->home.menu.empty()) {
         menuActive = this->index->home.menu[0].is_active() ? 1 : 0;
         __drawingalpha = this->index->home.menu[0].__drawingalpha;
     }
@@ -48,11 +49,12 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
 }
 
 void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gdiplus::REAL h) {
-    static auto warningWStr = app::i18n.GetConfigWarningText(app::config.warnings);
+    static auto warningWStr = app::i18n.get_config_warning_text(app::config.warnings);
     static Gdiplus::Color baseBgColor = app::config.background_color;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(apply_alpha(&baseBgColor, app::page.get_background_alpha()));
+    Gdiplus::SolidBrush bgBrush(
+        painter::apply_alpha(&baseBgColor, app::page.get_background_alpha()));
 
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -68,7 +70,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gd
     __DrawDebug(graphics, w, h);
 
     Gdiplus::RectF rect(0, 0, w, h);
-    this->index->Draw(graphics, {.rect = &rect});
+    this->index->draw(graphics, {.alpha = fade::MAX_ALPHA, .rect = &rect});
 }
 
 // Here we do not use appState.screenW/H.
