@@ -8,7 +8,7 @@ class Window {
     SINGLETON(Window)
 
    public:
-    Controller& controller = Controller::GetInstance();
+    controller& controller = Controller::GetInstance();
     Render& render = Render::GetInstance();
 
    public:

@@ -32,22 +32,23 @@ void Window::RegisterMenuButtonClickCallback() {
     for (auto& button : menu) {
         switch (button.action) {
             case Action::Donate:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.TriggerDonate(hWnd); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.trigger_donate(hWnd); });
                 break;
             case Action::Config:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.TriggerConfig(hWnd); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.trigger_config(hWnd); });
                 break;
             case Action::Lock:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.TriggerLock(hWnd); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.trigger_lock(hWnd); });
                 break;
             case Action::Sleep:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.StartCountdown(hWnd, Action::Sleep); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.start_countdown(hWnd, Action::Sleep); });
                 break;
             case Action::Restart:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.StartCountdown(hWnd, Action::Restart); });
+                button.OnClick([&ctrl](HWND hWnd) { ctrl.start_countdown(hWnd, Action::Restart); });
                 break;
             case Action::Shutdown:
-                button.OnClick([&ctrl](HWND hWnd) { ctrl.StartCountdown(hWnd, Action::Shutdown); });
+                button.OnClick(
+                    [&ctrl](HWND hWnd) { ctrl.start_countdown(hWnd, Action::Shutdown); });
                 break;
             case Action::None:
                 // do nothing
@@ -80,7 +81,7 @@ BOOL Window::InitInstance(int) {
     // state before starting the fade-in so the first drawn frame shows the
     // countdown UI instead of the main menu.
     if (app.config.IsImmediate()) {
-        controller.StartCountdown(hWnd, app.config.action);
+        controller.start_countdown(hWnd, app.config.action);
     } else {
         app.page.Start(Page::Home, hWnd);
     }
@@ -119,8 +120,8 @@ void Window::HandleTimer(HWND hWnd, WPARAM wParam) {
             return;
         }
 
-        controller.CancelCountdown(hWnd);
-        controller.ExecuteAction(hWnd, app.state.action);
+        controller.cancel_countdown(hWnd);
+        controller.execute_action(hWnd, app.state.action);
         return;
     }
 }
@@ -128,7 +129,7 @@ void Window::HandleTimer(HWND hWnd, WPARAM wParam) {
 void Window::HandleCancel(HWND hWnd) {
     static auto& app = App::GetInstance();
     if (app.state.isCountingDown()) {
-        controller.CancelCountdown(hWnd);
+        controller.cancel_countdown(hWnd);
         return;
     }
 
@@ -148,7 +149,7 @@ void Window::HandleClick(HWND hWnd, LPARAM lParam) {
     static auto& app = App::GetInstance();
     static auto& menu = Index::GetInstance().home.menu;
     if (app.state.isCountingDown()) {
-        controller.CancelCountdown(hWnd);
+        controller.cancel_countdown(hWnd);
         return;
     }
 

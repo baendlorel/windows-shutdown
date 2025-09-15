@@ -2,22 +2,17 @@
 #include "framework.h"
 #include "singleton.h"
 #include "app.core.h"
+#include "consts.app.h"
 
-class Controller {
-    SINGLETON(Controller)
-
-   private:
-    App& app = App::GetInstance();
-
-   public:
-    void ExecuteRestart();
-    void ExecuteShutdown();
-    void ExecuteSleep();
-    void ExecuteLock();
-    void ExecuteAction(HWND hWnd, Action action);
-    void StartCountdown(HWND hWnd, Action action);
-    void CancelCountdown(HWND hWnd);
-    void TriggerDonate(HWND hWnd);
-    void TriggerConfig(HWND hWnd);
-    void TriggerLock(HWND hWnd);
-};
+namespace controller {
+void execute_restart();
+void execute_shutdown();
+void execute_sleep();
+void execute_lock();
+void execute_action(const HWND hWnd, const app::Action action);
+void start_countdown(const HWND hWnd, const app::Action action);
+void cancel_countdown(const HWND hWnd);
+void trigger_donate(const HWND hWnd);
+void trigger_config(const HWND hWnd);
+void trigger_lock(const HWND hWnd);
+};  // namespace controller

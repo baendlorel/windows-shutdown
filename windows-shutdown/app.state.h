@@ -29,7 +29,7 @@ class AppState {
 
     // actions
     app::Action action = app::Action::None;
-    short countdown_seconds = 0;
+    int countdown_seconds = 0;
 
     // ui
     // ReSharper disable once CppInconsistentNaming

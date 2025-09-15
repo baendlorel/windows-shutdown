@@ -4,19 +4,17 @@
 #include <shellapi.h>
 #pragma comment(lib, "PowrProf.lib")
 
-#include "consts.app.h"
-
-void Controller::ExecuteRestart() {
+void controller::execute_restart() {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-        MessageBoxW(nullptr, app.i18n.ErrGetProcessTokenRestart.c_str(), app.i18n.ErrTitle.c_str(),
-                    MB_ICONERROR);
+        MessageBoxW(nullptr, app::i18n.ErrGetProcessTokenRestart.c_str(),
+                    app::i18n.ErrTitle.c_str(), MB_ICONERROR);
         return;
     }
     if (!LookupPrivilegeValue(nullptr, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
-        MessageBoxW(nullptr, app.i18n.ErrLookupPrivilegeRestart.c_str(), app.i18n.ErrTitle.c_str(),
-                    MB_ICONERROR);
+        MessageBoxW(nullptr, app::i18n.ErrLookupPrivilegeRestart.c_str(),
+                    app::i18n.ErrTitle.c_str(), MB_ICONERROR);
         CloseHandle(hToken);
         return;
     }
@@ -27,22 +25,22 @@ void Controller::ExecuteRestart() {
 
     wchar_t msg[] = L"Restarting...";
     if (!InitiateSystemShutdownEx(nullptr, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER)) {
-        MessageBoxW(nullptr, app.i18n.ErrRestartFailed.c_str(), app.i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrRestartFailed.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
     }
 }
 
-void Controller::ExecuteShutdown() {
+void controller::execute_shutdown() {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-        MessageBoxW(nullptr, app.i18n.ErrGetProcessTokenShutdown.c_str(), app.i18n.ErrTitle.c_str(),
-                    MB_ICONERROR);
+        MessageBoxW(nullptr, app::i18n.ErrGetProcessTokenShutdown.c_str(),
+                    app::i18n.ErrTitle.c_str(), MB_ICONERROR);
         return;
     }
     if (!LookupPrivilegeValue(nullptr, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
-        MessageBoxW(nullptr, app.i18n.ErrLookupPrivilegeShutdown.c_str(), app.i18n.ErrTitle.c_str(),
-                    MB_ICONERROR);
+        MessageBoxW(nullptr, app::i18n.ErrLookupPrivilegeShutdown.c_str(),
+                    app::i18n.ErrTitle.c_str(), MB_ICONERROR);
         CloseHandle(hToken);
         return;
     }
@@ -53,12 +51,12 @@ void Controller::ExecuteShutdown() {
 
     wchar_t msg[] = L"Shutdown...";
     if (!InitiateSystemShutdownEx(nullptr, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER)) {
-        MessageBoxW(nullptr, app.i18n.ErrShutdownFailed.c_str(), app.i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrShutdownFailed.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
     }
 }
 
-void Controller::ExecuteSleep() {
+void controller::execute_sleep() {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
@@ -72,77 +70,77 @@ void Controller::ExecuteSleep() {
     }
 
     if (!SetSuspendState(FALSE, FALSE, FALSE)) {
-        MessageBoxW(nullptr, app.i18n.ErrSleepFailed.c_str(), app.i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrSleepFailed.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
     }
 }
 
-void Controller::ExecuteLock() {
+void controller::execute_lock() {
     LockWorkStation();
 }
 
-void Controller::ExecuteAction(HWND hWnd, Action action) {
+void controller::execute_action(const HWND hWnd, const app::Action action) {
     switch (action) {
-        case Action::Sleep:
-            ExecuteSleep();
+        case app::Action::Sleep:
+            execute_sleep();
             break;
-        case Action::Shutdown:
-            ExecuteShutdown();
+        case app::Action::Shutdown:
+            execute_shutdown();
             break;
-        case Action::Restart:
-            ExecuteRestart();
+        case app::Action::Restart:
+            execute_restart();
             break;
-        case Action::Lock:
-            ExecuteLock();
+        case app::Action::Lock:
+            execute_lock();
             break;
-        case Action::None:
-        default:
+        case app::Action::Donate:
+        case app::Action::Config:
+        case app::Action::None:
             break;
     }
 
     // Destroy the window will trigger quit message
     DestroyWindow(hWnd);
-    return;
 }
 
 // Jump to countdown page and start countdown timer
-void Controller::StartCountdown(HWND hWnd, Action action) {
-    if (app.config.delay <= 0) {
-        ExecuteAction(hWnd, action);
+void controller::start_countdown(const HWND hWnd, const app::Action action) {
+    if (app::config.delay <= 0) {
+        execute_action(hWnd, action);
         return;
     }
 
-    SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, nullptr);  // 1 second interval
-    app.state.countdownSeconds = app.config.delay;
-    app.state.action = action;
-    app.page.Start(Page::Countdown, hWnd);
+    SetTimer(hWnd, app::COUNTDOWN_TIMER_ID, 1000, nullptr);  // 1 second interval
+    app::state.countdown_seconds = app::config.delay;
+    app::state.action = action;
+    app::page.start(app::Page::Countdown, hWnd);
 }
 
-void Controller::CancelCountdown(HWND hWnd) {
-    if (app.page.current == Page::Countdown) {
+void controller::cancel_countdown(const HWND hWnd) {
+    if (app::page.current == app::Page::Countdown) {
         // & do this in page.SetAlpha: appState.action = Action::None;
-        KillTimer(hWnd, COUNTDOWN_TIMER_ID);
+        KillTimer(hWnd, app::COUNTDOWN_TIMER_ID);
 
-        app.state.countdownSeconds = 0;
-        app.page.Start(Page::Home, hWnd);
-        app.page.OnFadeEnd([]() { App::GetInstance().state.action = Action::None; });
+        app::state.countdown_seconds = 0;
+        app::page.start(app::Page::Home, hWnd);
+        app::page.on_fade_end([]() { app::state.action = app::Action::None; });
     }
 }
 
-void Controller::TriggerLock(HWND hWnd) {
-    ExecuteLock();
+void controller::trigger_lock(const HWND hWnd) {
+    execute_lock();
 }
 
-void Controller::TriggerConfig(HWND hWnd) {
-    std::wstring configPath = app.config.get_config_path();
+void controller::trigger_config(const HWND hWnd) {
+    const std::wstring configPath = AppConfig::get_config_path();
     ShellExecuteW(nullptr, L"open", configPath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
-    if (app.page.fading) {
+    if (app::page.fading) {
         return;
     }
 
-    app.page.Start(Page::None, hWnd);
+    app::page.start(app::Page::None, hWnd);
 }
 
-void Controller::TriggerDonate(HWND hWnd) {
-    app.page.Start(Page::Donate, hWnd);
+void controller::trigger_donate(const HWND hWnd) {
+    app::page.start(app::Page::Donate, hWnd);
 }
