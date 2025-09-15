@@ -1,9 +1,12 @@
-﻿#pragma once
+﻿// ReSharper disable CppInconsistentNaming
+#pragma once
 #include <string>
 #include <vector>
-#include "singleton.h"
-#include "consts.config.h"
+
 #include "consts.app.h"
+#include "consts.config.h"
+#include "consts.warning.h"
+#include "singleton.h"
 
 #define EN_SHUTDOWN L"shutdown"
 #define EN_SLEEP    L"sleep"
@@ -19,7 +22,7 @@ class AppI18N {
     SINGLETON(AppI18N)
 
    public:
-    void SetLang(cfg::Lang lang);
+    void set_lang(cfg::Lang lang);
 
     // font family
     std::wstring FontFamilyName;
@@ -58,7 +61,8 @@ class AppI18N {
     std::wstring InvalidBackgroundColorFormat;
     std::wstring InvalidBackgroundColorValue;
 
-    std::wstring GetConfigWarningText(const std::vector<cfg::WarnInfo>& warnings) const;
+    [[nodiscard]] std::wstring get_config_warning_text(
+        const std::vector<warning::Info>& entries) const;
 
     // actions
     std::wstring Shutdown;
@@ -67,7 +71,7 @@ class AppI18N {
     std::wstring Lock;
     std::wstring Waiting[3] = {L"", L"", L""};
 
-    std::wstring Wait(Action type, int seconds) const;
+    [[nodiscard]] std::wstring wait(const app::Action type, const int seconds) const;
 
     // zh and en uses different resource ids
     int DonateQRResourceID = 0;

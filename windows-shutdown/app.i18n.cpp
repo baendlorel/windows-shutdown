@@ -1,9 +1,8 @@
 ﻿#include "app.i18n.h"
 #include <format>
 #include "resource.h"
-#include "utils.string.h"
 
-void AppI18N::SetLang(cfg::Lang lang) {
+void AppI18N::set_lang(const cfg::Lang lang) {
     if (lang == cfg::Lang::Zh) {
         FontFamilyName = L"Microsoft YaHei UI";
 
@@ -111,7 +110,7 @@ void AppI18N::SetLang(cfg::Lang lang) {
             std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
                         cfg::KEY_COUNTDOWN_STYLE_W, cfg::COUNTDOWN_STYLE_NORMAL_W,
                         cfg::COUNTDOWN_STYLE_STEINS_GATE_W, cfg::COUNTDOWN_STYLE_STEINS_GATE_W);
-        InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}.",
+        InvalidDelay = std::format(L"[{}] must be a non-negative integer. Using default value {}.",
                                    cfg::KEY_DELAY_W, cfg::CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
             std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format. Using default value {}.",
@@ -137,17 +136,17 @@ void AppI18N::SetLang(cfg::Lang lang) {
     }
 }
 
-std::wstring AppI18N::GetConfigWarningText(const std::vector<cfg::WarnInfo>& entries) const {
+std::wstring AppI18N::get_config_warning_text(const std::vector<warning::Info>& entries) const {
     if (entries.empty()) {
-        return std::wstring();
+        return {};
     }
 
     std::wstring result = this->InvalidConfig + L"\n";
-    for (int i = 0; i < entries.size(); i++) {
+    for (size_t i = 0; i < entries.size(); i++) {
         auto& entry = entries[i];
         std::wstring text;
 
-        switch (entry.warning) {
+        switch (entry.warning_code) {
             case warning::Code::InvalidLanguage:
                 text = this->InvalidLanguage;
                 break;
@@ -178,7 +177,7 @@ std::wstring AppI18N::GetConfigWarningText(const std::vector<cfg::WarnInfo>& ent
             case warning::Code::InvalidBackgroundColorValue:
                 text = this->InvalidBackgroundColorValue;
                 break;
-            default:
+            case warning::Code::None:
                 break;
         }
         result +=
@@ -188,26 +187,28 @@ std::wstring AppI18N::GetConfigWarningText(const std::vector<cfg::WarnInfo>& ent
     return result;
 }
 
-std::wstring AppI18N::Wait(Action type, int seconds) const {
+std::wstring AppI18N::wait(app::Action type, int seconds) const {
     std::wstring actionWStr;
     switch (type) {
-        case Action::Sleep:
+        case app::Action::Sleep:
             actionWStr = this->Sleep;
             break;
-        case Action::Shutdown:
+        case app::Action::Shutdown:
             actionWStr = this->Shutdown;
             break;
-        case Action::Restart:
+        case app::Action::Restart:
             actionWStr = this->Restart;
             break;
-        case Action::Lock:
+        case app::Action::Lock:
             actionWStr = this->Lock;
             break;
-        case Action::None:
-        default:
-            actionWStr = L"Unknown Action";
+        case app::Action::Donate:
+        case app::Action::Config:
+        case app::Action::None:
+            actionWStr = L"Not Valid Waiting Action";
             break;
     }
+
     // Return only the first-line text; seconds are drawn separately as a large centered number.
     return this->Waiting[0] + actionWStr + this->Waiting[1];
 }
