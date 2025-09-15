@@ -1,30 +1,26 @@
 ﻿#include "components.warning.h"
 
-#include "style.fade.h"
 #include "style.color.h"
 #include "style.font.h"
 #include "app.core.h"
 
 #include "mini-ui.h"
 
-void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::REAL w, Gdiplus::REAL h,
-                 std::wstring text) {
+void draw_warning(Gdiplus::Graphics& graphics, const BYTE alpha, const Gdiplus::REAL w,
+                  const Gdiplus::REAL h, const std::wstring& text) {
     if (alpha == 0) {
         return;
     }
 
-    static auto& i18n = App::GetInstance().i18n;
-    static auto& colors = ColorSet::GetInstance();
-    static Gdiplus::FontFamily fontFamily(i18n.FontFamilyName.c_str());
+    static Gdiplus::FontFamily fontFamily(app::i18n.FontFamilyName.c_str());
 
     Gdiplus::Font warnFont(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
     Gdiplus::RectF warnRect(CFG::WARNING_X, CFG::WARNING_Y, w, h);
-    DrawTextParams warnParams = {.text = text,
-                                 .font = &warnFont,
-                                 .rect = &warnRect,
-                                 .horizontal_align = Gdiplus::StringAlignmentNear,
-                                 .alpha = alpha,
-                                 .color = &colors.text_warn,
-                                 .shadow_color = &colors.text_shadow};
-    DrawCachedUIText(graphics, warnParams);
+    painter::draw_cached_text(graphics, {.text = text,
+                                         .font = &warnFont,
+                                         .rect = &warnRect,
+                                         .horizontal_align = Gdiplus::StringAlignmentNear,
+                                         .alpha = alpha,
+                                         .color = &color_set::TEXT_WARN,
+                                         .shadow_color = &color_set::TEXT_SHADOW});
 }

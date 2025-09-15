@@ -19,7 +19,7 @@ void DonateView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params
     int w = params.rect->Width;
     int h = params.rect->Height;
 
-    static auto& colors = ColorSet::GetInstance();
+    static auto& colors = color_set::GetInstance();
     static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
     static Gdiplus::Bitmap* img =
         load_bitmap_by_resource_id(app.state.hInst, app.i18n.DonateQRResourceID);

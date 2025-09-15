@@ -3,7 +3,7 @@
 #include "style.font.h"
 
 // colors are like those in Bootstrap 5.3
-namespace ColorSet {
+namespace color_set {
 
 // used for background color and button highlight, or other things else in the future
 inline constexpr int DEFAULT_ALPHA = 52;
@@ -14,4 +14,4 @@ inline const auto TEXT_DANGER = Gdiplus::Color(255, 255, 151, 163);
 inline const auto TEXT_SHADOW = Gdiplus::Color(TEXT_SHADOW_ALPHA, 0, 0, 0);
 inline const auto BUTTON_HIGHLIGHT = Gdiplus::Color(DEFAULT_ALPHA, 255, 255, 255);
 
-}  // namespace ColorSet
+}  // namespace color_set

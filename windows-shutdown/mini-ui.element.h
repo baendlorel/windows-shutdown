@@ -13,7 +13,7 @@ class Element {
 
    protected:
     App* app_ = App::GetInstance();
-    ColorSet* colors_ = ColorSet::GetInstance();
+    color_set* colors_ = color_set::GetInstance();
 
     // when alpha is MAX_ALPHA, active state is true
     bool active_ = false;

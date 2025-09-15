@@ -18,7 +18,7 @@ class AppConfig {
                                         Action::Sleep,  Action::Restart, Action::Shutdown};
     CFG::CountdownStyle countdown_style = CFG::CountdownStyle::SteinsGate;
     int delay = CFG::CFG_DEFAULT_DELAY;
-    Gdiplus::Color background_color = ColorSet::BACKGROUND;
+    Gdiplus::Color background_color = color_set::BACKGROUND;
     std::vector<CFG::WarnInfo> warnings;
 
    public:

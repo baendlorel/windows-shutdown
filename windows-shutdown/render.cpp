@@ -61,7 +61,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gd
 
     // * These functions will decide internally whether to draw based on current state
     if (!warningWStr.empty()) {
-        DrawWarning(graphics, fade::MAX_ALPHA, w, h, warningWStr);
+        draw_warning(graphics, fade::MAX_ALPHA, w, h, warningWStr);
     }
 
     // !

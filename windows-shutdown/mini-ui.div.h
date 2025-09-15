@@ -5,7 +5,7 @@
 class Div : public Element {
    protected:
     App& app = App::GetInstance();
-    ColorSet& colors = ColorSet::GetInstance();
+    color_set& colors = color_set::GetInstance();
 
    public:
     Div(ElementTag tag, const Gdiplus::RectF& rect) : tag(tag), rect(rect) {};

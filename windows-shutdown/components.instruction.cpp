@@ -26,6 +26,6 @@ void draw_instruction(Gdiplus::Graphics& graphics, const BYTE alpha, Gdiplus::Re
                                          .rect = rect,
                                          .horizontal_align = Gdiplus::StringAlignmentCenter,
                                          .alpha = alpha,
-                                         .color = &ColorSet::TEXT_LIGHT,
-                                         .shadow_color = &ColorSet::TEXT_SHADOW});
+                                         .color = &color_set::TEXT_LIGHT,
+                                         .shadow_color = &color_set::TEXT_SHADOW});
 }
