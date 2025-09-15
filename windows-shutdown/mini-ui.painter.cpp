@@ -1,8 +1,10 @@
 ﻿#include "mini-ui.h"
 #include <unordered_map>
 #include <format>
+#include <ranges>
+
 #include "style.font.h"
-#include "dtm.h"
+#include "realify.h"
 
 Gdiplus::Color apply_alpha(const Gdiplus::Color* color, const BYTE alpha) {
     if (alpha == FADE::MAX_ALPHA) {
@@ -10,16 +12,13 @@ Gdiplus::Color apply_alpha(const Gdiplus::Color* color, const BYTE alpha) {
     }
 
     // overallAlpha in 0..255, srcA in 0..255
-    int blended = alpha * color->GetA() / 255;
-    if (blended < 0) {
-        blended = 0;
-    } else if (blended > 255) {
-        blended = 255;
-    }
-    return Gdiplus::Color(blended, color->GetR(), color->GetG(), color->GetB());
+    BYTE blended = alpha * color->GetA() / 255;
+
+    return {blended, color->GetR(), color->GetG(), color->GetB()};
 };
 
-std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(Gdiplus::Image* image, BYTE alpha) {
+std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(Gdiplus::Image* image,
+                                                                const BYTE alpha) {
     if (alpha == FADE::MAX_ALPHA) {
         return nullptr;
     }
@@ -42,11 +41,12 @@ void draw_ui_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& para
 
     // temporarily change compositing mode to SourceCopy to avoid blending multiple shadows
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
-        BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * FADE::MAX_ALPHA);
+        const BYTE alpha = TEXT_SHADOW_ALPHA * params.alpha / ((radius + 1) * FADE::MAX_ALPHA);
         brush.SetColor(apply_alpha(params.shadow_color, alpha));
-        for (int i = 0; i < 16; i++) {
-            float dx = SHADOW_OFFSET[i][0] * radius;
-            float dy = SHADOW_OFFSET[i][1] * radius;
+
+        for (const int i : std::views::iota(0, 16)) {
+            const float dx = SHADOW_OFFSET[i][0] * to_real(radius);
+            const float dy = SHADOW_OFFSET[i][1] * to_real(radius);
             Gdiplus::RectF rect(params.rect->X + dx, params.rect->Y + dy, params.rect->Width,
                                 params.rect->Height);
             graphics.DrawString(params.text.c_str(), -1, params.font, rect, &format, &brush);
@@ -106,8 +106,14 @@ Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
     // Clear bitmap background to transparent
     bitmapGraphics.Clear(Gdiplus::Color(0, 0, 0, 0));
 
-    params.rect = &measuredRect;
-    draw_ui_text(bitmapGraphics, params);
+    draw_ui_text(bitmapGraphics, {.text = params.text,
+                                  .font = params.font,
+                                  .rect = &measuredRect,
+                                  .manual_align = params.manual_align,
+                                  .horizontal_align = params.horizontal_align,
+                                  .alpha = params.alpha,
+                                  .color = params.color,
+                                  .shadow_color = params.shadow_color});
 
     // Store in cache
     cache[params.text] = bitmap;
@@ -115,21 +121,25 @@ Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
     return bitmap;
 }
 
-void DrawCachedUIText(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
-    Gdiplus::RectF* rect = params.rect;
+void draw_cached_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
+    const Gdiplus::RectF* rect = params.rect;
 
     // temporarily set alpha to 255 to get correct cached bitmap
     BYTE alpha = params.alpha;
-    params.alpha = FADE::MAX_ALPHA;
-    Gdiplus::Bitmap* img = UITextToBitmap(graphics, {
-                                                        .alpha = params.alpha,
-                                                    });
+    Gdiplus::Bitmap* img = ui_text_to_bitmap(graphics, {.text = params.text,
+                                                        .font = params.font,
+                                                        .rect = params.rect,
+                                                        .manual_align = params.manual_align,
+                                                        .horizontal_align = params.horizontal_align,
+                                                        .alpha = FADE::MAX_ALPHA,
+                                                        .color = params.color,
+                                                        .shadow_color = params.shadow_color});
     if (!img) {
         return;
     }
     // Calculate draw position (consider shadow margin)
     Gdiplus::REAL drawX = rect->X;
-    Gdiplus::REAL drawY = rect->Y;
+    const Gdiplus::REAL drawY = rect->Y;
 
     // Adjust X position according to alignment
     if (params.manual_align) {
@@ -145,11 +155,11 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, const DrawTextParams& params)
     if (alpha == FADE::MAX_ALPHA) {
         graphics.DrawImage(img, drawX, drawY);
     } else {
-        auto imgAttr = image_attr_with_alpha(img, alpha);
-        Gdiplus::REAL imgW = static_cast<Gdiplus::REAL>(img->GetWidth());
-        Gdiplus::REAL imgH = static_cast<Gdiplus::REAL>(img->GetHeight());
-        Gdiplus::RectF rect(drawX, drawY, imgW, imgH);
-        graphics.DrawImage(img, rect, 0, 0, rect.Width, rect.Height, Gdiplus::UnitPixel,
+        const auto imgAttr = image_attr_with_alpha(img, alpha);
+        const Gdiplus::REAL imgW = static_cast<Gdiplus::REAL>(img->GetWidth());
+        const Gdiplus::REAL imgH = static_cast<Gdiplus::REAL>(img->GetHeight());
+        const Gdiplus::RectF drawRect(drawX, drawY, imgW, imgH);
+        graphics.DrawImage(img, drawRect, 0, 0, drawRect.Width, drawRect.Height, Gdiplus::UnitPixel,
                            imgAttr.get());
     }
 }

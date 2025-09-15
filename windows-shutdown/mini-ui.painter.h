@@ -5,7 +5,7 @@
 Gdiplus::Color apply_alpha(const Gdiplus::Color* color, BYTE alpha);
 
 std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(const Gdiplus::Image* image,
-                                                                BYTE alpha);
+                                                                const BYTE alpha);
 
 void draw_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params);
 

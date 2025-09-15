@@ -9,8 +9,7 @@ class Render {
     SINGLETON(Render)
 
    public:
-    App& app = App::GetInstance();
-    Index& index = Index::GetInstance();
+    Index* index = Index::GetInstancePtr();
 
     void draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gdiplus::REAL h);
     void update_layered(const HWND hWnd);

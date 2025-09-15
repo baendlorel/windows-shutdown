@@ -6,16 +6,15 @@
 #include "mini-ui.h"
 #include "components.warning.h"
 
-void Render::__DrawDebug(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::REAL h) {
-    static auto& app = App::GetInstance();
-    static auto& index = Index::GetInstance();
-    static Gdiplus::FontFamily fontFamily(app.i18n.FontFamilyName.c_str());
+void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
+                         const Gdiplus::REAL h) {
+    static Gdiplus::FontFamily fontFamily(app::i18n.FontFamilyName.c_str());
     static Gdiplus::SolidBrush brush(Gdiplus::Color(255, 166, 0));
     static Gdiplus::StringFormat format;
     static const Gdiplus::RectF rect(w - 900, 20, w, h);
     static const Gdiplus::Font font =
         Gdiplus::Font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);
-    auto pageName = [](app::Page p) -> const wchar_t* {
+    auto pageName = [](const app::Page p) -> const wchar_t* {
         switch (p) {
             case app::Page::None:
                 return L"None";
@@ -31,31 +30,29 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, Gdiplus::REAL w, Gdiplus::
     auto menuActive = -1;
     auto __drawingalpha = -1;
 
-    if (index.home.menu.size() > 0) {
-        menuActive = index.home.menu[0].is_active() ? 1 : 0;
-        __drawingalpha = index.home.menu[0].__drawingalpha;
+    if (this->index->home.menu.size() > 0) {
+        menuActive = this->index->home.menu[0].is_active() ? 1 : 0;
+        __drawingalpha = this->index->home.menu[0].__drawingalpha;
     }
 
     static int count = 0;
     count++;
     auto str = std::format(
         L"{}, Home:{} (menu active: {}, {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}", count,
-        app.page.GetPageAlpha(app::Page::Home), menuActive, __drawingalpha,
-        app.page.GetPageAlpha(app::Page::Countdown), app.page.GetPageAlpha(app::Page::None),
-        pageName(app.page.current), pageName(app.page.next),
-        (app.page.fading ? L"true" : L"false"));
+        app::page.GetPageAlpha(app::Page::Home), menuActive, __drawingalpha,
+        app::page.GetPageAlpha(app::Page::Countdown), app::page.GetPageAlpha(app::Page::None),
+        pageName(app::page.current), pageName(app::page.next),
+        (app::page.fading ? L"true" : L"false"));
 
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
 void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gdiplus::REAL h) {
-    static auto& app = App::GetInstance();
-    static auto& index = Index::GetInstance();
-    static auto warningWStr = app.i18n.GetConfigWarningText(app.config.warnings);
-    static Gdiplus::Color baseBgColor = app.config.background_color;
+    static auto warningWStr = app::i18n.GetConfigWarningText(app::config.warnings);
+    static Gdiplus::Color baseBgColor = app::config.background_color;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(apply_alpha(&baseBgColor, app.page.GetBackgroundAlpha()));
+    Gdiplus::SolidBrush bgBrush(apply_alpha(&baseBgColor, app::page.GetBackgroundAlpha()));
 
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -71,7 +68,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gd
     __DrawDebug(graphics, w, h);
 
     Gdiplus::RectF rect(0, 0, w, h);
-    index.Draw(graphics, {.rect = &rect});
+    this->index->Draw(graphics, {.rect = &rect});
 }
 
 // Here we do not use appState.screenW/H.
@@ -82,10 +79,11 @@ SIZE Render::get_wh(const HWND hWnd) const {
     GetClientRect(hWnd, &rc);
     const int w = rc.right - rc.left;
     const int h = rc.bottom - rc.top;
-    const int buttonCount = static_cast<int>(index.home.menu.size());
+    auto& menu = this->index->home.menu;
+    const int buttonCount = static_cast<int>(menu.size());
 
     for (int i = 0; i < buttonCount; i++) {
-        index.home.menu[i].center(buttonCount, i, w, h);
+        menu[i].center(buttonCount, i, w, h);
     }
     return {w, h};
 }
@@ -105,7 +103,7 @@ void Render::update_layered(const HWND hWnd) {
     void* pvBits = nullptr;
     const HBITMAP hBitmap = CreateDIBSection(hdcScreen, &bmi, DIB_RGB_COLORS, &pvBits, nullptr, 0);
     if (hBitmap == nullptr) {
-        MessageBoxW(nullptr, app.i18n.ErrCreateBitmap.c_str(), app.i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrCreateBitmap.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
         DeleteDC(hdcMem);
         ReleaseDC(nullptr, hdcScreen);
@@ -123,5 +121,5 @@ void Render::update_layered(const HWND hWnd) {
     DeleteDC(hdcMem);
     ReleaseDC(nullptr, hdcScreen);
 
-    app.state.needRedraw = false;
+    app::state.needRedraw = false;
 }
