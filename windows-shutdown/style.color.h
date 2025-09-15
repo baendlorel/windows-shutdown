@@ -1,19 +1,17 @@
 ﻿#pragma once
-// order below must be preserved
 #include "framework.h"
 #include "style.font.h"
-#include "singleton.h"
 
-// ui/colors
+// colors are like those in Bootstrap 5.3
+namespace ColorSet {
+
+// used for background color and button highlight, or other things else in the future
 inline constexpr int DEFAULT_ALPHA = 52;
+inline const auto BACKGROUND = Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0);
+inline const auto TEXT_LIGHT = Gdiplus::Color(255, 248, 249, 255);
+inline const auto TEXT_WARN = Gdiplus::Color(255, 255, 193, 7);
+inline const auto TEXT_DANGER = Gdiplus::Color(255, 255, 151, 163);
+inline const auto TEXT_SHADOW = Gdiplus::Color(TEXT_SHADOW_ALPHA, 0, 0, 0);
+inline const auto BUTTON_HIGHLIGHT = Gdiplus::Color(DEFAULT_ALPHA, 255, 255, 255);
 
-struct ColorSet {
-    SINGLETON(ColorSet)
-   public:
-    Gdiplus::Color BackgroundColor = Gdiplus::Color(DEFAULT_ALPHA, 0, 0, 0);
-    Gdiplus::Color TextColor = Gdiplus::Color(255, 255, 255, 255);
-    Gdiplus::Color TextWarnColor = Gdiplus::Color(255, 255, 193, 7);
-    Gdiplus::Color TextDangerColor = Gdiplus::Color(255, 255, 151, 163);
-    Gdiplus::Color TextShadowColor = Gdiplus::Color(TEXT_SHADOW_ALPHA, 0, 0, 0);
-    Gdiplus::Color ButtonHighlightColor = Gdiplus::Color(DEFAULT_ALPHA, 255, 255, 255);
-};
+}  // namespace ColorSet

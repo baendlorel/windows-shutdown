@@ -1,5 +1,4 @@
 ﻿#pragma once
 #include <xstring>
-#include <format>
 
-std::wstring format_time(int seconds);
+std::wstring format_time(const int seconds);

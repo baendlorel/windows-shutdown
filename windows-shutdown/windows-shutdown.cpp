@@ -56,8 +56,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-    LoadStringW(hInstance, IDS_APP_TITLE, app.state.szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, app.state.szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDS_APP_TITLE, app.state.szTitle, MAX_LOAD_STRING);
+    LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, app.state.szWindowClass, MAX_LOAD_STRING);
 
     auto& window = Window::GetInstance();
     window.MyRegisterClass();

@@ -5,13 +5,13 @@
 
 struct DrawTextParams {
     std::wstring text;
-    Gdiplus::Font* font;
-    Gdiplus::RectF* rect;
-    bool manualAlign = true;  // controls whether to use horizontalAlign or always near
-    Gdiplus::StringAlignment horizontalAlign;
+    const Gdiplus::Font* font;
+    const Gdiplus::RectF* rect;
+    bool manual_align = true;  // controls whether to use horizontalAlign or always near
+    Gdiplus::StringAlignment horizontal_align;
     BYTE alpha = FADE::MAX_ALPHA;  // overall alpha for this text
-    Gdiplus::Color* color;
-    Gdiplus::Color* shadowColor;
+    const Gdiplus::Color* color;
+    const Gdiplus::Color* shadow_color;
 };
 
 struct DrawParams {
@@ -21,5 +21,5 @@ struct DrawParams {
     Gdiplus::RectF* rect = nullptr;
 
     // optional, for text drawing
-    DrawTextParams* textParams = nullptr;
+    DrawTextParams* text_params = nullptr;
 };

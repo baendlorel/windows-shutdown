@@ -9,7 +9,7 @@
 #include "mini-ui.h"
 #include "dtm.h"
 
-void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) {
+void CountdownView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
     BYTE alpha = app.page.GetPageAlpha(Page::Countdown);
     static auto& countdownStyle = app.config.countdownStyle;
 
@@ -33,10 +33,10 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
         DrawTextParams firstParams = {.text = firstLine,
                                       .font = &firstFont,
                                       .rect = &firstRect,
-                                      .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                      .horizontal_align = Gdiplus::StringAlignmentCenter,
                                       .alpha = alpha,
-                                      .color = &colors_.TextColor,
-                                      .shadowColor = &colors_.TextShadowColor};
+                                      .color = &colors_.text_light,
+                                      .shadow_color = &colors_.text_shadow};
         DrawCachedUIText(graphics, firstParams);
 
         // Nixie tube clock in the center
@@ -46,7 +46,7 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
 
         // Draw cancel instruction below
         Gdiplus::RectF smallRect(0, y + 520, w, h);
-        DrawInstruction(graphics, alpha, &smallRect, app.i18n.PressAnyKeyToCancel);
+        draw_instruction(graphics, alpha, &smallRect, app.i18n.PressAnyKeyToCancel);
         return;
     }
 
@@ -65,10 +65,10 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
     DrawTextParams firstParams = {.text = firstLine,
                                   .font = &firstFont,
                                   .rect = &firstRect,
-                                  .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                  .horizontal_align = Gdiplus::StringAlignmentCenter,
                                   .alpha = alpha,
-                                  .color = &colors_.TextColor,
-                                  .shadowColor = &colors_.TextShadowColor};
+                                  .color = &colors_.text_light,
+                                  .shadow_color = &colors_.text_shadow};
     DrawCachedUIText(graphics, firstParams);
 
     // Second line: large centered numeric seconds
@@ -79,15 +79,15 @@ void CountdownView::DrawView(Gdiplus::Graphics& graphics, const DrawParams& para
     DrawTextParams secondParams = {.text = secondLine,
                                    .font = &secondFont,
                                    .rect = &secondRect,
-                                   .manualAlign = false,
-                                   .horizontalAlign = Gdiplus::StringAlignmentCenter,
+                                   .manual_align = false,
+                                   .horizontal_align = Gdiplus::StringAlignmentCenter,
                                    .alpha = alpha,
-                                   .color = &colors_.TextWarnColor,
-                                   .shadowColor = &colors_.TextShadowColor};
+                                   .color = &colors_.text_warn,
+                                   .shadow_color = &colors_.text_shadow};
     // & seconds cannot use cache since it changes every second
-    DrawUIText(graphics, secondParams);
+    draw_ui_text(graphics, secondParams);
 
     // Draw cancel instruction below the number
     Gdiplus::RectF smallRect(0, y + 300, w, h);
-    DrawInstruction(graphics, alpha, &smallRect, app.i18n.PressAnyKeyToCancel);
+    draw_instruction(graphics, alpha, &smallRect, app.i18n.PressAnyKeyToCancel);
 }

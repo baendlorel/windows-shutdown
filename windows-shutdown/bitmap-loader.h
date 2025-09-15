@@ -1,4 +1,4 @@
 ﻿#pragma once
 #include "framework.h"
 
-Gdiplus::Bitmap* LoadBitmapByResourceId(HINSTANCE hInst, int resId);
+Gdiplus::Bitmap* load_bitmap_by_resource_id(const HINSTANCE hInst, const int resId);

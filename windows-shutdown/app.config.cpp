@@ -127,7 +127,7 @@ bool IsSysLangChinese() {
     return primaryLang == LANG_CHINESE;
 }
 
-std::wstring AppConfig::GetConfigPath() {
+std::wstring AppConfig::get_config_path() {
     wchar_t exePath[MAX_PATH] = {0};
     GetModuleFileNameW(NULL, exePath, MAX_PATH);
     std::wstring path(exePath);
@@ -178,7 +178,7 @@ Action ParseActionFromString(const std::string& actionStr) {
 }
 
 // key and value is already lowercase
-CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
+CFG::Warning AppConfig::load_key_value(std::string& key, std::string& value) {
     if (key == CFG::LOWER_KEY_LANG) {
         if (value == CFG::LANG_EN) {
             this->lang = CFG::Lang::En;
@@ -262,7 +262,7 @@ CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
         if (buttons.empty()) {
             return CFG::Warning::InvalidMenuButton;
         } else {
-            this->menuButtons = buttons;
+            this->menu_buttons = buttons;
         }
 
         // Return warning if we had invalid items but some valid ones
@@ -271,12 +271,12 @@ CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
 
     if (key == CFG::LOWER_KEY_COUNTDOWN_STYLE) {
         if (value == CFG::COUNTDOWN_STYLE_NORMAL) {
-            this->countdownStyle = CFG::CountdownStyle::Normal;
+            this->countdown_style = CFG::CountdownStyle::Normal;
             return CFG::Warning::None;
         }
 
         if (value == CFG::COUNTDOWN_STYLE_STEINS_GATE) {
-            this->countdownStyle = CFG::CountdownStyle::SteinsGate;
+            this->countdown_style = CFG::CountdownStyle::SteinsGate;
             return CFG::Warning::None;
         }
 
@@ -305,7 +305,7 @@ CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
                 BYTE a = std::stoi(value.substr(7, 2), nullptr, 16);
-                this->backgroundColor = Gdiplus::Color(a, r, g, b);
+                this->background_color = Gdiplus::Color(a, r, g, b);
                 return CFG::Warning::None;
             } catch (...) {
                 return CFG::Warning::InvalidBackgroundColorValue;
@@ -317,7 +317,7 @@ CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
                 BYTE r = std::stoi(value.substr(1, 2), nullptr, 16);
                 BYTE g = std::stoi(value.substr(3, 2), nullptr, 16);
                 BYTE b = std::stoi(value.substr(5, 2), nullptr, 16);
-                this->backgroundColor = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
+                this->background_color = Gdiplus::Color(DEFAULT_ALPHA, r, g, b);
                 return CFG::Warning::None;
             } catch (...) {
                 return CFG::Warning::InvalidBackgroundColorValue;
@@ -330,8 +330,8 @@ CFG::Warning AppConfig::LoadKeyValue(std::string& key, std::string& value) {
     return CFG::Warning::UnknownConfigKey;
 }
 
-void AppConfig::Load() {
-    std::wstring configPathW = this->GetConfigPath();
+void AppConfig::load() {
+    std::wstring configPathW = this->get_config_path();
     std::string configPath = WStringToUtf8(configPathW);
 
     // Read config file as UTF-8
@@ -370,7 +370,7 @@ void AppConfig::Load() {
         std::string key = to_lowercase(trim(line.substr(0, eq)));
         std::string value = to_lowercase(trim(line.substr(eq + 1)));
 
-        auto warning = this->LoadKeyValue(key, value);
+        auto warning = this->load_key_value(key, value);
         if (warning != CFG::Warning::None) {
             this->warnings.push_back({.warning = warning, .lineNo = lineNo});
         }

@@ -21,6 +21,6 @@ class MenuButton : public Div {
     void center(int button_count, int index, int w, int h);
 
    private:
-    void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) override {
+    void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override {
     }
 };

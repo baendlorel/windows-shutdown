@@ -2,7 +2,6 @@
 #include "framework.h"
 #include "singleton.h"
 
-// consts
 #include "consts.config.h"
 #include "consts.app.h"
 #include "style.color.h"
@@ -15,22 +14,22 @@ class AppConfig {
     CFG::Lang lang = CFG::Lang::Zh;
     Action action = Action::None;
     CFG::Instruction instruction = CFG::Instruction::Show;
-    std::vector<Action> menuButtons = {Action::Donate, Action::Config,  Action::Lock,
-                                       Action::Sleep,  Action::Restart, Action::Shutdown};
-    CFG::CountdownStyle countdownStyle = CFG::CountdownStyle::SteinsGate;
+    std::vector<Action> menu_buttons = {Action::Donate, Action::Config,  Action::Lock,
+                                        Action::Sleep,  Action::Restart, Action::Shutdown};
+    CFG::CountdownStyle countdown_style = CFG::CountdownStyle::SteinsGate;
     int delay = CFG::CFG_DEFAULT_DELAY;
-    Gdiplus::Color backgroundColor = ColorSet::GetInstance().BackgroundColor;
+    Gdiplus::Color background_color = ColorSet::BACKGROUND;
     std::vector<CFG::WarnInfo> warnings;
 
    public:
-    void Load();
+    void load();
 
-    bool IsImmediate() const {
+    [[nodiscard]] bool is_immediate() const {
         return action != Action::None;
     }
 
-    std::wstring GetConfigPath();
+    std::wstring get_config_path();
 
    private:
-    CFG::Warning LoadKeyValue(std::string& key, std::string& value);
+    CFG::Warning load_key_value(std::string& key, std::string& value);
 };

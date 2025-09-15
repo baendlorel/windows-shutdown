@@ -36,8 +36,8 @@ class AppState {
     short countdownSeconds = 0;
 
     // ui
-    WCHAR szTitle[MAX_LOADSTRING] = L"";
-    WCHAR szWindowClass[MAX_LOADSTRING] = L"";
+    WCHAR szTitle[MAX_LOAD_STRING] = L"";
+    WCHAR szWindowClass[MAX_LOAD_STRING] = L"";
 
    public:
     bool isCountingDown() const {

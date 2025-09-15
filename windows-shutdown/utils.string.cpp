@@ -1,6 +1,7 @@
 ﻿#include "utils.string.h"
+#include <fstream>
 
-static constexpr char ASCII_UPLOWER_DELTA = 32;
+static constexpr char ASCII_CASE_DELTA = 32;
 
 std::string trim(const std::string &s) {
     if (s.empty()) {
@@ -24,7 +25,7 @@ std::string to_uppercase(const std::string &str) {
 
     for (char &ch : result) {
         if (ch >= 'a' && ch <= 'z') {
-            ch -= ASCII_UPLOWER_DELTA;
+            ch -= ASCII_CASE_DELTA;
         }
     }
 
@@ -36,7 +37,7 @@ std::string to_lowercase(const std::string &str) {
 
     for (char &ch : result) {
         if (ch >= 'A' && ch <= 'Z') {
-            ch += ASCII_UPLOWER_DELTA;
+            ch += ASCII_CASE_DELTA;
         }
     }
 

@@ -2,12 +2,13 @@
 #include "framework.h"
 #include "mini-ui.core.h"
 
-Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha);
+Gdiplus::Color apply_alpha(const Gdiplus::Color* color, BYTE alpha);
 
-std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha);
+std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(const Gdiplus::Image* image,
+                                                                BYTE alpha);
 
-void DrawUIText(Gdiplus::Graphics& graphics, DrawTextParams& params);
+void draw_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params);
 
-void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params);
+void draw_ui_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& params);
 
-void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params);
+void draw_cached_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params);

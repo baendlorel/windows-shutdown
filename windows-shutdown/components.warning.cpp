@@ -22,9 +22,9 @@ void DrawWarning(Gdiplus::Graphics& graphics, BYTE alpha, Gdiplus::REAL w, Gdipl
     DrawTextParams warnParams = {.text = text,
                                  .font = &warnFont,
                                  .rect = &warnRect,
-                                 .horizontalAlign = Gdiplus::StringAlignmentNear,
+                                 .horizontal_align = Gdiplus::StringAlignmentNear,
                                  .alpha = alpha,
-                                 .color = &colors.TextWarnColor,
-                                 .shadowColor = &colors.TextShadowColor};
+                                 .color = &colors.text_warn,
+                                 .shadow_color = &colors.text_shadow};
     DrawCachedUIText(graphics, warnParams);
 }

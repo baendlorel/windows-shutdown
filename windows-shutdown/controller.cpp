@@ -134,7 +134,7 @@ void Controller::TriggerLock(HWND hWnd) {
 }
 
 void Controller::TriggerConfig(HWND hWnd) {
-    std::wstring configPath = app.config.GetConfigPath();
+    std::wstring configPath = app.config.get_config_path();
     ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
     if (app.page.fading) {
         return;

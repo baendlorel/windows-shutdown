@@ -6,10 +6,10 @@
 #include <string>
 
 std::string read_file_content(const std::string& path) {
-    std::ifstream file(path);
+    const std::ifstream file(path);
 
     if (!file.is_open()) {
-        return std::string();
+        return {};
     }
 
     std::stringstream buffer;
@@ -35,10 +35,10 @@ bool save_to_file(const std::string& path, const std::string& content) {
     return true;
 }
 
-void for_each_line(const std::string& content, std::function<void(std::string)> callback) {
+void for_each_line(const std::string& content, const std::function<void(std::string)>& callback) {
     std::string line;
 
-    for (char ch : content) {
+    for (const char ch : content) {
         if (ch == '\n') {
             callback(line);
             line.clear();

@@ -28,13 +28,13 @@ int GetResourceIdFromAction(Action action) {
 
 MenuButton::MenuButton(int x, int y, Action action)
     : Div(ElementTag::Button,
-          Gdiplus::RectF(REALIFY(x), REALIFY(y), REALIFY(MenuButtonStyle::RADIUS),
-                         REALIFY(MenuButtonStyle::RADIUS))) {
+          Gdiplus::RectF(to_real(x), to_real(y), to_real(MenuButtonStyle::RADIUS),
+                         to_real(MenuButtonStyle::RADIUS))) {
     this->png = nullptr;
     this->action = action;
 
     this->res_id = GetResourceIdFromAction(action);
-    this->png = LoadBitmapByResourceId(app.state.hInst, this->res_id);
+    this->png = load_bitmap_by_resource_id(app.state.hInst, this->res_id);
 
     app.event.On(EventType::MouseMove, [this]() {
         if (!this->active_) {
@@ -56,14 +56,14 @@ void MenuButton::center(int button_count, int index, int w, int h) {
 
     int centerX = w / 2;
     int centerY = h / 2;
-    this->rect.X = centerX + REALIFY(MenuButtonStyle::MARGIN_LEFT) + delta;
-    this->rect.Y = centerY + REALIFY(MenuButtonStyle::MARGIN_TOP);
+    this->rect.X = centerX + to_real(MenuButtonStyle::MARGIN_LEFT) + delta;
+    this->rect.Y = centerY + to_real(MenuButtonStyle::MARGIN_TOP);
 }
 
 bool MenuButton::MouseHit(int mx, int my) {
     // x, y of the rect means center of a circle
-    int x = INTIFY(this->rect.X);
-    int y = INTIFY(this->rect.Y);
+    int x = to_int(this->rect.X);
+    int y = to_int(this->rect.Y);
     int dx = mx - x;
     int dy = my - y;
     this->hovered = (dx * dx + dy * dy <= MenuButtonStyle::TRUE_R_SQUARED);
@@ -71,12 +71,12 @@ bool MenuButton::MouseHit(int mx, int my) {
 }
 
 void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
-    int x = INTIFY(this->rect.X - MenuButtonStyle::RADIUS);
-    int y = INTIFY(this->rect.Y - MenuButtonStyle::RADIUS);
+    int x = to_int(this->rect.X - MenuButtonStyle::RADIUS);
+    int y = to_int(this->rect.Y - MenuButtonStyle::RADIUS);
 
     __drawingalpha = params.alpha;
 
-    auto imgAttr = ImageAttrWithAlpha(this->png, params.alpha);
+    auto imgAttr = image_attr_with_alpha(this->png, params.alpha);
 
     // where and what size to draw
     Gdiplus::Rect rect(x, y, MenuButtonStyle::DIAMETER, MenuButtonStyle::DIAMETER);
@@ -93,7 +93,7 @@ void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
         return;
     }
 
-    Gdiplus::Color blended(ApplyAlpha(&colors.ButtonHighlightColor, params.alpha));
+    Gdiplus::Color blended(apply_alpha(&colors.button_highlight, params.alpha));
     Gdiplus::SolidBrush highlightBrush(blended);
     graphics.FillEllipse(&highlightBrush, x + MenuButtonStyle::SHADOW_WIDTH,
                          y + MenuButtonStyle::SHADOW_WIDTH,

@@ -9,18 +9,18 @@ Gdiplus::Bitmap** LoadNixieBitmap() {
     HINSTANCE hInst = App::GetInstance().state.hInst;
     // Use static array so it's loaded once and no heap management needed
     static Gdiplus::Bitmap* nixieBitmaps[12];  // 0-9, blank, period
-    nixieBitmaps[0] = LoadBitmapByResourceId(hInst, IDB_NIXIE_0);
-    nixieBitmaps[1] = LoadBitmapByResourceId(hInst, IDB_NIXIE_1);
-    nixieBitmaps[2] = LoadBitmapByResourceId(hInst, IDB_NIXIE_2);
-    nixieBitmaps[3] = LoadBitmapByResourceId(hInst, IDB_NIXIE_3);
-    nixieBitmaps[4] = LoadBitmapByResourceId(hInst, IDB_NIXIE_4);
-    nixieBitmaps[5] = LoadBitmapByResourceId(hInst, IDB_NIXIE_5);
-    nixieBitmaps[6] = LoadBitmapByResourceId(hInst, IDB_NIXIE_6);
-    nixieBitmaps[7] = LoadBitmapByResourceId(hInst, IDB_NIXIE_7);
-    nixieBitmaps[8] = LoadBitmapByResourceId(hInst, IDB_NIXIE_8);
-    nixieBitmaps[9] = LoadBitmapByResourceId(hInst, IDB_NIXIE_9);
-    nixieBitmaps[10] = LoadBitmapByResourceId(hInst, IDB_NIXIE_BLANK);   // blank
-    nixieBitmaps[11] = LoadBitmapByResourceId(hInst, IDB_NIXIE_PERIOD);  // period/colon
+    nixieBitmaps[0] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_0);
+    nixieBitmaps[1] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_1);
+    nixieBitmaps[2] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_2);
+    nixieBitmaps[3] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_3);
+    nixieBitmaps[4] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_4);
+    nixieBitmaps[5] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_5);
+    nixieBitmaps[6] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_6);
+    nixieBitmaps[7] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_7);
+    nixieBitmaps[8] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_8);
+    nixieBitmaps[9] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_9);
+    nixieBitmaps[10] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_BLANK);   // blank
+    nixieBitmaps[11] = load_bitmap_by_resource_id(hInst, IDB_NIXIE_PERIOD);  // period/colon
     return nixieBitmaps;
 }
 

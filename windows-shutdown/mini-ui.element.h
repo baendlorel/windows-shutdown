@@ -5,9 +5,15 @@ class Element {
    public:
     Element() = default;
 
+    Element(const Element&) = delete;
+    Element& operator=(const Element&) = delete;
+    Element(Element&&) noexcept = default;
+    Element& operator=(Element&&) noexcept = default;
+    virtual ~Element() = default;
+
    protected:
-    App& app_ = App::GetInstance();
-    ColorSet& colors_ = ColorSet::GetInstance();
+    App* app_ = App::GetInstance();
+    ColorSet* colors_ = ColorSet::GetInstance();
 
     // when alpha is MAX_ALPHA, active state is true
     bool active_ = false;
@@ -21,13 +27,13 @@ class Element {
         this->active_ = false;
     }
 
-    bool is_active() const {
+    [[nodiscard]] bool is_active() const {
         return this->active_;
     }
 
     // normally use page alpha to determine visibility
     // for divs, we can always return false
-    virtual bool is_invisible() const {
+    [[nodiscard]] virtual bool is_invisible() const {
         return false;
     }
 
@@ -43,9 +49,9 @@ class Element {
             this->activate();
         }
 
-        this->DrawView(graphics, params);
+        this->draw_view(graphics, params);
     }
 
    protected:
-    virtual void DrawView(Gdiplus::Graphics& graphics, const DrawParams& params) = 0;
+    virtual void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) = 0;
 };

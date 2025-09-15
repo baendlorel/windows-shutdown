@@ -4,13 +4,13 @@
 #include "style.font.h"
 #include "dtm.h"
 
-Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
+Gdiplus::Color apply_alpha(const Gdiplus::Color* color, const BYTE alpha) {
     if (alpha == FADE::MAX_ALPHA) {
         return *color;
     }
 
     // overallAlpha in 0..255, srcA in 0..255
-    int blended = (alpha * color->GetA()) / 255;
+    int blended = alpha * color->GetA() / 255;
     if (blended < 0) {
         blended = 0;
     } else if (blended > 255) {
@@ -19,7 +19,7 @@ Gdiplus::Color ApplyAlpha(Gdiplus::Color* color, BYTE alpha) {
     return Gdiplus::Color(blended, color->GetR(), color->GetG(), color->GetB());
 };
 
-std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* image, BYTE alpha) {
+std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(Gdiplus::Image* image, BYTE alpha) {
     if (alpha == FADE::MAX_ALPHA) {
         return nullptr;
     }
@@ -32,9 +32,9 @@ std::unique_ptr<Gdiplus::ImageAttributes> ImageAttrWithAlpha(Gdiplus::Image* ima
     return imgAttr;
 }
 
-void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
+void draw_ui_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
     Gdiplus::StringFormat format;
-    auto align = params.manualAlign ? Gdiplus::StringAlignmentNear : params.horizontalAlign;
+    auto align = params.manual_align ? Gdiplus::StringAlignmentNear : params.horizontal_align;
     // & Better to be handled in DrawCachedUIText, here we always use near
     format.SetAlignment(align);
     format.SetLineAlignment(Gdiplus::StringAlignmentNear);
@@ -43,7 +43,7 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     // temporarily change compositing mode to SourceCopy to avoid blending multiple shadows
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
         BYTE alpha = (TEXT_SHADOW_ALPHA * params.alpha) / ((radius + 1) * FADE::MAX_ALPHA);
-        brush.SetColor(ApplyAlpha(params.shadowColor, alpha));
+        brush.SetColor(apply_alpha(params.shadow_color, alpha));
         for (int i = 0; i < 16; i++) {
             float dx = SHADOW_OFFSET[i][0] * radius;
             float dy = SHADOW_OFFSET[i][1] * radius;
@@ -54,28 +54,28 @@ void DrawUITextShadow(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     }
 }
 
-void DrawUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
+void draw_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
     graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAliasGridFit);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     graphics.SetCompositingQuality(Gdiplus::CompositingQualityHighQuality);
 
-    DrawUITextShadow(graphics, params);
+    draw_ui_text_shadow(graphics, params);
 
-    Gdiplus::SolidBrush brush(ApplyAlpha(params.color, params.alpha));
+    Gdiplus::SolidBrush brush(apply_alpha(params.color, params.alpha));
     Gdiplus::StringFormat format;
     // & Better to be handled in DrawCachedUIText, here we always use near
     // format.SetAlignment(params.horizontalAlign);
-    auto align = params.manualAlign ? Gdiplus::StringAlignmentNear : params.horizontalAlign;
+    auto align = params.manual_align ? Gdiplus::StringAlignmentNear : params.horizontal_align;
     format.SetAlignment(align);
     format.SetLineAlignment(Gdiplus::StringAlignmentNear);
     graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
 }
 
-Gdiplus::Bitmap* UITextToBitmap(Gdiplus::Graphics& graphics, DrawTextParams& params) {
+Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
+                                   const DrawTextParams& params) {
     // Cache for rendered UI text bitmaps
     static std::unordered_map<std::wstring, Gdiplus::Bitmap*> cache;
 
-    // only wstring can be correctly hashed, while LPCWSTR cannot
     auto it = cache.find(params.text);
     if (it != cache.end()) {
         return it->second;
@@ -83,7 +83,7 @@ Gdiplus::Bitmap* UITextToBitmap(Gdiplus::Graphics& graphics, DrawTextParams& par
 
     // Measure text size to determine bitmap dimensions
     Gdiplus::StringFormat format;
-    format.SetAlignment(params.horizontalAlign);
+    format.SetAlignment(params.horizontal_align);
     format.SetLineAlignment(Gdiplus::StringAlignmentNear);
 
     Gdiplus::RectF measuredRect(0, 0, params.rect->Width, params.rect->Height);
@@ -107,7 +107,7 @@ Gdiplus::Bitmap* UITextToBitmap(Gdiplus::Graphics& graphics, DrawTextParams& par
     bitmapGraphics.Clear(Gdiplus::Color(0, 0, 0, 0));
 
     params.rect = &measuredRect;
-    DrawUIText(bitmapGraphics, params);
+    draw_ui_text(bitmapGraphics, params);
 
     // Store in cache
     cache[params.text] = bitmap;
@@ -115,13 +115,15 @@ Gdiplus::Bitmap* UITextToBitmap(Gdiplus::Graphics& graphics, DrawTextParams& par
     return bitmap;
 }
 
-void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
+void DrawCachedUIText(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
     Gdiplus::RectF* rect = params.rect;
 
     // temporarily set alpha to 255 to get correct cached bitmap
     BYTE alpha = params.alpha;
     params.alpha = FADE::MAX_ALPHA;
-    Gdiplus::Bitmap* img = UITextToBitmap(graphics, params);
+    Gdiplus::Bitmap* img = UITextToBitmap(graphics, {
+                                                        .alpha = params.alpha,
+                                                    });
     if (!img) {
         return;
     }
@@ -130,12 +132,12 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     Gdiplus::REAL drawY = rect->Y;
 
     // Adjust X position according to alignment
-    if (params.manualAlign) {
-        if (params.horizontalAlign == Gdiplus::StringAlignmentCenter) {
+    if (params.manual_align) {
+        if (params.horizontal_align == Gdiplus::StringAlignmentCenter) {
             drawX += (rect->Width - img->GetWidth()) / 2 + TEXT_SHADOW_RADIUS;
-        } else if (params.horizontalAlign == Gdiplus::StringAlignmentFar) {
+        } else if (params.horizontal_align == Gdiplus::StringAlignmentFar) {
             drawX += rect->Width - img->GetWidth() + TEXT_SHADOW_RADIUS;
-        } else if (params.horizontalAlign == Gdiplus::StringAlignmentNear) {
+        } else if (params.horizontal_align == Gdiplus::StringAlignmentNear) {
             drawX += -TEXT_SHADOW_RADIUS;
         }
     }
@@ -143,7 +145,7 @@ void DrawCachedUIText(Gdiplus::Graphics& graphics, DrawTextParams& params) {
     if (alpha == FADE::MAX_ALPHA) {
         graphics.DrawImage(img, drawX, drawY);
     } else {
-        auto imgAttr = ImageAttrWithAlpha(img, alpha);
+        auto imgAttr = image_attr_with_alpha(img, alpha);
         Gdiplus::REAL imgW = static_cast<Gdiplus::REAL>(img->GetWidth());
         Gdiplus::REAL imgH = static_cast<Gdiplus::REAL>(img->GetHeight());
         Gdiplus::RectF rect(drawX, drawY, imgW, imgH);
