@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="alias.h" />
     <ClInclude Include="app.core.h" />
     <ClInclude Include="consts.warning.h" />
     <ClInclude Include="index.h" />

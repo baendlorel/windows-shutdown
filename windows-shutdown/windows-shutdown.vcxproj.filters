@@ -160,6 +160,9 @@
     <ClInclude Include="consts.warning.h">
       <Filter>src\consts</Filter>
     </ClInclude>
+    <ClInclude Include="alias.h">
+      <Filter>src\consts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils.bitmap-loader.cpp">

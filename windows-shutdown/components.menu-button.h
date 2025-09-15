@@ -23,7 +23,7 @@ class MenuButton : public Div {
     void center(int button_count, int index, int w, int h);
 
    private:
-    size_t mouse_move_listener_id_ = 0;
+    unsigned int mouse_move_listener_id_ = 0;
 
     void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 };

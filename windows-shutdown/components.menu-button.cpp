@@ -45,8 +45,8 @@ MenuButton::MenuButton(const int x, const int y, const app::Action action)
         }
 
         // highlight changed
-        bool before = this->hovered;
-        bool after = this->mouse_hit(app::state.mouse_x, app::state.mouse_y);
+        const bool before = this->hovered;
+        const bool after = this->mouse_hit(app::state.mouse_x, app::state.mouse_y);
         if (before != after) {
             app::event.emit(app::EventType::Redraw);
         }
