@@ -23,12 +23,11 @@ std::unique_ptr<Gdiplus::ImageAttributes> painter::image_attr_with_alpha(
         return nullptr;
     }
 
-    const Gdiplus::ColorMatrix colorMatrix = {
-        {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-         {0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
-         {0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
-         {0.0f, 0.0f, 0.0f, to_real(alpha) * fade::ONE_TO_MAX_ALPHA, 0.0f},
-         {0.0f, 0.0f, 0.0f, 0.0f, 1.0f}}};
+    const Gdiplus::ColorMatrix colorMatrix = {{{1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+                                               {0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
+                                               {0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
+                                               {0.0f, 0.0f, 0.0f, fade::get_opacity(alpha), 0.0f},
+                                               {0.0f, 0.0f, 0.0f, 0.0f, 1.0f}}};
     auto imgAttr = std::make_unique<Gdiplus::ImageAttributes>();
 
     imgAttr->SetColorMatrix(&colorMatrix);

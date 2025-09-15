@@ -13,4 +13,9 @@ inline constexpr int DURATION = 240;  // ms
 inline constexpr int FRAME_TIME = 30;
 inline constexpr int TIMER_ID = 1001;
 
+// Convert alpha (0..255) to opacity (0.0..1.0)
+inline float get_opacity(const BYTE alpha) {
+    return static_cast<float>(alpha) * ONE_TO_MAX_ALPHA;
+}
+
 }  // namespace fade
