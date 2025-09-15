@@ -6,34 +6,38 @@
 #include "style.font.h"
 #include "realify.h"
 
-Gdiplus::Color apply_alpha(const Gdiplus::Color* color, const BYTE alpha) {
-    if (alpha == FADE::MAX_ALPHA) {
+Gdiplus::Color painter::apply_alpha(const Gdiplus::Color* color, const BYTE alpha) {
+    if (alpha == fade::MAX_ALPHA) {
         return *color;
     }
 
     // overallAlpha in 0..255, srcA in 0..255
-    BYTE blended = alpha * color->GetA() / 255;
+    BYTE blended = alpha * color->GetA() / fade::MAX_ALPHA;
 
     return {blended, color->GetR(), color->GetG(), color->GetB()};
 };
 
-std::unique_ptr<Gdiplus::ImageAttributes> image_attr_with_alpha(Gdiplus::Image* image,
-                                                                const BYTE alpha) {
-    if (alpha == FADE::MAX_ALPHA) {
+std::unique_ptr<Gdiplus::ImageAttributes> painter::image_attr_with_alpha(
+    const Gdiplus::Image* image, const BYTE alpha) {
+    if (alpha == fade::MAX_ALPHA) {
         return nullptr;
     }
 
-    Gdiplus::ColorMatrix colorMatrix = {
-        1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,           1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, alpha / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+    const Gdiplus::ColorMatrix colorMatrix = {
+        {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+         {0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
+         {0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
+         {0.0f, 0.0f, 0.0f, to_real(alpha) * fade::ONE_TO_MAX_ALPHA, 0.0f},
+         {0.0f, 0.0f, 0.0f, 0.0f, 1.0f}}};
     auto imgAttr = std::make_unique<Gdiplus::ImageAttributes>();
+
     imgAttr->SetColorMatrix(&colorMatrix);
     return imgAttr;
 }
 
-void draw_ui_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
+void painter::draw_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
     Gdiplus::StringFormat format;
-    auto align = params.manual_align ? Gdiplus::StringAlignmentNear : params.horizontal_align;
+    const auto align = params.manual_align ? Gdiplus::StringAlignmentNear : params.horizontal_align;
     // & Better to be handled in DrawCachedUIText, here we always use near
     format.SetAlignment(align);
     format.SetLineAlignment(Gdiplus::StringAlignmentNear);
@@ -41,7 +45,7 @@ void draw_ui_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& para
 
     // temporarily change compositing mode to SourceCopy to avoid blending multiple shadows
     for (int radius = TEXT_SHADOW_RADIUS; radius >= 1; radius -= TEXT_SHADOW_RADIUS_STEP) {
-        const BYTE alpha = TEXT_SHADOW_ALPHA * params.alpha / ((radius + 1) * FADE::MAX_ALPHA);
+        const BYTE alpha = TEXT_SHADOW_ALPHA * params.alpha / ((radius + 1) * fade::MAX_ALPHA);
         brush.SetColor(apply_alpha(params.shadow_color, alpha));
 
         for (const int i : std::views::iota(0, 16)) {
@@ -54,30 +58,29 @@ void draw_ui_text_shadow(Gdiplus::Graphics& graphics, const DrawTextParams& para
     }
 }
 
-void draw_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
+void painter::draw_text(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
     graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAliasGridFit);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     graphics.SetCompositingQuality(Gdiplus::CompositingQualityHighQuality);
 
-    draw_ui_text_shadow(graphics, params);
+    draw_text_shadow(graphics, params);
 
     Gdiplus::SolidBrush brush(apply_alpha(params.color, params.alpha));
     Gdiplus::StringFormat format;
     // & Better to be handled in DrawCachedUIText, here we always use near
     // format.SetAlignment(params.horizontalAlign);
-    auto align = params.manual_align ? Gdiplus::StringAlignmentNear : params.horizontal_align;
+    const auto align = params.manual_align ? Gdiplus::StringAlignmentNear : params.horizontal_align;
     format.SetAlignment(align);
     format.SetLineAlignment(Gdiplus::StringAlignmentNear);
     graphics.DrawString(params.text.c_str(), -1, params.font, *params.rect, &format, &brush);
 }
 
-Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
-                                   const DrawTextParams& params) {
+Gdiplus::Bitmap* painter::text_to_bitmap(const Gdiplus::Graphics& graphics,
+                                         const DrawTextParams& params) {
     // Cache for rendered UI text bitmaps
     static std::unordered_map<std::wstring, Gdiplus::Bitmap*> cache;
 
-    auto it = cache.find(params.text);
-    if (it != cache.end()) {
+    if (const auto it = cache.find(params.text); it != cache.end()) {
         return it->second;
     }
 
@@ -91,8 +94,8 @@ Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
     graphics.MeasureString(params.text.c_str(), -1, params.font, measuredRect, &format, &box);
 
     // Add extra margin for shadow (max radius is 4, need extra space in each direction)
-    int bitmapWidth = static_cast<int>(box.Width) + TEXT_SHADOW_RADIUS * 2;
-    int bitmapHeight = static_cast<int>(box.Height) + TEXT_SHADOW_RADIUS * 2;
+    const int bitmapWidth = to_int(box.Width) + TEXT_SHADOW_RADIUS * 2;
+    const int bitmapHeight = to_int(box.Height) + TEXT_SHADOW_RADIUS * 2;
 
     // Create new bitmap
     Gdiplus::Bitmap* bitmap = new Gdiplus::Bitmap(bitmapWidth, bitmapHeight, PixelFormat32bppARGB);
@@ -106,14 +109,14 @@ Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
     // Clear bitmap background to transparent
     bitmapGraphics.Clear(Gdiplus::Color(0, 0, 0, 0));
 
-    draw_ui_text(bitmapGraphics, {.text = params.text,
-                                  .font = params.font,
-                                  .rect = &measuredRect,
-                                  .manual_align = params.manual_align,
-                                  .horizontal_align = params.horizontal_align,
-                                  .alpha = params.alpha,
-                                  .color = params.color,
-                                  .shadow_color = params.shadow_color});
+    draw_text(bitmapGraphics, {.text = params.text,
+                               .font = params.font,
+                               .rect = &measuredRect,
+                               .manual_align = params.manual_align,
+                               .horizontal_align = params.horizontal_align,
+                               .alpha = params.alpha,
+                               .color = params.color,
+                               .shadow_color = params.shadow_color});
 
     // Store in cache
     cache[params.text] = bitmap;
@@ -121,45 +124,47 @@ Gdiplus::Bitmap* ui_text_to_bitmap(const Gdiplus::Graphics& graphics,
     return bitmap;
 }
 
-void draw_cached_ui_text(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
+void painter::draw_cached_text(Gdiplus::Graphics& graphics, const DrawTextParams& params) {
     const Gdiplus::RectF* rect = params.rect;
 
     // temporarily set alpha to 255 to get correct cached bitmap
     BYTE alpha = params.alpha;
-    Gdiplus::Bitmap* img = ui_text_to_bitmap(graphics, {.text = params.text,
-                                                        .font = params.font,
-                                                        .rect = params.rect,
-                                                        .manual_align = params.manual_align,
-                                                        .horizontal_align = params.horizontal_align,
-                                                        .alpha = FADE::MAX_ALPHA,
-                                                        .color = params.color,
-                                                        .shadow_color = params.shadow_color});
-    if (!img) {
+    Gdiplus::Bitmap* image =
+        painter::text_to_bitmap(graphics, {.text = params.text,
+                                           .font = params.font,
+                                           .rect = params.rect,
+                                           .manual_align = params.manual_align,
+                                           .horizontal_align = params.horizontal_align,
+                                           .alpha = fade::MAX_ALPHA,
+                                           .color = params.color,
+                                           .shadow_color = params.shadow_color});
+    if (!image) {
         return;
     }
     // Calculate draw position (consider shadow margin)
     Gdiplus::REAL drawX = rect->X;
     const Gdiplus::REAL drawY = rect->Y;
+    const Gdiplus::REAL imageW = to_real(image->GetWidth());
 
     // Adjust X position according to alignment
     if (params.manual_align) {
         if (params.horizontal_align == Gdiplus::StringAlignmentCenter) {
-            drawX += (rect->Width - img->GetWidth()) / 2 + TEXT_SHADOW_RADIUS;
+            drawX += (rect->Width - imageW) / 2 + TEXT_SHADOW_RADIUS;
         } else if (params.horizontal_align == Gdiplus::StringAlignmentFar) {
-            drawX += rect->Width - img->GetWidth() + TEXT_SHADOW_RADIUS;
+            drawX += rect->Width - imageW + TEXT_SHADOW_RADIUS;
         } else if (params.horizontal_align == Gdiplus::StringAlignmentNear) {
             drawX += -TEXT_SHADOW_RADIUS;
         }
     }
 
-    if (alpha == FADE::MAX_ALPHA) {
-        graphics.DrawImage(img, drawX, drawY);
+    if (alpha == fade::MAX_ALPHA) {
+        graphics.DrawImage(image, drawX, drawY);
     } else {
-        const auto imgAttr = image_attr_with_alpha(img, alpha);
-        const Gdiplus::REAL imgW = static_cast<Gdiplus::REAL>(img->GetWidth());
-        const Gdiplus::REAL imgH = static_cast<Gdiplus::REAL>(img->GetHeight());
+        const auto imgAttr = image_attr_with_alpha(image, alpha);
+        const Gdiplus::REAL imgW = to_real(image->GetWidth());
+        const Gdiplus::REAL imgH = to_real(image->GetHeight());
         const Gdiplus::RectF drawRect(drawX, drawY, imgW, imgH);
-        graphics.DrawImage(img, drawRect, 0, 0, drawRect.Width, drawRect.Height, Gdiplus::UnitPixel,
-                           imgAttr.get());
+        graphics.DrawImage(image, drawRect, 0, 0, drawRect.Width, drawRect.Height,
+                           Gdiplus::UnitPixel, imgAttr.get());
     }
 }

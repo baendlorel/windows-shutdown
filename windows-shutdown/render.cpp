@@ -61,7 +61,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gd
 
     // * These functions will decide internally whether to draw based on current state
     if (!warningWStr.empty()) {
-        DrawWarning(graphics, FADE::MAX_ALPHA, w, h, warningWStr);
+        DrawWarning(graphics, fade::MAX_ALPHA, w, h, warningWStr);
     }
 
     // !
@@ -114,7 +114,7 @@ void Render::update_layered(const HWND hWnd) {
     draw_to_memory_dc(hdcMem, to_real(sizeWin.cx), to_real(sizeWin.cy));
     POINT ptWin = {0, 0};
 
-    BLENDFUNCTION blend = {AC_SRC_OVER, 0, FADE::MAX_ALPHA, AC_SRC_ALPHA};
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, fade::MAX_ALPHA, AC_SRC_ALPHA};
     UpdateLayeredWindow(hWnd, hdcScreen, &ptWin, &sizeWin, hdcMem, &ptWin, 0, &blend, ULW_ALPHA);
     SelectObject(hdcMem, oldBmp);
     DeleteObject(hBitmap);

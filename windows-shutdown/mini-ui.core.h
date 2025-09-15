@@ -9,7 +9,7 @@ struct DrawTextParams {
     const Gdiplus::RectF* rect;
     bool manual_align = true;  // controls whether to use horizontalAlign or always near
     Gdiplus::StringAlignment horizontal_align;
-    BYTE alpha = FADE::MAX_ALPHA;  // overall alpha for this text
+    BYTE alpha = fade::MAX_ALPHA;  // overall alpha for this text
     const Gdiplus::Color* color;
     const Gdiplus::Color* shadow_color;
 };

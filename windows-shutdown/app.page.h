@@ -23,11 +23,11 @@ class AppPage {
 
     BYTE GetPageAlpha(Page page) {
         if (!fading) {
-            return (current == page) ? FADE::MAX_ALPHA : 0;
+            return (current == page) ? fade::MAX_ALPHA : 0;
         }
 
         if (current == page) {
-            return FADE::MAX_ALPHA - alpha;
+            return fade::MAX_ALPHA - alpha;
         } else if (next == page) {
             return alpha;
         } else {
@@ -45,13 +45,13 @@ class AppPage {
         this->alpha = 0;
 
         if (hWnd != nullptr) {
-            SetTimer(hWnd, FADE::TIMER_ID, FADE::FRAME_TIME, NULL);
+            SetTimer(hWnd, fade::TIMER_ID, fade::FRAME_TIME, NULL);
         }
     }
 
     void SetAlpha(BYTE alpha) {
         this->alpha = alpha;
-        if (alpha == FADE::MAX_ALPHA) {
+        if (alpha == fade::MAX_ALPHA) {
             this->current = this->next;
             this->next = Page::None;
             this->fading = false;
@@ -81,9 +81,9 @@ class AppPage {
             return this->alpha;
         }
         if (isClosing()) {
-            return FADE::MAX_ALPHA - this->alpha;
+            return fade::MAX_ALPHA - this->alpha;
         }
-        return FADE::MAX_ALPHA;
+        return fade::MAX_ALPHA;
     }
 
    private:
