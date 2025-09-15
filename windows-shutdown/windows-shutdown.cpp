@@ -1,25 +1,21 @@
 ﻿#include "framework.h"
 #include "consts.app.h"
-#include "style.fade.h"
 #include "app.core.h"
 
-#include "controller.h"
 #include "window.h"
 
-//  _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
-// Try modern DPI APIs first (SetProcessDpiAwareness in shcore.dll), fall back to
-// SetProcessDPIAware in user32.dll when not available. This uses runtime loading
-// to remain compatible with different SDKs/toolchains.
-static void EnsureDpiAwareness() {
-    // Try SetProcessDpiAwareness (Windows 8.1+, shcore.dll)
-    HMODULE hShcore = LoadLibraryW(L"shcore.dll");
-    if (hShcore) {
-        typedef HRESULT(WINAPI * SetProcessDpiAwareness_t)(int /*PROCESS_DPI_AWARENESS*/);
-        SetProcessDpiAwareness_t pSet = reinterpret_cast<SetProcessDpiAwareness_t>(
-            GetProcAddress(hShcore, "SetProcessDpiAwareness"));
+namespace {
+void EnsureDpiAwareness() {
+    if (const HMODULE hShcore = LoadLibraryW(L"shcore.dll")) {
+        typedef HRESULT(WINAPI * setter)(int /*PROCESS_DPI_AWARENESS*/);
+
+        const auto pSet =
+            reinterpret_cast /* NOLINT(clang-diagnostic-cast-function-type-strict) */<setter>(
+                GetProcAddress(hShcore, "SetProcessDpiAwareness"));
+
         if (pSet) {
             // 2 == PROCESS_PER_MONITOR_DPI_AWARE
-            pSet(2);
+            (void)pSet(2);
             FreeLibrary(hShcore);
             return;
         }
@@ -27,43 +23,41 @@ static void EnsureDpiAwareness() {
     }
 
     // Fallback to old API SetProcessDPIAware (user32.dll)
-    HMODULE hUser = LoadLibraryW(L"user32.dll");
-    if (hUser) {
-        typedef BOOL(WINAPI * SetProcessDPIAware_t)(void);
-        SetProcessDPIAware_t pOld =
-            reinterpret_cast<SetProcessDPIAware_t>(GetProcAddress(hUser, "SetProcessDPIAware"));
-        if (pOld) {
+    if (const HMODULE hUser = LoadLibraryW(L"user32.dll")) {
+        typedef BOOL(WINAPI * setter)();
+        auto* t = GetProcAddress(hUser, "SetProcessDPIAware");
+        if (const auto pOld =
+                reinterpret_cast /* NOLINT(clang-diagnostic-cast-function-type-strict) */<setter>(
+                    t)) {
             pOld();
         }
         FreeLibrary(hUser);
     }
 }
+}  // namespace
 
-// msvc use: int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
-                      _In_ LPWSTR lpCmdLine, _In_ int nCmdShow) {
+int APIENTRY wWinMain(_In_ const HINSTANCE hInstance, _In_opt_ const HINSTANCE hPrevInstance,
+                      _In_ const LPWSTR lpCmdLine, _In_ const int nShowCmd) {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     EnsureDpiAwareness();
 
-    auto& app = App::GetInstance();
-    app.config.Load();
-    app.i18n.SetLang(app.config.lang);
-    app.state.hInst = hInstance;
+    app::config.load();
+    app::i18n.set_lang(app::config.lang);
+    app::state.hInst = hInstance;
 
-    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    const Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     ULONG_PTR gdiplusToken;
 
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
 
-    LoadStringW(hInstance, IDS_APP_TITLE, app.state.szTitle, MAX_LOAD_STRING);
-    LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, app.state.szWindowClass, MAX_LOAD_STRING);
+    LoadStringW(hInstance, IDS_APP_TITLE, app::state.szTitle, app::MAX_LOAD_STRING);
+    LoadStringW(hInstance, IDC_WINDOWSSHUTDOWN, app::state.szWindowClass, app::MAX_LOAD_STRING);
 
-    auto& window = Window::GetInstance();
-    window.MyRegisterClass();
+    window::my_register_class();
 
-    // fixme nono无响应退出了
-    if (!window.InitInstance(nCmdShow)) {
+    // fixme no-no无响应退出了
+    if (!window::init_instance(nShowCmd)) {
         return FALSE;
     }
 
