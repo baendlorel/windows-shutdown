@@ -19,8 +19,8 @@ ATOM Window::MyRegisterClass() {
     wcex.hInstance = appState.hInst;
     wcex.hIcon = LoadIcon(appState.hInst, MAKEINTRESOURCE(IDI_MAINICON));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = NULL;
-    wcex.lpszMenuName = NULL;
+    wcex.hbrBackground = nullptr;
+    wcex.lpszMenuName = nullptr;
     wcex.lpszClassName = appState.szWindowClass;
     wcex.hIconSm = LoadIcon(appState.hInst, MAKEINTRESOURCE(IDI_MAINICON));
     return RegisterClassExW(&wcex);

@@ -10,10 +10,10 @@ class AppPage {
 
    public:
     // Current page being displayed
-    Page current = Page::None;
+    app::Page current = app::Page::None;
 
-    // Page to fade into, normaly none
-    Page next = Page::None;
+    // Page to fade into, normally none
+    app::Page next = app::Page::None;
 
     // Opacity of current page, 0-255
     BYTE alpha = 0;
@@ -21,71 +21,73 @@ class AppPage {
     // Only consider one page fading to another, no need to distinguish fading out or in
     bool fading = false;
 
-    BYTE GetPageAlpha(Page page) {
+    BYTE get_page_alpha(const app::Page page) const {
         if (!fading) {
             return (current == page) ? fade::MAX_ALPHA : 0;
         }
 
         if (current == page) {
             return fade::MAX_ALPHA - alpha;
-        } else if (next == page) {
-            return alpha;
-        } else {
-            return 0;
         }
+
+        if (next == page) {
+            return alpha;
+        }
+
+        return 0;
     }
 
     // If hWnd is provided, start a fading timer
-    void Start(Page next, HWND hWnd) {
-        if (next == this->current) {
+    void start(const app::Page next_page, const HWND hWnd) {
+        if (next_page == this->current) {
             return;
         }
-        this->next = next;
+        this->next = next_page;
         this->fading = true;
         this->alpha = 0;
 
         if (hWnd != nullptr) {
-            SetTimer(hWnd, fade::TIMER_ID, fade::FRAME_TIME, NULL);
+            SetTimer(hWnd, fade::TIMER_ID, fade::FRAME_TIME, nullptr);
         }
     }
 
-    void SetAlpha(BYTE alpha) {
-        this->alpha = alpha;
-        if (alpha == fade::MAX_ALPHA) {
+    void set_alpha(const BYTE a) {
+        this->alpha = a;
+        if (a == fade::MAX_ALPHA) {
             this->current = this->next;
-            this->next = Page::None;
+            this->next = app::Page::None;
             this->fading = false;
             // invoke and clear fade-end callback if present
-            if (onFadeEnd) {
-                onFadeEnd();
-                onFadeEnd = {};
+            if (on_fade_end_) {
+                on_fade_end_();
+                on_fade_end_ = {};
             }
         }
     }
 
     // Register a callback to be invoked once when a fade finishes (alpha reaches MAX_ALPHA).
-    void OnFadeEnd(std::function<void()> cb) {
-        onFadeEnd = std::move(cb);
+    void on_fade_end(std::function<void()> cb) {
+        on_fade_end_ = std::move(cb);
     }
 
-    bool isOpening() const {
-        return this->current == Page::None && this->fading;
+    [[nodiscard]] bool is_opening() const {
+        return this->current == app::Page::None && this->fading;
     }
 
-    bool isClosing() const {
-        return this->next == Page::None && this->fading;
+    [[nodiscard]] bool is_closing() const {
+        return this->next == app::Page::None && this->fading;
     }
 
-    BYTE GetBackgroundAlpha() const {
-        if (isOpening()) {
+    [[nodiscard]] BYTE get_background_alpha() const {
+        if (is_opening()) {
             return this->alpha;
         }
-        if (isClosing()) {
+        if (is_closing()) {
             return fade::MAX_ALPHA - this->alpha;
         }
         return fade::MAX_ALPHA;
     }
 
    private:
-    std::function<void()> onFadeEnd;
+    std::function<void()> on_fade_end_;
 };

@@ -14,7 +14,7 @@ void Controller::ExecuteRestart() {
                     MB_ICONERROR);
         return;
     }
-    if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+    if (!LookupPrivilegeValue(nullptr, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
         MessageBoxW(nullptr, app.i18n.ErrLookupPrivilegeRestart.c_str(), app.i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
         CloseHandle(hToken);
@@ -22,11 +22,11 @@ void Controller::ExecuteRestart() {
     }
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0);
+    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), nullptr);
     CloseHandle(hToken);
 
     wchar_t msg[] = L"Restarting...";
-    if (!InitiateSystemShutdownEx(NULL, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER)) {
+    if (!InitiateSystemShutdownEx(nullptr, msg, 0, TRUE, TRUE, SHTDN_REASON_MAJOR_OTHER)) {
         MessageBoxW(nullptr, app.i18n.ErrRestartFailed.c_str(), app.i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
     }
@@ -40,7 +40,7 @@ void Controller::ExecuteShutdown() {
                     MB_ICONERROR);
         return;
     }
-    if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+    if (!LookupPrivilegeValue(nullptr, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
         MessageBoxW(nullptr, app.i18n.ErrLookupPrivilegeShutdown.c_str(), app.i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
         CloseHandle(hToken);
@@ -48,11 +48,11 @@ void Controller::ExecuteShutdown() {
     }
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), 0);
+    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr), nullptr);
     CloseHandle(hToken);
 
     wchar_t msg[] = L"Shutdown...";
-    if (!InitiateSystemShutdownEx(NULL, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER)) {
+    if (!InitiateSystemShutdownEx(nullptr, msg, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER)) {
         MessageBoxW(nullptr, app.i18n.ErrShutdownFailed.c_str(), app.i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
     }
@@ -62,11 +62,11 @@ void Controller::ExecuteSleep() {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-        if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+        if (LookupPrivilegeValue(nullptr, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, static_cast<PTOKEN_PRIVILEGES>(nullptr),
-                                  0);
+                                  nullptr);
         }
         CloseHandle(hToken);
     }
@@ -112,7 +112,7 @@ void Controller::StartCountdown(HWND hWnd, Action action) {
         return;
     }
 
-    SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, NULL);  // 1 second interval
+    SetTimer(hWnd, COUNTDOWN_TIMER_ID, 1000, nullptr);  // 1 second interval
     app.state.countdownSeconds = app.config.delay;
     app.state.action = action;
     app.page.Start(Page::Countdown, hWnd);
@@ -135,7 +135,7 @@ void Controller::TriggerLock(HWND hWnd) {
 
 void Controller::TriggerConfig(HWND hWnd) {
     std::wstring configPath = app.config.get_config_path();
-    ShellExecuteW(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    ShellExecuteW(nullptr, L"open", configPath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
     if (app.page.fading) {
         return;
     }

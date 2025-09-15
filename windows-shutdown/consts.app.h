@@ -7,6 +7,8 @@ enum class Page : unsigned char { None, Home, Countdown, Donate };
 
 enum class ElementTag : unsigned char { Div, A, Button };
 
+enum class EventType : unsigned char { MouseMove, MouseClick, KeyPress, Redraw };
+
 inline constexpr int MAX_LOAD_STRING = 100;
 
 inline constexpr int COUNTDOWN_TIMER_ID = 1002;

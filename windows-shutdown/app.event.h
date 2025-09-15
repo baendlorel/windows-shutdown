@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <unordered_map>
+
+#include "consts.app.h"
 #include "framework.h"
 #include "singleton.h"
-
-enum class EventType : unsigned char { MouseMove, MouseClick, KeyPress, Redraw };
 
 // Global event hub
 class AppEvent {
@@ -11,14 +11,14 @@ class AppEvent {
 
    private:
     // event listeners
-    std::unordered_map<EventType, std::vector<std::function<void()>>> listeners_;
+    std::unordered_map<app::EventType, std::vector<std::function<void()>>> listeners_;
 
    public:
-    void on(const EventType evt, std::function<void()>& handler) {
+    void on(const app::EventType evt, std::function<void()> handler) {
         this->listeners_[evt].push_back(std::move(handler));
     }
 
-    void emit(const EventType evt) {
+    void emit(const app::EventType evt) {
         for (auto& evtListener : this->listeners_[evt]) {
             evtListener();
         }

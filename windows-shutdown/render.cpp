@@ -39,8 +39,8 @@ void Render::__DrawDebug(Gdiplus::Graphics& graphics, const Gdiplus::REAL w,
     count++;
     auto str = std::format(
         L"{}, Home:{} (menu active: {}, {}), Cnt:{}, None:{}\nCur:{}, next:{}, fading:{}", count,
-        app::page.GetPageAlpha(app::Page::Home), menuActive, __drawingalpha,
-        app::page.GetPageAlpha(app::Page::Countdown), app::page.GetPageAlpha(app::Page::None),
+        app::page.get_page_alpha(app::Page::Home), menuActive, __drawingalpha,
+        app::page.get_page_alpha(app::Page::Countdown), app::page.get_page_alpha(app::Page::None),
         pageName(app::page.current), pageName(app::page.next),
         (app::page.fading ? L"true" : L"false"));
 
@@ -52,7 +52,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gd
     static Gdiplus::Color baseBgColor = app::config.background_color;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(apply_alpha(&baseBgColor, app::page.GetBackgroundAlpha()));
+    Gdiplus::SolidBrush bgBrush(apply_alpha(&baseBgColor, app::page.get_background_alpha()));
 
     Gdiplus::Graphics graphics(hdcMem);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -121,5 +121,5 @@ void Render::update_layered(const HWND hWnd) {
     DeleteDC(hdcMem);
     ReleaseDC(nullptr, hdcScreen);
 
-    app::state.needRedraw = false;
+    app::state.need_redraw = false;
 }

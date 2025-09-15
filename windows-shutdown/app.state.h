@@ -9,42 +9,46 @@ class AppState {
 
    private:
     AppState() {
-        AppEvent::GetInstance().on(EventType::Redraw, [this]() { this->needRedraw = true; });
-    };
+        AppEvent::GetInstance().on(app::EventType::Redraw, [this]() { this->need_redraw = true; });
+    }
 
    public:
+    // ReSharper disable once CppInconsistentNaming
     HINSTANCE hInst = nullptr;
 
     // control the redrawing
-    bool needRedraw = false;
+    bool need_redraw = false;
 
     // size
-    int screenW = 0;
-    int screenH = 0;
+    int screen_w = 0;
+    int screen_h = 0;
 
     // mouse
-    int mouseX = 0;
-    int mouseY = 0;
+    int mouse_x = 0;
+    int mouse_y = 0;
 
     // actions
-    Action action = Action::None;
-    short countdownSeconds = 0;
+    app::Action action = app::Action::None;
+    short countdown_seconds = 0;
 
     // ui
-    WCHAR szTitle[MAX_LOAD_STRING] = L"";
-    WCHAR szWindowClass[MAX_LOAD_STRING] = L"";
+    // ReSharper disable once CppInconsistentNaming
+    WCHAR szTitle[app::MAX_LOAD_STRING] = L"";
+
+    // ReSharper disable once CppInconsistentNaming
+    WCHAR szWindowClass[app::MAX_LOAD_STRING] = L"";
 
    public:
-    bool isCountingDown() const {
-        return countdownSeconds > 0;
+    [[nodiscard]] bool is_counting_down() const {
+        return countdown_seconds > 0;
     }
 
     // Will trigger MouseMove
-    void SetMousePos(int x, int y) {
+    void set_mouse_pos(const int x, const int y) {
         static auto& appEvent = AppEvent::GetInstance();
-        this->mouseX = x;
-        this->mouseY = y;
+        this->mouse_x = x;
+        this->mouse_y = y;
 
-        appEvent.emit(EventType::MouseMove);
+        appEvent.emit(app::EventType::MouseMove);
     }
 };

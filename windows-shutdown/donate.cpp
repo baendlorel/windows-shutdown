@@ -11,7 +11,7 @@
 
 void DonateView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) {
     // TODO 这里要改成统一的isinvisible
-    BYTE alpha = AppPage::GetInstance().GetPageAlpha(Page::Donate);
+    BYTE alpha = AppPage::GetInstance().get_page_alpha(app::Page::Donate);
     if (!params.rect) {
         throw "rect为空";
     }
