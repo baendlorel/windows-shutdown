@@ -3,8 +3,8 @@
 #include "resource.h"
 #include "utils.string.h"
 
-void AppI18N::SetLang(CFG::Lang lang) {
-    if (lang == CFG::Lang::Zh) {
+void AppI18N::SetLang(cfg::Lang lang) {
+    if (lang == cfg::Lang::Zh) {
         FontFamilyName = L"Microsoft YaHei UI";
 
         ErrCreateWindow = L"创建主窗口失败！程序无法启动。";
@@ -31,28 +31,28 @@ void AppI18N::SetLang(CFG::Lang lang) {
         UnknownConfigKey = std::format(L"未知的配置项，已忽略。");
         NotConfigEntry = L"配置文件中有无法解析的行，已忽略。";
         InvalidLanguage =
-            std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个。现使用默认值{}。", CFG::KEY_LANG_W,
-                        CFG::LANG_ZH_W, CFG::LANG_EN_W, CFG::LANG_EN_W);
+            std::format(L"[{}]的值无效，应该是\"{},{}\"中的一个。现使用默认值{}。", cfg::KEY_LANG_W,
+                        cfg::LANG_ZH_W, cfg::LANG_EN_W, cfg::LANG_EN_W);
         InvalidAction = std::format(L"[{}]的值无效，应该是\"{}\"中的一个。现使用默认值{}。",
-                                    CFG::KEY_ACTION_W, CFG::ACTION_SOME_W, CFG::ACTION_NONE_W);
+                                    cfg::KEY_ACTION_W, cfg::ACTION_SOME_W, cfg::ACTION_NONE_W);
         InvalidInstruction = std::format(
-            L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。", CFG::KEY_INSTRUCTION_W,
-            CFG::INSTRUCTION_SHOW_W, CFG::INSTRUCTION_HIDE_W, CFG::INSTRUCTION_SHOW_W);
+            L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。", cfg::KEY_INSTRUCTION_W,
+            cfg::INSTRUCTION_SHOW_W, cfg::INSTRUCTION_HIDE_W, cfg::INSTRUCTION_SHOW_W);
         InvalidMenuButton = std::format(
             L"[{}]的值无效，应该是以英文逗号分隔的Action枚举名称（如：{}）。现使用默认值。{}",
-            CFG::KEY_MENU_BUTTONS_W, CFG::MENU_BUTTONS_SOME_W, CFG::MENU_BUTTONS_SOME_W);
+            cfg::KEY_MENU_BUTTONS_W, cfg::MENU_BUTTONS_SOME_W, cfg::MENU_BUTTONS_SOME_W);
         InvalidCountdownStyle =
             std::format(L"[{}]的值无效，应该是\"{}, {}\"中的一个。现使用默认值{}。",
-                        CFG::KEY_COUNTDOWN_STYLE_W, CFG::COUNTDOWN_STYLE_NORMAL_W,
-                        CFG::COUNTDOWN_STYLE_STEINS_GATE_W, CFG::COUNTDOWN_STYLE_STEINS_GATE_W);
+                        cfg::KEY_COUNTDOWN_STYLE_W, cfg::COUNTDOWN_STYLE_NORMAL_W,
+                        cfg::COUNTDOWN_STYLE_STEINS_GATE_W, cfg::COUNTDOWN_STYLE_STEINS_GATE_W);
         InvalidDelay = std::format(L"[{}]必须是大于或等于0的整数。现使用默认值{}。",
-                                   CFG::KEY_DELAY_W, CFG::CFG_DEFAULT_DELAY);
+                                   cfg::KEY_DELAY_W, cfg::CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
             std::format(L"[{}]不是有效的#RRGGBBAA或#RRGGBB格式。现使用默认值{}。",
-                        CFG::KEY_BACKGROUND_COLOR_W, CFG::BACKGROUND_COLOR_DEFAULT_W);
+                        cfg::KEY_BACKGROUND_COLOR_W, cfg::BACKGROUND_COLOR_DEFAULT_W);
         InvalidBackgroundColorValue =
-            std::format(L"[{}]不是有效的颜色值。现使用默认值{}。", CFG::KEY_BACKGROUND_COLOR_W,
-                        CFG::BACKGROUND_COLOR_DEFAULT_W);
+            std::format(L"[{}]不是有效的颜色值。现使用默认值{}。", cfg::KEY_BACKGROUND_COLOR_W,
+                        cfg::BACKGROUND_COLOR_DEFAULT_W);
 
         // actions
         Shutdown = ZH_SHUTDOWN;
@@ -95,30 +95,30 @@ void AppI18N::SetLang(CFG::Lang lang) {
         NotConfigEntry = L"Unrecognized line in configuration file ignored.";
         InvalidLanguage =
             std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
-                        CFG::KEY_LANG_W, CFG::LANG_ZH_W, CFG::LANG_EN_W, CFG::LANG_EN_W);
+                        cfg::KEY_LANG_W, cfg::LANG_ZH_W, cfg::LANG_EN_W, cfg::LANG_EN_W);
         InvalidAction =
             std::format(L"[{}] is not valid, should be one of {}. Using default value {}.",
-                        CFG::KEY_ACTION_W, CFG::ACTION_SOME_W, CFG::ACTION_NONE_W);
+                        cfg::KEY_ACTION_W, cfg::ACTION_SOME_W, cfg::ACTION_NONE_W);
         InvalidInstruction =
             std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
-                        CFG::KEY_INSTRUCTION_W, CFG::INSTRUCTION_SHOW_W, CFG::INSTRUCTION_HIDE_W,
-                        CFG::INSTRUCTION_SHOW_W);
+                        cfg::KEY_INSTRUCTION_W, cfg::INSTRUCTION_SHOW_W, cfg::INSTRUCTION_HIDE_W,
+                        cfg::INSTRUCTION_SHOW_W);
         InvalidMenuButton = std::format(
             L"[{}] is not valid, should be comma-separated Action enum names (like: {}). Using "
             L"default value {}.",
-            CFG::KEY_MENU_BUTTONS_W, CFG::MENU_BUTTONS_SOME_W, CFG::MENU_BUTTONS_SOME_W);
+            cfg::KEY_MENU_BUTTONS_W, cfg::MENU_BUTTONS_SOME_W, cfg::MENU_BUTTONS_SOME_W);
         InvalidCountdownStyle =
             std::format(L"[{}] is not valid, should be {} or {}. Using default value {}.",
-                        CFG::KEY_COUNTDOWN_STYLE_W, CFG::COUNTDOWN_STYLE_NORMAL_W,
-                        CFG::COUNTDOWN_STYLE_STEINS_GATE_W, CFG::COUNTDOWN_STYLE_STEINS_GATE_W);
+                        cfg::KEY_COUNTDOWN_STYLE_W, cfg::COUNTDOWN_STYLE_NORMAL_W,
+                        cfg::COUNTDOWN_STYLE_STEINS_GATE_W, cfg::COUNTDOWN_STYLE_STEINS_GATE_W);
         InvalidDelay = std::format(L"[{}] must be a non-negative interger. Using default value {}.",
-                                   CFG::KEY_DELAY_W, CFG::CFG_DEFAULT_DELAY);
+                                   cfg::KEY_DELAY_W, cfg::CFG_DEFAULT_DELAY);
         InvalidBackgroundColorFormat =
             std::format(L"[{}] is not valid #RRGGBBAA or #RRGGBB format. Using default value {}.",
-                        CFG::KEY_BACKGROUND_COLOR_W, CFG::BACKGROUND_COLOR_DEFAULT_W);
+                        cfg::KEY_BACKGROUND_COLOR_W, cfg::BACKGROUND_COLOR_DEFAULT_W);
         InvalidBackgroundColorValue =
             std::format(L"[{}] is not a valid color value. Using default value {}.",
-                        CFG::KEY_BACKGROUND_COLOR_W, CFG::BACKGROUND_COLOR_DEFAULT_W);
+                        cfg::KEY_BACKGROUND_COLOR_W, cfg::BACKGROUND_COLOR_DEFAULT_W);
 
         // actions
         Shutdown = EN_SHUTDOWN;
@@ -137,7 +137,7 @@ void AppI18N::SetLang(CFG::Lang lang) {
     }
 }
 
-std::wstring AppI18N::GetConfigWarningText(const std::vector<CFG::WarnInfo>& entries) const {
+std::wstring AppI18N::GetConfigWarningText(const std::vector<cfg::WarnInfo>& entries) const {
     if (entries.empty()) {
         return std::wstring();
     }
@@ -148,40 +148,41 @@ std::wstring AppI18N::GetConfigWarningText(const std::vector<CFG::WarnInfo>& ent
         std::wstring text;
 
         switch (entry.warning) {
-            case CFG::Warning::InvalidLanguage:
+            case cfg::Warning::InvalidLanguage:
                 text = this->InvalidLanguage;
                 break;
-            case CFG::Warning::InvalidAction:
+            case cfg::Warning::InvalidAction:
                 text = this->InvalidAction;
                 break;
-            case CFG::Warning::InvalidInstruction:
+            case cfg::Warning::InvalidInstruction:
                 text = this->InvalidInstruction;
                 break;
-            case CFG::Warning::InvalidMenuButton:
+            case cfg::Warning::InvalidMenuButton:
                 text = this->InvalidMenuButton;
                 break;
-            case CFG::Warning::InvalidCountdownStyle:
+            case cfg::Warning::InvalidCountdownStyle:
                 text = this->InvalidCountdownStyle;
                 break;
-            case CFG::Warning::UnknownConfigKey:
+            case cfg::Warning::UnknownConfigKey:
                 text = this->UnknownConfigKey;
                 break;
-            case CFG::Warning::NotConfigEntry:
+            case cfg::Warning::NotConfigEntry:
                 text = this->NotConfigEntry;
                 break;
-            case CFG::Warning::InvalidDelay:
+            case cfg::Warning::InvalidDelay:
                 text = this->InvalidDelay;
                 break;
-            case CFG::Warning::InvalidBackgroundColorFormat:
+            case cfg::Warning::InvalidBackgroundColorFormat:
                 text = this->InvalidBackgroundColorFormat;
                 break;
-            case CFG::Warning::InvalidBackgroundColorValue:
+            case cfg::Warning::InvalidBackgroundColorValue:
                 text = this->InvalidBackgroundColorValue;
                 break;
             default:
                 break;
         }
-        result += std::format(L"    {}. {} ({} {})\n", i + 1, text, this->LineNumber, entry.lineNo);
+        result +=
+            std::format(L"    {}. {} ({} {})\n", i + 1, text, this->LineNumber, entry.line_no);
     }
 
     return result;

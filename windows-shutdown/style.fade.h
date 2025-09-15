@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 namespace fade {
-enum class State : std::uint8_t { None, FadingIn, FadingOut };
+enum class State : unsigned char { None, FadingIn, FadingOut };
 
 // effects
 inline constexpr unsigned char MAX_ALPHA = 255;

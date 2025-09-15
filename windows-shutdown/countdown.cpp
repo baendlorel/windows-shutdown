@@ -21,7 +21,7 @@ void CountdownView::draw_view(Gdiplus::Graphics& graphics, const DrawParams& par
     int h = params.rect->Height;
 
     // Check countdown style configuration
-    if (countdownStyle == CFG::CountdownStyle::SteinsGate) {
+    if (countdownStyle == cfg::CountdownStyle::SteinsGate) {
         // Steins;Gate style with nixie tubes
 
         // First line: action description

@@ -157,6 +157,9 @@
     <ClInclude Include="mini-ui.painter.h">
       <Filter>src\mini-ui</Filter>
     </ClInclude>
+    <ClInclude Include="consts.warning.h">
+      <Filter>src\consts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitmap-loader.cpp">

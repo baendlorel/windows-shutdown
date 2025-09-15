@@ -12,7 +12,7 @@ void draw_instruction(Gdiplus::Graphics& graphics, const BYTE alpha, Gdiplus::Re
     if (alpha == 0) {
         return;
     }
-    static bool showInstruction = app::config.instruction == CFG::Instruction::Show;
+    static bool showInstruction = app::config.instruction == cfg::Instruction::Show;
 
     static Gdiplus::FontFamily fontFamily(app::i18n.FontFamilyName.c_str());
     static Gdiplus::Font font(&fontFamily, INSTRUCTION_FONT_SIZE, Gdiplus::FontStyleBold);

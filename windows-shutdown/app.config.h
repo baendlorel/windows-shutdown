@@ -11,15 +11,15 @@ class AppConfig {
 
     // config entries
    public:
-    CFG::Lang lang = CFG::Lang::Zh;
+    cfg::Lang lang = cfg::Lang::Zh;
     Action action = Action::None;
-    CFG::Instruction instruction = CFG::Instruction::Show;
+    cfg::Instruction instruction = cfg::Instruction::Show;
     std::vector<Action> menu_buttons = {Action::Donate, Action::Config,  Action::Lock,
                                         Action::Sleep,  Action::Restart, Action::Shutdown};
-    CFG::CountdownStyle countdown_style = CFG::CountdownStyle::SteinsGate;
-    int delay = CFG::CFG_DEFAULT_DELAY;
+    cfg::CountdownStyle countdown_style = cfg::CountdownStyle::SteinsGate;
+    int delay = cfg::CFG_DEFAULT_DELAY;
     Gdiplus::Color background_color = color_set::BACKGROUND;
-    std::vector<CFG::WarnInfo> warnings;
+    std::vector<cfg::WarnInfo> warnings;
 
    public:
     void load();
@@ -31,5 +31,5 @@ class AppConfig {
     std::wstring get_config_path();
 
    private:
-    CFG::Warning load_key_value(std::string& key, std::string& value);
+    cfg::Warning load_key_value(std::string& key, std::string& value);
 };

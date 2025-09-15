@@ -1,11 +1,11 @@
 ﻿#pragma once
 namespace app {
 
-enum class Action : std::uint8_t { None, Donate, Config, Lock, Sleep, Restart, Shutdown };
+enum class Action : unsigned char { None, Donate, Config, Lock, Sleep, Restart, Shutdown };
 
-enum class Page : std::uint8_t { None, Home, Countdown, Donate };
+enum class Page : unsigned char { None, Home, Countdown, Donate };
 
-enum class ElementTag : std::uint8_t { Div, A, Button };
+enum class ElementTag : unsigned char { Div, A, Button };
 
 inline constexpr int MAX_LOAD_STRING = 100;
 

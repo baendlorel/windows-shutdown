@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <string_view>
 
-namespace CFG {
+namespace cfg {
 // file
 inline constexpr std::wstring_view FILE_NAME = L"config.txt";
 
@@ -86,32 +86,9 @@ inline constexpr std::wstring_view COUNTDOWN_STYLE_STEINS_GATE_W = L"nixietube";
 
 inline constexpr std::wstring_view BACKGROUND_COLOR_DEFAULT_W = L"#00000034";
 
-enum class Lang { Zh, En };  // used in config and i18n
-enum class Instruction { Show, Hide };
-enum class CountdownStyle { Normal, SteinsGate };
+enum class Lang : unsigned char { Zh, En };  // used in config and i18n
+enum class Instruction : unsigned char { Show, Hide };
+enum class CountdownStyle : unsigned char { Normal, SteinsGate };
 inline constexpr int CFG_DEFAULT_DELAY = 5;
 
-// config warnings
-enum class Warning {
-    None,
-    UnknownConfigKey,  // key not recognized
-    NotConfigEntry,    // neither comment nor key-value pair
-    InvalidLanguage,
-    InvalidAction,
-    InvalidInstruction,
-    InvalidMenuButton,
-    InvalidCountdownStyle,
-    InvalidDelay,
-    InvalidBackgroundColorFormat,
-    InvalidBackgroundColorValue
-};
-
-struct WarnInfo {
-    Warning warning;
-    short lineNo;
-};
-
-inline constexpr int WARNING_X = 40;
-inline constexpr int WARNING_Y = 40;
-inline constexpr int WARNING_FONT_SIZE = 16;
-}  // namespace CFG
+}  // namespace cfg

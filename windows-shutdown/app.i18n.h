@@ -19,7 +19,7 @@ class AppI18N {
     SINGLETON(AppI18N)
 
    public:
-    void SetLang(CFG::Lang lang);
+    void SetLang(cfg::Lang lang);
 
     // font family
     std::wstring FontFamilyName;
@@ -58,7 +58,7 @@ class AppI18N {
     std::wstring InvalidBackgroundColorFormat;
     std::wstring InvalidBackgroundColorValue;
 
-    std::wstring GetConfigWarningText(const std::vector<CFG::WarnInfo>& warnings) const;
+    std::wstring GetConfigWarningText(const std::vector<cfg::WarnInfo>& warnings) const;
 
     // actions
     std::wstring Shutdown;
