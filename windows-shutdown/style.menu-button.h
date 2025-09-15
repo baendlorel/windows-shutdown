@@ -6,11 +6,12 @@ namespace menu_button_style {
 // radius of the button
 inline constexpr int RADIUS = 80;
 
-// diameter of the button
-inline constexpr int DIAMETER = RADIUS * 2;
-
 // This value is based on testing, not actual measurement
 inline constexpr int SHADOW_WIDTH = 22;
+
+// diameter of the button
+inline constexpr int DIAMETER = RADIUS * 2;
+inline constexpr int TRUE_DIAMETER = RADIUS * 2 - SHADOW_WIDTH * 2;
 
 // squared value for hit test
 inline constexpr int TRUE_R_SQUARED = (RADIUS - SHADOW_WIDTH) * (RADIUS - SHADOW_WIDTH);

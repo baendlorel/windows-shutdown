@@ -90,15 +90,14 @@ void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     const auto imgAttr = painter::image_attr_with_alpha(this->png, params.alpha);
 
     // where and what size to draw
-    const Gdiplus::Rect rect(x, y, menu_button_style::DIAMETER, menu_button_style::DIAMETER);
+    const Gdiplus::Rect pos(x, y, menu_button_style::DIAMETER, menu_button_style::DIAMETER);
 
     // x, y, w, h cut from the source image
     // Since button images are 512x512, appState.buttons[i].png->GetWidth() is actually 512
     const int w = static_cast<int>(this->png->GetWidth());
     const int h = static_cast<int>(this->png->GetHeight());
-    graphics.DrawImage(this->png, rect, 0, 0, w, h, Gdiplus::UnitPixel, imgAttr.get());
+    graphics.DrawImage(this->png, pos, 0, 0, w, h, Gdiplus::UnitPixel, imgAttr.get());
 
-    // todo 按钮高光位置有异常
     // highlight
     if (const bool isHit = this->mouse_hit(app::state.mouse_x, app::state.mouse_y); !isHit) {
         return;
@@ -107,7 +106,6 @@ void MenuButton::draw(Gdiplus::Graphics& graphics, const DrawParams& params) {
     const Gdiplus::Color blended(painter::apply_alpha(&color_set::BUTTON_HIGHLIGHT, params.alpha));
     const Gdiplus::SolidBrush highlightBrush(blended);
     graphics.FillEllipse(&highlightBrush, x + menu_button_style::SHADOW_WIDTH,
-                         y + menu_button_style::SHADOW_WIDTH,
-                         menu_button_style::DIAMETER - menu_button_style::SHADOW_WIDTH * 2,
-                         menu_button_style::DIAMETER - menu_button_style::SHADOW_WIDTH * 2);
+                         y + menu_button_style::SHADOW_WIDTH, menu_button_style::TRUE_DIAMETER,
+                         menu_button_style::TRUE_DIAMETER);
 }

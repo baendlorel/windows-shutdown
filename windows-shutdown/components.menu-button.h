@@ -4,6 +4,7 @@
 
 class MenuButton : public Div {
     NO_COPY_DEFAULT_MOVE(MenuButton)
+
    public:
     app::Action action;
     int res_id;
