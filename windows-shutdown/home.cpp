@@ -16,6 +16,7 @@ void HomeView::init_menu() {
 
     // Create and position buttons
     const int button_count = static_cast<int>(actions.size());
+
     this->menu.reserve(actions.size());
     for (int i = 0; i < button_count; ++i) {
         this->menu.emplace_back(0, 0, actions[i]);

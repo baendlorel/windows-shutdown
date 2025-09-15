@@ -54,7 +54,7 @@ void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w,
     static Gdiplus::Color baseBgColor = app::config.background_color;
 
     // Create a background brush with appState.windowPage.alpha applied
-    Gdiplus::SolidBrush bgBrush(
+    const Gdiplus::SolidBrush bgBrush(
         painter::apply_alpha(&baseBgColor, app::page.get_background_alpha()));
 
     Gdiplus::Graphics graphics(hdcMem);
@@ -91,7 +91,7 @@ SIZE Render::get_wh(const HWND hWnd) const {
     return {w, h};
 }
 
-void Render::update_layered(const HWND hWnd) {
+void Render::update_layered(const HWND hWnd) const {
     static SIZE sizeWin = get_wh(hWnd);
     const HDC hdcScreen = GetDC(nullptr);
     const HDC hdcMem = CreateCompatibleDC(hdcScreen);
