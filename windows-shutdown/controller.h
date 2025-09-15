@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "framework.h"
-#include "consts.app.h"
+#include "app.core.h"
 
 namespace controller {
 void execute_restart();

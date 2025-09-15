@@ -9,7 +9,7 @@ class AppState {
 
    private:
     AppState() {
-        AppEvent::GetInstance().on(app::EventType::Redraw, [this]() { this->need_redraw = true; });
+        AppEvent::get_instance().on(app::EventType::Redraw, [this]() { this->need_redraw = true; });
     }
 
    public:
@@ -45,7 +45,7 @@ class AppState {
 
     // Will trigger MouseMove
     void set_mouse_pos(const int x, const int y) {
-        static auto& appEvent = AppEvent::GetInstance();
+        static auto& appEvent = AppEvent::get_instance();
         this->mouse_x = x;
         this->mouse_y = y;
 

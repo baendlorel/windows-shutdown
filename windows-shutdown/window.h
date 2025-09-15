@@ -4,7 +4,7 @@
 
 namespace window {
 
-inline Render* render = Render::GetInstancePtr();
+inline Render* render = Render::get_instance_ptr();
 
 ATOM my_register_class();
 void register_menu_button_click_callback();

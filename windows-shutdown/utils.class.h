@@ -18,13 +18,13 @@
     ClassName(ClassName &&) = delete;                 \
     ClassName &operator=(ClassName &&) = delete;      \
                                                       \
-    static ClassName &GetInstance() {                 \
+    static ClassName &get_instance() {                \
         static ClassName instance;                    \
         return instance;                              \
     };                                                \
                                                       \
-    static ClassName *GetInstancePtr() {              \
-        return &ClassName::GetInstance();             \
+    static ClassName *get_instance_ptr() {            \
+        return &ClassName::get_instance();            \
     };                                                \
                                                       \
    private:                                           \
@@ -39,11 +39,11 @@
     ClassName(ClassName &&) = delete;                 \
     ClassName &operator=(ClassName &&) = delete;      \
                                                       \
-    static ClassName &GetInstance() {                 \
+    static ClassName &get_instance() {                \
         static ClassName instance;                    \
         return instance;                              \
     };                                                \
                                                       \
-    static ClassName *GetInstancePtr() {              \
-        return &ClassName::GetInstance();             \
+    static ClassName *get_instance_ptr() {            \
+        return &ClassName::get_instance();            \
     };

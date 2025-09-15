@@ -48,7 +48,8 @@ void Render::debug_draw_some_info(Gdiplus::Graphics& graphics, const Gdiplus::RE
     graphics.DrawString(str.c_str(), -1, &font, rect, &format, &brush);
 }
 
-void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w, const Gdiplus::REAL h) {
+void Render::draw_to_memory_dc(const HDC hdcMem, const Gdiplus::REAL w,
+                               const Gdiplus::REAL h) const {
     static auto warningWStr = app::i18n.get_config_warning_text(app::config.warnings);
     static Gdiplus::Color baseBgColor = app::config.background_color;
 
@@ -113,7 +114,7 @@ void Render::update_layered(const HWND hWnd) {
     }
 
     const HGDIOBJ oldBmp = SelectObject(hdcMem, hBitmap);
-    draw_to_memory_dc(hdcMem, to_real(sizeWin.cx), to_real(sizeWin.cy));
+    draw_to_memory_dc(hdcMem, static_cast<float>(sizeWin.cx), static_cast<float>(sizeWin.cy));
     POINT ptWin = {0, 0};
 
     BLENDFUNCTION blend = {AC_SRC_OVER, 0, fade::MAX_ALPHA, AC_SRC_ALPHA};

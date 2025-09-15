@@ -25,7 +25,7 @@ ATOM window::my_register_class() {
 }
 
 void window::register_menu_button_click_callback() {
-    auto& menu = Index::GetInstance().home.menu;
+    auto& menu = Index::get_instance().home.menu;
     for (auto& button : menu) {
         switch (button.action) {
             case app::Action::Donate:
@@ -74,7 +74,7 @@ BOOL window::init_instance(int) {
     UpdateWindow(hWnd);
 
     // ui
-    Index::GetInstance().home.init_menu();
+    Index::get_instance().home.init_menu();
     register_menu_button_click_callback();
 
     // If config requests immediate action, initialize the immediate action
@@ -142,7 +142,7 @@ void window::handle_mouse_move(HWND hWnd, LPARAM lParam) {
 }
 
 void window::handle_click(HWND hWnd, LPARAM lParam) {
-    static auto& menu = Index::GetInstance().home.menu;
+    static auto& menu = Index::get_instance().home.menu;
     if (app::state.is_counting_down()) {
         controller::cancel_countdown(hWnd);
         return;

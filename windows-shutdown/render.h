@@ -8,9 +8,9 @@ class Render {
     SINGLETON(Render)
 
    public:
-    Index* index = Index::GetInstancePtr();
+    Index* index = Index::get_instance_ptr();
 
-    void draw_to_memory_dc(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h);
+    void draw_to_memory_dc(HDC hdcMem, Gdiplus::REAL w, Gdiplus::REAL h) const;
     void update_layered(HWND hWnd);
 
    private:

@@ -2,6 +2,7 @@
 
 #include <powrprof.h>
 #include <shellapi.h>
+
 #pragma comment(lib, "PowrProf.lib")
 
 void controller::execute_restart() {

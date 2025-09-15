@@ -12,10 +12,10 @@
 #include "app.i18n.h"
 
 namespace app {
-inline constexpr AppEvent& event = AppEvent::GetInstance();
-inline constexpr AppConfig& config = AppConfig::GetInstance();
-inline constexpr AppState& state = AppState::GetInstance();
-inline constexpr AppPage& page = AppPage::GetInstance();
+inline AppEvent& event = AppEvent::get_instance();
+inline AppConfig& config = AppConfig::get_instance();
+inline AppState& state = AppState::get_instance();
+inline AppPage& page = AppPage::get_instance();
 // ReSharper disable once CppInconsistentNaming
-inline constexpr AppI18N& i18n = AppI18N::GetInstance();
+inline AppI18N& i18n = AppI18N::get_instance();
 }  // namespace app
