@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <stdexcept>
 #include <unordered_map>
 
 #include "consts.app.h"
@@ -14,13 +15,25 @@ class AppEvent {
     std::unordered_map<app::EventType, std::vector<std::function<void()>>> listeners_;
 
    public:
-    void on(const app::EventType evt, std::function<void()> handler) {
-        this->listeners_[evt].push_back(std::move(handler));
+    int on(const app::EventType evt, std::function<void()> handler) {
+        auto& evtListeners = this->listeners_[evt];
+        evtListeners.push_back(std::move(handler));
+        return static_cast<int>(evtListeners.size()) - 1;
     }
 
     void emit(const app::EventType evt) {
         for (auto& evtListener : this->listeners_[evt]) {
-            evtListener();
+            if (evtListener) {
+                evtListener();
+            }
         }
+    }
+
+    void off(const app::EventType evt, const size_t listener_id) {
+        auto& evtListeners = this->listeners_[evt];
+        if (evtListeners.size() <= listener_id) {
+            throw std::runtime_error("Cannot find listener id" + static_cast<int>(listener_id));
+        }
+        evtListeners[listener_id] = nullptr;
     }
 };

@@ -3,6 +3,7 @@
 #include "consts.app.h"
 
 class MenuButton : public Div {
+    NO_COPY_DEFAULT_MOVE(MenuButton)
    public:
     app::Action action;
     int res_id;
@@ -12,6 +13,7 @@ class MenuButton : public Div {
 
    public:
     MenuButton(int x, int y, app::Action action);
+    ~MenuButton() override;
 
    public:
     bool mouse_hit(int mx, int my) override;
@@ -21,5 +23,7 @@ class MenuButton : public Div {
     void center(int button_count, int index, int w, int h);
 
    private:
+    size_t mouse_move_listener_id_ = 0;
+
     void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 };

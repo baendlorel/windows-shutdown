@@ -39,7 +39,7 @@ MenuButton::MenuButton(const int x, const int y, const app::Action action)
     this->res_id = get_resource_id_from_action(action);
     this->png = load_bitmap_by_resource_id(app::state.hInst, this->res_id);
 
-    app::event.on(app::EventType::MouseMove, [this]() {
+    this->mouse_move_listener_id_ = app::event.on(app::EventType::MouseMove, [this]() {
         if (!this->active_) {
             return;
         }
@@ -51,6 +51,10 @@ MenuButton::MenuButton(const int x, const int y, const app::Action action)
             app::event.emit(app::EventType::Redraw);
         }
     });
+}
+
+MenuButton::~MenuButton() {
+    app::event.off(app::EventType::MouseMove, this->mouse_move_listener_id_);
 }
 
 void MenuButton::center(const int button_count, const int index, const int w, const int h) {
