@@ -347,17 +347,17 @@ void AppConfig::load() {
         // out.write((const char*)bom, sizeof(bom));
         // out << content;
         // out.close();
-        save_to_file(configPath, content);
+        fs::save_content(configPath, content);
         return;
     }
 
-    const std::string content = read_file_content(configPath);
+    const std::string content = fs::read_content(configPath);
 
     // Parse config file line by line (UTF-8)
 
     short line_no = 0;
 
-    for_each_line(content, [this, &line_no](std::string line) {
+    fs::for_each_line(content, [this, &line_no](std::string line) {
         line_no++;
         if (line.empty()) {
             return;

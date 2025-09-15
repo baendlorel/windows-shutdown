@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-std::string read_file_content(const std::string& path) {
+std::string fs::read_content(const std::string& path) {
     const std::ifstream file(path);
 
     if (!file.is_open()) {
@@ -18,7 +18,7 @@ std::string read_file_content(const std::string& path) {
     return buffer.str();
 }
 
-bool save_to_file(const std::string& path, const std::string& content) {
+bool fs::save_content(const std::string& path, const std::string& content) {
     std::ofstream file(path, std::ios::out | std::ios::trunc);
 
     if (!file.is_open()) {
@@ -35,7 +35,8 @@ bool save_to_file(const std::string& path, const std::string& content) {
     return true;
 }
 
-void for_each_line(const std::string& content, const std::function<void(std::string)>& callback) {
+void fs::for_each_line(const std::string& content,
+                       const std::function<void(std::string)>& callback) {
     std::string line;
 
     for (const char ch : content) {

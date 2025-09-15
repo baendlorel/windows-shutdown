@@ -2,15 +2,16 @@
 #include "app.core.h"
 
 Gdiplus::Bitmap* load_bitmap_by_resource_id(const HINSTANCE hInst, const int resId) {
-    const auto& i18n = App::GetInstance().i18n;
     const HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resId), L"PNG");
     if (!hRes) {
-        MessageBoxW(nullptr, i18n.ErrResourceNotFound.c_str(), i18n.ErrTitle.c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, app::i18n.ErrResourceNotFound.c_str(), app::i18n.ErrTitle.c_str(),
+                    MB_ICONERROR);
         return nullptr;
     }
     const HGLOBAL hMem = LoadResource(hInst, hRes);
     if (!hMem) {
-        MessageBoxW(nullptr, i18n.ErrLoadResource.c_str(), i18n.ErrTitle.c_str(), MB_ICONERROR);
+        MessageBoxW(nullptr, app::i18n.ErrLoadResource.c_str(), app::i18n.ErrTitle.c_str(),
+                    MB_ICONERROR);
         return nullptr;
     }
 
@@ -18,19 +19,18 @@ Gdiplus::Bitmap* load_bitmap_by_resource_id(const HINSTANCE hInst, const int res
     const DWORD size = SizeofResource(hInst, hRes);
     IStream* pStream = nullptr;
     if (FAILED(CreateStreamOnHGlobal(NULL, TRUE, &pStream))) {
-        MessageBoxW(nullptr, i18n.ErrCreateImageStream.c_str(), i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrCreateImageStream.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
         return nullptr;
     }
     ULONG written;
     (void)pStream->Write(pData, size, &written);
-    // LARGE_INTEGER li = {0};
     constexpr LARGE_INTEGER li = {};
     (void)pStream->Seek(li, STREAM_SEEK_SET, nullptr);
     Gdiplus::Bitmap* image = Gdiplus::Bitmap::FromStream(pStream);
     pStream->Release();
     if (!image) {
-        MessageBoxW(nullptr, i18n.ErrCreateImageBitmap.c_str(), i18n.ErrTitle.c_str(),
+        MessageBoxW(nullptr, app::i18n.ErrCreateImageBitmap.c_str(), app::i18n.ErrTitle.c_str(),
                     MB_ICONERROR);
         return nullptr;
     }
