@@ -11,7 +11,7 @@
 
 #define SINGLETON(ClassName)                          \
    public:                                            \
-    ~ClassName();                                     \
+    ~ClassName(){};                                   \
     ClassName(const ClassName &) = delete;            \
     ClassName &operator=(const ClassName &) = delete; \
                                                       \
@@ -32,7 +32,7 @@
 
 #define DELETE_COPY_AND_MOVE(ClassName)               \
    public:                                            \
-    ~ClassName();                                     \
+    ~ClassName(){};                                   \
     ClassName(const ClassName &) = delete;            \
     ClassName &operator=(const ClassName &) = delete; \
                                                       \

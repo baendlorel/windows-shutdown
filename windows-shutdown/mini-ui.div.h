@@ -38,7 +38,4 @@ class Div : public Element {
             this->on_click_callback_(hwnd);
         }
     }
-
-   protected:
-    void draw_view(Gdiplus::Graphics& graphics, const DrawParams& params) override;
 };
