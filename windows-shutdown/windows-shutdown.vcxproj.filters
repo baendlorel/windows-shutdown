@@ -163,6 +163,9 @@
     <ClInclude Include="alias.h">
       <Filter>src\consts</Filter>
     </ClInclude>
+    <ClInclude Include="event.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils.bitmap-loader.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="mini-ui.view.h">
       <Filter>src\mini-ui</Filter>
+    </ClCompile>
+    <ClCompile Include="event.cpp">
+      <Filter>src\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

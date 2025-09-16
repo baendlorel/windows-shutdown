@@ -5,7 +5,9 @@
 #include "app.event.h"
 
 class AppState {
-    DELETE_COPY_AND_MOVE(AppState)
+    NO_COPY_NOR_MOVE(AppState)
+
+    INSTANCE_GETTER(AppState)
 
    private:
     AppState() {

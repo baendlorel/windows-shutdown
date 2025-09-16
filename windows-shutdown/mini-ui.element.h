@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "event.h"
 #include "utils.class.h"
 #include "mini-ui.core.h"
 
@@ -13,6 +14,8 @@ class Element {
    protected:
     // when alpha is MAX_ALPHA, active state is true
     bool active_ = false;
+
+    Event event_;
 
    public:
     virtual void activate() {
@@ -31,6 +34,14 @@ class Element {
     // for divs, we can always return false
     [[nodiscard]] virtual bool is_invisible() const {
         return false;
+    }
+
+    virtual void on(const app::EventType evt, std::function<void()> handler) {
+        this->event_.on(evt, std::move(handler));
+    }
+
+    virtual void emit(const app::EventType evt) {
+        this->event_.emit(evt);
     }
 
     virtual void draw(Gdiplus::Graphics& graphics, const DrawParams& params) = 0;

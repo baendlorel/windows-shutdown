@@ -30,20 +30,21 @@
    private:                                           \
     ClassName() = default;
 
-#define DELETE_COPY_AND_MOVE(ClassName)               \
+#define NO_COPY_NOR_MOVE(ClassName)                   \
    public:                                            \
-    ~ClassName(){};                                   \
     ClassName(const ClassName &) = delete;            \
     ClassName &operator=(const ClassName &) = delete; \
                                                       \
     ClassName(ClassName &&) = delete;                 \
-    ClassName &operator=(ClassName &&) = delete;      \
-                                                      \
-    static ClassName &get_instance() {                \
-        static ClassName instance;                    \
-        return instance;                              \
-    };                                                \
-                                                      \
-    static ClassName *get_instance_ptr() {            \
-        return &ClassName::get_instance();            \
+    ClassName &operator=(ClassName &&) = delete;
+
+#define INSTANCE_GETTER(ClassName)         \
+    ~ClassName(){};                        \
+    static ClassName &get_instance() {     \
+        static ClassName instance;         \
+        return instance;                   \
+    };                                     \
+                                           \
+    static ClassName *get_instance_ptr() { \
+        return &ClassName::get_instance(); \
     };
