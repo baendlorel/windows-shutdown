@@ -29,7 +29,7 @@ void window::register_menu_button_click_callback() {
     for (auto& button : menu) {
         switch (button.action) {
             case app::Action::Donate:
-                button.on_click(controller::trigger_donate);
+                button.on(app::EventType::MouseClick, controller::trigger_donate);
                 break;
             case app::Action::Config:
                 button.on_click(controller::trigger_config);

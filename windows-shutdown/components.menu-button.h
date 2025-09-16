@@ -14,7 +14,7 @@ class MenuButton : public Div {
 
    public:
     MenuButton(int x, int y, app::Action action);
-    ~MenuButton() override;
+    ~MenuButton() override = default;
 
    public:
     bool mouse_hit(int mx, int my) override;
@@ -23,7 +23,4 @@ class MenuButton : public Div {
     void center(int button_count, int index, int w, int h);
 
     void draw(Gdiplus::Graphics& graphics, const DrawParams& params) override;
-
-   private:
-    unsigned int mouse_move_listener_id_ = 0;
 };

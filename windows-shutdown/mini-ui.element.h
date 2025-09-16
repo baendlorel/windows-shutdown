@@ -43,10 +43,12 @@ class Element {
         return false;
     }
 
+    // TODO 如何让这里支持更多类型的handler
     virtual void on(const app::EventType evt, const std::function<void()>& handler) {
         this->event_.on(evt, handler);
     }
 
+    // TODO 如何让这里能带入参地emit
     virtual void emit(const app::EventType evt) {
         this->event_.emit(evt);
         for (auto& c : this->children_) {
