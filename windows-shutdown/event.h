@@ -24,6 +24,9 @@ struct ListenerEntry {
 class Event {
     NO_COPY_NOR_MOVE(Event)
 
+   public:
+    Event() = default;
+
    private:
     // event listeners
     std::unordered_map<app::EventType, std::vector<ListenerEntry*>> listeners_map_;

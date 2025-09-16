@@ -7,8 +7,6 @@ class Element {
     NO_COPY_DEFAULT_MOVE(Element)
 
    public:
-    Element() = default;
-
     virtual ~Element() = default;
 
    protected:

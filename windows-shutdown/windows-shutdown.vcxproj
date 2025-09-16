@@ -59,7 +59,6 @@
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="app.event.h" />
     <ClCompile Include="event.cpp" />
     <ClCompile Include="utils.bitmap-loader.cpp" />
     <ClCompile Include="components.instruction.cpp" />
