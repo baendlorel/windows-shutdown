@@ -17,7 +17,8 @@ void HomeView::init_menu() {
     // Create and position buttons
     const int button_count = static_cast<int>(actions.size());
 
-    this->menu.reserve(actions.size());
+    // TODO 当跟随element的事件触发机制完成，这里将不会受到扩容影响
+    // this->menu.reserve(actions.size());
     for (int i = 0; i < button_count; ++i) {
         this->menu.emplace_back(0, 0, actions[i]);
         this->menu[i].center(button_count, i, app::state.screen_w, app::state.screen_h);

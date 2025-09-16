@@ -2,7 +2,7 @@
 #include "framework.h"
 #include "utils.class.h"
 
-#include "app.event.h"
+#include "event.h"
 
 class AppState {
     NO_COPY_NOR_MOVE(AppState)
@@ -11,7 +11,7 @@ class AppState {
 
    private:
     AppState() {
-        AppEvent::get_instance().on(app::EventType::Redraw, [this]() { this->need_redraw = true; });
+        Event::get_global().on(app::EventType::Redraw, [this]() { this->need_redraw = true; });
     }
 
    public:
@@ -47,10 +47,10 @@ class AppState {
 
     // Will trigger MouseMove
     void set_mouse_pos(const int x, const int y) {
-        static auto& appEvent = AppEvent::get_instance();
+        static auto& event = Event::get_global();
         this->mouse_x = x;
         this->mouse_y = y;
 
-        appEvent.emit(app::EventType::MouseMove);
+        event.emit(app::EventType::MouseMove);
     }
 };

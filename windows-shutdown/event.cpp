@@ -34,7 +34,7 @@ void Event::emit(const app::EventType evt) {
         }
     }
 }
-void Event::off(const unsigned int id) {
+bool Event::off(const unsigned int id) {
     static auto off_evt = [this](const app::EventType evt, const unsigned int _id) {
         auto& entries = this->listeners_map_[evt];
 
@@ -49,15 +49,17 @@ void Event::off(const unsigned int id) {
     };
 
     if (off_evt(app::EventType::Redraw, id)) {
-        return;
+        return true;
     }
     if (off_evt(app::EventType::MouseClick, id)) {
-        return;
+        return true;
     }
     if (off_evt(app::EventType::MouseMove, id)) {
-        return;
+        return true;
     }
     if (off_evt(app::EventType::KeyPress, id)) {
-        return;
+        return true;
     }
+
+    return false;
 }

@@ -27,6 +27,11 @@ class Event {
    public:
     Event() = default;
 
+    static Event& get_global() {
+        static Event e;
+        return e;
+    }
+
    private:
     // event listeners
     std::unordered_map<app::EventType, std::vector<ListenerEntry*>> listeners_map_;
@@ -39,5 +44,5 @@ class Event {
 
     void emit(const app::EventType evt);
 
-    void off(unsigned int id);
+    bool off(unsigned int id);
 };
