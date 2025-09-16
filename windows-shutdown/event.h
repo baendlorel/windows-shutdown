@@ -6,7 +6,14 @@
 #include "consts.app.h"
 #include "utils.class.h"
 
-struct ListenerEntry {
+struct ListenerBase {
+    NO_COPY_NOR_MOVE(ListenerBase)
+    ListenerBase() = default;
+    virtual ~ListenerBase() = default;
+};
+
+template <typename... Args>
+struct ListenerEntry : ListenerBase {
     NO_COPY_NOR_MOVE(ListenerEntry)
 
    private:
@@ -14,11 +21,28 @@ struct ListenerEntry {
 
    public:
     unsigned int id;
-    std::function<void()> listener;
 
-    explicit ListenerEntry(std::function<void()> _listener);
-    ~ListenerEntry() = default;
+    std::function<void(Args...)> listener;
+    explicit ListenerEntry(std::function<void(Args...)> _listener)
+        : id(next_id_++), listener(std::move(_listener)) {
+    }
+
+    ~ListenerEntry() override = default;
 };
+
+// struct ListenerEntry {
+//     NO_COPY_NOR_MOVE(ListenerEntry)
+//
+//    private:
+//     static unsigned int next_id_;
+//
+//    public:
+//     unsigned int id;
+//     std::function<void()> listener;
+//
+//     explicit ListenerEntry(std::function<void()> _listener);
+//     ~ListenerEntry() = default;
+// };
 
 // event hub for every element
 class Event {

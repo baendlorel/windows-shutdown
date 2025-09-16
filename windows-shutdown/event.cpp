@@ -2,11 +2,8 @@
 #include <ranges>
 #include <algorithm>
 
-unsigned int ListenerEntry::next_id_ = 0;
-
-ListenerEntry::ListenerEntry(std::function<void()> _listener)
-    : id(next_id_++), listener(std::move(_listener)) {
-}
+template <typename... Args>
+unsigned int ListenerEntry<Args...>::next_id_ = 0;
 
 Event::~Event() {
     static auto delete_listener_entries = [this](const app::EventType evt) {
